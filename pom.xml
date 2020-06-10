@@ -12,6 +12,8 @@
         <module>redis-start</module>
         <module>swagger-start</module>
         <module>a-start-test</module>
+        <module>hbase-start</module>
+        <module>hbase-shaded</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
