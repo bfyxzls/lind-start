@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "name": "lind.lettuce.redis",
+      "type": "com.lind.redis.cache.properties.LettuceRedisProperties",
+      "sourceType": "com.lind.redis.cache.properties.LettuceRedisProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "lind.lettuce.redis.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启Lettuce Redis",
+      "sourceType": "com.lind.redis.cache.properties.LettuceRedisProperties",
+      "defaultValue": true
+    }
+  ],
+  "hints": []
+}

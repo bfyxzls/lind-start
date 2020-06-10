@@ -1,0 +1,144 @@
+{
+  "groups": [
+    {
+      "name": "lind.swagger",
+      "type": "com.lind.swagger.SwaggerProperties",
+      "sourceType": "com.lind.swagger.SwaggerProperties"
+    },
+    {
+      "name": "lind.swagger.authorization",
+      "type": "com.lind.swagger.SwaggerProperties$Authorization",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "sourceMethod": "getAuthorization()"
+    },
+    {
+      "name": "lind.swagger.contact",
+      "type": "com.lind.swagger.SwaggerProperties$Contact",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "sourceMethod": "getContact()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "lind.swagger.authorization.auth-regex",
+      "type": "java.lang.String",
+      "description": "需要开启鉴权URL的正则",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Authorization",
+      "defaultValue": "^.*$"
+    },
+    {
+      "name": "lind.swagger.authorization.authorization-scope-list",
+      "type": "java.util.List<com.lind.swagger.SwaggerProperties$AuthorizationScope>",
+      "description": "鉴权作用域列表",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Authorization"
+    },
+    {
+      "name": "lind.swagger.authorization.name",
+      "type": "java.lang.String",
+      "description": "鉴权策略ID，需要和SecurityReferences ID保持一致",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Authorization",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.authorization.token-url-list",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Authorization"
+    },
+    {
+      "name": "lind.swagger.base-package",
+      "type": "java.lang.String",
+      "description": "swagger会解析的包路径",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.base-path",
+      "type": "java.util.List<java.lang.String>",
+      "description": "swagger会解析的url规则",
+      "sourceType": "com.lind.swagger.SwaggerProperties"
+    },
+    {
+      "name": "lind.swagger.contact.email",
+      "type": "java.lang.String",
+      "description": "联系人email",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Contact",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.contact.name",
+      "type": "java.lang.String",
+      "description": "联系人",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Contact",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.contact.url",
+      "type": "java.lang.String",
+      "description": "联系人url",
+      "sourceType": "com.lind.swagger.SwaggerProperties$Contact",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.description",
+      "type": "java.lang.String",
+      "description": "描述",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.enabled",
+      "type": "java.lang.Boolean",
+      "description": "是否开启swagger",
+      "sourceType": "com.lind.swagger.SwaggerProperties"
+    },
+    {
+      "name": "lind.swagger.exclude-path",
+      "type": "java.util.List<java.lang.String>",
+      "description": "在basePath基础上需要排除的url规则",
+      "sourceType": "com.lind.swagger.SwaggerProperties"
+    },
+    {
+      "name": "lind.swagger.host",
+      "type": "java.lang.String",
+      "description": "host信息",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.license",
+      "type": "java.lang.String",
+      "description": "许可证",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.license-url",
+      "type": "java.lang.String",
+      "description": "许可证URL",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.terms-of-service-url",
+      "type": "java.lang.String",
+      "description": "服务条款URL",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.title",
+      "type": "java.lang.String",
+      "description": "标题",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    },
+    {
+      "name": "lind.swagger.version",
+      "type": "java.lang.String",
+      "description": "版本",
+      "sourceType": "com.lind.swagger.SwaggerProperties",
+      "defaultValue": ""
+    }
+  ],
+  "hints": []
+}
