@@ -1,3 +1,6 @@
-lettuce.redis.enable: true #这个注册这后需要com.lind.redis.cache.LettuceRedisAutoConfigure失效，导致redisService也不被初始化
-server:
-  port: 9090
+#server:
+#  port: 9090
+#lind:
+#  lettuce:
+#    redis:
+#      enable: true #这个注册这后需要com.lind.redis.cache.LettuceRedisAutoConfigure失效，导致redisService也不被初始化

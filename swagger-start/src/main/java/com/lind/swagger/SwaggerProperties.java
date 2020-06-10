@@ -26,10 +26,7 @@ import java.util.List;
 
 /**
  * SwaggerProperties
- *
- * @author: lengleng
- * @date: 2018/7/25  14:00
- */
+ **/
 @Data
 @ConfigurationProperties(prefix = "lind.swagger")
 public class SwaggerProperties {

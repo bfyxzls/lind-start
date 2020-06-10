@@ -3,7 +3,7 @@ package com.lind.redis.cache.properties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * @author MrBird
+ * 配置实体
  */
 @ConfigurationProperties(prefix = "lind.lettuce.redis")
 public class LettuceRedisProperties {
