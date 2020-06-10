@@ -1,4 +1,0 @@
-com\lind\redis\cache\service\RedisService.class
-com\lind\redis\cache\properties\LettuceRedisProperties.class
-META-INF\spring-configuration-metadata.json
-com\lind\redis\cache\configure\WinterLettuceRedisAutoConfigure.class
