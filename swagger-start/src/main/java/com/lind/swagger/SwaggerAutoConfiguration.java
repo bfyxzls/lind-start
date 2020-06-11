@@ -18,6 +18,7 @@
 package com.lind.swagger;
 
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -43,6 +44,7 @@ import java.util.List;
  * swagger配置
  */
 @EnableSwagger2
+@EnableKnife4j
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(SwaggerProperties.class)
 @ConditionalOnProperty(name = "lind.swagger.enabled", havingValue = "true", matchIfMissing = true)
