@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.exception;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.exception;
 
 /**
  * 返回状态码
