@@ -1,3 +1,2 @@
-# Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.lind.hbase.config.HBaseAutoConfiguration
+  com.lind.common.logger.LoggerConfigure
