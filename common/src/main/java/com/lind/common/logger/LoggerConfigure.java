@@ -1,15 +1,14 @@
 package com.lind.common.logger;
 
 import com.lind.common.exception.LindException;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @Configuration
 @EnableConfigurationProperties(LoggerProperties.class)
-@ConditionalOnClass(Logger.class)
 public class LoggerConfigure {
     LoggerProperties loggerProperties;
 
@@ -17,6 +16,21 @@ public class LoggerConfigure {
         this.loggerProperties = loggerProperties;
     }
 
+    /**
+     * 默认实现.
+     *
+     * @return
+     */
+    @Bean
+    public Logger defaultLogger() {
+        return new ConsoleLogger();
+    }
+
+    /**
+     * Logger对象的生成，它做了conditional，当属性enable为false时，Logger对象不会被初始化
+     *
+     * @return
+     */
     @Bean
     @ConditionalOnProperty(value = "lind.logger.enable", havingValue = "true", matchIfMissing = true)
     public Logger logger() {

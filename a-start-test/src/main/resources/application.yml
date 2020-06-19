@@ -3,7 +3,9 @@ server:
 lind:
   logger:
     level: Info
-    type: Console
+    type: File
+    enable: true
+
   lettuce:
     redis:
       enable: true #这个注册这后需要com.lind.redis.cache.LettuceRedisAutoConfigure失效，导致redisService也不被初始化
