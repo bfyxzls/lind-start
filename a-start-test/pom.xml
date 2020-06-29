@@ -21,26 +21,11 @@
             <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
 
-        <!-- 封装的工具包 -->
         <dependency>
             <groupId>com.lind</groupId>
-            <artifactId>redis-start</artifactId>
+            <artifactId>logger-shaded</artifactId>
             <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>swagger-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>common</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>nacos-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+            <systemPath>${project.basedir}/src/main/resources/logger-shaded-1.0.0.jar</systemPath>
+         </dependency>
     </dependencies>
 </project>
