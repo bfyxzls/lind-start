@@ -37,23 +37,11 @@
         <httpclient.version>4.5.12</httpclient.version>
         <feign-httpclient.version>11.0</feign-httpclient.version>
         <swagger.fox.version>2.9.2</swagger.fox.version>
-        <elasticsearch.version>6.5.4</elasticsearch.version>
     </properties>
 
     <!-- 公用配置管理 -->
     <dependencies>
 
-        <!-- 其它xml,properties配置文件的支持-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
