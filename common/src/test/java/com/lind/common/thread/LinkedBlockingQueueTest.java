@@ -72,8 +72,12 @@ public class LinkedBlockingQueueTest {
 
         @Override
         public void run() {
-            print("Offer item to queue");
-            queue.offer(l.getAndIncrement());
+            print("put item to queue");
+            try {
+                queue.put(l.getAndIncrement());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
