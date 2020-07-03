@@ -10,7 +10,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>common</artifactId>
-
+    <properties>
+        <jsr305.version>3.0.2</jsr305.version>
+        <more-lambdas.version>0.1.27</more-lambdas.version>
+        <jmh.version>1.23</jmh.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -32,6 +36,38 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- https://github.com/PhantomThief/simple-pool/blob/master/pom.xml -->
+        <!-- bug 解决方案，底层框架使用它 -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr305.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 一个基于数量和时间的数据收集触发器 -->
+        <dependency>
+            <groupId>com.github.phantomthief</groupId>
+            <artifactId>more-lambdas</artifactId>
+            <version>${more-lambdas.version}</version>
+        </dependency>
+        <!-- 代码微基准测试的工具套件 -->
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
         </dependency>
     </dependencies>
 </project>

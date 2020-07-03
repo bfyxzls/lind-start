@@ -37,6 +37,7 @@
         <httpclient.version>4.5.12</httpclient.version>
         <feign-httpclient.version>11.0</feign-httpclient.version>
         <swagger.fox.version>2.9.2</swagger.fox.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     </properties>
 
     <!-- 公用配置管理 -->
@@ -190,4 +191,49 @@
             </snapshots>
         </repository>
     </repositories>
+
+
+    <url>https://github.com/PhantomThief/simple-pool</url>
+
+    <developers>
+        <developer>
+            <name>zhanling.zhang</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git@github.com:bfyxzls/lind-start.git</connection>
+        <url>https://github.com/bfyxzls/lind-start.git</url>
+        <developerConnection>scm:git@github.com:bfyxzls/lind-start.git
+        </developerConnection>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-maven-plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
