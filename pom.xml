@@ -37,7 +37,9 @@
         <httpclient.version>4.5.12</httpclient.version>
         <feign-httpclient.version>11.0</feign-httpclient.version>
         <swagger.fox.version>2.9.2</swagger.fox.version>
-        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
+        <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
     </properties>
 
     <!-- 公用配置管理 -->
@@ -197,8 +199,7 @@
 
     <developers>
         <developer>
-            <name>bfyxzls</name>
-            <password>bdyh@20192020</password>
+            <name>zhangzhanling</name>
         </developer>
     </developers>
 
@@ -207,11 +208,12 @@
         <url>https://github.com/bfyxzls/lind-start.git</url>
         <developerConnection>scm:git@github.com:bfyxzls/lind-start.git
         </developerConnection>
+        <tag>lind-start</tag>
     </scm>
 
     <distributionManagement>
         <snapshotRepository>
-            <id>ossrh</id>
+            <id>ossrh-snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
@@ -232,6 +234,96 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-scm-plugin</artifactId>
+                <version>1.8.1</version>
+            </plugin>
+
+            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.5.3</version>
+            <configuration>
+                <mavenExecutorId>forked-path</mavenExecutorId>
+                <useReleaseProfile>false</useReleaseProfile>
+                <arguments>-Psonatype-oss-release</arguments>
+                <pushChanges>false</pushChanges>
+                <localCheckout>false</localCheckout>
+                <autoVersionSubmodules>true</autoVersionSubmodules>
+                <checkModificationExcludes>
+                    <checkModificationExclude>.idea/</checkModificationExclude>
+                    <checkModificationExclude>.idea/*</checkModificationExclude>
+                    <checkModificationExclude>.idea/libraries/*</checkModificationExclude>
+                    <checkModificationExclude>pom.xml</checkModificationExclude>
+                    <checkModificationExclude>release-pom.xml</checkModificationExclude>
+
+                    <checkModificationExclude>es-shaded/</checkModificationExclude>
+                    <checkModificationExclude>hbash-shaded/</checkModificationExclude>
+                    <checkModificationExclude>hbash-start/</checkModificationExclude>
+                    <checkModificationExclude>swagger-start/</checkModificationExclude>
+                    <checkModificationExclude>a-start-test/</checkModificationExclude>
+
+                </checkModificationExcludes>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-scm-plugin</artifactId>
+                    <version>1.8.1</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven-source-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <configuration>
+                    <doclint>none</doclint>
+                    <source>8</source>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
