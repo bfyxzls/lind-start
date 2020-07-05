@@ -193,11 +193,12 @@
     </repositories>
 
 
-    <url>https://github.com/PhantomThief/simple-pool</url>
+    <url>https://github.com/bfyxzls/lind-start</url>
 
     <developers>
         <developer>
-            <name>zhanling.zhang</name>
+            <name>bfyxzls</name>
+            <password>bdyh@20192020</password>
         </developer>
     </developers>
 
@@ -218,8 +219,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-
 
     <build>
         <plugins>
