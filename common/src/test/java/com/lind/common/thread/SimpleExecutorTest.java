@@ -1,7 +1,14 @@
 package com.lind.common.thread;
 
+import com.github.phantomthief.concurrent.AdaptiveExecutor;
+import com.github.phantomthief.pool.Pool;
+import com.github.phantomthief.pool.impl.ConcurrencyAwarePool;
 import org.junit.Test;
 
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -20,7 +27,7 @@ public class SimpleExecutorTest {
     @Test
     public void threadPoolExecutor() throws InterruptedException {
         //大于核心线核数放入阻塞队列，队列满了，建立新的线程，达到最大线程数时，走拒绝策略
-        LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(1);
+        LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(2);
         ThreadFactory threadFactory = new NameTreadFactory();
         MyIgnorePolicy myIgnorePolicy = new MyIgnorePolicy();
         ExecutorService executor = new ThreadPoolExecutor(1,
@@ -36,6 +43,45 @@ public class SimpleExecutorTest {
         }
         Thread.sleep(10000);
 
+    }
+
+    /**
+     * 自适应的Executor框架封装
+     * 全局最大线程数设置，防止线程泄露
+     * 单次任务线程数分配策略定制
+     * 更友好的批量提交任务API
+     * 只支持Java8
+     */
+    @Test
+    public void adaptiveExecutor() {
+        // 声明executor
+        AdaptiveExecutor executor = AdaptiveExecutor.newBuilder()
+                .withGlobalMaxThread(10) // 全局最大线程数10
+                .adaptiveThread(5, 8) // 每5个任务使用一个线程，每次提交任务最多使用8个线程
+                .maxThreadAsPossible(6) // 每次提交任务最多使用6个线程，尽可能多的使用多线程（这个和上面策略二选一）
+                .build();
+
+        // 调用
+        Collection<Integer> tasks = Arrays.asList(1, 2, 3); // 原始任务
+
+        Map<Integer, String> result = executor.invokeAll(tasks, task -> task + " done."); // 并发执行
+
+        executor.run(tasks, System.out::println); // 并发执行，无返回值
+    }
+
+    /**
+     * 有序线程池：com.github.phantomthief:simple-pool
+     */
+    @Test
+    public void simplePool() {
+        Pool<MyObject> pool = ConcurrencyAwarePool.<MyObject>builder()
+                .maxSize(30)
+                .minIdle(1)
+                .evaluatePeriod(Duration.ofDays(1))
+                .simpleThresholdStrategy(10, 0.8)
+                .build(MyObject::new);
+
+        pool.supply(o -> o.print());
     }
 
     /**
