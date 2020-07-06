@@ -5,12 +5,3 @@ lind:
     level: Info
     type: File
     enable: true
-
-  lettuce:
-    redis:
-      enable: true #这个注册这后需要com.lind.redis.cache.LettuceRedisAutoConfigure失效，导致redisService也不被初始化
-spring:
-  elasticsearch:
-    jest:
-      uris: http://192.168.0.160:9235
-  max-http-header-size: 10000000
