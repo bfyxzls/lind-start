@@ -1,10 +1,13 @@
 package com.lind.start.test.controller;
 
 
+import com.lind.start.test.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,15 +23,15 @@ public class HomeController {
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/e")
-    public ResponseEntity e() {
-        int a = 0;
-        int c = 1 / a;
-        return ResponseEntity.ok("ok");
+
+    @PostMapping("/p")
+    public ResponseEntity p(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userDTO);
     }
 
     /**
      * 对应重定向咱们：/callback?token=abc123，咱们再把token重定向到其它网站
+     *
      * @param request
      * @param response
      * @throws IOException
@@ -42,7 +45,7 @@ public class HomeController {
             String value = StringUtils.join(param.getValue());
             log.info("key={},value={}", key, value);
         }
-        String token= StringUtils.join(params.get("token"));
-        response.sendRedirect("http://www.baidu.com?token="+token);
+        String token = StringUtils.join(params.get("token"));
+        response.sendRedirect("http://www.baidu.com?token=" + token);
     }
 }
