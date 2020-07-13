@@ -1,10 +1,12 @@
 package com.lind.start.test.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 @Data
+@Builder(toBuilder = true)
 public class UserDTO {
     private String name;
     private String email;

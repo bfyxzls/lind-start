@@ -5,3 +5,17 @@ lind:
     level: Info
     type: File
     enable: true
+  ratelimit:
+    enable: true
+    limit: 1
+    timeout: 3000
+spring:
+  # Redis
+  redis:
+    host: 127.0.0.1
+    password:
+    # 数据库索引 默认0
+    database: 10
+    port: 6379
+    # 超时时间 Duration类型 3秒
+    timeout: 3S

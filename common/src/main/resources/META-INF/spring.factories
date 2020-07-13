@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.lind.common.logger.LoggerConfigure
+  com.lind.common.logger.LoggerConfigure, \
+  com.lind.common.lock.RedisLockConfig, \
+  com.lind.common.lock.RedisLockTemplate

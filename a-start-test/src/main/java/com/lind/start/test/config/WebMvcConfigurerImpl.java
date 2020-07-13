@@ -7,9 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.lind.start.test.limit.LimitRaterInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
@@ -19,12 +24,16 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 @Configuration
-public class JsonConfig implements WebMvcConfigurer {
+@EnableWebMvc //覆盖默认的配置
+public class WebMvcConfigurerImpl implements WebMvcConfigurer {
+    @Autowired
+    LimitRaterInterceptor limitRaterInterceptor;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         MappingJackson2HttpMessageConverter jackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
         ObjectMapper objectMapper = new ObjectMapper();
+
         /**
          * 序列换成Json时,将所有的Long变成String
          * 因为js中得数字类型不能包括所有的java Long值
@@ -34,22 +43,31 @@ public class JsonConfig implements WebMvcConfigurer {
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
 
         // 所有的double类型返回保留三位小数
-        simpleModule.addSerializer(Double.class, new Object6Serialize());
-        simpleModule.addSerializer(Double.TYPE,new Object6Serialize());
+        simpleModule.addSerializer(BigDecimal.class, new MoneySerialize());
 
+        // double保留两位小数
         simpleModule.addSerializer(Double.class, new DoubleSerialize());
-        simpleModule.addSerializer(Double.TYPE,new DoubleSerialize());
+        simpleModule.addSerializer(Double.TYPE, new DoubleSerialize());
 
         objectMapper.registerModule(simpleModule);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);
         converters.add(jackson2HttpMessageConverter);
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 注册拦截器
+        InterceptorRegistration ir = registry.addInterceptor(limitRaterInterceptor);
+        // 配置拦截的路径
+        ir.addPathPatterns("/**");
+        // 配置不拦截的路径
+        ir.excludePathPatterns("/no-get");
+    }
+
     /**
-     * 描述：金额数值序列化
-     * 1.分 -> 万 当前数据除以6个0： 1000000 -> 1
+     * money serializer.
      */
-    public class Object6Serialize extends JsonSerializer<Object> {
+    public class MoneySerialize extends JsonSerializer<Object> {
         //修改要除的数据
         final BigDecimal TEMP = BigDecimal.valueOf(1000000L);
 
@@ -57,12 +75,14 @@ public class JsonConfig implements WebMvcConfigurer {
         public void serialize(Object value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
             if (value != null) {
                 BigDecimal bigDecimal = new BigDecimal(value.toString());
-                //参考该方法 第二个参数是几就保留几位小数 第三个参数 参考 RoundingMode.java
                 gen.writeNumber(bigDecimal.divide(TEMP, 4, RoundingMode.DOWN));
             }
         }
     }
 
+    /**
+     * double serializer.
+     */
     public class DoubleSerialize extends JsonSerializer<Double> {
 
         private DecimalFormat df = new DecimalFormat("##.00");

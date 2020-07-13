@@ -76,6 +76,12 @@ public class AbstractRestExceptionHandler {
         return CommonResult.failure(CodeEnum.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(value = LindException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public CommonResult businessErrorException(LindException lindException) {
+        return CommonResult.failure(400, lindException.getMessage());
+    }
+
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handlerNoSuchElementException(NoSuchElementException e) {
