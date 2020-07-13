@@ -62,11 +62,12 @@ public class HomeController {
     @ResponseBody
     public ResponseEntity test1(HttpServletRequest request) {
 
-        redisLockTemplate.execute("订单流水号", 3, TimeUnit.SECONDS, new Callback() {
+        redisLockTemplate.execute("订单流水号", 10, TimeUnit.SECONDS, new Callback() {
             @Override
             public Object onGetLock() throws InterruptedException {
                 // TODO 获得锁后要做的事
-                log.info("生成订单流水号");
+                log.info("生成订单流水号，需要5秒钟，些时有请求打入应该被阻塞或者拒绝");
+                Thread.sleep(3000);
                 return null;
             }
 

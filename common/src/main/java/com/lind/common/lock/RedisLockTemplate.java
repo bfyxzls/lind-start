@@ -31,7 +31,7 @@ public class RedisLockTemplate implements DistributedLockTemplate {
                 // 拿到锁
                 return callback.onGetLock();
             }else{
-                // 未拿到锁
+                // 未拿到锁，它会进行阻塞
                 return callback.onTimeout();
             }
         }catch(InterruptedException ex){
