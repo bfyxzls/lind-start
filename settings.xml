@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+    <mirrors>
+        <!-- 阿里云仓库 -->
+        <mirror>
+            <id>alimaven</id>
+            <mirrorOf>central</mirrorOf>
+            <name>aliyun maven</name>
+            <url>http://maven.aliyun.com/nexus/content/repositories/central/</url>
+        </mirror>
+
+        <!-- 中央仓库1 -->
+        <mirror>
+            <id>repo1</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>http://repo1.maven.org/maven2/</url>
+        </mirror>
+
+        <!-- 中央仓库2 -->
+        <mirror>
+            <id>repo2</id>
+            <mirrorOf>central</mirrorOf>
+            <name>Human Readable Name for this Mirror.</name>
+            <url>http://repo2.maven.org/maven2/</url>
+        </mirror>
+    </mirrors>
+
+    <profiles>
+        <profile>
+            <id>ossrh</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <gpg.executable>gpg</gpg.executable>
+                <gpg.passphrase>abc123QWE</gpg.passphrase>
+                <gpg.executable>C:\Program Files (x86)\gnupg\bin\gpg.exe</gpg.executable>
+                <gpg.homedir>C:/Users/User/AppData/Roaming/gnupg</gpg.homedir>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>rdc-private-repo</id>
+            <repositories>
+                <repository>
+                    <id>rdc-releases</id>
+                    <url>https://repo.rdc.aliyun.com/repository/44454-release-3afmGw/</url>
+                </repository>
+                <repository>
+                    <id>rdc-snapshots</id>
+                    <url>https://repo.rdc.aliyun.com/repository/44454-snapshot-Ejfhso/</url>
+                </repository>
+            </repositories>
+        </profile>
+
+    </profiles>
+
+    <servers>
+        <server>
+            <id>ossrh</id><!-- 仓库ID-->
+            <username>bfyxzls</username>
+            <password>Zzl123@@45678</password>
+        </server>
+        <server>
+            <id>rdc-releases</id>
+            <username>fTMcrA</username>
+            <password>uCQE7YXL3d</password>
+        </server>
+        <server>
+            <id>rdc-snapshots</id>
+            <username>fTMcrA</username>
+            <password>uCQE7YXL3d</password>
+        </server>
+
+    </servers>
+</settings>
