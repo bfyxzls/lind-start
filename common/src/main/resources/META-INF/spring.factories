@@ -1,4 +1,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.logger.LoggerConfigure, \
   com.lind.common.lock.RedisLockConfig, \
-  com.lind.common.lock.RedisLockTemplate
+  com.lind.common.lock.RedisLockTemplate,\
+  com.lind.common.thread.LindExecutorPool,\
+  com.lind.common.limit.LimitProperties,\
+  com.lind.common.limit.LimitRaterInterceptor,\
+  com.lind.common.limit.RedisRaterLimiter

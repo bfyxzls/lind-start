@@ -431,12 +431,11 @@ public class RedisService {
     }
 
     /**
-     * 通过索引 获取list中的值
+     * 通过索引 获取list中的值.
      *
      * @param key   键
-     * @param index 索引 index>=0时， 0 表头，1 第二个元素，依次类推；
-     *              index<0时，-1，表尾，-2倒数第二个元素，依次类推
-     * @return Object
+     * @param index 值
+     * @return 对象
      */
     public Object lGetIndex(String key, Long index) {
         try {
@@ -448,11 +447,11 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存.
      *
      * @param key   键
      * @param value 值
-     * @return Boolean
+     * @return 对象
      */
     public Boolean lSet(String key, Object value) {
         try {
@@ -465,12 +464,12 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存.
      *
      * @param key   键
      * @param value 值
-     * @param time  时间(秒)
-     * @return Boolean
+     * @param time  时间
+     * @return 对象
      */
     public Boolean lSet(String key, Object value, Long time) {
         try {
@@ -486,11 +485,11 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存.
      *
      * @param key   键
      * @param value 值
-     * @return Boolean
+     * @return 对象
      */
     public Boolean lSet(String key, List<Object> value) {
         try {
@@ -503,12 +502,12 @@ public class RedisService {
     }
 
     /**
-     * 将list放入缓存
+     * 将list放入缓存.
      *
      * @param key   键
      * @param value 值
-     * @param time  时间(秒)
-     * @return Boolean
+     * @param time  时间
+     * @return 对象
      */
     public Boolean lSet(String key, List<Object> value, Long time) {
         try {
@@ -524,12 +523,12 @@ public class RedisService {
     }
 
     /**
-     * 根据索引修改list中的某条数据
+     * 根据索引修改list中的某条数据.
      *
      * @param key   键
      * @param index 索引
      * @param value 值
-     * @return Boolean
+     * @return 对象
      */
     public Boolean lUpdateIndex(String key, Long index, Object value) {
         try {
@@ -542,12 +541,12 @@ public class RedisService {
     }
 
     /**
-     * 移除N个值为value
+     * 移除N个值为value.
      *
      * @param key   键
-     * @param count 移除多少个
+     * @param count 数量
      * @param value 值
-     * @return 移除的个数
+     * @return 对象
      */
     public Long lRemove(String key, Long count, Object value) {
         try {

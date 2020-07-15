@@ -17,10 +17,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 /**
- * @author 赵阳
- * @Description TODO
- * @date 2020/6/5 15:08
- **/
+ * Hbase配置.
+ */
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties({HBaseProperties.class})
@@ -39,10 +37,10 @@ public class HBaseAutoConfiguration {
     }
 
     /**
-     * HBase 连接
+     * Base 连接.
      *
-     * @return
-     * @throws IOException
+     * @return 返回
+     * @throws IOException IO错误
      */
     @Bean
     public Connection connection() throws IOException {

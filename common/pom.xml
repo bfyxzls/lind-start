@@ -7,8 +7,8 @@
         <groupId>com.lind</groupId>
         <version>1.0.0</version>
     </parent>
+    <version>1.0.2</version>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>common</artifactId>
     <properties>
         <jsr305.version>3.0.2</jsr305.version>
@@ -20,6 +20,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

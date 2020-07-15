@@ -1,4 +1,4 @@
-package com.lind.start.test.limit;
+package com.lind.common.limit;
 
 import java.lang.annotation.*;
 

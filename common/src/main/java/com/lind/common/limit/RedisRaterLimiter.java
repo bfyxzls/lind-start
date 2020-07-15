@@ -1,4 +1,4 @@
-package com.lind.start.test.limit;
+package com.lind.common.limit;
 
 import com.lind.common.exception.LindException;
 import lombok.extern.slf4j.Slf4j;
