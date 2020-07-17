@@ -2,6 +2,7 @@ package com.lind.start.test.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Configuration
@@ -48,6 +50,14 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
         // double保留两位小数
         simpleModule.addSerializer(Double.class, new DoubleSerialize());
         simpleModule.addSerializer(Double.TYPE, new DoubleSerialize());
+
+        // 时间格式化
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd"));//只能是一个日期格式化，多个会复盖
+
+        // 设置格式化内容
+        jackson2HttpMessageConverter.setObjectMapper(objectMapper);
+        converters.add(0, jackson2HttpMessageConverter);
 
         objectMapper.registerModule(simpleModule);
         jackson2HttpMessageConverter.setObjectMapper(objectMapper);

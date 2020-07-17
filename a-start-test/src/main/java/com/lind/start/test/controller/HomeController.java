@@ -5,7 +5,6 @@ import com.lind.common.lock.Callback;
 import com.lind.common.lock.RedisLockTemplate;
 import com.lind.start.test.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.lucene.util.fst.Util;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -34,22 +34,24 @@ public class HomeController {
         return ResponseEntity.ok(userDTO);
     }
 
+
+    @PostMapping("/postUser")
+    public ResponseEntity postUser(@RequestBody UserDTO userDTO) {
+        return ResponseEntity.ok(userDTO);
+    }
+
     @GetMapping("/pget")
     public ResponseEntity pget() {
-        return ResponseEntity.ok(UserDTO.builder()
-                .name("zzl")
-                .total(5d)
-                .totalMoney(BigDecimal.valueOf(100))
-                .build());
+        return ResponseEntity.ok(
+                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null,null)
+        );
     }
 
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
-        return ResponseEntity.ok(UserDTO.builder()
-                .name("zzl")
-                .total(5d)
-                .totalMoney(BigDecimal.valueOf(100))
-                .build());
+        return ResponseEntity.ok(
+                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null,null)
+        );
     }
 
     /**
