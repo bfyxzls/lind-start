@@ -44,7 +44,7 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
 
-        // 所有的double类型返回保留三位小数
+        // 所有的BigDecimal类型返回保留三位小数
         simpleModule.addSerializer(BigDecimal.class, new MoneySerialize());
 
         // double保留两位小数
@@ -105,6 +105,5 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
             }
         }
     }
-
 
 }
