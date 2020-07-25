@@ -9,12 +9,14 @@
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>redis-start</module>
-        <module>swagger-start</module>
+        <module>lind-redis-start</module>
+        <module>lind-swagger-start</module>
         <module>a-start-test</module>
-        <module>hbase-start</module>
-        <module>hbase-shaded</module>
-        <module>common</module>
+        <module>lind-hbase-start</module>
+        <module>lind-hbase-shaded</module>
+        <module>lind-common</module>
+        <module>a-start-gateway</module>
+        <module>a-start-oauth</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
