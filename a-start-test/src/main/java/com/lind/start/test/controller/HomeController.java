@@ -1,32 +1,32 @@
 package com.lind.start.test.controller;
 
-
 import com.lind.common.lock.Callback;
 import com.lind.common.lock.RedisLockTemplate;
 import com.lind.start.test.dto.UserDTO;
+import com.lind.testshade.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@RestController
+ @RestController
 @Slf4j
 public class HomeController {
+    @Autowired
+    UserService userService;
     @Autowired
     private RedisLockTemplate redisLockTemplate;
 
     @GetMapping("/ok")
     public ResponseEntity ok() {
-        return ResponseEntity.ok("ok");
+        return ResponseEntity.ok(userService.getByName("lvzhuqing"));
     }
 
     @PostMapping("/p")
@@ -43,14 +43,14 @@ public class HomeController {
     @GetMapping("/pget")
     public ResponseEntity pget() {
         return ResponseEntity.ok(
-                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null,null)
+                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null, null)
         );
     }
 
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
         return ResponseEntity.ok(
-                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null,null)
+                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null, null)
         );
     }
 

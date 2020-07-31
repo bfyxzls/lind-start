@@ -1,4 +1,4 @@
-package com.lind.testshade;
+package com.lind.testshade.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

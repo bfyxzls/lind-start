@@ -1,4 +1,4 @@
-package com.lind.start.test.dto;
+package com.lind.start.test.entity;
 
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableName;

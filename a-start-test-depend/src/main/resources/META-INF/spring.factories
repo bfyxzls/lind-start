@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.lind.testshade.mapper.UserMapper ,\
+  com.lind.testshade.service.UserService
