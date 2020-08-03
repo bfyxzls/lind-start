@@ -3,30 +3,36 @@ package com.lind.start.test.controller;
 import com.lind.common.lock.Callback;
 import com.lind.common.lock.RedisLockTemplate;
 import com.lind.start.test.dto.UserDTO;
+import com.lind.testshade.entity.UserInfo;
+import com.lind.testshade.mapper.UserMapper;
 import com.lind.testshade.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import shade.com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
- @RestController
+@RestController
 @Slf4j
 public class HomeController {
     @Autowired
-    UserService userService;
+    UserMapper userMapper;
     @Autowired
     private RedisLockTemplate redisLockTemplate;
 
     @GetMapping("/ok")
     public ResponseEntity ok() {
-        return ResponseEntity.ok(userService.getByName("lvzhuqing"));
+
+        return ResponseEntity.ok(userMapper.selectById(1));
     }
 
     @PostMapping("/p")

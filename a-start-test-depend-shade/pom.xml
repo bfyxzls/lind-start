@@ -12,13 +12,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>a-start-test-depend-shade</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.4</version>
 
     <dependencies>
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>a-start-test-depend</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
     </dependencies>
 
@@ -43,6 +43,14 @@
                                 <relocation>
                                     <pattern>com.baomidou</pattern>
                                     <shadedPattern>shade.com.baomidou</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.mybatis</pattern>
+                                    <shadedPattern>shade.org.mybatis</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.springframework.boot</pattern>
+                                    <shadedPattern>shade.org.springframework.boot</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
