@@ -120,6 +120,12 @@
             <version>1.0.4</version>
             <systemPath>${project.basedir}/src/main/resources/a-start-test-depend-shade-1.0.4.jar</systemPath>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
     </dependencies>
 
 

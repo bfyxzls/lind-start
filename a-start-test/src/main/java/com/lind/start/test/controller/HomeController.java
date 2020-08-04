@@ -11,7 +11,6 @@ import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import shade.com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,11 +28,11 @@ public class HomeController {
     @Autowired
     private RedisLockTemplate redisLockTemplate;
 
-    @GetMapping("/ok")
-    public ResponseEntity ok() {
-
-        return ResponseEntity.ok(userMapper.selectById(1));
-    }
+//    @GetMapping("/ok")
+//    public ResponseEntity ok() {
+//
+//        return ResponseEntity.ok(userMapper.selectById(1));
+//    }
 
     @PostMapping("/p")
     public ResponseEntity p(@RequestBody UserDTO userDTO) {
