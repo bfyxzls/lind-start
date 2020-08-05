@@ -19,33 +19,15 @@ spring:
     port: 6379
     # 超时时间 Duration类型 3秒
     timeout: 3S
+  elasticsearch:
+    rest:
+      uris: 192.168.0.204:9200
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://192.168.4.26:3306/zhfw?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
     username: root
     password: 123456
-    hikari:
-    minimum-idle: 5
-    maximum-pool-size: 20
-    connection-test-query: SELECT 1
-    # Druid StatViewServlet配置
-    druid:
-    stat-view-servlet:
-      # 默认true 内置监控页面首页/druid/index.html
-      enabled: true
-      url-pattern: /druid/*
-      # 允许清空统计数据
-      reset-enable: true
-      login-username: zhfw
-      login-password: zhfw
-      # IP白名单 多个逗号分隔
-      allow:
-      # IP黑名单
-      deny:
-    filter:
-      stat:
-      # 显示慢sql 默认当超过3秒显示
-      log-slow-sql: true
+
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml

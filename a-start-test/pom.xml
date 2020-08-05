@@ -11,6 +11,19 @@
 
     <artifactId>a-start-test</artifactId>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--spring boot 版本-->
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-elasticsearch-start</artifactId>
+                <version>1.0.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -64,11 +77,18 @@
             <artifactId>jest</artifactId>
             <version>5.3.3</version>
         </dependency>
+
         <dependency>
-            <groupId>org.elasticsearch</groupId>
-            <artifactId>elasticsearch</artifactId>
-            <version>5.6.7</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <version>6.5.4</version>
+        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -125,7 +145,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-
+        <dependency>
+        <groupId>com.lind</groupId>
+        <artifactId>lind-elasticsearch-start</artifactId>
+        <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 

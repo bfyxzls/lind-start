@@ -1,5 +1,6 @@
-package com.lind.elasticsearch;
+package com.lind.start.test.es;
 
+import com.lind.elasticsearch.audit.EnableEsAuditing;
 import com.lind.elasticsearch.util.EsPageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
@@ -21,16 +22,17 @@ import java.util.Optional;
 
 @SpringBootTest()
 @Slf4j
+@EnableEsAuditing
 public class TestApp {
 
     @Autowired
-    EsRepo testDao;
+    TestDao testDao;
     @Autowired
     ElasticsearchRestTemplate elasticsearchTemplate;
 
     @Test
     public void insert() {
-        EsDto testBean = new EsDto("lind5", 1, "测试", "es hello world");
+        TestEsDto testBean = new TestEsDto("lind5", 1, "测试", "es hello world");
         testDao.save(testBean);
     }
 
@@ -44,10 +46,10 @@ public class TestApp {
         SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(new FetchSourceFilter(fieldNames, null))
                 .withPageable(pageable).build();
-        Page<EsDto> page = testDao.search(searchQuery);
-        List<EsDto> content = page.getContent();
+        Page<TestEsDto> page = testDao.search(searchQuery);
+        List<TestEsDto> content = page.getContent();
         if (content.size() > 0) {
-            for (EsDto dto : content) {
+            for (TestEsDto dto : content) {
                 log.info(dto.toString());
             }
         }
@@ -62,7 +64,7 @@ public class TestApp {
         indexRequest.source(sourceMap);
         UpdateQuery updateQuery = new UpdateQueryBuilder()
                 .withId(id)
-                .withClass(EsDto.class)
+                .withClass(TestEsDto.class)
                 .withIndexRequest(indexRequest).build();
         elasticsearchTemplate.update(updateQuery);
     }
@@ -70,7 +72,7 @@ public class TestApp {
     @Test
     public void detail() {
         String id = "303280141742641152";
-        Optional<EsDto> optional = testDao.findById(id);
+        Optional<TestEsDto> optional = testDao.findById(id);
         Assert.notNull(optional.orElse(null));
         log.info(optional.get().toString());
     }

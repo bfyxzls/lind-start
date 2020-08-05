@@ -18,21 +18,25 @@ public class EsBaseEntity {
      * 创建时间.
      */
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
+    @CreatedDate
     protected String createTime;
     /**
      * 创建人.
      */
     @Field(type = FieldType.Keyword)
+    @CreatedBy
     protected String creator;
     /**
      * 更新时间.
      */
     @Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
+    @LastModifiedDate
     protected String updateTime;
     /**
      * 更新人.
      */
     @Field(type = FieldType.Keyword)
+    @LastModifiedBy
     protected String updateUser;
     /**
      * 删除标记.
