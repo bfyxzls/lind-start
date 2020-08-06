@@ -20,6 +20,7 @@
         <module>a-start-oauth</module>
         <module>a-start-test-depend-shade</module>
         <module>lind-elasticsearch-start</module>
+        <module>lind-mybatis-start</module>
 
     </modules>
     <properties>
