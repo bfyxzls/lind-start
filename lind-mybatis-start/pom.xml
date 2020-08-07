@@ -22,15 +22,12 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <properties>
-        <mybatis-plus.version>3.0.6</mybatis-plus.version>
-    </properties>
+
     <dependencies>
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

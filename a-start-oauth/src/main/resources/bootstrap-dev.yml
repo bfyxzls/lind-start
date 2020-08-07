@@ -1,8 +1,13 @@
 spring:
-   cloud:
-      nacos:
-         config:
-            server-addr: 127.0.0.1:8848
-            file-extension: yaml
-         discovery:
-            server-addr: 127.0.0.1:8848
+#   cloud:
+#      nacos:
+#         config:
+#            server-addr: 127.0.0.1:8848
+#            file-extension: yaml
+#         discovery:
+#            server-addr: 127.0.0.1:8848
+   datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://192.168.4.26:3306/hunandianwang?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      username: root
+      password: 123456
