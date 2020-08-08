@@ -8,6 +8,6 @@ spring:
 #            server-addr: 127.0.0.1:8848
    datasource:
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://192.168.4.26:3306/hunandianwang?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false
+      url: jdbc:mysql://localhost:3306/zhfw?useUnicode=true&characterEncoding=utf-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=UTC
       username: root
       password: 123456

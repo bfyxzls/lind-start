@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>swagger-start</artifactId>
+    <artifactId>lind-swagger-start</artifactId>
     <dependencies>
         <!--swagger 依赖-->
         <dependency>

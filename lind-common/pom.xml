@@ -9,7 +9,7 @@
     </parent>
     <version>1.0.2</version>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>common</artifactId>
+    <artifactId>lind-common</artifactId>
     <properties>
         <jsr305.version>3.0.2</jsr305.version>
         <more-lambdas.version>0.1.27</more-lambdas.version>

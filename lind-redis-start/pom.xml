@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>redis-start</artifactId>
+    <artifactId>lind-redis-start</artifactId>
 
     <dependencies>
         <dependency>
