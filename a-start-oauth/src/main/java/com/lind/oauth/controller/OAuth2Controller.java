@@ -1,9 +1,10 @@
-package com.lind.uaa.controller;
+package com.lind.oauth.controller;
 
 import com.lind.uaa.entity.User;
 import com.lind.uaa.redis.RedisUtil;
 import com.lind.uaa.util.UAAConstant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-@RequestMapping
 public class OAuth2Controller {
 
     @Autowired
@@ -39,12 +39,13 @@ public class OAuth2Controller {
     @Autowired
     private RedisUtil redisUtil;
 
+
     @PostMapping("/oauth/token")
-    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) {
+    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal,  @RequestBody Map<String,String>parameters) {
         try {
             redisTemplate.opsForValue().set(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), parameters.get("loginType"));
             redisTemplate.expire(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), 3000, TimeUnit.SECONDS);
-            ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal, parameters);
+            ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal,parameters);
             if (!ObjectUtils.isEmpty(responseEntity)) {
                 if (responseEntity.getStatusCodeValue() == 200) {
                     User user = (User) redisUtil.get(UAAConstant.USER + responseEntity.getBody().getValue());
@@ -98,7 +99,7 @@ public class OAuth2Controller {
      *
      * @return
      */
-    @GetMapping("/user-me")
+    @GetMapping("/oauth/user-me")
     public Authentication principal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("user-me:{}" + authentication.getName());
@@ -112,7 +113,7 @@ public class OAuth2Controller {
      *
      * @param access_token
      */
-    @DeleteMapping(value = "/remove_token", params = "access_token")
+    @DeleteMapping(value = "/oauth/remove_token", params = "access_token")
     public void removeToken(String access_token) {
         boolean flag = tokenServices.revokeToken(access_token);
         if (flag) {
@@ -120,9 +121,4 @@ public class OAuth2Controller {
         }
     }
 
-    @GetMapping("/oauth/test")
-    public ResponseEntity test() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ResponseEntity.ok("调用成功");
-    }
 }

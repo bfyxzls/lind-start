@@ -1,12 +1,12 @@
 package com.lind.uaa.permission;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lind.uaa.dao.PermissionDao;
+import com.lind.uaa.service.OauthPermissionService;
 import com.lind.uaa.entity.Permission;
 import com.lind.uaa.util.UAAConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -25,11 +25,12 @@ import java.util.*;
  */
 @Slf4j
 @Component
+@ConditionalOnClass(OauthPermissionService.class)
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
 
     @Autowired
-    private PermissionDao permissionDao;
+    private OauthPermissionService permissionDao;
 
     private Map<String, Collection<ConfigAttribute>> map = null;
 
@@ -42,9 +43,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(Permission::getType, UAAConstant.PERMISSION_OPERATION);
-        List<Permission> permissions = permissionDao.selectList(queryWrapper);
+        List<Permission> permissions = permissionDao.getByType(UAAConstant.PERMISSION_OPERATION);
         for (Permission permission : permissions) {
             if (StringUtils.isNotBlank(permission.getTitle()) && StringUtils.isNotBlank(permission.getPath())) {
                 configAttributes = new ArrayList<>();

@@ -1,5 +1,6 @@
 package com.lind.uaa.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.lind.mybatis.base.BaseEntity;
 import lombok.Data;
 import lombok.ToString;
@@ -17,9 +18,8 @@ import java.util.List;
  */
 @Data
 @ToString
+@TableName("t_user")
 public class User extends BaseEntity implements UserDetails {
-
-    private static final long serialVersionUID = 1L;
 
     /**
      * 用户名.

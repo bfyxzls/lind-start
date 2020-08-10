@@ -22,12 +22,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    @Value("${pkulaw.token.redis}")
-    private Boolean tokenRedis;
-
-    @Value("${pkulaw.tokenExpireTime}")
-    private Integer tokenExpireTime;
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);

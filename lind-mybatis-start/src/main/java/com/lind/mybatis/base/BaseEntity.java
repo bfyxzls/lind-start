@@ -66,11 +66,6 @@ public abstract class BaseEntity implements Serializable {
     @TableLogic
     private Integer delFlag = 0;
 
-    /**
-     * 建立部门.
-     */
-    @TableField("create_department_id")
-    @CreatedDepartmentBy
-    private String createDepartmentId;
+
 
 }

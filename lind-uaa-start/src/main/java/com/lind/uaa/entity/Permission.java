@@ -1,5 +1,8 @@
 package com.lind.uaa.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.lind.mybatis.base.BaseEntity;
 import lombok.Data;
 
@@ -10,6 +13,7 @@ import java.util.List;
  * @author Exrick
  */
 @Data
+@TableName("t_permission")
 public class Permission extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -79,32 +83,15 @@ public class Permission extends BaseEntity {
     private String url;
 
     /**
-     * 模板菜单ID.
-     */
-    private String templateId;
-
-    /**
      * 子菜单/权限.
      */
+    @TableField(exist = false)
     private List<Permission> children;
 
     /**
      * 页面拥有的权限类型.
      */
+    @TableField(exist = false)
     private List<String> permTypes;
 
-    /**
-     * 节点展开 前端所需.
-     */
-    private Boolean expand = true;
-
-    /**
-     * 是否勾选 前端所需.
-     */
-    private Boolean checked = false;
-
-    /**
-     * 是否选中 前端所需.
-     */
-    private Boolean selected = false;
 }
