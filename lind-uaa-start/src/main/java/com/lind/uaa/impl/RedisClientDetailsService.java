@@ -55,7 +55,7 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
         ClientDetails clientDetails = super.loadClientByClientId(clientId);
         if (clientDetails != null) {// 写入redis缓存
             stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(clientId, JSONObject.toJSONString(clientDetails));
-            //log.info("缓存clientId:{},{}", clientId, clientDetails);
+            log.info("缓存clientId:{},{}", clientId, clientDetails);
         }
 
         return clientDetails;
@@ -95,7 +95,7 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
         if (stringRedisTemplate.hasKey(CACHE_CLIENT_KEY) == Boolean.TRUE) {
             return;
         }
-        //log.info("将oauth_client_details全表刷入redis");
+        log.info("将oauth_client_details全表刷入redis");
 
         List<ClientDetails> list = super.listClientDetails();
         if (CollectionUtils.isEmpty(list)) {

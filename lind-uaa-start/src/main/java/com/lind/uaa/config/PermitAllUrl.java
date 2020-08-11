@@ -20,7 +20,8 @@ public final class PermitAllUrl {
             "/swagger-resources/**",
             "/webjars/**",
             "/webjars/**",
-            "/oauth/**"
+            "/oauth/token",
+            "/oauth/test"
     };
 
     /**

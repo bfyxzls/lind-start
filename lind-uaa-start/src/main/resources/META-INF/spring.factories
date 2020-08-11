@@ -4,7 +4,7 @@
    com.lind.uaa.config.ResourceServerConfig,\
    com.lind.uaa.config.RestAccessDeniedHandler,\
    com.lind.uaa.config.SecurityConfig,\
-   com.lind.uaa.security.IgnoredUrlsProperties,\
+   com.lind.uaa.config.IgnoredUrlsProperties,\
    com.lind.uaa.redis.RedisUtil,\
    com.lind.uaa.redis.RedisConfig,\
    com.lind.uaa.permission.MyAccessDecisionManager,\
@@ -14,4 +14,5 @@
    com.lind.uaa.impl.RedisAuthorizationCodeServices,\
    com.lind.uaa.impl.RedisClientDetailsService,\
    com.lind.uaa.impl.UserDetailServiceImpl,\
-   org.springframework.data.redis.connection.jedis.JedisConnectionFactory
+   org.springframework.data.redis.connection.jedis.JedisConnectionFactory,\
+   com.lind.uaa.controller.OAuth2Controller

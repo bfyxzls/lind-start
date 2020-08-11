@@ -1,4 +1,4 @@
-package com.lind.oauth.dao;
+package com.lind.uaa.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lind.uaa.entity.Permission;

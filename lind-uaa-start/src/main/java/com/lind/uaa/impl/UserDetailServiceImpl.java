@@ -2,15 +2,15 @@ package com.lind.uaa.impl;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.uaa.service.OauthUserService;
+import com.lind.uaa.dto.SecurityUserDetails;
 import com.lind.uaa.entity.User;
 import com.lind.uaa.redis.RedisUtil;
+import com.lind.uaa.service.OauthUserService;
 import com.lind.uaa.util.UAAConstant;
 import com.lind.uaa.util.UAAException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,6 +46,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
             //持久化到redis
             redisUtil.set(UAAConstant.USER + username, user);
         }
-        return user;
+        return new SecurityUserDetails(user);
     }
 }

@@ -11,7 +11,6 @@
 
     <artifactId>lind-uaa-start</artifactId>
 
-
     <dependencyManagement>
         <dependencies>
             <!--spring cloud 版本-->
@@ -22,10 +21,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
+                <artifactId>spring-boot-dependencies</artifactId>
                 <version>${spring-boot-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
 
@@ -66,6 +68,7 @@
             <groupId>com.lind</groupId>
             <artifactId>lind-mybatis-start</artifactId>
             <version>${lind-mybatis-start-version}</version>
+
         </dependency>
         <!-- redis -->
         <dependency>
@@ -85,6 +88,7 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
+            <version>2.9.0</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -92,5 +96,17 @@
         </dependency>
 
     </dependencies>
+    <build>
+        <plugins>
+            <!-- 跳过test项目 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

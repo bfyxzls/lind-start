@@ -46,7 +46,7 @@
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
         <commons-lang3-version>3.7</commons-lang3-version>
-        <jedis-version>3.3.0</jedis-version>
+        <jedis-version>2.9.0</jedis-version>
     </properties>
 
     <!-- 公用配置管理 -->

@@ -1,4 +1,4 @@
-package com.lind.oauth;
+package com.lind;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -30,13 +30,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                         (request, response, authException) -> response.sendError(
                                 HttpServletResponse.SC_UNAUTHORIZED))
                 .and().authorizeRequests()
-                .antMatchers("/oauth/token").permitAll() // 放开权限的url
+                .antMatchers("/oauth/**").permitAll() // 放开权限的url
                 .anyRequest().authenticated()
-                .and().httpBasic()
-        ;
+                .and().httpBasic() ;
 
-
-//        http.authorizeRequests().anyRequest().permitAll();
         http.headers().frameOptions().sameOrigin();
     }
 

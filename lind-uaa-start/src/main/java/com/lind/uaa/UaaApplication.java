@@ -1,19 +1,17 @@
-package com.lind.oauth;
+package com.lind.uaa;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 
 @SpringBootApplication
-@MapperScan("com.lind.oauth.dao")
-@EnableAuthorizationServer
 @EnableResourceServer
-public class OauthApplication {
+@MapperScan("com.lind.uaa.mapper")
+public class UaaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OauthApplication.class, args);
+        SpringApplication.run(UaaApplication.class, args);
 
     }
 

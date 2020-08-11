@@ -1,10 +1,9 @@
-package com.lind.oauth.controller;
+package com.lind.uaa.controller;
 
 import com.lind.uaa.entity.User;
 import com.lind.uaa.redis.RedisUtil;
 import com.lind.uaa.util.UAAConstant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,10 @@ import org.springframework.security.oauth2.common.exceptions.InvalidGrantExcepti
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
 import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -41,11 +43,11 @@ public class OAuth2Controller {
 
 
     @PostMapping("/oauth/token")
-    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal,  @RequestBody Map<String,String>parameters) {
+    public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) {
         try {
             redisTemplate.opsForValue().set(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), parameters.get("loginType"));
             redisTemplate.expire(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), 3000, TimeUnit.SECONDS);
-            ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal,parameters);
+            ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal, parameters);
             if (!ObjectUtils.isEmpty(responseEntity)) {
                 if (responseEntity.getStatusCodeValue() == 200) {
                     User user = (User) redisUtil.get(UAAConstant.USER + responseEntity.getBody().getValue());
@@ -106,19 +108,10 @@ public class OAuth2Controller {
         return authentication;
     }
 
-    /**
-     * 注销登陆/退出
-     * 移除access_token和refresh_token<br>
-     * 2018.06.28 改为用ConsumerTokenServices，该接口的实现类DefaultTokenServices已有相关实现，我们不再重复造轮子
-     *
-     * @param access_token
-     */
-    @DeleteMapping(value = "/oauth/remove_token", params = "access_token")
-    public void removeToken(String access_token) {
-        boolean flag = tokenServices.revokeToken(access_token);
-        if (flag) {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        }
+    @GetMapping("/oauth/test")
+    public ResponseEntity ok() {
+        return ResponseEntity.ok("success");
     }
+
 
 }
