@@ -1,8 +1,8 @@
 package com.lind.start.test.hbase;
 
 import com.lind.common.util.SnowFlakeUtil;
-import com.lind.start.test.hbase.entity.DataRecord;
-import com.lind.start.test.hbase.service.HBaseService;
+import com.lind.hbase.entity.DataRecord;
+import com.lind.hbase.service.HBaseService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,14 @@ public class HbaseTest {
 
     @Test
     public void search() {
-      DataRecord dataRecord=  hBaseService.getByKey(TABLE_NAME,"305849083174588416");
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "305849083174588416");
         System.out.print(dataRecord.toString());
+    }
+
+    @Test
+    public void update() {
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "305849083174588416");
+        dataRecord.put("name", "李李");
+        hBaseService.update(TABLE_NAME, dataRecord);
     }
 }

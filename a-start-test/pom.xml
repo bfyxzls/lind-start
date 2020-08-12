@@ -134,9 +134,9 @@
 
 
         <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-shaded-client</artifactId>
-            <version>1.3.1</version>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-hbase-start</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
 

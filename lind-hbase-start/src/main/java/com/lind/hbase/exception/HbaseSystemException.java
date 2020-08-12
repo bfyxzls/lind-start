@@ -1,4 +1,4 @@
-package com.lind.start.test.hbase.exception;
+package com.lind.hbase.exception;
 
 
 /**

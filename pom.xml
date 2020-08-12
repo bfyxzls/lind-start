@@ -14,7 +14,6 @@
         <module>a-start-test</module>
         <module>a-start-test-depend</module>
         <module>lind-hbase-start</module>
-        <module>lind-hbase-shaded</module>
         <module>lind-common</module>
         <module>a-start-gateway</module>
         <module>a-start-oauth</module>

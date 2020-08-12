@@ -1,14 +1,9 @@
-package com.lind.start.test.hbase.service;
+package com.lind.hbase.service;
 
-import com.lind.start.test.hbase.entity.DataRecord;
+import com.lind.hbase.entity.DataRecord;
 
 import java.io.IOException;
 
-/**
- * @author 赵阳
- * @Description TODO
- * @date 2020/7/20 9:03
- **/
 public interface HBaseService {
 
     /**

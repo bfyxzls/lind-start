@@ -5,7 +5,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Sender {
+public class MessageSender {
     String kafkaTopic = "topic.quick.demo";
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;

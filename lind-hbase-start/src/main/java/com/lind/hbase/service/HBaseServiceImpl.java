@@ -1,9 +1,9 @@
-package com.lind.start.test.hbase.service;
+package com.lind.hbase.service;
 
-import com.lind.start.test.hbase.api.RowMapper;
-import com.lind.start.test.hbase.api.TableCallback;
-import com.lind.start.test.hbase.entity.DataRecord;
-import com.lind.start.test.hbase.template.HBaseTemplate;
+import com.lind.hbase.api.RowMapper;
+import com.lind.hbase.api.TableCallback;
+import com.lind.hbase.entity.DataRecord;
+import com.lind.hbase.template.HBaseTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,11 +19,6 @@ import org.springframework.util.SerializationUtils;
 import java.io.IOException;
 import java.util.UUID;
 
-/**
- * @author 赵阳
- * @Description TODO
- * @date 2020/7/20 9:05
- **/
 @Slf4j
 @RequiredArgsConstructor
 public class HBaseServiceImpl implements HBaseService {

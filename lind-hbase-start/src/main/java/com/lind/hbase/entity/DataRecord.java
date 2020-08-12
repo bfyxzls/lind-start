@@ -1,4 +1,4 @@
-package com.lind.start.test.hbase.entity;
+package com.lind.hbase.entity;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -153,7 +153,7 @@ public class DataRecord implements Map<String, Object>, Serializable {
     }
 
     @Override
-    public Set<Map.Entry<String, Object>> entrySet() {
+    public Set<Entry<String, Object>> entrySet() {
         return document.entrySet();
     }
 

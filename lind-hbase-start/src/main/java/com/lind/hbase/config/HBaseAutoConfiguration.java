@@ -1,8 +1,9 @@
 package com.lind.hbase.config;
 
 import com.lind.hbase.api.HBaseOperations;
-import com.lind.hbase.api.HBaseTemplate;
-import com.lind.hbase.properties.HBaseProperties;
+import com.lind.hbase.service.HBaseService;
+import com.lind.hbase.service.HBaseServiceImpl;
+import com.lind.hbase.template.HBaseTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -16,13 +17,10 @@ import org.springframework.context.annotation.Bean;
 import java.io.IOException;
 import java.util.Objects;
 
-/**
- * Hbase配置.
- */
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties({HBaseProperties.class})
-@ConditionalOnProperty(value = "lind.hbase.enable", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = "hbase.enable", havingValue = "true", matchIfMissing = true)
 public class HBaseAutoConfiguration {
 
 
@@ -37,10 +35,10 @@ public class HBaseAutoConfiguration {
     }
 
     /**
-     * Base 连接.
+     * HBase 连接
      *
-     * @return 返回
-     * @throws IOException IO错误
+     * @return
+     * @throws IOException
      */
     @Bean
     public Connection connection() throws IOException {
@@ -77,7 +75,6 @@ public class HBaseAutoConfiguration {
             }
 
             if (!isEmptyOrWhiteSpace(properties.getUsername())) {
-                //conf.set("HADOOP_USER_NAME", properties.getUsername());
                 System.setProperty("HADOOP_USER_NAME", properties.getUsername());
             }
 
@@ -97,5 +94,11 @@ public class HBaseAutoConfiguration {
         return hbaseTemplate;
     }
 
+
+    @Bean
+    @ConditionalOnMissingBean(HBaseService.class)
+    public HBaseService hBaseService(HBaseTemplate template) {
+        return new HBaseServiceImpl(template, properties.getNameSpace());
+    }
 
 }

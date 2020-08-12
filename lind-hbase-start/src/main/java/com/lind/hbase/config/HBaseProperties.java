@@ -1,16 +1,11 @@
-package com.lind.start.test.hbase.config;
+package com.lind.hbase.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-/**
- * @author 赵阳
- * @Description TODO
- * @date 2020/6/5 15:09
- **/
 @Data
-@ConfigurationProperties("winter.hbase")
-public class WinterHBaseProperties {
+@ConfigurationProperties("hbase")
+public class HBaseProperties {
 
 
     /**
@@ -32,11 +27,11 @@ public class WinterHBaseProperties {
     /**
      * zookeeper相关配置
      */
-    private WinterZookeeperProperties zookeeper = new WinterZookeeperProperties();
+    private ZookeeperProperties zookeeper = new ZookeeperProperties();
     /**
      * 客户端相关配置，重试次数与时间等
      */
-    private WinterHBaseClientProperties client = new WinterHBaseClientProperties();
+    private HBaseClientProperties client = new HBaseClientProperties();
     private Rpc rpc = new Rpc();
 
 
@@ -49,7 +44,7 @@ public class WinterHBaseProperties {
     }
 
     @Data
-    public class WinterZookeeperProperties {
+    public class ZookeeperProperties {
 
         /**
          * zookeeper地址，以英文逗号隔开
@@ -59,7 +54,7 @@ public class WinterHBaseProperties {
     }
 
     @Data
-    public class WinterHBaseClientProperties {
+    public class HBaseClientProperties {
 
         /**
          * 失败重试等待时间，单位 ms

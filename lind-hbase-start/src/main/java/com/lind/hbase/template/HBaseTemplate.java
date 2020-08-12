@@ -1,6 +1,11 @@
-package com.lind.hbase.api;
+package com.lind.hbase.template;
 
-import org.apache.commons.lang.StringUtils;
+import com.lind.hbase.api.HBaseOperations;
+import com.lind.hbase.api.MutatorCallback;
+import com.lind.hbase.api.RowMapper;
+import com.lind.hbase.api.TableCallback;
+import com.lind.hbase.exception.HbaseSystemException;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -10,7 +15,6 @@ import org.springframework.util.Assert;
 import org.springframework.util.StopWatch;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -42,7 +46,7 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public <T> T execute(String tableName, TableCallback<T> action) {
+    public <T> T execute(TableName tableName, TableCallback<T> action) {
         Assert.notNull(action, "Callback object must not be null");
         Assert.notNull(tableName, "No table specified");
 
@@ -50,7 +54,7 @@ public class HBaseTemplate implements HBaseOperations {
         sw.start();
         Table table = null;
         try {
-            table = this.getConnection().getTable(TableName.valueOf(tableName));
+            table = this.getConnection().getTable(tableName);
             return action.doInTable(table);
         } catch (Throwable throwable) {
             throw new HbaseSystemException(throwable);
@@ -67,63 +71,22 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public <T> List<T> find(String tableName, String family, final RowMapper<T> action) {
-        Scan scan = new Scan();
-        scan.setCaching(5000);
-        scan.addFamily(Bytes.toBytes(family));
-        return this.find(tableName, scan, action);
+    public <T> T get(TableName tableName, String rowKey, final RowMapper<T> mapper) {
+        return this.get(tableName, rowKey, null, null, mapper);
     }
 
     @Override
-    public <T> List<T> find(String tableName, String family, String qualifier, final RowMapper<T> action) {
-        Scan scan = new Scan();
-        scan.setCaching(5000);
-        scan.addColumn(Bytes.toBytes(family), Bytes.toBytes(qualifier));
-        return this.find(tableName, scan, action);
+    public <T> T get(TableName tableName, String rowKey, String familyName, final RowMapper<T> mapper) {
+        return this.get(tableName, rowKey, familyName, null, mapper);
     }
 
     @Override
-    public <T> List<T> find(String tableName, final Scan scan, final RowMapper<T> action) {
-        return this.execute(tableName, new TableCallback<List<T>>() {
-            @Override
-            public List<T> doInTable(Table table) throws Throwable {
-                int caching = scan.getCaching();
-                // 如果caching未设置(默认是1)，将默认配置成5000
-                if (caching == 1) {
-                    scan.setCaching(5000);
-                }
-                ResultScanner scanner = table.getScanner(scan);
-                try {
-                    List<T> rs = new ArrayList<T>();
-                    int rowNum = 0;
-                    for (Result result : scanner) {
-                        rs.add(action.mapRow(result, rowNum++));
-                    }
-                    return rs;
-                } finally {
-                    scanner.close();
-                }
-            }
-        });
-    }
-
-    @Override
-    public <T> T get(String tableName, String rowName, final RowMapper<T> mapper) {
-        return this.get(tableName, rowName, null, null, mapper);
-    }
-
-    @Override
-    public <T> T get(String tableName, String rowName, String familyName, final RowMapper<T> mapper) {
-        return this.get(tableName, rowName, familyName, null, mapper);
-    }
-
-    @Override
-    public <T> T get(String tableName, final String rowName, final String familyName, final String qualifier,
+    public <T> T get(TableName tableName, final String rowKey, final String familyName, final String qualifier,
                      final RowMapper<T> mapper) {
         return this.execute(tableName, new TableCallback<T>() {
             @Override
             public T doInTable(Table table) throws Throwable {
-                Get get = new Get(Bytes.toBytes(rowName));
+                Get get = new Get(Bytes.toBytes(rowKey));
                 if (StringUtils.isNotBlank(familyName)) {
                     byte[] family = Bytes.toBytes(familyName);
                     if (StringUtils.isNotBlank(qualifier)) {
@@ -139,7 +102,7 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public void execute(String tableName, MutatorCallback action) {
+    public void execute(TableName tableName, MutatorCallback action) {
         Assert.notNull(action, "Callback object must not be null");
         Assert.notNull(tableName, "No table specified");
 
@@ -147,7 +110,7 @@ public class HBaseTemplate implements HBaseOperations {
         sw.start();
         BufferedMutator mutator = null;
         try {
-            BufferedMutatorParams mutatorParams = new BufferedMutatorParams(TableName.valueOf(tableName));
+            BufferedMutatorParams mutatorParams = new BufferedMutatorParams(tableName);
             mutator = this.getConnection().getBufferedMutator(mutatorParams.writeBufferSize(3 * 1024 * 1024));
             action.doInMutator(mutator);
         } catch (Throwable throwable) {
@@ -159,6 +122,9 @@ public class HBaseTemplate implements HBaseOperations {
                     mutator.flush();
                     mutator.close();
                     sw.stop();
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("cost time:{}", sw.prettyPrint());
+                    }
                 } catch (IOException e) {
                     LOGGER.error("hbase mutator资源释放失败");
                 }
@@ -167,7 +133,7 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public void saveOrUpdate(String tableName, final Mutation mutation) {
+    public void saveOrUpdate(TableName tableName, final Mutation mutation) {
         this.execute(tableName, new MutatorCallback() {
             @Override
             public void doInMutator(BufferedMutator mutator) throws Throwable {
@@ -177,7 +143,7 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public void saveOrUpdates(String tableName, final List<Mutation> mutations) {
+    public void saveOrUpdates(TableName tableName, final List<Mutation> mutations) {
         this.execute(tableName, new MutatorCallback() {
             @Override
             public void doInMutator(BufferedMutator mutator) throws Throwable {

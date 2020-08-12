@@ -44,8 +44,7 @@ spring:
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 # hbase配置
-winter:
-  hbase:
+hbase:
     zookeeper:
       quorum: 192.168.10.37,192.168.10.38,192.168.10.39
     name-space: nezha
