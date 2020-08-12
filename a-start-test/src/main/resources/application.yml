@@ -28,6 +28,31 @@ spring:
     username: root
     password: 123456
 
+# 指定kafka 代理地址，可以多个
+  kafka:
+    listener:
+      missing-topics-fatal: false # 没有主题就自动建立
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: group_id
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+# hbase配置
+winter:
+  hbase:
+    zookeeper:
+      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+    name-space: nezha
+
+zookeeper:
+  znode:
+    parent: /hbase
 # Mybatis-plus
 mybatis-plus:
   mapper-locations: classpath:/mapper/*.xml

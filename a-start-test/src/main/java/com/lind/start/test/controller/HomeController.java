@@ -3,7 +3,6 @@ package com.lind.start.test.controller;
 import com.lind.common.lock.Callback;
 import com.lind.common.lock.RedisLockTemplate;
 import com.lind.start.test.dto.UserDTO;
-import com.lind.testshade.mapper.UserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import java.util.concurrent.TimeUnit;
 @RestController
 @Slf4j
 public class HomeController {
-    @Autowired
-    UserMapper userMapper;
     @Autowired
     private RedisLockTemplate redisLockTemplate;
 
