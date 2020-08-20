@@ -43,6 +43,11 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
+redis:
+  lock:
+    autoRelease: false
+    registryKey: lind-lock
+
 # hbase配置
 hbase:
     zookeeper:

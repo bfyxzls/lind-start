@@ -1,11 +1,12 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.lock.Callback;
-import com.lind.common.lock.RedisLockTemplate;
+import com.lind.common.lock.annotation.RepeatSubmit;
+import com.lind.common.lock.impl.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,19 +21,14 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class HomeController {
     @Autowired
-    private RedisLockTemplate redisLockTemplate;
-
-//    @GetMapping("/ok")
-//    public ResponseEntity ok() {
-//
-//        return ResponseEntity.ok(userMapper.selectById(1));
-//    }
+    RedisUserManualLockTemplate redisUserManualLockTemplate;
+    @Autowired
+    ApplicationContext applicationContext;
 
     @PostMapping("/p")
     public ResponseEntity p(@RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(userDTO);
     }
-
 
     @PostMapping("/postUser")
     public ResponseEntity postUser(@RequestBody UserDTO userDTO) {
@@ -54,33 +50,31 @@ public class HomeController {
     }
 
     /**
-     * 同步锁限流测试.
+     * 同步锁.
      *
-     * @param request
+     * @param userId
      * @return
      */
     @RequestMapping(value = "/lockAndLimit", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity test1(HttpServletRequest request) {
+    public Object test1(HttpServletRequest request, @RequestParam String userId) throws InterruptedException {
+        request.getSession().setAttribute("id", userId);
+        return redisUserManualLockTemplate.execute("dateId1001", 30, TimeUnit.SECONDS);
+    }
 
-        redisLockTemplate.execute("订单流水号", 2, TimeUnit.SECONDS, new Callback() {
-            @Override
-            public Object onGetLock() throws InterruptedException {
-                // 获得锁后要做的事
-                log.info("生成订单流水号，需要5秒钟，些时有请求打入应该被阻塞或者拒绝");
-                Thread.sleep(5000);
-                return null;
-            }
+    @RepeatSubmit()
+    @RequestMapping(value = "/repeat", method = RequestMethod.GET)
+    public String repeat() {
+        return "OK";
+    }
 
-            @Override
-            public Object onTimeout() throws InterruptedException {
-                // 获取到锁（获取锁超时）后要做的事
-                log.info("没拿到锁");
-                return null;
-            }
-        });
-
-        return ResponseEntity.ok("success");
+    /**
+     * 删除锁
+     *
+     * @return
+     */
+    @RequestMapping(value = "/remove", method = RequestMethod.GET)
+    public void remove() {
+        redisUserManualLockTemplate.unLock("dateId1001");
     }
 
     /**
