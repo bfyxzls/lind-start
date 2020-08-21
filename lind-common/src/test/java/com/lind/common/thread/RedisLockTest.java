@@ -1,7 +1,7 @@
 package com.lind.common.thread;
 
-import com.lind.common.lock.Callback;
-import com.lind.common.lock.DistributedLockTemplate;
+import com.lind.common.lock.template.Callback;
+import com.lind.common.lock.template.DistributedLockTemplate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

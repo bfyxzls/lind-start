@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "redis.lock")
+@ConfigurationProperties(prefix = "lind.redis.lock")
 public class RedisLockProperty {
     /**
      * 是否开启redis分布锁.

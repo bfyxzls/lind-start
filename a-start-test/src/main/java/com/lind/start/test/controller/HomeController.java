@@ -1,7 +1,7 @@
 package com.lind.start.test.controller;
 
 import com.lind.common.lock.annotation.RepeatSubmit;
-import com.lind.common.lock.impl.RedisUserManualLockTemplate;
+import com.lind.common.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.UserDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;

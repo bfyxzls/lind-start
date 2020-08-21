@@ -1,4 +1,4 @@
-package com.lind.common.lock;
+package com.lind.common.lock.template;
 
 /**
  * @author sunyujia@aliyun.com https://github.com/yujiasun/Distributed-Kit

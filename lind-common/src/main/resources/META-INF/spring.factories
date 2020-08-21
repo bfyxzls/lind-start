@@ -1,10 +1,10 @@
-# 自动注入的bean,有些自动注入bean里面也会有手动new出来的bean,如RedisLockConfig里包含了两个bean.
+# 自动注入的bean
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.logger.LoggerConfigure, \
   com.lind.common.lock.config.RedisLockConfig, \
   com.lind.common.lock.config.RedisLockProperty,\
-  com.lind.common.lock.impl.RedisLockTemplate,\
-  com.lind.common.lock.impl.redisUserManualLockTemplate,\
+  com.lind.common.lock.template.RedisLockTemplate,\
+  com.lind.common.lock.template.RedisUserManualLockTemplate,\
   com.lind.common.lock.aspect.RepeatSubmitAspect,\
   com.lind.common.thread.LindExecutorPool,\
   com.lind.common.limit.LimitProperties,\

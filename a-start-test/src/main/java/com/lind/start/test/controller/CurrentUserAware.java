@@ -1,18 +1,17 @@
 package com.lind.start.test.controller;
 
+import com.lind.common.lock.template.UserIdAuditorAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
 
 @Component
-public class CurrentUserAware implements AuditorAware<String> {
+public class CurrentUserAware implements UserIdAuditorAware {
     @Autowired
     ApplicationContext applicationContext;
 

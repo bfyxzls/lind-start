@@ -1,7 +1,5 @@
-package com.lind.common.lock.impl;
+package com.lind.common.lock.template;
 
-import com.lind.common.lock.Callback;
-import com.lind.common.lock.DistributedLockTemplate;
 import com.lind.common.lock.config.RedisLockProperty;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;

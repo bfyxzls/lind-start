@@ -1,4 +1,4 @@
-package com.lind.common.lock;
+package com.lind.common.lock.template;
 
 import java.util.concurrent.TimeUnit;
 

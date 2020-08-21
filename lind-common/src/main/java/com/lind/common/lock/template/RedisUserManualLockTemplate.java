@@ -1,16 +1,14 @@
-package com.lind.common.lock.impl;
+package com.lind.common.lock.template;
 
 import com.google.common.collect.ImmutableMap;
-import com.lind.common.lock.Callback;
 import com.lind.common.lock.config.RedisLockProperty;
-import com.lind.common.lock.exception.RepeatSubmitException;
+import com.lind.common.lock.exception.RedisUserManualLockException;
+import com.lind.common.util.SpringContextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
@@ -33,10 +31,9 @@ public class RedisUserManualLockTemplate {
     @Autowired
     RedisLockProperty redisLockProperty;
     @Autowired
-    AuditorAware<String> auditorAware;
-    @Autowired
     RedisLockTemplate redisLockTemplate;
-
+    @Autowired
+    UserIdAuditorAware auditorAware;
     /**
      * 执行手动锁.
      *
@@ -60,7 +57,7 @@ public class RedisUserManualLockTemplate {
                         timeout,
                         unit);
                 log.info("获取锁成功，需要检查锁定列表里是否是自己的资源.");
-                return ResponseEntity.ok(ImmutableMap.of("code", "200"));
+                return true; // 成功获取
             }
 
             @Override
@@ -81,7 +78,7 @@ public class RedisUserManualLockTemplate {
         if (redisTemplate.hasKey(key)) {
             String currentValue = redisTemplate.opsForValue().get(key);
             if (StringUtils.isBlank(currentValue) || !currentValue.equals(user)) {
-                throw new RepeatSubmitException(
+                throw new RedisUserManualLockException(
                         String.format("记录正被用户%s锁定,将在%s秒后释放",
                                 currentValue,
                                 redisTemplate.getExpire(key)));
@@ -101,10 +98,10 @@ public class RedisUserManualLockTemplate {
         if (redisTemplate.hasKey(key)) {
             currentValue = redisTemplate.opsForValue().get(key);
             if (StringUtils.isNotBlank(currentValue) && currentValue.equals(user)) {
-                return ResponseEntity.ok(ImmutableMap.of("code", "200"));
+                return true; // 成功获取
             }
         }
-        throw new RepeatSubmitException(
+        throw new RedisUserManualLockException(
                 String.format("记录正被用户%s锁定,将在%s秒后释放",
                         currentValue,
                         redisTemplate.getExpire(key)));
