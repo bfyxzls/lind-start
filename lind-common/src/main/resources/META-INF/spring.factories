@@ -1,3 +1,4 @@
+# 自动注入的bean,有些自动注入bean里面也会有手动new出来的bean,如RedisLockConfig里包含了两个bean.
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.logger.LoggerConfigure, \
   com.lind.common.lock.config.RedisLockConfig, \

@@ -56,9 +56,27 @@ public class HomeController {
      * @return
      */
     @RequestMapping(value = "/lockAndLimit", method = RequestMethod.GET)
-    public Object test1(HttpServletRequest request, @RequestParam String userId) throws InterruptedException {
+    public Object test1(HttpServletRequest request, @RequestParam String sourceId, @RequestParam String userId) throws InterruptedException {
         request.getSession().setAttribute("id", userId);
-        return redisUserManualLockTemplate.execute("dateId1001", 30, TimeUnit.SECONDS);
+        return redisUserManualLockTemplate.execute(sourceId, 60*5, TimeUnit.SECONDS);
+    }
+
+    /**
+     * 删除锁
+     *
+     * @return
+     */
+    @RequestMapping(value = "/remove/{sourceId}", method = RequestMethod.GET)
+    public void remove(@PathVariable String sourceId) {
+        redisUserManualLockTemplate.unLock(sourceId);
+    }
+
+    /**
+     * 锁定资源列表.
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public ResponseEntity list() {
+       return  ResponseEntity.ok(redisUserManualLockTemplate.getSourceList());
     }
 
     @RepeatSubmit()
@@ -67,15 +85,6 @@ public class HomeController {
         return "OK";
     }
 
-    /**
-     * 删除锁
-     *
-     * @return
-     */
-    @RequestMapping(value = "/remove", method = RequestMethod.GET)
-    public void remove() {
-        redisUserManualLockTemplate.unLock("dateId1001");
-    }
 
     /**
      * 对应重定向咱们：/callback?token=abc123，咱们再把token重定向到其它网站

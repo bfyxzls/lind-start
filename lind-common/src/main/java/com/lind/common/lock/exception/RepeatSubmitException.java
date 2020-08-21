@@ -1,5 +1,8 @@
 package com.lind.common.lock.exception;
 
+/**
+ * 防治重复操作异常.
+ */
 public class RepeatSubmitException extends IllegalArgumentException {
 
     public RepeatSubmitException(String message) {

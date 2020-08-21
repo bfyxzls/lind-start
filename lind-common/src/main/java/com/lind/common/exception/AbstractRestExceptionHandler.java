@@ -21,7 +21,7 @@ import java.util.Set;
  */
 @Slf4j
 public class AbstractRestExceptionHandler {
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler({Exception.class, RuntimeException.class})
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handleException(Exception e) {
         String message = "系统内部异常";

@@ -3,6 +3,7 @@ package com.lind.common.lock.impl;
 import com.lind.common.lock.Callback;
 import com.lind.common.lock.DistributedLockTemplate;
 import com.lind.common.lock.config.RedisLockProperty;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -22,9 +23,9 @@ public class RedisLockTemplate implements DistributedLockTemplate {
     @Autowired
     private RedisLockProperty redisLockProperty;
 
+    @SneakyThrows //向上层抛出异常
     @Override
     public Object execute(String lockId, Integer timeout, TimeUnit unit, Callback callback) {
-        log.info("RedisLockTemplate.time {}", timeout);
         Lock lock = null;
         boolean getLock = false;
         try {
@@ -32,7 +33,7 @@ public class RedisLockTemplate implements DistributedLockTemplate {
             if (redisLockProperty.getInterrupt()) {
                 getLock = lock.tryLock();//中断执行,立即返回
             } else {
-                getLock = lock.tryLock(timeout, unit); //阻塞执行
+                getLock = lock.tryLock(timeout, unit); //阻塞执行,实现可重入锁，每100ms重试一次
             }
             if (getLock) {
                 // 拿到锁
@@ -42,18 +43,17 @@ public class RedisLockTemplate implements DistributedLockTemplate {
                 return callback.onTimeout();
             }
         } catch (InterruptedException ex) {
-            log.error(ex.getMessage(), ex);
             Thread.currentThread().interrupt();
+            log.error(ex.getMessage(), ex);
+            throw ex;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
+            throw e;
         } finally {
             if (getLock) {
-                if (redisLockProperty.getAutoRelease()) {
-                    // 释放锁
-                    lock.unlock();
-                }
+                // 释放锁
+                lock.unlock();
             }
         }
-        return null;
     }
 }

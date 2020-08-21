@@ -46,6 +46,7 @@ spring:
 redis:
   lock:
     autoRelease: false
+    interrupt: true
     registryKey: lind-lock
 
 # hbase配置
