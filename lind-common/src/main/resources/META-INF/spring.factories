@@ -1,12 +1,7 @@
 # 自动注入的bean
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.logger.LoggerConfigure, \
-  com.lind.common.lock.config.RedisLockConfig, \
-  com.lind.common.lock.config.RedisLockProperty,\
-  com.lind.common.lock.template.RedisLockTemplate,\
-  com.lind.common.lock.template.RedisUserManualLockTemplate,\
-  com.lind.common.lock.aspect.RepeatSubmitAspect,\
-  com.lind.common.thread.LindExecutorPool,\
-  com.lind.common.limit.LimitProperties,\
-  com.lind.common.limit.LimitRaterInterceptor,\
-  com.lind.common.limit.RedisRaterLimiter
+  com.lind.common.thread.LindExecutorPool
+# Application Listeners
+org.springframework.context.ApplicationListener=\
+  com.lind.common.listener.MessageDbListener

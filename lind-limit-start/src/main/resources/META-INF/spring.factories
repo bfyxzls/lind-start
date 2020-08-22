@@ -1,0 +1,5 @@
+# 自动注入的bean
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.lind.limit.LimitProperties,\
+  com.lind.limit.LimitRaterInterceptor,\
+  com.lind.limit.RedisRaterLimiter

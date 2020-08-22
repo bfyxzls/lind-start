@@ -7,9 +7,9 @@
         <groupId>com.lind</groupId>
         <version>1.0.0</version>
     </parent>
-    <version>1.0.2</version>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>lind-common</artifactId>
+
+    <artifactId>lind-lock-start</artifactId>
 
     <dependencies>
         <dependency>
@@ -26,6 +26,30 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-redis-start</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-common</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+        <!-- redis分布锁 -->
+        <dependency>
+            <groupId>org.springframework.integration</groupId>
+            <artifactId>spring-integration-redis</artifactId>
+
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
@@ -34,30 +58,17 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.phantomthief</groupId>
-            <artifactId>adaptive-executor</artifactId>
-            <version>0.1.4</version>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.phantomthief</groupId>
-            <artifactId>simple-pool</artifactId>
-            <version>0.1.17</version>
+            <groupId>com.github.kstyrc</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.6</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-
-     </dependencies>
-
+    </dependencies>
 </project>
