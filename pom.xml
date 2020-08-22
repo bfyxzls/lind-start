@@ -61,7 +61,12 @@
 
     <!-- 公用配置管理 -->
     <dependencies>
-
+        <!-- Generating Your Own Metadata by Using the Annotation Processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
