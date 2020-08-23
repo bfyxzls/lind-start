@@ -1,5 +1,6 @@
 package com.lind.common.exception;
 
+import com.lind.common.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -73,7 +74,7 @@ public class AbstractRestExceptionHandler {
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handleAccessDeniedException() {
-        return CommonResult.failure(CodeEnum.UNAUTHORIZED);
+        return CommonResult.failure(HttpCodeEnum.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = LindException.class)

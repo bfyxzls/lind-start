@@ -1,7 +1,8 @@
-package com.lind.common.exception;
+package com.lind.common.util;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lind.common.exception.HttpCodeEnum;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,11 +10,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * @Author 赵阳
- * @Description 通用返回结果
- * @Date 10:25 2019-04-23
- * @Param
- * @return
+ * 通用返回结果
  **/
 @Getter
 @Setter
@@ -69,14 +66,14 @@ public class CommonResult<T> implements Serializable {
      * @return
      */
     public static <T> CommonResult<T> ok(T data) {
-        CodeEnum success = CodeEnum.SUCCESS;
+        HttpCodeEnum success = HttpCodeEnum.SUCCESS;
         return new CommonResult<T>(success.getCode(), success.getMessage(), data);
     }
 
     public static <T> CommonResult<T> failure() {
         CommonResult<T> result = new CommonResult<>();
-        result.code = CodeEnum.FAILURE.getCode();
-        result.message = CodeEnum.FAILURE.getMessage();
+        result.code = HttpCodeEnum.FAILURE.getCode();
+        result.message = HttpCodeEnum.FAILURE.getMessage();
 
         return result;
     }
@@ -90,14 +87,14 @@ public class CommonResult<T> implements Serializable {
      **/
     public static <T> CommonResult<T> serverFailure(String message) {
         CommonResult<T> result = new CommonResult<>();
-        result.code = CodeEnum.INTERNAL_SERVER_ERROR.getCode();
+        result.code = HttpCodeEnum.INTERNAL_SERVER_ERROR.getCode();
         result.message = message;
         return result;
     }
 
     public static <T> CommonResult<T> clientFailure(String message) {
         CommonResult<T> result = new CommonResult<>();
-        result.code = CodeEnum.ILLEGAL_ARGUMENT.getCode();
+        result.code = HttpCodeEnum.ILLEGAL_ARGUMENT.getCode();
         result.message = message;
         return result;
     }
@@ -109,10 +106,10 @@ public class CommonResult<T> implements Serializable {
      * @Param codeEnum:
      * @return: com.pkulaw.tec.common.core.entity.CommonResult
      **/
-    public static <T> CommonResult<T> failure(CodeEnum codeEnum) {
+    public static <T> CommonResult<T> failure(HttpCodeEnum httpCodeEnum) {
         CommonResult<T> result = new CommonResult<>();
-        result.code = codeEnum.getCode();
-        result.message = codeEnum.getMessage();
+        result.code = httpCodeEnum.getCode();
+        result.message = httpCodeEnum.getMessage();
         return result;
     }
 
@@ -134,7 +131,7 @@ public class CommonResult<T> implements Serializable {
      */
     @JsonIgnore
     public boolean isSuccess() {
-        return CodeEnum.SUCCESS.getCode().equals(this.code);
+        return HttpCodeEnum.SUCCESS.getCode().equals(this.code);
     }
 
     /**

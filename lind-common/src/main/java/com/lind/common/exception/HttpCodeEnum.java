@@ -5,7 +5,7 @@ package com.lind.common.exception;
  *
  * @author BD-PC220
  */
-public enum CodeEnum {
+public enum HttpCodeEnum {
 
     /**
      * 成功
@@ -29,15 +29,19 @@ public enum CodeEnum {
 
 
     /**
+     * 没有授权
+     */
+    UNAUTHORIZED(401, "没有授权"),
+
+    /**
      * 权限不足
      */
-    UNAUTHORIZED(403, "权限不足");
-
+    FORBIDDEN(403,"权限不足");
 
     private Integer code;
     private String message;
 
-    CodeEnum(Integer code, String message) {
+    HttpCodeEnum(Integer code, String message) {
         this.code = code;
         this.message = message;
     }
