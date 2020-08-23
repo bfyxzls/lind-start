@@ -16,6 +16,9 @@
 5. lind-redis-start 封装了redis读写操作
 6. lind-uaa-start 用户收取服务
 
+# 项目里的公用包
+1. 公用工具包一般是util，它是单数，事实上包的命名都是单数
+2. util包里的类，一般用utils结尾，它是复数，这也是遵循国际上公用类库的一个标准，如com.google.guava和org.apache.commons.lang3里的类命名方式。
 # 测试项目
 1. a-start-gateway
 2. a-start-oauth

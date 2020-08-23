@@ -1,6 +1,6 @@
 package com.lind.start.test.hbase;
 
-import com.lind.common.util.SnowFlakeUtil;
+import com.lind.common.util.SnowFlakeUtils;
 import com.lind.hbase.entity.DataRecord;
 import com.lind.hbase.service.HBaseService;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class HbaseTest {
     @Test
     public void insert() {
         DataRecord dataRecord = new DataRecord();
-        dataRecord.setId(String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId()));
+        dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
         dataRecord.append("name", "zzl");
         dataRecord.append("age", "男");
         dataRecord.append("marry", true);
@@ -36,7 +36,7 @@ public class HbaseTest {
     @Test
     public void append() {
         DataRecord dataRecord = new DataRecord();
-        dataRecord.setId(String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId()));
+        dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
         dataRecord.append("name", "zhangzhanling");
         dataRecord.append("age", "男");
         dataRecord.append("marry", true);

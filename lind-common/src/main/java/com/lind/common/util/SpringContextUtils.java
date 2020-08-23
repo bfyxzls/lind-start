@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 /**
  * 直接获取bean.
  */
-public class SpringContextUtil implements ApplicationContextAware {
+public class SpringContextUtils implements ApplicationContextAware {
 
     /**
      * 上下文对象实例

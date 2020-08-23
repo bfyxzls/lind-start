@@ -1,6 +1,5 @@
 package com.lind.start.test.dto;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 

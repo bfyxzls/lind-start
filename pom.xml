@@ -52,6 +52,7 @@
         <httpclient.version>4.5.12</httpclient.version>
         <feign-httpclient.version>11.0</feign-httpclient.version>
         <swagger.fox.version>2.9.2</swagger.fox.version>
+        <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
         <commons-lang3-version>3.7</commons-lang3-version>
@@ -164,7 +165,7 @@
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
-                <version>${springfox-swagger2.version}</version>
+                <version>${springfox-swagger-ui.version}</version>
             </dependency>
 
             <!-- HTTP 客户端请求 -->
@@ -193,6 +194,14 @@
                 <artifactId>jedis</artifactId>
                 <version>${jedis-version}</version>
             </dependency>
+
+            <!-- Jasypt加密 -->
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>3.0.0</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <repositories>

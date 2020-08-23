@@ -1,6 +1,6 @@
 package com.lind.elasticsearch.entity;
 
-import com.lind.common.util.SnowFlakeUtil;
+import com.lind.common.util.SnowFlakeUtils;
 import lombok.Data;
 import org.springframework.data.annotation.*;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
@@ -47,6 +47,6 @@ public class EsBaseEntity {
      * 主键.
      */
     @Id
-    private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
+    private String id = String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId());
 
 }

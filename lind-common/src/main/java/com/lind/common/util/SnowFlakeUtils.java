@@ -2,13 +2,11 @@ package com.lind.common.util;
 
 
 /**
- * 原作者 zzxadi https://github.com/zzxadi/Snowflake-IdWorker
- *
- * @author Exrickx
+ * 雪花算法：ID生成器
  */
-public class SnowFlakeUtil {
+public class SnowFlakeUtils {
 
-    private static final SnowFlakeUtil flowIdWorker = new SnowFlakeUtil(1);
+    private static final SnowFlakeUtils flowIdWorker = new SnowFlakeUtils(1);
     private final long id;
     /**
      * 时间起始标记点，作为基准，一般取系统的最近时间
@@ -45,14 +43,14 @@ public class SnowFlakeUtil {
     private long sequence = 0L;
     private long lastTimestamp = -1L;
 
-    private SnowFlakeUtil(long id) {
+    private SnowFlakeUtils(long id) {
         if (id > this.maxWorkerId || id < 0) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0", this.maxWorkerId));
         }
         this.id = id;
     }
 
-    public static SnowFlakeUtil getFlowIdInstance() {
+    public static SnowFlakeUtils getFlowIdInstance() {
         return flowIdWorker;
     }
 
@@ -65,7 +63,7 @@ public class SnowFlakeUtil {
 
     public static void main(String[] args) {
         for (int i = 0; i < 100; i++) {
-            SnowFlakeUtil snowFlakeUtil = SnowFlakeUtil.getFlowIdInstance();
+            SnowFlakeUtils snowFlakeUtil = SnowFlakeUtils.getFlowIdInstance();
             System.out.println(snowFlakeUtil.nextId());
         }
     }
