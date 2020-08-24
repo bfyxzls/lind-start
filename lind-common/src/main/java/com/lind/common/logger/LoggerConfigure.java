@@ -1,6 +1,8 @@
 package com.lind.common.logger;
 
 import com.lind.common.exception.LindException;
+import org.slf4j.Logger;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +23,7 @@ public class LoggerConfigure {
      * @return
      */
     @Bean
+    @ConditionalOnMissingBean(Logger.class)
     public Logger defaultLogger() {
         return new EsLogger();
     }
@@ -34,10 +37,8 @@ public class LoggerConfigure {
     @ConditionalOnProperty(value = "lind.logger.enable", havingValue = "true", matchIfMissing = true)
     public Logger logger() {
         switch (loggerProperties.getType()) {
-            case "Console":
+            case "ES":
                 return new EsLogger();
-            case "File":
-                return new FileLogger();
             default:
                 throw new LindException("不能的日志类型");
         }

@@ -14,9 +14,14 @@ import static java.lang.String.format;
 public class DataRecord implements Map<String, Object>, Serializable {
 
     private static final long serialVersionUID = 2546462404989740543L;
+    /**
+     * 存储对象的容器,key为字段名,value为字段值.
+     */
     @Getter
     private final LinkedHashMap<String, Object> document;
-    //数据id，只能是string类型
+    /**
+     * rowkey字段.
+     */
     @Getter
     @Setter
     private String id;

@@ -50,18 +50,14 @@ public class HBaseServiceImpl implements HBaseService {
         String execute = hBaseTemplate.execute(retrieveTableName(tableName), new TableCallback<String>() {
             @Override
             public String doInTable(Table table) throws Throwable {
-
-
                 String id = dataRecord.getId();
                 String idStr = StringUtils.isBlank(id) ? UUID.randomUUID().toString() : id;
-
                 Put put = new Put(Bytes.toBytes(idStr));
-
                 dataRecord.entrySet().stream()
                         .forEach(en -> {
-                            //将数据填充到dataRecord中
-                            put.addColumn(FAMILY_NAME_BYTE, Bytes.toBytes(en.getKey()),
-                                    SerializationUtils.serialize(en.getValue()));
+                            put.addColumn(FAMILY_NAME_BYTE, // 列族
+                                    Bytes.toBytes(en.getKey()), // 列
+                                    SerializationUtils.serialize(en.getValue())); // 列值
                         });
                 table.put(put);
 

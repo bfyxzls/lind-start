@@ -6,14 +6,10 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author Exrickx
+ * 标准线程池配置.
  */
 public class ThreadPoolUtils {
 
-    /**
-     * 线程缓冲队列
-     */
-    private static BlockingQueue<Runnable> bqueue = new ArrayBlockingQueue<Runnable>(100);
     /**
      * 核心线程数，会一直存活，即使没有任务，线程池也会维护线程的最少数量
      */
@@ -26,11 +22,13 @@ public class ThreadPoolUtils {
      * 线程池维护线程所允许的空闲时间
      */
     private static final long ALIVE_TIME = 2000;
-
+    /**
+     * 线程缓冲队列
+     */
+    private static BlockingQueue<Runnable> bqueue = new ArrayBlockingQueue<Runnable>(100);
     private static ThreadPoolExecutor pool = new ThreadPoolExecutor(SIZE_CORE_POOL, SIZE_MAX_POOL, ALIVE_TIME, TimeUnit.MILLISECONDS, bqueue, new ThreadPoolExecutor.CallerRunsPolicy());
 
     static {
-
         pool.prestartAllCoreThreads();
     }
 
@@ -38,7 +36,4 @@ public class ThreadPoolUtils {
         return pool;
     }
 
-    public static void main(String[] args) {
-        System.out.println(pool.getPoolSize());
-    }
 }

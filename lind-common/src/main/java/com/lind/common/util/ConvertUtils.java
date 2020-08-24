@@ -44,35 +44,7 @@ public class ConvertUtils {
     return result;
   }
 
-  /**
-   * 从map里的object类型转long.
-   *
-   * @param list .
-   * @return
-   */
-  public static List<Long> convertLongFromObject(Object list) {
-    List<Long> result = new ArrayList<>();
-    try {
-      for (Integer item : (List<Integer>) list) {
-        result.add(Long.valueOf(item));
-      }
-    } catch (Exception ex) {
-      try {
-        for (Long item : (List<Long>) list) {
-          result.add(item);
-        }
-      } catch (Exception exStr) {
-        for (String item : (List<String>) list) {
-          result.add(Long.valueOf(item));
-        }
-      }
-    }
-
-    return result;
-  }
-
-
-  /**
+   /**
    * 时间戳转日期格式.
    *
    * @param seconds .

@@ -16,9 +16,15 @@
 5. lind-redis-start 封装了redis读写操作
 6. lind-uaa-start 用户收取服务
 
+# spring.factories
+  springboot-start项目里，通过spring.factories进行自动注册，里面可以设置自动配置，自动监听，应用初始化，配置文件类型，环境变量等信息，
+在我们封装扩展包时，可以使用这个文件帮使用者自动装配bean。
+  如果不希望自动装配你的bean，可以为bean添加Enable开头的注解，类似于`EnableResourceServer`,`EnableAuthorizationServer`等。
+
 # 项目里的公用包
 1. 公用工具包一般是util，它是单数，事实上包的命名都是单数
 2. util包里的类，一般用utils结尾，它是复数，这也是遵循国际上公用类库的一个标准，如com.google.guava和org.apache.commons.lang3里的类命名方式。
+
 # 测试项目
 1. a-start-gateway
 2. a-start-oauth
