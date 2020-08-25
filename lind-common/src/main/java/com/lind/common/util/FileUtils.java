@@ -6,18 +6,32 @@ import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.function.Function;
 
 /**
  * 文件读取工具.
  */
 public class FileUtils {
+    public static Function<String, String> resourceFun;
+
     /**
-     * 获取测试资源文件.
-     *
-     * @param name 文件名
+     * 禁止实例化.
      */
-    public static File readResourceFile(String name) throws IOException {
-        return ResourceUtils.getFile("classpath:" + name);
+    private FileUtils() {
+    }
+
+    /**
+     * 设置文件获取的路径为资源resource路径.
+     */
+    public static void setResourcePath() {
+        resourceFun = (path) -> {
+            try {
+                return ResourceUtils.getFile("classpath:" + path).getPath();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            return null;
+        };
     }
 
     /**
@@ -27,6 +41,9 @@ public class FileUtils {
      * @return
      */
     public static byte[] readResourceByteArray(String name) throws IOException {
+        if (resourceFun != null) {
+            name = resourceFun.apply(name);
+        }
         File f = new File(name);
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
         BufferedInputStream in = null;
@@ -60,6 +77,9 @@ public class FileUtils {
      * @throws IOException
      */
     public static byte[] readResourceByteArrayNIO(String name) throws IOException {
+        if (resourceFun != null) {
+            name = resourceFun.apply(name);
+        }
         File f = new File(name);
         FileChannel channel = null;
         FileInputStream fs = null;
@@ -98,6 +118,9 @@ public class FileUtils {
     public static byte[] readResourceByteArrayBigFileNIO(String name) throws IOException {
         FileChannel fc = null;
         try {
+            if (resourceFun != null) {
+                name = resourceFun.apply(name);
+            }
             File f = new File(name);
             fc = new RandomAccessFile(f.getAbsoluteFile(), "r").getChannel();
             MappedByteBuffer byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0,

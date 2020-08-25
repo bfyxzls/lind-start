@@ -66,8 +66,10 @@ public class HOTPTest extends AbstractTest {
 
     @Test
     public void fileEncryption() throws Exception {
-        String result = new String(FileUtils.readResourceByteArray(getResourceFilePath("pkg.txt")));
-        for (int i = 0; i < 60; i++) {
+        FileUtils.setResourcePath();
+
+        String result = new String(FileUtils.readResourceByteArray("pkg.txt"));
+        for (int i = 0; i < 5; i++) {
             // 解密
             String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
             log.info("{} decryptDES result={}", i, EncryptionUtils.decryptDES(passKey, result));

@@ -2,6 +2,7 @@ package com.lind.common;
 
 import com.github.phantomthief.pool.Pool;
 import com.github.phantomthief.pool.impl.ConcurrencyAwarePool;
+import com.lind.common.util.LindExecutorPool;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
