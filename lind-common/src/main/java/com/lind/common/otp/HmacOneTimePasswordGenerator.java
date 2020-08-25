@@ -39,7 +39,7 @@ public class HmacOneTimePasswordGenerator {
     /**
      * The default length, in decimal digits, for one-time passwords.
      */
-    public static final int DEFAULT_PASSWORD_LENGTH = 6;
+    public static final int DEFAULT_PASSWORD_LENGTH = 8;
     /**
      * The HMAC algorithm specified by the HOTP standard.
      */

@@ -41,6 +41,12 @@ public class HOTPTest extends AbstractTest {
     }
 
     @Test
+    public void instantTest() {
+        Instant now = Instant.now().plusMillis(TimeUnit.HOURS.toMillis(8));// beijing时间
+        System.out.println("now:" + now);
+    }
+
+    @Test
     public void totpGenerator() throws Exception {
         final Instant now = Instant.now();
         String passKey = String.valueOf(timeBasedOneTimePasswordGenerator.generateOneTimePassword("pkulaw", now));
@@ -56,7 +62,7 @@ public class HOTPTest extends AbstractTest {
         String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
         String result = EncryptionUtils.encryptDES(passKey, plaintext);
         log.info("encryptDES result={}", result);
-        for (int i = 0; i < 60; i++) {
+        for (int i = 0; i < 30; i++) {
             // 解密
             passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
             log.info("{} decryptDES result={}", i, EncryptionUtils.decryptDES(passKey, result));
