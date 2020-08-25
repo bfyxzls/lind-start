@@ -1,6 +1,5 @@
-package com.lind.common.thread;
+package com.lind.common;
 
-import com.github.phantomthief.concurrent.AdaptiveExecutor;
 import com.github.phantomthief.pool.Pool;
 import com.github.phantomthief.pool.impl.ConcurrencyAwarePool;
 import org.junit.Test;
@@ -12,7 +11,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest()

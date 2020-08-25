@@ -1,7 +1,9 @@
 # 自动注入的bean
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.logger.LoggerConfigure, \
-  com.lind.common.thread.LindExecutorPool
+  com.lind.common.LindExecutorPool,\
+  com.lind.common.otp.OneTimePasswordGeneratorConfig
+
 # Application Listeners
 org.springframework.context.ApplicationListener=\
   com.lind.common.listener.MessageDbListener

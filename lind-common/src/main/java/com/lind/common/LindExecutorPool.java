@@ -1,7 +1,8 @@
-package com.lind.common.thread;
+package com.lind.common;
 
 import com.github.phantomthief.concurrent.AdaptiveExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -16,6 +17,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  */
 @Slf4j
 @Component
+@ConditionalOnMissingBean(LindExecutorPool.class)
 public class LindExecutorPool {
     /**
      * 阻塞队列长度.

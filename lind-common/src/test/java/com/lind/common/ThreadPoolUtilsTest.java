@@ -1,4 +1,4 @@
-package com.lind.common.thread;
+package com.lind.common;
 
 import com.lind.common.util.ThreadPoolUtils;
 import org.junit.Assert;

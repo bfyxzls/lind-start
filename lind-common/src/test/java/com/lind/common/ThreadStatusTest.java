@@ -1,4 +1,4 @@
-package com.lind.common.thread;
+package com.lind.common;
 
 import org.junit.Test;
 
