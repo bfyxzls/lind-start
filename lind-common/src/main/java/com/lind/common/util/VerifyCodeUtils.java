@@ -1,55 +1,61 @@
 package com.lind.common.util;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Random;
 
 /**
- * 随机字符验证码生成工具类
- * @author Exrickx
+ * 随机字符验证码生成工具类.
  */
 public class VerifyCodeUtils {
 
+    Random random = new Random();
     /**
-     * 图片的宽度
+     * 图片的宽度.
      */
     private int width = 160;
     /**
-     * 图片的高度
+     * 图片的高度.
      */
     private int height = 40;
     /**
-     * 验证码字符个数
+     * 验证码字符个数.
      */
     private int codeCount = 4;
     /**
-     * 验证码干扰线数
+     * 验证码干扰线数.
      */
     private int lineCount = 20;
     /**
-     * 验证码
+     * 验证码.
      */
     private String code = null;
     /**
-     * 验证码图片Buffer
+     * 验证码图片Buffer.
      */
     private BufferedImage buffImg = null;
-
-    Random random = new Random();
 
     public VerifyCodeUtils() {
         creatImage();
     }
 
+    /**
+     * 初始化.
+     */
     public VerifyCodeUtils(int width, int height) {
         this.width = width;
         this.height = height;
         creatImage();
     }
 
+    /**
+     * 初始化.
+     */
     public VerifyCodeUtils(int width, int height, int codeCount) {
         this.width = width;
         this.height = height;
@@ -57,6 +63,9 @@ public class VerifyCodeUtils {
         creatImage();
     }
 
+    /**
+     * 初始化.
+     */
     public VerifyCodeUtils(int width, int height, int codeCount, int lineCount) {
         this.width = width;
         this.height = height;
@@ -65,6 +74,9 @@ public class VerifyCodeUtils {
         creatImage();
     }
 
+    /**
+     * 初始化.
+     */
     public VerifyCodeUtils(int width, int height, int codeCount, int lineCount, String code) {
         this.width = width;
         this.height = height;
@@ -74,13 +86,11 @@ public class VerifyCodeUtils {
     }
 
     /**
-     * 生成图片
+     * 生成图片.
      */
     private void creatImage() {
-        // 字体的宽度
-        int fontWidth = width / codeCount;
-        // 字体的高度
-        int fontHeight = height - 5;
+
+
         int codeY = height - 8;
 
         // 图像buffer
@@ -91,8 +101,8 @@ public class VerifyCodeUtils {
         g.setColor(getRandColor(200, 250));
         g.fillRect(0, 0, width, height);
 
-        // 设置字体
-        //Font font1 = getFont(fontHeight);
+        // 字体的高度
+        int fontHeight = height - 5;
         Font font = new Font("Fixedsys", Font.BOLD, fontHeight);
         g.setFont(font);
 
@@ -123,19 +133,17 @@ public class VerifyCodeUtils {
             g.setColor(getRandColor(1, 255));
             // g.drawString(a,x,y);
             // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
-            g.drawString(strRand, i*fontWidth+3, codeY);
+            int fontWidth = width / codeCount;
+            g.drawString(strRand, i * fontWidth + 3, codeY);
         }
 
     }
 
     /**
-     * 生成指定字符图片
+     * 生成指定字符图片.
      */
     private void creatImage(String code) {
-        // 字体的宽度
-        int fontWidth = width / codeCount;
-        // 字体的高度
-        int fontHeight = height - 5;
+
         int codeY = height - 8;
 
         // 图像buffer
@@ -147,7 +155,9 @@ public class VerifyCodeUtils {
         g.fillRect(0, 0, width, height);
 
         // 设置字体
-        //Font font1 = getFont(fontHeight);
+        int fontWidth = width / codeCount;
+        // 字体的高度
+        int fontHeight = height - 5;
         Font font = new Font("Fixedsys", Font.BOLD, fontHeight);
         g.setFont(font);
 
@@ -177,15 +187,16 @@ public class VerifyCodeUtils {
             g.setColor(getRandColor(1, 255));
             // g.drawString(a,x,y);
             // a为要画出来的东西，x和y表示要画的东西最左侧字符的基线位于此图形上下文坐标系的 (x, y) 位置处
-            g.drawString(strRand, i*fontWidth+3, codeY);
+            g.drawString(strRand, i * fontWidth + 3, codeY);
         }
 
     }
 
     /**
-     * 得到随机字符
-     * @param n
-     * @return
+     * 得到随机字符.
+     *
+     * @param n .
+     * @return .
      */
     public String randomStr(int n) {
         String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
@@ -200,17 +211,18 @@ public class VerifyCodeUtils {
     }
 
     /**
-     * 得到随机颜色
-     * @param fc
-     * @param bc
-     * @return
+     * 得到随机颜色.
+     *
+     * @param fc .
+     * @param bc .
+     * @return .
      */
     private Color getRandColor(int fc, int bc) {
         // 给定范围获得随机颜色
-        if (fc > 255){
+        if (fc > 255) {
             fc = 255;
         }
-        if (bc > 255){
+        if (bc > 255) {
             bc = 255;
         }
         int r = fc + random.nextInt(bc - fc);
@@ -220,16 +232,16 @@ public class VerifyCodeUtils {
     }
 
     /**
-     * 产生随机字体
+     * 产生随机字体.
      */
     private Font getFont(int size) {
-        Random random = new Random();
-        Font font[] = new Font[5];
+        Font[] font = new Font[5];
         font[0] = new Font("Ravie", Font.PLAIN, size);
         font[1] = new Font("Antique Olive Compact", Font.PLAIN, size);
         font[2] = new Font("Fixedsys", Font.PLAIN, size);
         font[3] = new Font("Wide Latin", Font.PLAIN, size);
         font[4] = new Font("Gill Sans Ultra Bold", Font.PLAIN, size);
+        Random random = new Random();
         return font[random.nextInt(5)];
     }
 

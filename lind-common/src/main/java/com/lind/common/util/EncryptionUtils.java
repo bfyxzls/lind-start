@@ -21,7 +21,7 @@ public class EncryptionUtils {
      * BASE64解密.
      *
      * @param key .
-     * @return
+     * @return .
      */
     public static byte[] decryptBASE64(String key) throws Exception {
         return (Base64.getDecoder().decode(key));
@@ -31,7 +31,7 @@ public class EncryptionUtils {
      * BASE64加密.
      *
      * @param key .
-     * @return
+     * @return .
      */
     public static String encryptBASE64(byte[] key) throws Exception {
         return (Base64.getEncoder().encodeToString(key));
@@ -42,9 +42,9 @@ public class EncryptionUtils {
      *
      * @param inputStr 明文
      * @param len      长度
-     * @return
+     * @return .
      */
-    public static String MD5(String inputStr, int len) {
+    public static String md5(String inputStr, int len) {
         BigInteger bigInteger = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -61,10 +61,10 @@ public class EncryptionUtils {
      * 长度为32位的MD5字符.
      *
      * @param inputStr 明文
-     * @return
+     * @return .
      */
-    public static String MD5(String inputStr) {
-        return MD5(inputStr, 32);
+    public static String md5(String inputStr) {
+        return md5(inputStr, 32);
     }
 
     /**
@@ -72,7 +72,7 @@ public class EncryptionUtils {
      *
      * @param password 密钥
      * @param data     数据
-     * @return
+     * @return .
      */
     public static String encryptDES(String password, String data) {
         return DESUtils.encrypt(password, data);
@@ -83,7 +83,7 @@ public class EncryptionUtils {
      *
      * @param password 密钥
      * @param data     数据
-     * @return
+     * @return .
      */
     public static String decryptDES(String password, String data) {
         return DESUtils.decrypt(password, data);
@@ -93,9 +93,9 @@ public class EncryptionUtils {
      * SHA1的加密算法.
      *
      * @param inputStr 明文
-     * @return
+     * @return .
      */
-    public static String SHA(String inputStr) {
+    public static String sha(String inputStr) {
         BigInteger sha = null;
         byte[] inputData = inputStr.getBytes();
         try {
@@ -111,28 +111,24 @@ public class EncryptionUtils {
     static class DESUtils {
 
         /**
-         * 偏移变量，固定占8位字节
+         * 偏移变量，固定占8位字节.
          */
-        private final static String IV_PARAMETER = "12345678";
+        private static final String IV_PARAMETER = "12345678";
         /**
-         * 密钥算法
+         * 密钥算法.
          */
         private static final String ALGORITHM = "DES";
         /**
-         * 加密/解密算法-工作模式-填充模式
+         * 加密/解密算法-工作模式-填充模式.
          */
         private static final String CIPHER_ALGORITHM = "DES/CBC/PKCS5Padding";
         /**
-         * 默认编码
+         * 默认编码.
          */
         private static final String CHARSET = "utf-8";
 
         /**
-         * 生成key
-         *
-         * @param password
-         * @return
-         * @throws Exception
+         * 生成key.
          */
         private static Key generateKey(String password) throws Exception {
             DESKeySpec dks = new DESKeySpec(password.getBytes(CHARSET));
@@ -142,7 +138,7 @@ public class EncryptionUtils {
 
 
         /**
-         * DES加密字符串
+         * DES加密字符串.
          *
          * @param password 加密密码，长度不能够小于8位
          * @param data     待加密字符串
@@ -152,8 +148,9 @@ public class EncryptionUtils {
             if (password == null || password.length() < 8) {
                 throw new RuntimeException("加密失败，key不能小于8位");
             }
-            if (data == null)
+            if (data == null) {
                 return null;
+            }
             try {
                 Key secretKey = generateKey(password);
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
@@ -169,7 +166,7 @@ public class EncryptionUtils {
         }
 
         /**
-         * DES解密字符串
+         * DES解密字符串.
          *
          * @param password 解密密码，长度不能够小于8位
          * @param data     待解密字符串
@@ -179,8 +176,9 @@ public class EncryptionUtils {
             if (password == null || password.length() < 8) {
                 throw new RuntimeException("加密失败，key不能小于8位");
             }
-            if (data == null)
+            if (data == null) {
                 return null;
+            }
             try {
                 Key secretKey = generateKey(password);
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);

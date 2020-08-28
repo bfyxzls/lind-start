@@ -13,9 +13,6 @@ import java.util.Date;
 
 /**
  * 日期工具类.
- *
- * @author liuyutao
- * @create 2018-07-10 14:46
  */
 public class DateUtils {
 
@@ -69,7 +66,6 @@ public class DateUtils {
      * 时分秒.
      *
      * @param time .
-     * @return
      */
     public static String secToTime(int time) {
         String timeStr = null;
@@ -98,9 +94,6 @@ public class DateUtils {
 
     /**
      * unitFormat.
-     *
-     * @param i .
-     * @return
      */
     public static String unitFormat(int i) {
         String retStr = null;

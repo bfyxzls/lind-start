@@ -1,6 +1,12 @@
 package com.lind.common.exception;
 
 import com.lind.common.util.CommonResult;
+import java.nio.file.AccessDeniedException;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -9,19 +15,19 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
-import java.nio.file.AccessDeniedException;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
 /**
  * 全局异常拦截器.
  * 如果某个模块需要,直接继承然后加入@RestControllerAdvice即可
  */
 @Slf4j
 public class AbstractRestExceptionHandler {
+
+    /**
+     * Exception.
+     *
+     * @param e 异常
+     * @return CommonResult
+     */
     @ExceptionHandler({Exception.class, RuntimeException.class})
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handleException(Exception e) {
@@ -32,7 +38,7 @@ public class AbstractRestExceptionHandler {
 
 
     /**
-     * 统一处理请求参数校验(普通传参)
+     * 统一处理请求参数校验(普通传参).
      *
      * @param e ConstraintViolationException
      * @return CommonResult
@@ -44,7 +50,8 @@ public class AbstractRestExceptionHandler {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         for (ConstraintViolation<?> violation : violations) {
             Path path = violation.getPropertyPath();
-            String[] pathArr = StringUtils.splitByWholeSeparatorPreserveAllTokens(path.toString(), ".");
+            String[] pathArr =
+                    StringUtils.splitByWholeSeparatorPreserveAllTokens(path.toString(), ".");
             message.append(pathArr[1]).append(violation.getMessage()).append(",");
         }
         message = new StringBuilder(message.substring(0, message.length() - 1));
@@ -53,7 +60,7 @@ public class AbstractRestExceptionHandler {
     }
 
     /**
-     * 统一处理请求参数校验(json)
+     * 统一处理请求参数校验(json).
      *
      * @param e ConstraintViolationException
      * @return CommonResult
@@ -70,19 +77,35 @@ public class AbstractRestExceptionHandler {
         return CommonResult.clientFailure(message.toString());
     }
 
-
+    /**
+     * AccessDeniedException.
+     *
+     * @return CommonResult
+     */
     @ExceptionHandler(value = AccessDeniedException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handleAccessDeniedException() {
         return CommonResult.failure(HttpCodeEnum.UNAUTHORIZED);
     }
 
+    /**
+     * LindException.
+     *
+     * @param lindException 异常
+     * @return CommonResult
+     */
     @ExceptionHandler(value = LindException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult businessErrorException(LindException lindException) {
-        return CommonResult.failure(400, lindException.getMessage());
+        return CommonResult.failure(HttpStatus.BAD_REQUEST.value(), lindException.getMessage());
     }
 
+    /**
+     * NoSuchElementException.
+     *
+     * @param e 异常
+     * @return CommonResult
+     */
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult handlerNoSuchElementException(NoSuchElementException e) {
@@ -91,6 +114,12 @@ public class AbstractRestExceptionHandler {
         return CommonResult.clientFailure(message);
     }
 
+    /**
+     * IllegalArgumentException.
+     *
+     * @param e 异常
+     * @return CommonResult
+     */
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult<String> handlerIllegalArgumentException(IllegalArgumentException e) {

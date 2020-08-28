@@ -4,14 +4,19 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 
-import java.security.MessageDigest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class CommonUtils {
@@ -54,8 +59,6 @@ public class CommonUtils {
 
     /**
      * 获取当前时间秒数.
-     *
-     * @return
      */
     public static String date2utcStr() {
         long miliSeconds = new Date().getTime();
@@ -64,8 +67,6 @@ public class CommonUtils {
 
     /**
      * 根据当前字符串获取毫秒数.
-     *
-     * @return
      */
     public static String date2utcStr(String date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -81,8 +82,6 @@ public class CommonUtils {
 
     /**
      * 毫秒数转 LocalDateTime.
-     *
-     * @return
      */
     public static LocalDateTime instant2LocalDateTime(Long time) {
         if (time == null || time == 0) {
@@ -96,9 +95,6 @@ public class CommonUtils {
 
     /**
      * 如果传入的时间为null，则默认为最小时间.
-     * 1970-01-01
-     *
-     * @return
      */
     public static LocalDateTime ifNullToMinTime(Long epochMilli) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -110,9 +106,6 @@ public class CommonUtils {
 
     /**
      * 如果传入的时间为null,则默认为最大时间.
-     * 2999-01-01
-     *
-     * @return
      */
     public static LocalDateTime ifNullToMaxTime(Long epochMilli) {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -124,8 +117,6 @@ public class CommonUtils {
 
     /**
      * 默认字符串.
-     *
-     * @return
      */
     public static String stringNulltoDefault(String value) {
         if (value == null) {
@@ -136,8 +127,6 @@ public class CommonUtils {
 
     /**
      * 得到一个随机字符串.
-     *
-     * @return
      */
     public static String getRandomString() {
         return UUID.randomUUID().toString();
@@ -186,9 +175,6 @@ public class CommonUtils {
 
     /**
      * 实际替换动作.
-     *
-     * @param param .
-     * @return
      */
     public static String replaceStar(String param) {
         if (param == null) {

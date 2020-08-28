@@ -6,7 +6,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
@@ -37,7 +41,7 @@ public class LindExecutorPool {
      */
     public void defaultExecutor(Runnable runnable) {
         LinkedBlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(queueSize);
-        ThreadFactory threadFactory = new NameTreadFactory();
+        NameTreadFactory threadFactory = new NameTreadFactory();
         MyIgnorePolicy myIgnorePolicy = new MyIgnorePolicy();
         ExecutorService executor = new ThreadPoolExecutor(coreSize,
                 maxSize,
@@ -88,11 +92,11 @@ public class LindExecutorPool {
      */
     static class NameTreadFactory implements ThreadFactory {
 
-        private final AtomicInteger mThreadNum = new AtomicInteger(1);
+        private final AtomicInteger atomicInteger = new AtomicInteger(1);
 
         @Override
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(r, "my-thread-" + mThreadNum.getAndIncrement());
+            Thread t = new Thread(r, "my-thread-" + atomicInteger.getAndIncrement());
             log.debug(t.getName() + " has been created");
             return t;
         }

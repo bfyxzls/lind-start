@@ -12,8 +12,7 @@ public class IdMakerTest {
     /**
      * 时间戳转换成日期格式字符串
      *
-     * @param seconds   精确到秒的字符串
-     * @param formatStr
+     * @param seconds 精确到秒的字符串
      * @return
      */
     public static String timeStamp2Date(Integer seconds, String format) {
@@ -55,4 +54,37 @@ public class IdMakerTest {
         log.info("inc:{}", inc);
 
     }
+
+    @Test
+    public void bitAndOperator() {
+        log.info("10 & 7={}", 10 & 7);
+        log.info("3 & 7={}", 3 & 7);
+        log.info("10 & 255={}", 10 & 255);
+        log.info("300 & 255={}", 300 & 255); //255的16进制为ff,后面数字为2^n-1
+    }
+
+    @Test
+    public void bitOrOperator() {
+        Long begin = Long.parseLong("0007000000000000", 16);
+        log.info("or={}", 1 | begin);
+        log.info(String.format("%16x", 1 | begin));
+
+        begin = Long.parseLong("1000", 16);
+        for (int i = 0; i < 10; i++) {
+            log.info("{} | {} = {}", i, begin, i | begin);//超过begin之后，数字会有重复
+        }
+    }
+
+    @Test
+    public void hashCodeString() {
+        log.info("hex data1={}", String.format("%08x", "hello data1".hashCode()));
+        log.info("hex data1={}", String.format("%016x", "hell9o data2".hashCode()));
+        log.info("dec val={}", Long.parseLong("0007000000000000", 16));
+        log.info("dec val={}", Long.parseLong("004B000000000000", 16)); //21110623253299200
+        log.info("dec max={}", Long.MAX_VALUE); //9223372036854775807
+
+        log.info("hex data1={}", String.format("%02x", 10));
+
+    }
+
 }

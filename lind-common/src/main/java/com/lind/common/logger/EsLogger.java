@@ -10,11 +10,6 @@ public class EsLogger implements Logger {
     }
 
     @Override
-    public boolean isTraceEnabled() {
-        return false;
-    }
-
-    @Override
     public void trace(String msg) {
 
     }
@@ -37,11 +32,6 @@ public class EsLogger implements Logger {
     @Override
     public void trace(String msg, Throwable t) {
 
-    }
-
-    @Override
-    public boolean isTraceEnabled(Marker marker) {
-        return false;
     }
 
     @Override
@@ -69,10 +59,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isDebugEnabled() {
-        return false;
-    }
 
     @Override
     public void debug(String msg) {
@@ -99,10 +85,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isDebugEnabled(Marker marker) {
-        return false;
-    }
 
     @Override
     public void debug(Marker marker, String msg) {
@@ -127,11 +109,6 @@ public class EsLogger implements Logger {
     @Override
     public void debug(Marker marker, String msg, Throwable t) {
 
-    }
-
-    @Override
-    public boolean isInfoEnabled() {
-        return false;
     }
 
     @Override
@@ -160,11 +137,6 @@ public class EsLogger implements Logger {
     }
 
     @Override
-    public boolean isInfoEnabled(Marker marker) {
-        return false;
-    }
-
-    @Override
     public void info(Marker marker, String msg) {
 
     }
@@ -189,10 +161,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isWarnEnabled() {
-        return false;
-    }
 
     @Override
     public void warn(String msg) {
@@ -219,10 +187,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isWarnEnabled(Marker marker) {
-        return false;
-    }
 
     @Override
     public void warn(Marker marker, String msg) {
@@ -249,10 +213,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isErrorEnabled() {
-        return false;
-    }
 
     @Override
     public void error(String msg) {
@@ -279,10 +239,6 @@ public class EsLogger implements Logger {
 
     }
 
-    @Override
-    public boolean isErrorEnabled(Marker marker) {
-        return false;
-    }
 
     @Override
     public void error(Marker marker, String msg) {
@@ -308,4 +264,55 @@ public class EsLogger implements Logger {
     public void error(Marker marker, String msg, Throwable t) {
 
     }
+
+    @Override
+    public boolean isDebugEnabled(Marker marker) {
+        return false;
+    }
+
+    @Override
+    public boolean isDebugEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isErrorEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isErrorEnabled(Marker marker) {
+        return false;
+    }
+
+    @Override
+    public boolean isTraceEnabled(Marker marker) {
+        return false;
+    }
+
+    @Override
+    public boolean isTraceEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isInfoEnabled(Marker marker) {
+        return false;
+    }
+
+    @Override
+    public boolean isInfoEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isWarnEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isWarnEnabled(Marker marker) {
+        return false;
+    }
+
 }

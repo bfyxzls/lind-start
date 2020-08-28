@@ -19,8 +19,6 @@ public class LoggerConfigure {
 
     /**
      * 默认实现.
-     *
-     * @return
      */
     @Bean
     @ConditionalOnMissingBean(Logger.class)
@@ -29,9 +27,8 @@ public class LoggerConfigure {
     }
 
     /**
-     * Logger对象的生成，它做了conditional，当属性enable为false时，Logger对象不会被初始化
-     *
-     * @return
+     * Logger对象的生成，它做了conditional，当属性enable为false时，
+     * Logger对象不会被初始化.
      */
     @Bean
     @ConditionalOnProperty(value = "lind.logger.enable", havingValue = "true", matchIfMissing = true)

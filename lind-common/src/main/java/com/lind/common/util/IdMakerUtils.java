@@ -10,9 +10,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 模仿Mongodb ObjectId生成规则.
  */
 public class IdMakerUtils {
-    final static Logger log = LoggerFactory.getLogger(IdMakerUtils.class);
-    private static AtomicInteger _nextInc = new AtomicInteger(1);
+    private static final Logger LOG = LoggerFactory.getLogger(IdMakerUtils.class);
+    private static final AtomicInteger _nextInc = new AtomicInteger(1);
 
+    /**
+     * 得到当前最大ID偏移量.
+     *
+     * @return .
+     */
     public static int getCurrentInc() {
         return _nextInc.get();
     }
@@ -20,8 +25,8 @@ public class IdMakerUtils {
     /**
      * 生成某个服务的ID号.
      *
-     * @param serviceId
-     * @return
+     * @param serviceId .
+     * @return .
      */
     public static String generateId(Integer serviceId) {
         StringBuilder idString = new StringBuilder();
@@ -32,12 +37,13 @@ public class IdMakerUtils {
         idString.append(timeStr);
 
         // 1字节,2位Hex
-        serviceId = serviceId & 0xFF;//保证结果在ff(0~255)范围内
+        //后面数字为2^n-1,可以保证结果在ff(0~255)范围内,当serviceId>255，值会定为255
+        serviceId = serviceId & 0xFF;
         String serviceIdStr = String.format("%02x", serviceId);
         idString.append(serviceIdStr);
 
         // 4字节,8位Hex
-        int inc =  _nextInc.getAndIncrement() & 0xFFFFFFFF;
+        int inc = _nextInc.getAndIncrement() & 0xFFFFFFFF;
         String incString = String.format("%08x", inc);
         idString.append(incString);
         return idString.toString();
@@ -49,23 +55,26 @@ public class IdMakerUtils {
      * @return whether the string could be a shardable object id
      */
     public static boolean isValid(String s) {
-        if (s == null)
+        if (s == null) {
             return false;
+        }
 
         final int len = s.length();
         if (len == 18) {
             for (int i = 0; i < len; i++) {
                 char c = s.charAt(i);
-                if (c >= '0' && c <= '9')
+                if (c >= '0' && c <= '9') {
                     continue;
-                if (c >= 'a' && c <= 'f')
+                }
+                if (c >= 'a' && c <= 'f') {
                     continue;
-                if (c >= 'A' && c <= 'F')
+                }
+                if (c >= 'A' && c <= 'F') {
                     continue;
-
+                }
                 return false;
             }
-        }else {
+        } else {
             return false;
         }
 

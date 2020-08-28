@@ -10,7 +10,7 @@ import java.time.Duration;
 @Component
 public class OneTimePasswordGeneratorConfig {
     /**
-     * TOTP的时间有效期（秒）
+     * TOTP的时间有效期（秒）.
      */
     @Value("${totpSeconds:30}")
     private long totpSeconds;
@@ -21,7 +21,8 @@ public class OneTimePasswordGeneratorConfig {
     }
 
     @Bean
-    TimeBasedOneTimePasswordGenerator timeBasedOneTimePasswordGenerator() throws NoSuchAlgorithmException {
+    TimeBasedOneTimePasswordGenerator timeBasedOneTimePasswordGenerator()
+            throws NoSuchAlgorithmException {
         return new TimeBasedOneTimePasswordGenerator(Duration.ofSeconds(totpSeconds));
     }
 }

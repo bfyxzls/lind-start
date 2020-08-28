@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "lind.logger")
 public class LoggerProperties {
-    private String type="ES";
-    private String level="Debug";
+    private String type = "ES";
+    private String level = "Debug";
     private Boolean enable;
 
     public String getType() {

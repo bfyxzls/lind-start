@@ -20,20 +20,14 @@
 
 package com.lind.common.otp;
 
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 
 /**
- * <p>Generates HMAC-based one-time passwords (HOTP) as specified in
- * <a href="https://tools.ietf.org/html/rfc4226">RFC&nbsp;4226</a>.</p>
- *
- * <p>{@code HmacOneTimePasswordGenerator} instances are thread-safe and may be shared between threads.</p>
- *
- * @author <a href="https://github.com/jchambers">Jon Chambers</a>
+ * Generates HMAC-based one-time passwords (HOTP).
  */
 public class HmacOneTimePasswordGenerator {
     /**
@@ -50,12 +44,7 @@ public class HmacOneTimePasswordGenerator {
     private final int modDivisor;
 
     /**
-     * Creates a new HMAC-based one-time password (HOTP) generator using a default password length
-     * ({@value com.eatthepath.otp.HmacOneTimePasswordGenerator#DEFAULT_PASSWORD_LENGTH} digits).
-     *
-     * @throws NoSuchAlgorithmException if the underlying JRE doesn't support the
-     *                                  {@value com.eatthepath.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM} algorithm, which should never
-     *                                  happen except in cases of serious misconfiguration
+     * Creates a new HMAC-based one-time password (HOTP) generator using a default password length.
      */
     public HmacOneTimePasswordGenerator() throws NoSuchAlgorithmException {
         this(DEFAULT_PASSWORD_LENGTH);
@@ -63,30 +52,17 @@ public class HmacOneTimePasswordGenerator {
 
     /**
      * Creates a new HMAC-based one-time password (HOTP) generator using the given password length.
-     *
-     * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
-     *                       6 and 8, inclusive
-     * @throws NoSuchAlgorithmException if the underlying JRE doesn't support the
-     *                                  {@value com.eatthepath.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM} algorithm, which should never
-     *                                  happen except in cases of serious misconfiguration
      */
     public HmacOneTimePasswordGenerator(final int passwordLength) throws NoSuchAlgorithmException {
         this(passwordLength, HOTP_HMAC_ALGORITHM);
     }
 
     /**
-     * <p>Creates a new HMAC-based one-time password generator using the given password length and algorithm. Note that
-     * <a href="https://tools.ietf.org/html/rfc4226">RFC&nbsp;4226</a> specifies that HOTP must always use HMAC-SHA1 as
-     * an algorithm, but derived one-time password systems like TOTP may allow for other algorithms.</p>
-     *
-     * @param passwordLength the length, in decimal digits, of the one-time passwords to be generated; must be between
-     *                       6 and 8, inclusive
-     * @param algorithm      the name of the {@link Mac} algorithm to use when generating passwords; note that
-     *                       HOTP only allows for {@value com.eatthepath.otp.HmacOneTimePasswordGenerator#HOTP_HMAC_ALGORITHM}, but derived
-     *                       standards like TOTP may allow for other algorithms
-     * @throws NoSuchAlgorithmException if the given algorithm is not supported by the underlying JRE
+     * Creates a new HMAC-based one-time password generator using the given password length
+     * and algorithm.
      */
-    protected HmacOneTimePasswordGenerator(final int passwordLength, final String algorithm) throws NoSuchAlgorithmException {
+    protected HmacOneTimePasswordGenerator(final int passwordLength, final String algorithm)
+            throws NoSuchAlgorithmException {
         this.mac = Mac.getInstance(algorithm);
 
         switch (passwordLength) {
@@ -106,7 +82,8 @@ public class HmacOneTimePasswordGenerator {
             }
 
             default: {
-                throw new IllegalArgumentException("Password length must be between 6 and 8 digits.");
+                throw new IllegalArgumentException(
+                        "Password length must be between 6 and 8 digits.");
             }
         }
 
@@ -116,10 +93,6 @@ public class HmacOneTimePasswordGenerator {
 
     /**
      * 生成key.
-     *
-     * @param password
-     * @return
-     * @throws Exception
      */
     protected Key generateKey(String password) throws Exception {
         byte[] keyBytes = password.getBytes();
@@ -129,14 +102,9 @@ public class HmacOneTimePasswordGenerator {
 
     /**
      * Generates a one-time password using the given key and counter value.
-     *
-     * @param key     the key to be used to generate the password
-     * @param counter the counter value for which to generate the password
-     * @return an integer representation of a one-time password; callers will need to format the password for display
-     * on their own
-     * @throws InvalidKeyException if the given key is inappropriate for initializing the {@link Mac} for this generator
      */
-    public synchronized int generateOneTimePassword(String password, final long counter) throws Exception {
+    public synchronized int generateOneTimePassword(String password, final long counter)
+            throws Exception {
         Key key = generateKey(password);
         this.mac.init(key);
         this.buffer[0] = (byte) ((counter & 0xff00000000000000L) >>> 56);
@@ -160,10 +128,14 @@ public class HmacOneTimePasswordGenerator {
 
         final int offset = this.buffer[this.buffer.length - 1] & 0x0f;
 
-        return ((this.buffer[offset] & 0x7f) << 24 |
-                (this.buffer[offset + 1] & 0xff) << 16 |
-                (this.buffer[offset + 2] & 0xff) << 8 |
-                (this.buffer[offset + 3] & 0xff)) %
+        return ((this.buffer[offset] & 0x7f) << 24
+                |
+                (this.buffer[offset + 1] & 0xff) << 16
+                |
+                (this.buffer[offset + 2] & 0xff) << 8
+                |
+                (this.buffer[offset + 3] & 0xff))
+                %
                 this.modDivisor;
     }
 

@@ -2,7 +2,14 @@ package com.lind.common.util;
 
 import org.springframework.util.ResourceUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -37,8 +44,8 @@ public class FileUtils {
     /**
      * IO方式读取文件到对象.
      *
-     * @param name
-     * @return
+     * @param name .
+     * @return .
      */
     public static byte[] readResourceByteArray(String name) throws IOException {
         if (resourceFun != null) {
@@ -49,10 +56,10 @@ public class FileUtils {
         BufferedInputStream in = null;
         try {
             in = new BufferedInputStream(new FileInputStream(f));
-            int buf_size = 1024;
-            byte[] buffer = new byte[buf_size];
+            int bufSize = 1024;
+            byte[] buffer = new byte[bufSize];
             int len = 0;
-            while (-1 != (len = in.read(buffer, 0, buf_size))) {
+            while (-1 != (len = in.read(buffer, 0, bufSize))) {
                 bos.write(buffer, 0, len);
             }
             return bos.toByteArray();
@@ -72,9 +79,9 @@ public class FileUtils {
     /**
      * NIO方式读取.
      *
-     * @param name
-     * @return
-     * @throws IOException
+     * @param name .
+     * @return .
+     * @throws IOException .
      */
     public static byte[] readResourceByteArrayNIO(String name) throws IOException {
         if (resourceFun != null) {
@@ -111,9 +118,9 @@ public class FileUtils {
     /**
      * 大文件读取.
      *
-     * @param name
-     * @return
-     * @throws IOException
+     * @param name .
+     * @return .
+     * @throws IOException .
      */
     public static byte[] readResourceByteArrayBigFileNIO(String name) throws IOException {
         FileChannel fc = null;
