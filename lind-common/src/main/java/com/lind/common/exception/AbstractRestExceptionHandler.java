@@ -1,12 +1,6 @@
 package com.lind.common.exception;
 
 import com.lind.common.util.CommonResult;
-import java.nio.file.AccessDeniedException;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Path;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
@@ -14,6 +8,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Path;
+import java.nio.file.AccessDeniedException;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
 /**
  * 全局异常拦截器.
