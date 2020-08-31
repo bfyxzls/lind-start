@@ -20,11 +20,12 @@
 
 package com.lind.common.otp;
 
-import java.security.Key;
-import java.security.NoSuchAlgorithmException;
 import javax.crypto.Mac;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.Charset;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Generates HMAC-based one-time passwords (HOTP).
@@ -94,8 +95,8 @@ public class HmacOneTimePasswordGenerator {
     /**
      * 生成key.
      */
-    protected Key generateKey(String password) throws Exception {
-        byte[] keyBytes = password.getBytes();
+    protected Key generateKey(String password) {
+        byte[] keyBytes = password.getBytes(Charset.forName("UTF-8"));
         SecretKeySpec signingKey = new SecretKeySpec(keyBytes, this.mac.getAlgorithm());
         return signingKey;
     }

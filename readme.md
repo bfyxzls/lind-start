@@ -39,3 +39,95 @@
         <artifactId>spring-boot-starter-tomcat</artifactId>
     </dependency>
 ```docker-compose -f example/standalone-mysql.yaml up
+
+# 项目报告
+mvn site
+>这个主要针对spotsbug,checkstyle,PMD,test等进行文档报告的打针，运行时间比较长，单独执行某些任务也是可以的，
+如下面只执行checkstyle,spotbugs,pmd: mvn compile -D maven.test.skip=true clean compile spotbugs:spotbugs  checkstyle:checkstyle pmd:pmd
+
+```
+<!-- 代码检查 -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-checkstyle-plugin</artifactId>
+    <version>3.1.1</version>
+    <executions>
+        <execution>
+            <id>checkstyle</id>
+            <phase>validate</phase>
+            <goals>
+                <goal>check</goal>
+            </goals>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency>
+            <groupId>com.puppycrawl.tools</groupId>
+            <artifactId>checkstyle</artifactId>
+            <version>8.29</version>
+        </dependency>
+    </dependencies>
+    <configuration>
+        <configLocation>/checkstyle.xml</configLocation>
+        <encoding>UTF-8</encoding>
+        <consoleOutput>true</consoleOutput>
+        <failsOnError>true</failsOnError>
+    </configuration>
+</plugin>
+<!-- 配置pmd对java源文件进行检查，检测出可以优化的代码 -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-pmd-plugin</artifactId>
+    <version>3.8</version>
+</plugin>
+<plugin>
+    <groupId>com.github.spotbugs</groupId>
+    <artifactId>spotbugs-maven-plugin</artifactId>
+    <version>4.0.4</version>
+    <dependencies>
+        <!-- overwrite dependency on spotbugs if you want to specify the version of spotbugs -->
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+    </dependencies>
+</plugin>
+<!-- 测试报告 -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.22.2</version>
+    <configuration>
+        <skip>false</skip>
+        <skipTests>false</skipTests><!-- false不跳过测试,true表示跳过测试项目-->
+        <testFailureIgnore>true</testFailureIgnore>
+    </configuration>
+</plugin>
+<!-- mvn site时使用 -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-site-plugin</artifactId>
+    <version>3.8.2</version>
+</plugin>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-project-info-reports-plugin</artifactId>
+    <version>3.1.0</version>
+</plugin>
+
+```
+# 测试报告
+ mvn surefire-report:report
+```$xslt
+ <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>2.22.2</version>
+    <configuration>
+        <skip>false</skip>
+        <skipTests>false</skipTests><!-- false不跳过测试,true表示跳过测试项目-->
+        <testFailureIgnore>true</testFailureIgnore>
+    </configuration>
+</plugin>
+```

@@ -1,7 +1,7 @@
 package com.lind.elasticsearch.audit;
 
-import com.lind.elasticsearch.util.ClassHelper;
 import com.lind.elasticsearch.config.SpringContextConfig;
+import com.lind.elasticsearch.util.ClassHelper;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -29,14 +29,14 @@ public class AuditAspect {
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     /**
-     * 添加ES实体-切入点
+     * 添加ES实体-切入点.
      */
     @Pointcut("execution(* org.springframework.data.repository.CrudRepository.save(..))")
     public void save() {
     }
 
     /**
-     * 更新ES实体-切入点
+     * 更新ES实体-切入点.
      */
     @Pointcut("execution(* org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate.update(..))")
     public void update() {
@@ -45,8 +45,8 @@ public class AuditAspect {
     /**
      * 插入实体拦截器.
      *
-     * @param joinPoint
-     * @throws IllegalAccessException
+     * @param joinPoint .
+     * @throws IllegalAccessException .
      */
     @Before("save()")
     public void beforeSave(JoinPoint joinPoint) throws IllegalAccessException {
@@ -89,7 +89,7 @@ public class AuditAspect {
     /**
      * 更新实体拦截器.
      *
-     * @param joinPoint
+     * @param joinPoint .
      */
     @Before("update()")
     public void beforeUpdate(JoinPoint joinPoint) {

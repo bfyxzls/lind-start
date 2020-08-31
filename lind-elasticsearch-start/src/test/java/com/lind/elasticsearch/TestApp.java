@@ -25,7 +25,13 @@ import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 @SpringBootTest()
 @Slf4j
@@ -130,7 +136,7 @@ public class TestApp {
         old.add("1");
         old.add("2");
         old.forEach(stringList::add);
-        Assert.notNull(stringList);
+        notNull(stringList);
         stringList.forEach(System.out::printf);
     }
 

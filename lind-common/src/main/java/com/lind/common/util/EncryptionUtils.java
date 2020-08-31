@@ -4,10 +4,14 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.IvParameterSpec;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.util.Base64;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 /**
  * 加密工具类.
@@ -23,7 +27,7 @@ public class EncryptionUtils {
      * @param key .
      * @return .
      */
-    public static byte[] decryptBASE64(String key) throws Exception {
+    public static byte[] decryptBASE64(String key) {
         return (Base64.getDecoder().decode(key));
     }
 
@@ -33,7 +37,7 @@ public class EncryptionUtils {
      * @param key .
      * @return .
      */
-    public static String encryptBASE64(byte[] key) throws Exception {
+    public static String encryptBASE64(byte[] key) {
         return (Base64.getEncoder().encodeToString(key));
     }
 
@@ -45,16 +49,17 @@ public class EncryptionUtils {
      * @return .
      */
     public static String md5(String inputStr, int len) {
+        notNull(inputStr);
         BigInteger bigInteger = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] inputData = inputStr.getBytes();
+            byte[] inputData = inputStr.getBytes(Charset.forName("UTF-8"));
             md.update(inputData);
             bigInteger = new BigInteger(md.digest());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return bigInteger.toString(len);
+        return bigInteger == null ? null : bigInteger.toString(len);
     }
 
     /**
@@ -95,9 +100,10 @@ public class EncryptionUtils {
      * @param inputStr 明文
      * @return .
      */
-    public static String sha(String inputStr) {
+    public static String sha(String inputStr) throws UnsupportedEncodingException {
+        notNull(inputStr);
         BigInteger sha = null;
-        byte[] inputData = inputStr.getBytes();
+        byte[] inputData = inputStr.getBytes(DESUtils.DM_DEFAULT_ENCODING);
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA");
             messageDigest.update(inputData);
@@ -105,7 +111,7 @@ public class EncryptionUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return sha.toString(32);
+        return sha == null ? null : sha.toString(32);
     }
 
     static class DESUtils {
@@ -125,13 +131,13 @@ public class EncryptionUtils {
         /**
          * 默认编码.
          */
-        private static final String CHARSET = "utf-8";
+        private static final String DM_DEFAULT_ENCODING = "utf-8";
 
         /**
          * 生成key.
          */
         private static Key generateKey(String password) throws Exception {
-            DESKeySpec dks = new DESKeySpec(password.getBytes(CHARSET));
+            DESKeySpec dks = new DESKeySpec(password.getBytes(DM_DEFAULT_ENCODING));
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM);
             return keyFactory.generateSecret(dks);
         }
@@ -154,9 +160,9 @@ public class EncryptionUtils {
             try {
                 Key secretKey = generateKey(password);
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-                IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(CHARSET));
+                IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(DM_DEFAULT_ENCODING));
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
-                byte[] bytes = cipher.doFinal(data.getBytes(CHARSET));
+                byte[] bytes = cipher.doFinal(data.getBytes(DM_DEFAULT_ENCODING));
                 return new String(Base64.getEncoder().encode(bytes));
 
             } catch (Exception e) {
@@ -182,11 +188,11 @@ public class EncryptionUtils {
             try {
                 Key secretKey = generateKey(password);
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
-                IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(CHARSET));
+                IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(DM_DEFAULT_ENCODING));
                 cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
                 return new String(cipher.doFinal(
                         Base64.getDecoder().decode(
-                                data.getBytes(CHARSET))), CHARSET);
+                                data.getBytes(DM_DEFAULT_ENCODING))), DM_DEFAULT_ENCODING);
             } catch (Exception e) {
                 e.getStackTrace();
             }
