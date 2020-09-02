@@ -7,24 +7,23 @@ package com.lind.common.util;
 public class SnowFlakeUtils {
 
     private static final SnowFlakeUtils flowIdWorker = new SnowFlakeUtils(1);
-    private final long id;
     /**
      * 时间起始标记点，作为基准，一般取系统的最近时间.
      */
-    private final long epoch = 1524291141010L;
+    private static final long epoch = 1524291141010L;
     /**
      * 机器标识位数.
      */
-    private final long workerIdBits = 10L;
+    private static final long workerIdBits = 10L;
+    /**
+     * 毫秒内自增位.
+     */
+    private static final long sequenceBits = 12L;
+    private final long id;
     /**
      * 机器ID最大值: 1023.
      */
     private final long maxWorkerId = -1L ^ -1L << this.workerIdBits;
-    /**
-     * 毫秒内自增位.
-     */
-    private final long sequenceBits = 12L;
-
     /**
      * 12.
      */
@@ -44,7 +43,7 @@ public class SnowFlakeUtils {
     private long lastTimestamp = -1L;
 
     private SnowFlakeUtils(long id) {
-        if (id > this.maxWorkerId || id < 0) {
+        if (id > this.maxWorkerId || id < 0L) {
             throw new IllegalArgumentException(String.format("worker Id can't be greater than %d or less than 0",
                     this.maxWorkerId));
         }

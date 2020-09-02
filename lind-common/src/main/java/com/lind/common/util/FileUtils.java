@@ -15,11 +15,14 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.function.Function;
 
+import static org.springframework.util.Assert.notNull;
+
 /**
  * 文件读取工具.
  */
 public class FileUtils {
-    public static Function<String, String> resourceFun;
+    public static final String OBJ_NO_NULL = "对象不能为空";
+    static Function<String, String> resourceFun;
 
     /**
      * 禁止实例化.
@@ -52,6 +55,8 @@ public class FileUtils {
             name = resourceFun.apply(name);
         }
         File f = new File(name);
+        notNull(f, OBJ_NO_NULL);
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream((int) f.length());
         BufferedInputStream in = null;
         try {
@@ -68,7 +73,9 @@ public class FileUtils {
             throw e;
         } finally {
             try {
-                in.close();
+                if (in != null) {
+                    in.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -88,10 +95,12 @@ public class FileUtils {
             name = resourceFun.apply(name);
         }
         File f = new File(name);
+        notNull(f, OBJ_NO_NULL);
         FileChannel channel = null;
         FileInputStream fs = null;
         try {
             fs = new FileInputStream(f);
+            notNull(fs, OBJ_NO_NULL);
             channel = fs.getChannel();
             ByteBuffer byteBuffer = ByteBuffer.allocate((int) channel.size());
             while ((channel.read(byteBuffer)) > 0) {
@@ -103,12 +112,16 @@ public class FileUtils {
             throw e;
         } finally {
             try {
-                channel.close();
+                if (channel != null) {
+                    channel.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             try {
-                fs.close();
+                if (fs != null) {
+                    fs.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -129,6 +142,8 @@ public class FileUtils {
                 name = resourceFun.apply(name);
             }
             File f = new File(name);
+            notNull(f, OBJ_NO_NULL);
+
             fc = new RandomAccessFile(f.getAbsoluteFile(), "r").getChannel();
             MappedByteBuffer byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0,
                     fc.size()).load();
@@ -143,10 +158,13 @@ public class FileUtils {
             throw e;
         } finally {
             try {
-                fc.close();
+                if (fc != null) {
+                    fc.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
@@ -157,10 +175,14 @@ public class FileUtils {
         FileOutputStream fos = null;
         try {
             File file = new File(path);
+            notNull(file, OBJ_NO_NULL);
             if (!file.exists()) {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    throw new IllegalArgumentException("文件建立不成功");
+                }
             }
             fos = new FileOutputStream(file.getAbsoluteFile());
+            notNull(fos, OBJ_NO_NULL);
             FileChannel channel = fos.getChannel();
             ByteBuffer src = ByteBuffer.wrap(obj);
             // 字节缓冲的容量和limit会随着数据长度变化，不是固定不变的

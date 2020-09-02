@@ -2,8 +2,8 @@ package com.lind.common.util;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -200,14 +200,14 @@ public class VerifyCodeUtils {
      */
     public String randomStr(int n) {
         String str1 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        String str2 = "";
+        StringBuilder str2 = new StringBuilder();
         int len = str1.length() - 1;
         double r;
         for (int i = 0; i < n; i++) {
             r = (Math.random()) * len;
-            str2 = str2 + str1.charAt((int) r);
+            str2.append(str1.charAt((int) r));
         }
-        return str2;
+        return str2.toString();
     }
 
     /**

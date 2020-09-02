@@ -163,7 +163,7 @@ public class EncryptionUtils {
                 IvParameterSpec iv = new IvParameterSpec(IV_PARAMETER.getBytes(DM_DEFAULT_ENCODING));
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey, iv);
                 byte[] bytes = cipher.doFinal(data.getBytes(DM_DEFAULT_ENCODING));
-                return new String(Base64.getEncoder().encode(bytes));
+                return new String(Base64.getEncoder().encode(bytes), DM_DEFAULT_ENCODING);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -194,10 +194,8 @@ public class EncryptionUtils {
                         Base64.getDecoder().decode(
                                 data.getBytes(DM_DEFAULT_ENCODING))), DM_DEFAULT_ENCODING);
             } catch (Exception e) {
-                e.getStackTrace();
+                return null;
             }
-            return null;
-
         }
     }
 }

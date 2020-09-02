@@ -43,7 +43,8 @@ public class IdMakerUtils {
         idString.append(serviceIdStr);
 
         // 4字节,8位Hex
-        int inc = _nextInc.getAndIncrement() & 0xFFFFFFFF;
+        int inc = _nextInc.getAndIncrement();
+        inc = inc & 0x7fffffff;
         String incString = String.format("%08x", inc);
         idString.append(incString);
         return idString.toString();

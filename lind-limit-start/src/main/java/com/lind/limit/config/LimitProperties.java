@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
  * @author Exrickx
  */
 @Data
-@Configuration
 @ConfigurationProperties(prefix = "lind.ratelimit")
 public class LimitProperties {
 

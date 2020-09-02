@@ -2,30 +2,19 @@ package com.lind.common.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 /**
  * 直接获取bean.
  */
-public class SpringContextUtils implements ApplicationContextAware {
+public class SpringContextUtils {
 
     /**
      * 上下文对象实例.
      */
     private static ApplicationContext applicationContext;
 
-    /**
-     * 获取applicationContext.
-     *
-     * @return .
-     */
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public static void setApplicationContext(ApplicationContext application) throws BeansException {
+        applicationContext = application;
     }
 
     /**
@@ -35,7 +24,7 @@ public class SpringContextUtils implements ApplicationContextAware {
      * @return .
      */
     public static Object getBean(String name) {
-        return getApplicationContext().getBean(name);
+        return applicationContext.getBean(name);
     }
 
     /**
@@ -46,7 +35,7 @@ public class SpringContextUtils implements ApplicationContextAware {
      * @return .
      */
     public static <T> T getBean(Class<T> clazz) {
-        return getApplicationContext().getBean(clazz);
+        return applicationContext.getBean(clazz);
     }
 
     /**
@@ -58,6 +47,6 @@ public class SpringContextUtils implements ApplicationContextAware {
      * @return .
      */
     public static <T> T getBean(String name, Class<T> clazz) {
-        return getApplicationContext().getBean(name, clazz);
+        return applicationContext.getBean(name, clazz);
     }
 }
