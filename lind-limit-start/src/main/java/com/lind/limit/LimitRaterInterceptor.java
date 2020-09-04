@@ -1,10 +1,10 @@
 package com.lind.limit;
 
 import com.lind.common.exception.LindException;
+import com.lind.limit.config.LimitProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -17,10 +17,9 @@ import java.lang.reflect.Method;
  * 通过WebMvcConfigurer来注册ReqInterceptor.
  */
 @Slf4j
-@Component
 public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     /**
-     * 限流标识
+     * 限流标识.
      */
     static final String LIMIT_ALL = "LIMIT_ALL";
     @Autowired
@@ -32,7 +31,7 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
         // 全局限流
-        if (limitProperties!=null && limitProperties.getEnable()) {
+        if (limitProperties != null && limitProperties.getEnable()) {
             String token2 = redisRaterLimiter.acquireToken(LIMIT_ALL,
                     limitProperties.getLimit(), limitProperties.getTimeout());
             if (StringUtils.isBlank(token2)) {
