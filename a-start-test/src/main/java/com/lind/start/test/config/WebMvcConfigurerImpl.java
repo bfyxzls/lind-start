@@ -8,13 +8,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.lind.limit.LimitRaterInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -28,8 +25,8 @@ import java.util.List;
 @Configuration
 @EnableWebMvc //覆盖默认的配置
 public class WebMvcConfigurerImpl implements WebMvcConfigurer {
-    @Autowired
-    LimitRaterInterceptor limitRaterInterceptor;
+//    @Autowired
+//    LimitRaterInterceptor limitRaterInterceptor;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -67,17 +64,17 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册拦截器
-        InterceptorRegistration ir = registry.addInterceptor(limitRaterInterceptor);
+        //  InterceptorRegistration ir = registry.addInterceptor(limitRaterInterceptor);
         // 配置拦截的路径
-        ir.addPathPatterns("/**");
+         //ir.addPathPatterns("/**");
         // 配置不拦截的路径
-        ir.excludePathPatterns("/no-get");
+        // ir.excludePathPatterns("/no-get");
     }
 
     /**
      * money serializer.
      */
-    public class MoneySerialize extends JsonSerializer<Object> {
+    public static class MoneySerialize extends JsonSerializer<Object> {
         //修改要除的数据
         final BigDecimal TEMP = BigDecimal.valueOf(1000000L);
 
@@ -93,7 +90,7 @@ public class WebMvcConfigurerImpl implements WebMvcConfigurer {
     /**
      * double serializer.
      */
-    public class DoubleSerialize extends JsonSerializer<Double> {
+    public static class DoubleSerialize extends JsonSerializer<Double> {
 
         private DecimalFormat df = new DecimalFormat("##.00");
 

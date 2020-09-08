@@ -10,6 +10,7 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Document(indexName = "esdto", type = "esdto")
 @Data
@@ -26,4 +27,19 @@ public class TestEsDto extends EsBaseEntity implements Serializable {
     private String sex;
     @Field(type = FieldType.Keyword)
     private String desc;
+    @Field(type = FieldType.Nested)
+    private List<Person> personList;
+
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @ToString
+    public static class Person {
+        private Integer age;
+        @Field(type = FieldType.Keyword)
+        private String sex;
+        @Field(type = FieldType.Keyword)
+        private String desc;
+    }
 }

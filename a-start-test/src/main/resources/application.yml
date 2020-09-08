@@ -1,14 +1,16 @@
 server:
   port: 9090
 lind:
-  logger:
-    level: Info
-    type: File
-    enable: true
   ratelimit:
-    enable: true
+    enable: false
     limit: 1
     timeout: 5 #毫秒
+  redis:
+    lock:
+      enable: true
+      autoRelease: false
+      interrupt: true
+      registryKey: lind-lock
 spring:
   # Redis
   redis:
@@ -38,11 +40,6 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-redis:
-  lock:
-    autoRelease: false
-    interrupt: true
-    registryKey: lind-lock
 
 # hbase配置
 hbase:

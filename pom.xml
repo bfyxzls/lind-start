@@ -3,27 +3,22 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.lind</groupId>
     <artifactId>lind-start</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>lind-redis-start</module>
-        <module>lind-swagger-start</module>
         <module>a-start-test</module>
-        <module>lind-hbase-start</module>
-        <module>lind-common</module>
         <module>a-start-gateway</module>
         <module>a-start-oauth</module>
-        <module>lind-elasticsearch-start</module>
-        <module>lind-mybatis-start</module>
-        <module>lind-uaa-start</module>
-        <module>lind-hbase2-start</module>
-        <module>lind-lock-start</module>
-        <module>lind-limit-start</module>
+        <module>lind-start-framework</module>
     </modules>
     <properties>
+        <skipTests>true</skipTests>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
         <!-- Maven Plugin Versions -->
         <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
         <!-- 部署插件-->
@@ -45,9 +40,6 @@
         <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
 
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
         <guava.version>28.2-jre</guava.version>
         <mysql.drive.version>8.0.17</mysql.drive.version>
         <HikariCP.version>3.4.2</HikariCP.version>
@@ -63,23 +55,22 @@
         <commons-lang3-version>3.7</commons-lang3-version>
         <!-- 在官方的文档里面，规定了2.2.6的jedis版本就是3.1.0 -->
         <jedis-version>3.1.0</jedis-version>
-
-
         <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
         <maven.sevntu.checkstyle.plugin.version>1.37.1</maven.sevntu.checkstyle.plugin.version>
         <maven.sevntu-checkstyle-check.checkstyle.version>8.29</maven.sevntu-checkstyle-check.checkstyle.version>
-
+        <!-- mvn site时跳过包检查，加快构建速度-->
+        <dependency.locations.enabled>false</dependency.locations.enabled>
 
     </properties>
 
     <!-- 公用配置管理 -->
     <dependencies>
         <!-- Generating Your Own Metadata by Using the Annotation Processor -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
+        <!--            <optional>true</optional>-->
+        <!--        </dependency>-->
 
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
@@ -273,6 +264,9 @@
     </distributionManagement>
 
     <build>
+        <!-- 所有子项目重命名jar-->
+        <!--        <finalName>${project.artifactId}</finalName>-->
+        <!-- defaultGoal：执行build任务时，如果没有指定目标，将使用的默认值 -->
         <plugins>
             <!-- 生成源码jar -->
             <plugin>
@@ -288,7 +282,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <!-- 代码检查 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -297,9 +290,9 @@
                 <executions>
                     <execution>
                         <id>checkstyle</id>
-                        <phase>validate</phase>
+                        <phase>validate</phase><!-- 步骤：绑定到lifecycle的validate上-->
                         <goals>
-                            <goal>check</goal>
+                            <goal>check</goal><!--spotbugs失败后也生成jar,check失败后不生成jar -->
                         </goals>
                     </execution>
                 </executions>
@@ -313,30 +306,27 @@
                 <configuration>
                     <configLocation>/checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>
-                    <consoleOutput>true</consoleOutput>
-                    <failsOnError>true</failsOnError>
+                    <consoleOutput>true</consoleOutput><!-- 控制台显示-->
                 </configuration>
             </plugin>
-            <!-- 配置pmd对java源文件进行检查，检测出可以优化的代码 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.8</version>
-            </plugin>
+            <!-- bug检查 -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>4.0.4</version>
-
                 <executions>
                     <execution>
-                        <id>check</id>
-                        <phase>test</phase>
+                        <id>spotbugs</id>
+                        <phase>compile</phase><!-- 需要等代码编译完之后再检查 -->
                         <goals>
-                            <goal>check</goal>
+                            <goal>check</goal><!-- 动作：plugin的goal绑定到validate步骤上-->
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <skip>false</skip><!-- 是否跳过检查spotbugs -->
+
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>com.github.spotbugs</groupId>
@@ -361,11 +351,23 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.8.2</version>
+                <configuration>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-site-renderer</artifactId>
+                        <version>1.9.2</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <version>3.1.0</version>
+                <configuration>
+                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                </configuration>
             </plugin>
 
         </plugins>

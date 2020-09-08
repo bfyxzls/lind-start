@@ -3,12 +3,22 @@ package com.lind.start.test.controller;
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.UserDTO;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,11 +29,24 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
+@Api("测试")
 public class HomeController {
     @Autowired
     RedisUserManualLockTemplate redisUserManualLockTemplate;
     @Autowired
     ApplicationContext applicationContext;
+
+    /**
+     * 不加@RequestBody相当于@RequestParam
+     *
+     * @param userDTO
+     * @return
+     */
+    @ApiOperation("post参数在url")
+    @PostMapping("/p-url")
+    public ResponseEntity ptest(@ApiParam("请求体") UserDTO userDTO) {
+        return ResponseEntity.ok(userDTO);
+    }
 
     @PostMapping("/p")
     public ResponseEntity p(@RequestBody UserDTO userDTO) {
@@ -58,7 +81,7 @@ public class HomeController {
     @RequestMapping(value = "/lockAndLimit", method = RequestMethod.GET)
     public Object test1(HttpServletRequest request, @RequestParam String sourceId, @RequestParam String userId) throws InterruptedException {
         request.getSession().setAttribute("id", userId);
-        return redisUserManualLockTemplate.execute(sourceId, 60*5, TimeUnit.SECONDS);
+        return redisUserManualLockTemplate.execute(sourceId, 60 * 5, TimeUnit.SECONDS);
     }
 
     /**
@@ -76,7 +99,7 @@ public class HomeController {
      */
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ResponseEntity list() {
-       return  ResponseEntity.ok(redisUserManualLockTemplate.getSourceList());
+        return ResponseEntity.ok(redisUserManualLockTemplate.getSourceList());
     }
 
     @RepeatSubmit()

@@ -1,0 +1,6 @@
+# 自动注入的bean
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.lind.lock.config.RedisLockConfig, \
+  com.lind.lock.template.RedisLockTemplate,\
+  com.lind.lock.template.RedisUserManualLockTemplate,\
+  com.lind.lock.aspect.RepeatSubmitAspect
