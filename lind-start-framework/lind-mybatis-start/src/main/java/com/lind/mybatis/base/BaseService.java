@@ -24,7 +24,7 @@ public interface BaseService<E> {
     /**
      * 根据ID获取.
      *
-     * @param id
+     * @param id 主键
      * @return
      */
     default E get(String id) {
@@ -34,7 +34,7 @@ public interface BaseService<E> {
     /**
      * 保存.
      *
-     * @param entity
+     * @param entity 实体
      * @return
      */
     default Integer insert(E entity) {
@@ -44,7 +44,7 @@ public interface BaseService<E> {
     /**
      * 修改.
      *
-     * @param entity
+     * @param entity 实体
      * @return
      */
     default Integer update(E entity) {
@@ -54,7 +54,7 @@ public interface BaseService<E> {
     /**
      * 修改.
      *
-     * @param entity
+     * @param entity 实体
      * @return
      */
     default Integer update(Wrapper<E> entityWrapper, E entity) {
@@ -64,7 +64,7 @@ public interface BaseService<E> {
     /**
      * 删除.
      *
-     * @param id
+     * @param id 主键
      */
     default void delete(String id) {
         getRepository().deleteById(id);
@@ -73,7 +73,7 @@ public interface BaseService<E> {
     /**
      * 批量删除.
      *
-     * @param idList
+     * @param idList 列表
      */
     default void delete(List<String> idList) {
         getRepository().deleteBatchIds(idList);
@@ -83,7 +83,7 @@ public interface BaseService<E> {
     /**
      * 根据条件查询获取.
      *
-     * @param entityWrapper
+     * @param entityWrapper 条件
      * @return
      */
     default List<E> findAll(Wrapper<E> entityWrapper) {
@@ -93,9 +93,9 @@ public interface BaseService<E> {
     /**
      * 分页获取.
      *
-     * @param pageNum       .
-     * @param pageSize      .
-     * @param entityWrapper .
+     * @param pageNum       页号
+     * @param pageSize      每页记录数
+     * @param entityWrapper 条件
      * @return
      */
     default IPage<E> findAll(int pageNum, int pageSize, Wrapper<E> entityWrapper) {
@@ -108,7 +108,7 @@ public interface BaseService<E> {
     /**
      * 获取查询条件的结果数
      *
-     * @param entityWrapper
+     * @param entityWrapper 条件
      * @return
      */
     default long count(Wrapper<E> entityWrapper) {

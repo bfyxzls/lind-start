@@ -24,7 +24,6 @@ import javax.crypto.Mac;
 import javax.crypto.ShortBufferException;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
@@ -95,6 +94,10 @@ public class HmacOneTimePasswordGenerator {
 
     /**
      * 生成key.
+     *
+     * @param password
+     * @return
+     * @throws UnsupportedEncodingException
      */
     protected Key generateKey(String password) throws UnsupportedEncodingException {
         byte[] keyBytes = password.getBytes("UTF-8");

@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * 拦截器.
+ * 拦截器
  * 依赖于EsAuditorAwarer接口，开发人员通过实现这个接口将当前登陆人ID进行返回.
  */
 @Component

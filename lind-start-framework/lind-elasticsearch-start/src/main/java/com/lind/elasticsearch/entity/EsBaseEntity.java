@@ -2,7 +2,11 @@ package com.lind.elasticsearch.entity;
 
 import com.lind.common.util.SnowFlakeUtils;
 import lombok.Data;
-import org.springframework.data.annotation.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
@@ -10,10 +14,10 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Data
 public class EsBaseEntity {
 
-    public static final String dateTimeFormat = "yyyy/MM/dd||yyyy-MM-dd" +
-            "||yyyy-MM-dd HH:mm:ss||yyyy/MM/dd HH:mm:ss" +
-            "||yyyy-MM-dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS" +
-            "||yyyy-MM-dd'T'HH:mm:ss.SSS";
+    public static final String dateTimeFormat = "yyyy/MM/dd||yyyy-MM-dd"
+            + "||yyyy-MM-dd HH:mm:ss||yyyy/MM/dd HH:mm:ss"
+            + "||yyyy-MM-dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS"
+            + "||yyyy-MM-dd'T'HH:mm:ss.SSS";
     /**
      * 创建时间.
      */

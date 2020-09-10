@@ -16,7 +16,7 @@ public class HBaseExceptionHandler {
     /**
      * hbase重复建表
      *
-     * @param e
+     * @param e TableExistsException
      * @return
      */
     @ExceptionHandler(TableExistsException.class)
@@ -29,7 +29,7 @@ public class HBaseExceptionHandler {
     /**
      * hbase操作错误
      *
-     * @param e
+     * @param e TableExistsException
      * @return
      */
     @ExceptionHandler(HbaseSystemException.class)

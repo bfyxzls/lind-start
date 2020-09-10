@@ -8,6 +8,7 @@
     Checkstyle configuration that checks the Google coding conventions from Google Java Style
     that can be found at https://google.github.io/styleguide/javaguide.html.
     Checkstyle is very configurable. Be sure to read the documentation at
+    Checkstyle is very configurable. Be sure to read the documentation at
     http://checkstyle.sf.net (or in your downloaded distribution).
     To completely disable a check, just comment it out or delete it from the file.
     Authors: Max Vetrenko, Ruslan Diachenko, Roman Ivanov.
@@ -213,7 +214,9 @@
         <module name="SummaryJavadoc">
             <property name="forbiddenSummaryFragments"
                       value="^@return the *|^This method returns |^A [{]@code [a-zA-Z0-9]+[}]( is a )"/>
+            <property name="period" value=""/>
         </module>
+
 
         <module name="JavadocParagraph"/>
         <module name="AtclauseOrder">
@@ -223,7 +226,6 @@
         <module name="JavadocMethod">
             <property name="scope" value="public"/>
             <property name="allowMissingParamTags" value="true"/>
-            <!-- <property name="allowMissingThrowsTags" value="true"/>-->
             <property name="allowMissingReturnTag" value="true"/>
             <!--  <property name="minLineCount" value="2"/> -->
             <property name="allowedAnnotations" value="Override, Test"/>

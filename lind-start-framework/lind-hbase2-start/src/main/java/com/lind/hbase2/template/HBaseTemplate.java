@@ -33,7 +33,7 @@ public class HBaseTemplate implements HBaseOperations {
     static final String CHARSET_NAME = "UTF-8";
     private static final Logger logger = LoggerFactory.getLogger(HBaseTemplate.class);
     @Autowired
-    private HBaseAdmin hBaseAdmin;
+    private HBaseAdmin hbaseAdmin;
     @Autowired
     private Connection connection;
 
@@ -49,7 +49,7 @@ public class HBaseTemplate implements HBaseOperations {
         boolean tableExistsFlag = false;
         try {
             table = connection.getTable(TableName.valueOf(tableName));
-            tableExistsFlag = hBaseAdmin.tableExists(table.getName());
+            tableExistsFlag = hbaseAdmin.tableExists(table.getName());
         } catch (IOException e) {
             logger.error("IOException : {}", e.getMessage());
             e.printStackTrace();
@@ -187,13 +187,13 @@ public class HBaseTemplate implements HBaseOperations {
 
         TableName tableNameVar = TableName.valueOf(tableName);
         if (!tableExists(tableName)) {
-            HTableDescriptor hTableDescriptor = new HTableDescriptor(tableNameVar);
+            HTableDescriptor tableDescriptor = new HTableDescriptor(tableNameVar);
             for (int i = 0; i < familyName.length; i++) {
-                HColumnDescriptor hColumnDescriptor = new HColumnDescriptor(familyName[i]);
-                hTableDescriptor.addFamily(hColumnDescriptor);
+                HColumnDescriptor columnDescriptor = new HColumnDescriptor(familyName[i]);
+                tableDescriptor.addFamily(columnDescriptor);
             }
             try {
-                hBaseAdmin.createTable(hTableDescriptor);
+                hbaseAdmin.createTable(tableDescriptor);
             } catch (IOException e) {
                 logger.error("create failed , Exception: {}", e.getMessage());
                 e.printStackTrace();
@@ -367,8 +367,8 @@ public class HBaseTemplate implements HBaseOperations {
         boolean tableExists = tableExists(tableName);
         if (tableExists) {
             try {
-                hBaseAdmin.disableTable(tableName);
-                hBaseAdmin.deleteTable(tableName);
+                hbaseAdmin.disableTable(tableName);
+                hbaseAdmin.deleteTable(tableName);
                 logger.info("table {} delete successfully", tableName);
             } catch (IOException e) {
                 e.printStackTrace();

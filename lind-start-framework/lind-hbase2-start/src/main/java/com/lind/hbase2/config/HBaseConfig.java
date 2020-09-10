@@ -14,10 +14,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * @Author YaoQi
- * @Date 2018/8/13 11:32
- * @Modified
- * @Description HBase配置类
+ * HBase配置类
  */
 @org.springframework.context.annotation.Configuration
 @ConfigurationProperties(prefix = "hbase.zookeeper")

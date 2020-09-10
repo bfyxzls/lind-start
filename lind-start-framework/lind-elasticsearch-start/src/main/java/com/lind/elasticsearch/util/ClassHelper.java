@@ -12,8 +12,8 @@ public class ClassHelper {
     /**
      * 获取type所有字段,包含基类的.
      *
-     * @param type
-     * @return
+     * @param type 类型
+     * @return 
      */
     public static Field[] getAllFields(Class type) {
         java.lang.reflect.Field[] fields = type.getDeclaredFields();

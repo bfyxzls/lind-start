@@ -88,7 +88,7 @@ public class HBaseAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(HBaseOperations.class)
-    public HBaseTemplate hBaseTemplate(Connection connection) throws IOException {
+    public HBaseTemplate hbaseTemplate(Connection connection) throws IOException {
         HBaseTemplate hbaseTemplate = new HBaseTemplate(connection);
         log.info("HBase 连接成功。");
         return hbaseTemplate;
@@ -97,7 +97,7 @@ public class HBaseAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(HBaseService.class)
-    public HBaseService hBaseService(HBaseTemplate template) {
+    public HBaseService hbaseService(HBaseTemplate template) {
         return new HBaseServiceImpl(template, properties.getNameSpace());
     }
 

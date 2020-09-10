@@ -24,6 +24,9 @@ import org.springframework.security.oauth2.provider.token.store.redis.RedisToken
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 认证管理配置,
+ */
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -31,8 +34,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public UserDetailsService userDetailsService;
     /**
      * 认证管理器
-     *
-     * @see SecurityConfig 的authenticationManagerBean()
      */
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -56,7 +57,33 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return redisTokenStore;
     }
 
-    // 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)。
+
+    /**
+     * 将当前用户信息追加到登陆后返回的json数据里<br>
+     * 通过参数access_token.add-userinfo控制<br>
+     * 2018.07.13
+     *
+     * @param accessToken    accessToken
+     * @param authentication authentication
+     */
+    private void addLoginUserInfo(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
+        if (accessToken instanceof DefaultOAuth2AccessToken) {
+            DefaultOAuth2AccessToken defaultOAuth2AccessToken = (DefaultOAuth2AccessToken) accessToken;
+
+            Authentication userAuthentication = authentication.getUserAuthentication();
+            Object principal = userAuthentication.getPrincipal();
+            Map<String, Object> map = new HashMap<>(defaultOAuth2AccessToken.getAdditionalInformation()); // 旧的附加参数
+            map.put("loginUser", principal); // 追加当前登陆用户
+            defaultOAuth2AccessToken.setAdditionalInformation(map);
+        }
+    }
+
+    /**
+     * 用来配置授权（authorization）以及令牌（token）的访问端点和令牌服务(token services)
+     *
+     * @param endpoints endpoints
+     * @throws Exception Exception
+     */
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(this.authenticationManager);
@@ -72,30 +99,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     }
 
     /**
-     * 将当前用户信息追加到登陆后返回的json数据里<br>
-     * 通过参数access_token.add-userinfo控制<br>
-     * 2018.07.13
-     *
-     * @param accessToken
-     * @param authentication
-     */
-    private void addLoginUserInfo(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        if (accessToken instanceof DefaultOAuth2AccessToken) {
-            DefaultOAuth2AccessToken defaultOAuth2AccessToken = (DefaultOAuth2AccessToken) accessToken;
-
-            Authentication userAuthentication = authentication.getUserAuthentication();
-            Object principal = userAuthentication.getPrincipal();
-            Map<String, Object> map = new HashMap<>(defaultOAuth2AccessToken.getAdditionalInformation()); // 旧的附加参数
-            map.put("loginUser", principal); // 追加当前登陆用户
-            defaultOAuth2AccessToken.setAdditionalInformation(map);
-        }
-    }
-
-    /**
      * AuthorizationServerSecurityConfigurer：用来配置令牌端点(Token Endpoint)的安全约束.
      *
-     * @param security
-     * @throws Exception
+     * @param security security
+     * @throws Exception Exception
      */
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
@@ -106,8 +113,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      * 我们将client信息存储到oauth_client_details表里<br>
      * 并将数据缓存到redis
      *
-     * @param clients
-     * @throws Exception
+     * @param clients clients
+     * @throws Exception Exception
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {

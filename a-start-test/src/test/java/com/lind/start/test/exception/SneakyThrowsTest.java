@@ -4,8 +4,11 @@ package com.lind.start.test.exception;
 import com.google.common.collect.ImmutableMap;
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.springframework.util.ResourceUtils;
 import org.springframework.util.StringUtils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class SneakyThrowsTest {
@@ -31,6 +34,12 @@ public class SneakyThrowsTest {
         }, "zzl");
     }
 
+    @Test
+    public void ioException() {
+        Father father = new Father();
+        father.nestedException();
+    }
+
     interface Do {
         String process() throws IllegalArgumentException;
     }
@@ -46,7 +55,7 @@ public class SneakyThrowsTest {
                 System.out.print("c=" + a.toString());
 
             } catch (Exception e) {
-                e.getStackTrace();
+                throw e;
             }
 
         }
@@ -64,7 +73,17 @@ public class SneakyThrowsTest {
             System.out.println("helloThrow name:" + name);
         }
 
+        /**
+         * FileNotFoundException是Execption的子类，需要声明SneakyThrows.
+         */
+        @SneakyThrows
         public void nestedException() {
+            try {
+                File file = ResourceUtils.getFile("classpath:pkg1.txt");
+                file.getTotalSpace();
+            } catch (FileNotFoundException e) {
+                throw e;
+            }
         }
     }
 

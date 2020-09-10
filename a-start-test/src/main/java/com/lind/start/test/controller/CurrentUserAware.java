@@ -19,6 +19,10 @@ public class CurrentUserAware implements UserIdAuditorAware {
     public Optional<String> getCurrentAuditor() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = requestAttributes.getRequest();
-        return Optional.of(request.getSession().getAttribute("id").toString());
+        if (request != null) {
+            return Optional.of(request.getSession().getAttribute("id").toString());
+        } else {
+            return Optional.empty();
+        }
     }
 }

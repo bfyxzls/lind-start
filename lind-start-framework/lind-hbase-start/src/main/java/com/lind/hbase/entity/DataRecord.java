@@ -6,7 +6,13 @@ import lombok.ToString;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 
 import static java.lang.String.format;
 
@@ -43,8 +49,8 @@ public class DataRecord implements Map<String, Object>, Serializable {
     /**
      * 增加 kv数据
      *
-     * @param key
-     * @param value
+     * @param key key
+     * @param value value
      * @return
      */
     public DataRecord append(final String key, final Object value) {
@@ -55,9 +61,9 @@ public class DataRecord implements Map<String, Object>, Serializable {
     /**
      * 获取指定类型参数
      *
-     * @param key
-     * @param clazz
-     * @param <T>
+     * @param key key
+     * @param clazz clazz
+     * @param <T> 类型
      * @return
      */
     public <T> T get(final String key, final Class<T> clazz) {
@@ -66,25 +72,11 @@ public class DataRecord implements Map<String, Object>, Serializable {
     }
 
     /**
-     * 获取指定key的值，如果获取不到返回设定的默认值
-     *
-     * @param key
-     * @param defaultValue 默认值
-     * @param <T>
-     * @return
-     */
-    public <T> T get(final String key, final T defaultValue) {
-        Assert.notNull(defaultValue, "默认值不能为空");
-        Object value = document.get(key);
-        return value == null ? defaultValue : (T) value;
-    }
-
-    /**
      * 获取指定类型的list列表
      *
-     * @param key
+     * @param key 键
      * @param clazz 指定的数据类型
-     * @param <T>
+     * @param <T> 类型
      * @return
      */
     public <T> List<T> getList(final String key, final Class<T> clazz) {
@@ -127,6 +119,20 @@ public class DataRecord implements Map<String, Object>, Serializable {
         return document.get(key);
     }
 
+    /**
+     * 获取指定key的值，如果获取不到返回设定的默认值
+     *
+     * @param key 键
+     * @param defaultValue 默认值
+     * @param <T> 类型
+     * @return
+     */
+    public <T> T get(final String key, final T defaultValue) {
+        Assert.notNull(defaultValue, "默认值不能为空");
+        Object value = document.get(key);
+        return value == null ? defaultValue : (T) value;
+    }
+    
     @Override
     public Object put(final String key, final Object value) {
         return document.put(key, value);

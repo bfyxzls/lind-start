@@ -12,7 +12,7 @@ public class ClassHelper {
     /**
      * 获取type所有字段,包含基类的.
      *
-     * @param type
+     * @param type type
      * @return
      */
     public static Field[] getAllFields(Class type) {

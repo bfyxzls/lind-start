@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @author Exrickx
+ * mybatis实体基类.
  */
 @Data
 public abstract class BaseEntity implements Serializable {

@@ -304,7 +304,7 @@
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <configLocation>/checkstyle.xml</configLocation>
+                    <configLocation>/google_checkstyle.xml</configLocation>
                     <encoding>UTF-8</encoding>
                     <consoleOutput>true</consoleOutput><!-- 控制台显示-->
                 </configuration>

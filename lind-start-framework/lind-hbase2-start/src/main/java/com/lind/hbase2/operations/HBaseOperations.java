@@ -1,14 +1,16 @@
 package com.lind.hbase2.operations;
 
-import org.apache.hadoop.hbase.client.*;
+import org.apache.hadoop.hbase.client.Delete;
+import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.Result;
+import org.apache.hadoop.hbase.client.ResultScanner;
+import org.apache.hadoop.hbase.client.Scan;
 
 import java.util.List;
 
 /**
- * @Author YaoQi
- * @Date 2018/8/13 14:46
- * @Modified
- * @Description 组件接口
+ * 组件接口
  */
 public interface HBaseOperations {
 

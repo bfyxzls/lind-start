@@ -9,7 +9,7 @@ public interface HBaseService {
     /**
      * 创建表
      *
-     * @param tableName
+     * @param tableName tableName
      * @return
      * @throws IOException
      */
@@ -18,7 +18,7 @@ public interface HBaseService {
     /**
      * 表格是否已经存在
      *
-     * @param tableName
+     * @param tableName tableName
      * @return
      * @throws IOException
      */
@@ -28,8 +28,8 @@ public interface HBaseService {
     /**
      * 保存数据
      *
-     * @param tableName
-     * @param dataRecord
+     * @param tableName  tableName
+     * @param dataRecord dataRecord
      * @return 保存数据的rowKey
      */
     String save(String tableName, DataRecord dataRecord);
@@ -37,8 +37,8 @@ public interface HBaseService {
     /**
      * 更新数据
      *
-     * @param tableName
-     * @param dataRecord
+     * @param tableName  tableName
+     * @param dataRecord dataRecord
      * @return
      */
     String update(String tableName, DataRecord dataRecord);
@@ -46,9 +46,9 @@ public interface HBaseService {
     /**
      * 获取数据的指定列
      *
-     * @param tableName
-     * @param rowKey
-     * @param fieldName
+     * @param tableName tableName
+     * @param rowKey    rowKey
+     * @param fieldName fieldName
      * @return
      */
     Object getValue(String tableName, String rowKey, String fieldName);
@@ -57,9 +57,9 @@ public interface HBaseService {
     /**
      * 根据rowKey获取数据
      *
-     * @param tableName
-     * @param rowKey
-     * @param fieldNames
+     * @param tableName  tableName
+     * @param rowKey     rowKey
+     * @param fieldNames fieldNames
      * @return
      */
     DataRecord getByKey(String tableName, String rowKey, String... fieldNames);
@@ -67,8 +67,8 @@ public interface HBaseService {
     /**
      * 根据rowKey获取全字段
      *
-     * @param tableName
-     * @param rowKey
+     * @param tableName tableName
+     * @param rowKey    rowKey
      * @return
      */
     DataRecord getByKey(String tableName, String rowKey);

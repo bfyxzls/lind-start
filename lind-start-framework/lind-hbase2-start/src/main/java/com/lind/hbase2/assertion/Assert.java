@@ -4,10 +4,7 @@ import com.lind.hbase2.constant.ExceptionMessage;
 import org.springframework.util.StringUtils;
 
 /**
- * @Author YaoQi
- * @Date 2018/8/13 17:00
- * @Modified
- * @Description 参数断言
+ * test
  */
 public class Assert {
 
