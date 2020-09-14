@@ -2,10 +2,18 @@ package com.lind.common;
 
 import com.lind.common.util.EncryptionUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 @Slf4j
 public class StringTest {
+
+    @Test
+    public void split(){
+        String msg="admin|中国";
+        log.info(StringUtils.split(msg,"|")[1]);
+    }
+
     @Test
     public void equals() {
         // 作为对象使用
