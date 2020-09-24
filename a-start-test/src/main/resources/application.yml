@@ -14,13 +14,24 @@ lind:
 spring:
   # Redis
   redis:
-    host: 127.0.0.1
-    #password: bdyh@2020
+    # host: 127.0.0.1
+    password: bdyh@2020
     # 数据库索引 默认0
     database: 10
-    port: 6379
+    # port: 6379
     # 超时时间 Duration类型 3秒
     timeout: 3S
+    cluster: #集群环境
+      nodes:
+        - 192.168.10.118:6379
+        - 192.168.10.118:6380
+        - 192.168.10.119:6379
+        - 192.168.10.119:6380
+        - 192.168.10.121:6379
+        - 192.168.10.121:6380
+      max-redirects: 3 # 获取失败 最大重定向次数
+
+
   elasticsearch:
     rest:
       uris: 192.168.0.204:9200
