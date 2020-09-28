@@ -1,1 +1,2 @@
 totpSeconds: 30 # 30天
+spring.application.name: lind-start-common
