@@ -1,8 +1,13 @@
 package com.lind.start.test.controller;
 
+import com.lind.common.handler.ObjectEventService;
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.UserDTO;
+import com.lind.start.test.handler.UserEvent;
+import com.lind.start.test.handler.UserEventType;
+import com.lind.start.test.handler.listener.EmailEventListener;
+import com.lind.start.test.handler.listener.SmsEventListener;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -35,6 +40,12 @@ public class HomeController {
     RedisUserManualLockTemplate redisUserManualLockTemplate;
     @Autowired
     ApplicationContext applicationContext;
+    @Autowired
+    ObjectEventService userEventService;
+    @Autowired
+    SmsEventListener smsEventListener;
+    @Autowired
+    EmailEventListener emailEventListener;
 
     /**
      * 不加@RequestBody相当于@RequestParam
@@ -108,7 +119,6 @@ public class HomeController {
         return "OK";
     }
 
-
     /**
      * 对应重定向咱们：/callback?token=abc123，咱们再把token重定向到其它网站
      *
@@ -128,4 +138,17 @@ public class HomeController {
         String token = StringUtils.join(params.get("token"));
         response.sendRedirect("http://www.baidu.com?token=" + token);
     }
+
+    @GetMapping("/event2")
+    public void event2() {
+        userEventService.addEventListener(emailEventListener, UserEventType.LOGIN.name());
+
+    }
+
+    @GetMapping("/event1")
+    public void event1() {
+        userEventService.addEventListener(smsEventListener, UserEventType.LOGIN.name());
+        userEventService.publisher(new UserEvent("1", "hello"), UserEventType.LOGIN.name());
+    }
+
 }
