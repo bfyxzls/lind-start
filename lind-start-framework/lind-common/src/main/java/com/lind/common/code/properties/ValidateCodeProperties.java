@@ -12,6 +12,7 @@
 package com.lind.common.code.properties;
 
 import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * 验证码配置
@@ -19,19 +20,20 @@ import lombok.Data;
  * @author paascloud.net @gmail.com
  */
 @Data
+@ConfigurationProperties(prefix = "lind.validate-code")
 public class ValidateCodeProperties {
 
-    /**
-     * 图片验证码配置
-     */
-    private ImageCodeProperties image = new ImageCodeProperties();
-    /**
-     * 短信验证码配置
-     */
-    private SmsCodeProperties sms = new SmsCodeProperties();
-    /**
-     * 邮箱验证码配置
-     */
-    private EmailCodeProperties email = new EmailCodeProperties();
+	/**
+	 * 图片验证码配置
+	 */
+	private ImageCodeProperties image = new ImageCodeProperties();
+	/**
+	 * 短信验证码配置
+	 */
+	private SmsCodeProperties sms = new SmsCodeProperties();
+	/**
+	 * 邮箱验证码配置
+	 */
+	private EmailCodeProperties email = new EmailCodeProperties();
 
 }

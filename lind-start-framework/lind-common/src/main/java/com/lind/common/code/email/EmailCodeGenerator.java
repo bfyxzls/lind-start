@@ -14,13 +14,12 @@ package com.lind.common.code.email;
 
 import com.lind.common.code.ValidateCode;
 import com.lind.common.code.ValidateCodeGenerator;
-import com.lind.common.code.properties.EmailCodeProperties;
+import com.lind.common.code.properties.ValidateCodeProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Map;
 
@@ -33,23 +32,21 @@ import java.util.Map;
 @Component("emailValidateCodeGenerator")
 public class EmailCodeGenerator implements ValidateCodeGenerator {
 
-	@Autowired
-	private EmailCodeProperties emailCodeProperties;
+    @Autowired
+    private ValidateCodeProperties validateCodeProperties;
 
-	/**
-	 * Generate validate code.
-	 *
-	 * @param request the request
-	 *
-	 * @return the validate code
-	 */
-	@Override
-	public ValidateCode generate(ServletWebRequest request) {
-		HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-		Map<String, String[]> parameterMap = httpServletRequest.getParameterMap();
-		String[] emails = parameterMap.get("email");
-		log.info(Arrays.toString(emails));
-		String code = Arrays.toString(emails);
-		return new ValidateCode(code, emailCodeProperties.getExpireIn());
-	}
+    /**
+     * Generate validate code.
+     *
+     * @param request the request
+     * @return the validate code
+     */
+    @Override
+    public ValidateCode generate(ServletWebRequest request) {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        String[] emails = parameterMap.get("email");
+        log.info(Arrays.toString(emails));
+        String code = Arrays.toString(emails);
+        return new ValidateCode(code, validateCodeProperties.getEmail().getExpireIn());
+    }
 }

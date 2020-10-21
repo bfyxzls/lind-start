@@ -13,7 +13,6 @@ public class PcView {
     @GetMapping("/test/view")
     public View renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
                                         HttpServletResponse response) throws Exception {
-
         return new BaseView();
     }
 }

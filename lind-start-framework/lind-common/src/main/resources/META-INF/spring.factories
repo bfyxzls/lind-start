@@ -2,7 +2,15 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.util.LindExecutorPool,\
   com.lind.common.otp.OneTimePasswordGeneratorConfig,\
-  com.lind.common.handler.DefaultObjectEventService
+  com.lind.common.event.DefaultEventBusBusService,\
+  com.lind.common.code.ValidateCodeBeanConfig,\
+  com.lind.common.code.image.ImageCodeProcessor,\
+  com.lind.common.code.impl.RedisValidateCodeRepository,\
+  com.lind.common.code.sms.SmsCodeProcessor,\
+  com.lind.common.code.sms.SmsCodeGenerator,\
+  com.lind.common.code.email.EmailCodeProcessor,\
+  com.lind.common.code.email.EmailCodeGenerator,\
+  com.lind.common.code.ValidateCodeProcessorHolder
 # Application Listeners
 org.springframework.context.ApplicationListener=\
   com.lind.common.listener.MessageDbListener

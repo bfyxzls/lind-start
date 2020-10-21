@@ -1,13 +1,14 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.handler.ObjectEventService;
+import com.lind.common.code.image.ImageCodeProcessor;
+import com.lind.common.event.EventBusService;
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.UserDTO;
 import com.lind.start.test.handler.UserEvent;
 import com.lind.start.test.handler.UserEventType;
-import com.lind.start.test.handler.listener.EmailEventListener;
-import com.lind.start.test.handler.listener.SmsEventListener;
+import com.lind.start.test.handler.listener.EmailEventBusListener;
+import com.lind.start.test.handler.listener.SmsEventBusListener;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,11 +43,13 @@ public class HomeController {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    ObjectEventService userEventService;
+    EventBusService userEventService;
     @Autowired
-    SmsEventListener smsEventListener;
+    SmsEventBusListener smsEventListener;
     @Autowired
-    EmailEventListener emailEventListener;
+    EmailEventBusListener emailEventListener;
+    @Autowired
+    ImageCodeProcessor imageCodeProcessor;
 
     /**
      * 不加@RequestBody相当于@RequestParam
@@ -149,6 +153,12 @@ public class HomeController {
     public void event1() {
         userEventService.addEventListener(smsEventListener, UserEventType.LOGIN.name());
         userEventService.publisher(new UserEvent("1", "hello"), UserEventType.LOGIN.name());
+    }
+
+    @GetMapping("/test/image-code")
+    public void imageGenerate(ServletWebRequest request, HttpServletResponse response) throws Exception {
+        imageCodeProcessor.create(request);
+
     }
 
 }

@@ -2,7 +2,7 @@ package com.lind.common.code.sms;
 
 import com.lind.common.code.ValidateCode;
 import com.lind.common.code.ValidateCodeGenerator;
-import com.lind.common.code.properties.SmsCodeProperties;
+import com.lind.common.code.properties.ValidateCodeProperties;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,19 +16,18 @@ import org.springframework.web.context.request.ServletWebRequest;
 @Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
 
-	@Autowired
-	private SmsCodeProperties smsCodeProperties;
+    @Autowired
+    private ValidateCodeProperties validateCodeProperties;
 
-	/**
-	 * Generate validate code.
-	 *
-	 * @param request the request
-	 *
-	 * @return the validate code
-	 */
-	@Override
-	public ValidateCode generate(ServletWebRequest request) {
-		String code = RandomStringUtils.randomNumeric(smsCodeProperties.getLength());
-		return new ValidateCode(code, smsCodeProperties.getExpireIn());
-	}
+    /**
+     * Generate validate code.
+     *
+     * @param request the request
+     * @return the validate code
+     */
+    @Override
+    public ValidateCode generate(ServletWebRequest request) {
+        String code = RandomStringUtils.randomNumeric(validateCodeProperties.getSms().getLength());
+        return new ValidateCode(code, validateCodeProperties.getSms().getExpireIn());
+    }
 }

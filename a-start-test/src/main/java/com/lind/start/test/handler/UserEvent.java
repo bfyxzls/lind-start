@@ -1,16 +1,17 @@
 package com.lind.start.test.handler;
 
-import com.lind.common.handler.ObjectEvent;
+import com.lind.common.event.AbstractEvent;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  * email事件源对象
  */
 @Getter
 @Setter
-public class UserEvent extends ObjectEvent {
-    private static final long serialVersionUID = 1L;
+@ToString(callSuper = true)
+public class UserEvent extends AbstractEvent {
     private String message;
     private String userId;
 

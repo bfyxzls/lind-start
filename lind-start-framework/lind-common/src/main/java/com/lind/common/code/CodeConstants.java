@@ -12,18 +12,23 @@ public interface CodeConstants {
 	 */
 	String DEFAULT_VALIDATE_CODE_URL_PREFIX = "/auth/code";
 
-		/**
+	/**
+	 * 检查验证码
+	 */
+	String DEFAULT_CHECK_CODE_URL_PREFIX = "/auth/check";
+
+	/**
 	 * 验证图片验证码时，http请求中默认的携带图片验证码信息的参数的名称
 	 */
-	String DEFAULT_PARAMETER_NAME_CODE_IMAGE = "imageCode";
+	String DEFAULT_PARAMETER_NAME_CODE_IMAGE = "image";
 	/**
 	 * 验证短信验证码时，http请求中默认的携带短信验证码信息的参数的名称
 	 */
-	String DEFAULT_PARAMETER_NAME_CODE_SMS = "smsCode";
+	String DEFAULT_PARAMETER_NAME_CODE_SMS = "sms";
 	/**
 	 * 验证邮箱验证码时，http请求中默认的携带短信验证码信息的参数的名称
 	 */
-	String DEFAULT_PARAMETER_NAME_CODE_EMAIL = "emailCode";
+	String DEFAULT_PARAMETER_NAME_CODE_EMAIL = "email";
 	/**
 	 * 发送短信验证码 或 验证短信验证码时，传递手机号的参数的名称
 	 */

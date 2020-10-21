@@ -8,7 +8,7 @@ import com.lind.common.code.ValidateCodeException;
 import com.lind.common.code.ValidateCodeGenerator;
 import com.lind.common.code.ValidateCodeRepository;
 import com.lind.common.code.impl.AbstractValidateCodeProcessor;
-import com.lind.common.code.properties.SmsCodeProperties;
+import com.lind.common.code.properties.ValidateCodeProperties;
 import com.lind.common.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -49,7 +48,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
     @Autowired
-    private SmsCodeProperties smsCodeProperties;
+    private ValidateCodeProperties validateCodeProperties;
     @Resource
     private ObjectMapper objectMapper;
 
@@ -74,7 +73,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
     protected void send(ServletWebRequest request, ValidateCode validateCode) throws Exception {
         String paramName = CodeConstants.DEFAULT_PARAMETER_NAME_MOBILE;
         String mobile = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
-        String ipAddr = this.getRemoteAddr(request.getRequest());
+        String ipAddr = this.getRemoteAddr(request);
         CommonResult result =  CommonResult.ok( "校验成功");
         // 统一处理短信流量
         try {
@@ -107,21 +106,21 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
         }
 
         Integer mobileSmsCount = (Integer) redisTemplate.opsForValue().get(mobileSmsCountKey);
-        if (mobileSmsCount != null && mobileSmsCount > smsCodeProperties.getMobileMaxSendCount()) {
+        if (mobileSmsCount != null && mobileSmsCount > validateCodeProperties.getSms().getMobileMaxSendCount()) {
             log.error("Mobile当天短信发送数上限 ipAddr={}, mobile={}", ipAddr, mobile);
             throw new ValidateCodeException("Mobile当天短信发送数上限");
         } else {
             redisTemplate.opsForValue().set(mobileSmsCountKey, mobileSmsCount == null ? 1 : mobileSmsCount + 1, 1, TimeUnit.DAYS);
         }
         Integer ipSmsCount = (Integer) redisTemplate.opsForValue().get(ipSmsCountKey);
-        if (ipSmsCount != null && ipSmsCount > smsCodeProperties.getIpMaxSendCount()) {
+        if (ipSmsCount != null && ipSmsCount > validateCodeProperties.getSms().getIpMaxSendCount()) {
             log.error("IP当天短信发送数上限 ipAddr={}, mobile={}", ipAddr, mobile);
             throw new ValidateCodeException("IP当天短信发送数上限");
         } else {
             redisTemplate.opsForValue().set(ipSmsCountKey, ipSmsCount == null ? 1 : ipSmsCount + 1, 1, TimeUnit.DAYS);
         }
         Integer totalSmsCount = (Integer) redisTemplate.opsForValue().get(totalSmsCountKey);
-        if (totalSmsCount != null && totalSmsCount > smsCodeProperties.getTotalMaxSendCount()) {
+        if (totalSmsCount != null && totalSmsCount > validateCodeProperties.getSms().getTotalMaxSendCount()) {
             log.error("当天短信发送数上限 ipAddr={}, mobile={}", ipAddr, mobile);
             throw new ValidateCodeException("当天短信发送数上限");
         } else {
@@ -129,7 +128,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
         }
     }
 
-    private String getRemoteAddr(HttpServletRequest request) {
+    private String getRemoteAddr(ServletWebRequest request) {
         String ipAddress = request.getHeader(X_FORWARDED_FOR);
         if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
             ipAddress = request.getHeader(PROXY_CLIENT_IP);
@@ -138,7 +137,7 @@ public class SmsCodeProcessor extends AbstractValidateCodeProcessor<ValidateCode
             ipAddress = request.getHeader(WL_PROXY_CLIENT_IP);
         }
         if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
-            ipAddress = request.getRemoteAddr();
+            ipAddress = request.getRequest().getRemoteAddr();
             if (LOCALHOST_IP.equals(ipAddress) || LOCALHOST_IP_16.equals(ipAddress)) {
                 //根据网卡取本机配置的IP
                 InetAddress inet = null;

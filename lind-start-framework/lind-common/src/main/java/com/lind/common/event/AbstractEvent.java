@@ -1,7 +1,7 @@
-package com.lind.common.handler;
+package com.lind.common.event;
 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -10,8 +10,8 @@ import java.util.UUID;
  * email事件源对象
  */
 @Getter
-@Setter
-public class ObjectEvent implements Serializable {
+@ToString
+public abstract class AbstractEvent implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id = UUID.randomUUID().toString();
 }

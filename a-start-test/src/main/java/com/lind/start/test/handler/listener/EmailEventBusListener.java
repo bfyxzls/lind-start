@@ -1,13 +1,13 @@
 package com.lind.start.test.handler.listener;
 
 import com.lind.start.test.handler.UserEvent;
-import com.lind.start.test.handler.UserEventListener;
+import com.lind.start.test.handler.UserEventBusListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EmailEventListener implements UserEventListener {
+public class EmailEventBusListener implements UserEventBusListener {
     @Override
     public void onEvent(UserEvent event) {
-        System.out.println("email:" + event.getMessage());
+        System.out.println("email:" + event.toString());
     }
 }

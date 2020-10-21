@@ -1,22 +1,21 @@
 package com.lind.common.code.properties;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /**
  * 图片验证码配置项
  *
  * @author paascloud.net @gmail.com
  */
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class ImageCodeProperties extends SmsCodeProperties {
+public class ImageCodeProperties {
 
     /**
-     * Instantiates a new Image code properties.
+     * 验证码长度
      */
-    ImageCodeProperties() {
-        super.setLength(4);
-    }
-
+    private int length = 6;
+    /**
+     * 过期时间
+     */
+    private int expireIn = 60;
 }

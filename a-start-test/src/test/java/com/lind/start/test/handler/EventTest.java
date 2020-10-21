@@ -1,8 +1,8 @@
 package com.lind.start.test.handler;
 
-import com.lind.common.handler.ObjectEventService;
-import com.lind.start.test.handler.listener.EmailEventListener;
-import com.lind.start.test.handler.listener.SmsEventListener;
+import com.lind.common.event.EventBusService;
+import com.lind.start.test.handler.listener.EmailEventBusListener;
+import com.lind.start.test.handler.listener.SmsEventBusListener;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,13 +14,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class EventTest {
     @Autowired
-    ObjectEventService userEventService;
+    EventBusService userEventService;
 
     @Before
     public void init() {
-        userEventService.addEventListener(new SmsEventListener(), UserEventType.LOGIN.name(), UserEventType.DEL.name());
-        userEventService.addEventListener(new EmailEventListener(), UserEventType.LOGIN.name());
-        userEventService.addEventListener(new EmailEventListener(), UserEventType.LOGIN.name());
+        userEventService.addEventListener(new SmsEventBusListener(), UserEventType.LOGIN.name(), UserEventType.DEL.name());
+        userEventService.addEventListener(new EmailEventBusListener(), UserEventType.LOGIN.name());
+        userEventService.addEventListener(new EmailEventBusListener(), UserEventType.LOGIN.name());
     }
 
     @Test

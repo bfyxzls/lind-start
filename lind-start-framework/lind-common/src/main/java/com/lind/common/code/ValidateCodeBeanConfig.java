@@ -12,65 +12,85 @@
 package com.lind.common.code;
 
 import com.google.code.kaptcha.Producer;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.google.code.kaptcha.util.Config;
 import com.lind.common.code.email.DefaultEmailCodeSender;
 import com.lind.common.code.email.EmailCodeSender;
 import com.lind.common.code.image.ImageCodeGenerator;
-import com.lind.common.code.properties.ImageCodeProperties;
+import com.lind.common.code.properties.ValidateCodeProperties;
 import com.lind.common.code.sms.DefaultSmsCodeSender;
 import com.lind.common.code.sms.SmsCodeSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Properties;
+
 /**
- * 验证码相关的扩展点配置。配置在这里的bean，业务系统都可以通过声明同类型或同名的bean来覆盖安全
- * 模块默认的配置。
- *
- * @author paascloud.net @gmail.com
- */
+ * 验证码自动装配
+ **/
 @Configuration
+@EnableConfigurationProperties({ValidateCodeProperties.class})
 public class ValidateCodeBeanConfig {
 
-	@Autowired
-	private ImageCodeProperties imageCodeProperties;
-	@Autowired
-	private Producer captchaProducer;
+    @Autowired
+    private ValidateCodeProperties validateCodeProperties;
+    @Autowired
+    private Producer captchaProducer;
 
-	/**
-	 * 图片验证码图片生成器
-	 *
-	 * @return validate code generator
-	 */
-	@Bean
-	@ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
-	public ValidateCodeGenerator imageValidateCodeGenerator() {
-		ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
-		codeGenerator.setSecurityProperties(imageCodeProperties);
-		codeGenerator.setCaptchaProducer(captchaProducer);
-		return codeGenerator;
-	}
+    @Bean(name = "captchaProducer")
+    public DefaultKaptcha getKaptchaBean() {
+        DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
+        Properties properties = new Properties();
+        properties.setProperty("kaptcha.border", "yes");
+        properties.setProperty("kaptcha.border.color", "105,179,90");
+        properties.setProperty("kaptcha.textproducer.font.color", "blue");
+        properties.setProperty("kaptcha.image.width", "125");
+        properties.setProperty("kaptcha.image.height", "45");
+        properties.setProperty("kaptcha.session.key", "code");
+        properties.setProperty("kaptcha.textproducer.char.length", "4");
+        properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
+        Config config = new Config(properties);
+        defaultKaptcha.setConfig(config);
+        return defaultKaptcha;
+    }
 
-	/**
-	 * 短信验证码发送器
-	 *
-	 * @return sms code sender
-	 */
-	@Bean
-	@ConditionalOnMissingBean(SmsCodeSender.class)
-	public SmsCodeSender smsCodeSender() {
-		return new DefaultSmsCodeSender();
-	}
+    /**
+     * 图片验证码图片生成器
+     *
+     * @return validate code generator
+     */
+    @Bean
+    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
+    public ValidateCodeGenerator imageValidateCodeGenerator() {
+        ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
+        codeGenerator.setSecurityProperties(validateCodeProperties.getImage());
+        codeGenerator.setCaptchaProducer(captchaProducer);
+        return codeGenerator;
+    }
 
-	/**
-	 * 邮箱验证码发送器
-	 *
-	 * @return sms code sender
-	 */
-	@Bean
-	@ConditionalOnMissingBean(EmailCodeSender.class)
-	public EmailCodeSender emailCodeSender() {
-		return new DefaultEmailCodeSender();
-	}
+    /**
+     * 短信验证码发送器
+     *
+     * @return sms code sender
+     */
+    @Bean
+    @ConditionalOnMissingBean(SmsCodeSender.class)
+    public SmsCodeSender smsCodeSender() {
+        return new DefaultSmsCodeSender();
+    }
+
+    /**
+     * 邮箱验证码发送器
+     *
+     * @return sms code sender
+     */
+    @Bean
+    @ConditionalOnMissingBean(EmailCodeSender.class)
+    public EmailCodeSender emailCodeSender() {
+        return new DefaultEmailCodeSender();
+    }
 
 }

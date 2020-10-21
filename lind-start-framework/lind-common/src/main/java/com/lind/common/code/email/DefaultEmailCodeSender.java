@@ -29,7 +29,6 @@ public class DefaultEmailCodeSender implements EmailCodeSender {
 	 */
 	@Override
 	public void send(String email, String code) {
-		log.warn("请配置真实的邮件验证码发送器(SmsCodeSender)");
 		log.info("向邮件" + email + "发送短信验证码" + code);
 	}
 

@@ -1,4 +1,4 @@
-package com.lind.common.handler;
+package com.lind.common.event;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -12,12 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * 说明：同一个UserEventListener可以订阅到不同的事件类型里,但一种事件类型只能有一个事件订阅者.
  */
 @Component
-public class DefaultObjectEventService implements ObjectEventService {
+public class DefaultEventBusBusService implements EventBusService {
 
     /**
      * 事件字典.
      */
-    private ConcurrentHashMap<String, Map<String, ObjectEventListener>> handlers = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, Map<String, EventBusListener>> handlers = new ConcurrentHashMap<>();
 
     /**
      * 添加订阅,同一个订阅者可以订阅多种类型;同一个类型也可以被多个订阅者订阅.
@@ -26,9 +26,9 @@ public class DefaultObjectEventService implements ObjectEventService {
      * @param types
      */
     @Override
-    public void addEventListener(ObjectEventListener userEventListener, String... types) {
+    public void addEventListener(EventBusListener userEventListener, String... types) {
         for (String userEventType : types) {
-            Map<String, ObjectEventListener> userEventListeners = handlers.get(userEventType);
+            Map<String, EventBusListener> userEventListeners = handlers.get(userEventType);
             if (CollectionUtils.isEmpty(userEventListeners)) {
                 userEventListeners = new HashMap<>();
             }
@@ -47,9 +47,9 @@ public class DefaultObjectEventService implements ObjectEventService {
      * @param type
      */
     @Override
-    public void publisher(ObjectEvent userEvent, String type) {
+    public void publisher(AbstractEvent userEvent, String type) {
         if (handlers.containsKey(type)) {
-            for (ObjectEventListener handler : handlers.get(type).values()) {
+            for (EventBusListener handler : handlers.get(type).values()) {
                 handler.onEvent(userEvent);
             }
         }
