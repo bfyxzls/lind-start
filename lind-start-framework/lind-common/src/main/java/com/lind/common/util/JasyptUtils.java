@@ -45,7 +45,7 @@ public class JasyptUtils {
      * @param password 密码
      * @return .
      */
-    public static SimpleStringPBEConfig cryptor(String password) {
+    private static SimpleStringPBEConfig cryptor(String password) {
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(password);
         config.setAlgorithm("PBEWITHHMACSHA512ANDAES_256");

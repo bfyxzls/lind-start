@@ -44,7 +44,7 @@ public class EncryptionUtils {
     }
 
     /**
-     * 长度为32位的MD5字符.
+     * 长度为32位的MD5散列加密算法.
      *
      * @param inputStr 明文
      * @return .
@@ -88,7 +88,7 @@ public class EncryptionUtils {
     }
 
     /**
-     * SHA1的加密算法.
+     * SHA1的散列加密算法.
      *
      * @param inputStr 明文
      * @return .
@@ -107,6 +107,9 @@ public class EncryptionUtils {
         return sha == null ? null : sha.toString(32);
     }
 
+    /**
+     * DES对称加密算法
+     */
     static class DESUtils {
 
         /**

@@ -1,6 +1,5 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.code.image.ImageCodeProcessor;
 import com.lind.common.event.EventBusService;
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.template.RedisUserManualLockTemplate;
@@ -9,6 +8,8 @@ import com.lind.start.test.handler.UserEvent;
 import com.lind.start.test.handler.UserEventType;
 import com.lind.start.test.handler.listener.EmailEventBusListener;
 import com.lind.start.test.handler.listener.SmsEventBusListener;
+import com.lind.verification.code.image.ImageCodeProcessor;
+import com.lind.verification.code.image.ImageStreamCodeProcessor;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -50,6 +51,8 @@ public class HomeController {
     EmailEventBusListener emailEventListener;
     @Autowired
     ImageCodeProcessor imageCodeProcessor;
+    @Autowired
+    ImageStreamCodeProcessor imageStreamCodeProcessor;
 
     /**
      * 不加@RequestBody相当于@RequestParam
@@ -161,4 +164,9 @@ public class HomeController {
 
     }
 
+    @GetMapping("/test/image-stream")
+    public void imageStreamGenerate(ServletWebRequest request, HttpServletResponse response) throws Exception {
+        imageStreamCodeProcessor.create(request);
+
+    }
 }

@@ -1,9 +1,9 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.code.CodeConstants;
-import com.lind.common.code.ValidateCodeException;
-import com.lind.common.code.ValidateCodeProcessor;
-import com.lind.common.code.ValidateCodeProcessorHolder;
+import com.lind.verification.code.CodeConstants;
+import com.lind.verification.code.ValidateCodeException;
+import com.lind.verification.code.ValidateCodeProcessor;
+import com.lind.verification.code.ValidateCodeProcessorHolder;
 import com.lind.common.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
