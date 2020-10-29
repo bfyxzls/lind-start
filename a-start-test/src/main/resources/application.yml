@@ -41,7 +41,7 @@ spring:
     listener:
       missing-topics-fatal: false # 没有主题就自动建立
     consumer:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: 192.168.119.130:9092
       group-id: group_id
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer

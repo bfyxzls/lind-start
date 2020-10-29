@@ -21,10 +21,27 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--spring boot 版本 2.3.0对org.springframework.data.elasticsearch.core.query.SearchQuery引用有问题-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>2.2.6.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -93,7 +110,14 @@
             <artifactId>lind-elasticsearch-start</artifactId>
             <version>1.0.0</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
@@ -110,6 +134,11 @@
             <groupId>com.lind</groupId>
             <artifactId>lind-hbase-start</artifactId>
             <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-shaded-client</artifactId>
+            <version>1.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -152,6 +181,19 @@
             <groupId>com.lind</groupId>
             <artifactId>lind-lock-start</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>1.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.allegro.tech</groupId>
+            <artifactId>embedded-elasticsearch</artifactId>
+            <version>2.7.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

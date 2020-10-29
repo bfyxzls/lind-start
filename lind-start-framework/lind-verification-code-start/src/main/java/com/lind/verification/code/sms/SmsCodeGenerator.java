@@ -3,7 +3,7 @@ package com.lind.verification.code.sms;
 import com.lind.verification.code.ValidateCode;
 import com.lind.verification.code.ValidateCodeGenerator;
 import com.lind.verification.code.properties.ValidateCodeProperties;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.ServletWebRequest;
