@@ -17,7 +17,7 @@ public class DefaultEventBusBusService implements EventBusService {
     /**
      * 事件字典.
      */
-    private ConcurrentHashMap<String, Map<String, EventBusListener>> handlers = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, Map<String, EventBusListener>> handlers = new ConcurrentHashMap<>();
 
     /**
      * 添加订阅,同一个订阅者可以订阅多种类型;同一个类型也可以被多个订阅者订阅.
