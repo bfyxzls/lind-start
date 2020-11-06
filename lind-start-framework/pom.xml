@@ -9,8 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lind-start-framework</artifactId>
-    <packaging>pom</packaging>
     <name>lind start framework</name>
+    <packaging>pom</packaging>
     <description>basic framework for all project.</description>
     <modules>
         <module>lind-redis-start</module>
@@ -24,5 +24,6 @@
         <module>lind-lock-start</module>
         <module>lind-limit-start</module>
         <module>lind-verification-code-start</module>
+        <module>lind-activiti</module>
     </modules>
 </project>

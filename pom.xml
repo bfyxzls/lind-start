@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lind</groupId>
     <artifactId>lind-start</artifactId>
-    <packakging>pom</packakging>
     <version>1.0.0</version>
+    <packaging>pom</packaging>
+
     <modules>
         <module>a-start-test</module>
         <module>a-start-gateway</module>
@@ -71,7 +72,11 @@
         <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
         <!--            <optional>true</optional>-->
         <!--        </dependency>-->
-
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
@@ -110,10 +115,10 @@
                 <version>${spring-boot-dependencies.version}</version>
                 <exclusions>
                     <!-- 排除Tomcat 以使用 Undertow，这个会导致子项目引web时没有tomcat，而项目无法启动问题,需要把tomcat包含进来 -->
-<!--                    <exclusion>-->
-<!--                        <groupId>org.springframework.boot</groupId>-->
-<!--                        <artifactId>spring-boot-starter-tomcat</artifactId>-->
-<!--                    </exclusion>-->
+                    <!--                    <exclusion>-->
+                    <!--                        <groupId>org.springframework.boot</groupId>-->
+                    <!--                        <artifactId>spring-boot-starter-tomcat</artifactId>-->
+                    <!--                    </exclusion>-->
                 </exclusions>
             </dependency>
 
@@ -296,7 +301,7 @@
                 <executions>
                     <execution>
                         <id>checkstyle</id>
-                        <phase>validate</phase><!-- 步骤：绑定到lifecycle的validate上-->
+                        <phase>test</phase><!-- 步骤：绑定到lifecycle的validate上-->
                         <goals>
                             <goal>check</goal><!--spotbugs失败后也生成jar,check失败后不生成jar -->
                         </goals>
@@ -316,31 +321,31 @@
                 </configuration>
             </plugin>
             <!-- bug检查 -->
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.0.4</version>
-                <executions>
-                    <execution>
-                        <id>spotbugs</id>
-                        <phase>compile</phase><!-- 需要等代码编译完之后再检查 -->
-                        <goals>
-                            <goal>check</goal><!-- 动作：plugin的goal绑定到validate步骤上-->
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <skip>false</skip><!-- 是否跳过检查spotbugs -->
+            <!--            <plugin>-->
+            <!--                <groupId>com.github.spotbugs</groupId>-->
+            <!--                <artifactId>spotbugs-maven-plugin</artifactId>-->
+            <!--                <version>4.0.4</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <id>spotbugs</id>-->
+            <!--                        <phase>test</phase>&lt;!&ndash; 需要等代码编译完之后再检查 &ndash;&gt;-->
+            <!--                        <goals>-->
+            <!--                            <goal>check</goal>&lt;!&ndash; 动作：plugin的goal绑定到validate步骤上&ndash;&gt;-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--                <configuration>-->
+            <!--                    <skip>false</skip>&lt;!&ndash; 是否跳过检查spotbugs &ndash;&gt;-->
 
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs</artifactId>
-                        <version>4.1.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            <!--                </configuration>-->
+            <!--                <dependencies>-->
+            <!--                    <dependency>-->
+            <!--                        <groupId>com.github.spotbugs</groupId>-->
+            <!--                        <artifactId>spotbugs</artifactId>-->
+            <!--                        <version>4.1.2</version>-->
+            <!--                    </dependency>-->
+            <!--                </dependencies>-->
+            <!--            </plugin>-->
             <!-- 测试报告 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
