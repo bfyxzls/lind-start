@@ -25,5 +25,6 @@
         <module>lind-limit-start</module>
         <module>lind-verification-code-start</module>
         <module>lind-activiti</module>
+        <module>lind-uaa-keycloak-start</module>
     </modules>
 </project>
