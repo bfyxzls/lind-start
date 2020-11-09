@@ -1,6 +1,5 @@
 package com.lind.mybatis.audit;
 
-import com.lind.mybatis.config.SpringContextConfig;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.Documented;
@@ -16,6 +15,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({AuditInterceptor.class, SpringContextConfig.class})
+@Import({AuditInterceptor.class})
 public @interface EnableMybatisAuditing {
 }

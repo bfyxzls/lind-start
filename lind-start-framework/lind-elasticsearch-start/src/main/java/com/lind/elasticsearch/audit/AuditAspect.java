@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Aspect
 public class AuditAspect {
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    @Autowired
+    @Autowired(required = false)
     EsAuditorAware esAuditorAware;
 
     /**
@@ -80,7 +80,7 @@ public class AuditAspect {
             if (!CollectionUtils.isEmpty(auditFieldList)) {
                 for (Field field : auditFieldList) {
                     field.setAccessible(true);//取消私有字段限制
-                    if (field.get(esBaseEntity) == null) {
+                    if (field.get(esBaseEntity) == null && esAuditorAware != null) {
                         field.set(esBaseEntity, esAuditorAware.getCurrentAuditor().orElse(null));
                     }
                 }
@@ -113,7 +113,7 @@ public class AuditAspect {
                     .filter(o -> o.getAnnotation(LastModifiedBy.class) != null)
                     .collect(Collectors.toList());
             for (Field field : auditFieldList) {
-                if (!source.containsKey(field.getName())) {
+                if (!source.containsKey(field.getName()) && esAuditorAware != null) {
                     source.put(field.getName(), esAuditorAware.getCurrentAuditor().orElse(null));
                 }
             }

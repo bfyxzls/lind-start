@@ -1,4 +1,5 @@
 # lind-activiti
+> 注意：如果你项目中使用了mybatis，需要注意它与lind-activiti里的mybatis的版本，当出现冲突后，可以把lind-activiti里的排除
 ## 安装
 ```$xslt
       <dependency>
