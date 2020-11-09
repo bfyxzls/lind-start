@@ -1,7 +1,6 @@
 package com.lind.mybatis;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lind.mybatis.audit.EnableMybatisAuditing;
 import com.lind.mybatis.entity.TUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 @RunWith(SpringRunner.class)
 @Slf4j
-@EnableMybatisAuditing
 @MapperScan("com.lind.mybatis.dao")
 public class BasicTest {
     @Autowired

@@ -1,6 +1,7 @@
 package com.lind.mybatis.audit;
 
 import com.baomidou.mybatisplus.extension.handlers.AbstractSqlParserHandler;
+import com.lind.mybatis.config.SpringContextConfig;
 import com.lind.mybatis.util.ClassHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,11 +14,11 @@ import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Plugin;
 import org.apache.ibatis.plugin.Signature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.domain.AuditorAware;
 
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
@@ -36,10 +37,6 @@ import java.util.Properties;
         args = {MappedStatement.class, Object.class})})
 public class AuditInterceptor extends AbstractSqlParserHandler implements Interceptor {
 
-    @Autowired
-    DepartmentAuditorAware departmentAuditorAware;
-    @Autowired
-    UserAuditorAware auditorAware;
     private Properties properties;
 
     @Override
@@ -79,13 +76,19 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
                 }
 
                 if (field.getAnnotation(CreatedBy.class) != null) {
-                    field.setAccessible(true);
-                    field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                    AuditorAware auditorAware = SpringContextConfig.getBean(AuditorAware.class);
+                    if (auditorAware != null) {
+                        field.setAccessible(true);
+                        field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                    }
                 }
 
                 if (field.getAnnotation(CreatedDepartmentBy.class) != null) {
-                    field.setAccessible(true);
-                    field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                    DepartmentAuditorAware auditorAware = SpringContextConfig.getBean(DepartmentAuditorAware.class);
+                    if (auditorAware != null) {
+                        field.setAccessible(true);
+                        field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                    }
                 }
             }
 
@@ -105,13 +108,15 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
                 }
                 if (field.getAnnotation(LastModifiedBy.class) != null) {
                     field.setAccessible(true);
-                    if (isPlugUpdate) {
-                        Map<String, Object> updateParam = (Map<String, Object>) parameter;
-                        field.set(updateParam.get("param1"), auditorAware.getCurrentAuditor().orElse(null));
-                    } else {
-                        field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                    AuditorAware auditorAware = SpringContextConfig.getBean(AuditorAware.class);
+                    if (auditorAware != null) {
+                        if (isPlugUpdate) {
+                            Map<String, Object> updateParam = (Map<String, Object>) parameter;
+                            field.set(updateParam.get("param1"), auditorAware.getCurrentAuditor().orElse(null));
+                        } else {
+                            field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
+                        }
                     }
-
                 }
             }
         }
