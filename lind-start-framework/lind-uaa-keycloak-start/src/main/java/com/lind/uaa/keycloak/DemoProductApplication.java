@@ -2,10 +2,9 @@ package com.lind.uaa.keycloak;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 
 @SpringBootApplication
-@EnableGlobalMethodSecurity(prePostEnabled=true)
+//@EnableGlobalMethodSecurity(prePostEnabled=true)
 public class DemoProductApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoProductApplication.class, args);

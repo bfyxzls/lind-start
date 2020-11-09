@@ -1,6 +1,6 @@
 package com.lind.start.test.handler;
 
-import com.lind.common.handler.ObjectEvent;
+import com.lind.common.event.AbstractEvent;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class OrderEvent extends ObjectEvent {
+public class OrderEvent extends AbstractEvent {
     private static final long serialVersionUID = 1L;
     private String message;
     private String orderId;

@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {org.activiti.spring.boot.SecurityAutoConfiguration.class,
+        org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class,})
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
 public class TestApplication implements WebMvcConfigurer {
     public static void main(String[] args) {
@@ -16,6 +17,7 @@ public class TestApplication implements WebMvcConfigurer {
 
     /**
      * 解决springboot不能加载swagger的doc.html的问题.
+     *
      * @param registry
      */
     @Override
