@@ -11,6 +11,7 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
 
 import java.util.ArrayList;
@@ -47,17 +48,21 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         // 获取启用的权限操作请求
         List<SourcePermission> permissions = permissionDao.getAll();
         for (SourcePermission permission : permissions) {
-            if (StringUtils.isNotBlank(permission.getTitle())
-                    && StringUtils.isNotBlank(permission.getPath())
-                    && StringUtils.isNotBlank(permission.getAuth())
-            ) {
-                configAttributes = new ArrayList<>();
+            configAttributes = new ArrayList<>();
+            if (StringUtils.isNotBlank(permission.getPath())
+                    && StringUtils.isNotBlank(permission.getAuth())) {
                 cfg = new SecurityConfig(permission.getAuth());
-                //作为MyAccessDecisionManager类的decide的第三个参数
                 configAttributes.add(cfg);
-                //用权限的path作为map的key，用ConfigAttribute的集合作为value
+            }
+            if (StringUtils.isNotBlank(permission.getPath())
+                    && StringUtils.isNotBlank(permission.getScope())) {
+                cfg = new SecurityConfig(permission.getScope());
+                configAttributes.add(cfg);
+            }
+            if (!CollectionUtils.isEmpty(configAttributes)) {
                 map.put(permission.getPath(), configAttributes);
             }
+
         }
     }
 
@@ -81,7 +86,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         PathMatcher pathMatcher = new AntPathMatcher();
         for (Map.Entry<String, Collection<ConfigAttribute>> item : map.entrySet()) {
             String resURL = item.getKey();
-            log.info("resURL:{},result:{}",resURL,url);
+            log.info("resURL:{},result:{}", resURL, map);
             if (StringUtils.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
                 return item.getValue();
             }

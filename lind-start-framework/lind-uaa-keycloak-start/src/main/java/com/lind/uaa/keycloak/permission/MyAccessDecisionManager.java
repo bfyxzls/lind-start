@@ -30,8 +30,9 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         if (configAttributes == null) {
             return;
         }
-        log.info("configAttributes:{}",configAttributes);
+        log.info("configAttributes:{}", configAttributes);
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
+        int devote = 0;
         while (iterator.hasNext()) {
             ConfigAttribute c = iterator.next();
             String needPerm = c.getAttribute();
@@ -40,9 +41,13 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
                     needPerm = ROLE_PREFIX.concat(needPerm);
                 }
                 if (needPerm.trim().equals(ga.getAuthority())) {
-                    return;
+                    devote++;
                 }
             }
+        }
+        // 用户拥有的权限与资源需要的所有权限都匹配,才能访问资源.
+        if (devote == configAttributes.size()) {
+            return;
         }
         throw new AccessDeniedException("抱歉，您没有访问权限");
     }

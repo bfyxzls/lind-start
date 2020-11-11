@@ -5,7 +5,7 @@ package com.lind.uaa.keycloak.permission;
  */
 public interface SourcePermission {
     /**
-     * 菜单标题.
+     * 标题.
      */
     String getTitle();
 
@@ -15,8 +15,12 @@ public interface SourcePermission {
     String getPath();
 
     /**
-     * 权限名称
+     * 资源允许的权限
      */
     String getAuth();
 
+    /**
+     * 资源允许的scope
+     */
+    String getScope();
 }

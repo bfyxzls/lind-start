@@ -22,8 +22,13 @@ public class Permission implements SourcePermission {
      */
     private String path;
     /**
-     * 权限名称
+     * 权限名称.
      */
     private String auth;
+
+    /**
+     * scope权限.
+     */
+    private String scope;
 
 }
