@@ -53,6 +53,10 @@ public class HomeController {
     ImageCodeProcessor imageCodeProcessor;
     @Autowired
     ImageStreamCodeProcessor imageStreamCodeProcessor;
+    @GetMapping("/index")
+    public String index() {
+        return "success index!";
+    }
 
     /**
      * 不加@RequestBody相当于@RequestParam

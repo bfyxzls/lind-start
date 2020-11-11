@@ -1,7 +1,7 @@
 package com.lind.uaa.keycloak.permission;
 
 /**
- * 资源权限.
+ * 资源权限,实体数据表需要实现这个接口.
  */
 public interface SourcePermission {
     /**

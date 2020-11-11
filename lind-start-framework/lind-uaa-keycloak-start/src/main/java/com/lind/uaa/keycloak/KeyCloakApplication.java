@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 //@EnableGlobalMethodSecurity(prePostEnabled=true)
-public class DemoProductApplication {
+public class KeyCloakApplication {
     public static void main(String[] args) {
-        SpringApplication.run(DemoProductApplication.class, args);
+        SpringApplication.run(KeyCloakApplication.class, args);
     }
 }
