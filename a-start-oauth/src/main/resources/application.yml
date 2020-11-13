@@ -3,7 +3,7 @@ spring:
    application.name: start-oauth
    profiles.active: dev
    redis:
-      host: 192.168.4.26
+      host: localhost
       database: 1
       port: 6379
       jedis:

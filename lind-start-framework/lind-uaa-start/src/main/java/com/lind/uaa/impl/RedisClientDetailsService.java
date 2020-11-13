@@ -16,6 +16,9 @@ import org.springframework.util.CollectionUtils;
 import javax.sql.DataSource;
 import java.util.List;
 
+/**
+ * 将数据表oauth_client_details的数据读到redis.
+ */
 @Service
 @Slf4j
 public class RedisClientDetailsService extends JdbcClientDetailsService {
