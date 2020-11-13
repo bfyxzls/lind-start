@@ -31,37 +31,29 @@ spring:
         - 192.168.10.121:6380
       max-redirects: 3 # 获取失败 最大重定向次数
 
-
   elasticsearch:
     rest:
       uris: 192.168.0.204:9200
 
-# 指定kafka 代理地址，可以多个
   kafka:
+    bootstrap-servers: 192.168.10.11:9091,192.168.10.12:9092,192.168.10.13:9097
     listener:
       missing-topics-fatal: false # 没有主题就自动建立
     consumer:
-      bootstrap-servers: 192.168.119.130:9092
-      group-id: group_id
-      auto-offset-reset: earliest
+      group-id: lind1
+      auto-offset-reset: latest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
     producer:
-      bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
-  thymeleaf:
-    enabled: true  #开启thymeleaf视图解析
-    encoding: utf-8  #编码
-    prefix: classpath:/templates/  #前缀
-    cache: false  #是否使用缓存
-    suffix: .html  #后缀名
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://192.168.4.26:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
+
   jpa:
     hibernate:
       ddl-auto: update
@@ -72,7 +64,6 @@ spring:
     font:
       activityFontName: 宋体
       labelFontName: 宋体
-
 
 # hbase配置
 hbase:
@@ -119,5 +110,6 @@ keycloak:
   cors: true
 
 uaa:
-  permitAll: /users
+  permitAll: /users,/kafka,/kafka/create
   callbackUri: http://localhost:9090/token/authorizationCodeLogin
+
