@@ -1,6 +1,6 @@
 package com.lind.uaa.permission;
 
-import com.lind.uaa.entity.Permission;
+import com.lind.uaa.entity.ResourcePermission;
 import com.lind.uaa.service.OauthPermissionService;
 import com.lind.uaa.util.UAAConstant;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
 
     @Autowired
-    private OauthPermissionService permissionDao;
+    private OauthPermissionService oauthPermissionService;
 
     private Map<String, Collection<ConfigAttribute>> map = null;
 
@@ -47,15 +47,15 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<Permission> permissions = permissionDao.getByType(UAAConstant.PERMISSION_OPERATION);
-        for (Permission permission : permissions) {
-            if (StringUtils.isNotBlank(permission.getTitle()) && StringUtils.isNotBlank(permission.getPath())) {
+        List<ResourcePermission> resourcePermissions = oauthPermissionService.getByType(UAAConstant.PERMISSION_OPERATION);
+        for (ResourcePermission resourcePermission : resourcePermissions) {
+            if (StringUtils.isNotBlank(resourcePermission.getTitle()) && StringUtils.isNotBlank(resourcePermission.getPath())) {
                 configAttributes = new ArrayList<>();
-                cfg = new SecurityConfig(permission.getTitle());
+                cfg = new SecurityConfig(resourcePermission.getTitle());
                 //作为MyAccessDecisionManager类的decide的第三个参数
                 configAttributes.add(cfg);
                 //用权限的path作为map的key，用ConfigAttribute的集合作为value
-                map.put(permission.getPath(), configAttributes);
+                map.put(resourcePermission.getPath(), configAttributes);
             }
         }
     }

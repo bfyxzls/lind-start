@@ -1,8 +1,9 @@
 package com.lind.uaa.dto;
 
-import com.lind.uaa.entity.Permission;
+import com.lind.uaa.entity.ResourcePermission;
 import com.lind.uaa.entity.Role;
 import com.lind.uaa.entity.User;
+import com.lind.uaa.util.UAAException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,19 +18,16 @@ import java.util.List;
  * 用户认证.
  */
 @Slf4j
-public class SecurityUserDetails extends User implements UserDetails {
+public class SecurityUserDetails implements UserDetails {
 
-    private static final long serialVersionUID = 1L;
+
+    private User user;
 
     public SecurityUserDetails(User user) {
-
-        if (user != null) {
-            this.setUsername(user.getUsername());
-            this.setPassword(user.getPassword());
-            this.setStatus(user.getStatus());
-            this.setRoles(user.getRoles());
-            this.setPermissions(user.getPermissions());
+        if (user == null) {
+            throw new UAAException("请实现com.lind.uaa.entity.User接口");
         }
+        this.user = user;
     }
 
     /**
@@ -41,20 +39,18 @@ public class SecurityUserDetails extends User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<Permission> permissions = this.getPermissions();
+        List<ResourcePermission> resourcePermissions = user.getResourcePermissions();
         // 添加请求权限
-        if (permissions != null && permissions.size() > 0) {
-            for (Permission permission : permissions) {
-                if (permission.getType()==1
-                        && StringUtils.isNotBlank(permission.getTitle())
-                        && StringUtils.isNotBlank(permission.getPath())) {
-
-                    authorityList.add(new SimpleGrantedAuthority(permission.getTitle()));
+        if (resourcePermissions != null && resourcePermissions.size() > 0) {
+            for (ResourcePermission resourcePermission : resourcePermissions) {
+                if (StringUtils.isNotBlank(resourcePermission.getTitle())
+                        && StringUtils.isNotBlank(resourcePermission.getPath())) {
+                    authorityList.add(new SimpleGrantedAuthority(resourcePermission.getTitle()));
                 }
             }
         }
         // 添加角色
-        List<Role> roles = this.getRoles();
+        List<Role> roles = user.getRoles();
         if (roles != null && roles.size() > 0) {
             // lambda表达式
             roles.forEach(item -> {
@@ -64,6 +60,16 @@ public class SecurityUserDetails extends User implements UserDetails {
             });
         }
         return authorityList;
+    }
+
+    @Override
+    public String getPassword() {
+        return user.getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return user.getUsername();
     }
 
     /**
@@ -85,7 +91,7 @@ public class SecurityUserDetails extends User implements UserDetails {
     @Override
     public boolean isAccountNonLocked() {
 
-        return this.getStatus()==-1 ? false : true;
+        return true;
     }
 
     /**
@@ -95,7 +101,6 @@ public class SecurityUserDetails extends User implements UserDetails {
      */
     @Override
     public boolean isCredentialsNonExpired() {
-
         return true;
     }
 
@@ -107,6 +112,6 @@ public class SecurityUserDetails extends User implements UserDetails {
     @Override
     public boolean isEnabled() {
 
-        return this.getStatus()==0 ? true : false;
+        return true;
     }
 }

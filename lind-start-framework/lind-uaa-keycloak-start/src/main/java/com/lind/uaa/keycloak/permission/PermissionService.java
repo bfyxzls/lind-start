@@ -3,7 +3,7 @@ package com.lind.uaa.keycloak.permission;
 import java.util.List;
 
 /**
- * 获取权限.
+ * 获取数据仓库里的权限.
  */
 public interface PermissionService {
     /**
@@ -11,5 +11,5 @@ public interface PermissionService {
      *
      * @return
      */
-    List<SourcePermission> getAll();
+    List<ResourcePermission> getAll();
 }

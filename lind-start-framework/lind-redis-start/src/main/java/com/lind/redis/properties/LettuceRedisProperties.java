@@ -1,4 +1,4 @@
-package com.lind.redis.cache.properties;
+package com.lind.redis.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

@@ -1,9 +1,13 @@
-package com.lind.uaa.keycloak.permission;
+package com.lind.uaa.entity;
+
+import java.io.Serializable;
 
 /**
- * 资源权限,实体数据表需要实现这个接口.
+ * 权限.
  */
-public interface SourcePermission {
+public interface ResourcePermission extends Serializable {
+    String getId();
+
     /**
      * 标题.
      */
@@ -23,4 +27,5 @@ public interface SourcePermission {
      * 资源允许的scope
      */
     String getScope();
+
 }

@@ -1,10 +1,10 @@
-package com.lind.redis.cache.configure;
+package com.lind.redis.configure;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.redis.cache.properties.LettuceRedisProperties;
-import com.lind.redis.cache.service.RedisService;
+import com.lind.redis.properties.LettuceRedisProperties;
+import com.lind.redis.service.RedisService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -20,7 +20,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
  * redis配置.
  **/
 @EnableConfigurationProperties(LettuceRedisProperties.class)
-@ConditionalOnProperty(value = "lind.lettuce.redis.enable", havingValue = "true", matchIfMissing = true) //以来lettuce.redis.enable属性为true才执行本类
+@ConditionalOnProperty(value = "lind.lettuce.redis.enable", havingValue = "true", matchIfMissing = true)
+//以来lettuce.redis.enable属性为true才执行本类
 public class LettuceRedisAutoConfigure {
 
     @Bean(name = "redisTemplate")
@@ -34,6 +35,7 @@ public class LettuceRedisAutoConfigure {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
         mapper.activateDefaultTyping(mapper.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.NON_FINAL);
+
         jackson2JsonRedisSerializer.setObjectMapper(mapper);
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();

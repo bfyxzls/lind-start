@@ -1,4 +1,0 @@
-server.port: 6061
-spring:
-   application.name: start-oauth
-   profiles.active: dev

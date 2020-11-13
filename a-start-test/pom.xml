@@ -182,29 +182,16 @@
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>
-            <artifactId>lind-redis-start</artifactId>
+            <artifactId>lind-bundle</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-common</artifactId>
-            <version>1.0.2</version>
-        </dependency>
+
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-verification-code-start</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-limit-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-lock-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-uaa-keycloak-start</artifactId>

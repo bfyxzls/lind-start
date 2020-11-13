@@ -1,7 +1,6 @@
 package com.lind.uaa.impl;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.uaa.dto.SecurityUserDetails;
 import com.lind.uaa.entity.User;
 import com.lind.uaa.redis.RedisUtil;
@@ -25,11 +24,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
     @Autowired
     StringRedisTemplate redisTemplate;
     @Autowired
-    ObjectMapper objectMapper;
+    OauthUserService oauthUserService;
     @Autowired
-    OauthUserService userDao;
-    @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtil redisService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -41,10 +38,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
             System.out.println("登录错误次数超过限制，请" + timeRest + "分钟后再试");
             throw new UAAException("登录错误次数超过限制，请" + timeRest + "分钟后再试");
         }
-        User user = userDao.getByUserName(username);
+        User user = oauthUserService.getByUserName(username);
         if (user != null) {
             //持久化到redis
-            redisUtil.set(UAAConstant.USER + username, user);
+            redisService.set(UAAConstant.USER + username, user);
         }
         return new SecurityUserDetails(user);
     }

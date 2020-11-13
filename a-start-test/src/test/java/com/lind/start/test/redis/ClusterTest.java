@@ -1,6 +1,6 @@
 package com.lind.start.test.redis;
 
-import com.lind.redis.cache.service.RedisService;
+import com.lind.redis.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -30,7 +30,6 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
         if (configAttributes == null) {
             return;
         }
-        log.info("configAttributes:{}", configAttributes);
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
         int devote = 0;
         while (iterator.hasNext()) {

@@ -222,7 +222,7 @@ GC有两种类型：Scavenge GC和Full GC，Scavenge GC一般是针对年轻代�
 去掉System.gc()
 28. DP_DO_INSIDE_DO_PRIVILEGED
 Bug: com.taobao.sellerservice.core.test.BaseTestJunit.autoSetBean() invokes reflect.Field.setAccessible(boolean), which should be invoked from within a doPrivileged block Pattern id: DP_DO_INSIDE_DO_PRIVILEGED, type: DP, category: BAD_PRACTICE
-This code invokes a method that requires a security permission check. If this code will be granted security permissions, but might be invoked by code that does not have security permissions, then the invocation needs to occur inside a doPrivileged block.
+This code invokes a method that requires a security resourcePermission check. If this code will be granted security resourcePermissions, but might be invoked by code that does not have security resourcePermissions, then the invocation needs to occur inside a doPrivileged block.
 此代码调用一个方法，需要一个安全权限检查。如果此代码将被授予安全权限，但可能是由代码不具有安全权限调用，则需要调用发生在一个doPrivileged的块。
 30. MS_SHOULD_BE_FINAL
 Bug: IPv4Document.m_strInitString isn't final but should be Pattern id: MS_SHOULD_BE_FINAL, type: MS, category: MALICIOUS_CODE

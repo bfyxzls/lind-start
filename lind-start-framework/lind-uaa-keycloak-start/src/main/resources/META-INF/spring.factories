@@ -3,7 +3,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.uaa.keycloak.config.KeycloackAuthenticationProcessingFilterPostProcessor,\
   com.lind.uaa.keycloak.config.MyKeycloakAuthenticationProvider,\
   com.lind.uaa.keycloak.config.SecurityConfig,\
-  com.lind.uaa.keycloak.permission.MyAccessDecisionManager,\
-  com.lind.uaa.keycloak.permission.MyFilterSecurityInterceptor,\
-  com.lind.uaa.keycloak.permission.MySecurityMetadataSource,\
+  com.lind.uaa.keycloak.resourcePermission.MyAccessDecisionManager,\
+  com.lind.uaa.keycloak.resourcePermission.MyFilterSecurityInterceptor,\
+  com.lind.uaa.keycloak.resourcePermission.MySecurityMetadataSource,\
   com.lind.uaa.keycloak.controller.TokenController

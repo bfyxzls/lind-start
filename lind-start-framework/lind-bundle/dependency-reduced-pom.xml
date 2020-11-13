@@ -30,6 +30,7 @@
               <artifactSet>
                 <includes>
                   <include>com.lind:lind-common</include>
+                  <include>com.lind:lind-redis-start</include>
                   <include>com.lind:lind-limit-start</include>
                   <include>com.lind:lind-lock-start</include>
                 </includes>

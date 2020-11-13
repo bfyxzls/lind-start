@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.common.exceptions.InvalidGrantException;
 import org.springframework.security.oauth2.provider.endpoint.TokenEndpoint;
-import org.springframework.security.oauth2.provider.token.ConsumerTokenServices;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,16 +29,13 @@ import java.util.concurrent.TimeUnit;
 public class OAuth2Controller {
 
     @Autowired
-    private ConsumerTokenServices tokenServices;
-
-    @Autowired
     private TokenEndpoint tokenEndpoint;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
 
     @Autowired
-    private RedisUtil redisUtil;
+    private RedisUtil redisService;
 
 
     @PostMapping("/oauth/token")
@@ -50,11 +46,11 @@ public class OAuth2Controller {
             ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal, parameters);
             if (!ObjectUtils.isEmpty(responseEntity)) {
                 if (responseEntity.getStatusCodeValue() == 200) {
-                    User user = (User) redisUtil.get(UAAConstant.USER + responseEntity.getBody().getValue());
+                    User user = (User) redisService.get(UAAConstant.USER + responseEntity.getBody().getValue());
                     if (ObjectUtils.isEmpty(user)) {
-                        User user1 = (User) redisUtil.get(UAAConstant.USER + parameters.get("username"));
+                        User user1 = (User) redisService.get(UAAConstant.USER + parameters.get("username"));
                         if (!ObjectUtils.isEmpty(user1))
-                            redisUtil.set(UAAConstant.USER + responseEntity.getBody().getValue(), user1, 86400);
+                            redisService.set(UAAConstant.USER + responseEntity.getBody().getValue(), user1, 86400L);
                     }
 
 

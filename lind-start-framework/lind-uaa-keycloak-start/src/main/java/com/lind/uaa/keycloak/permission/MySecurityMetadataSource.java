@@ -46,8 +46,8 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<SourcePermission> permissions = permissionDao.getAll();
-        for (SourcePermission permission : permissions) {
+        List<ResourcePermission> permissions = permissionDao.getAll();
+        for (ResourcePermission permission : permissions) {
             configAttributes = new ArrayList<>();
             if (StringUtils.isNotBlank(permission.getPath())
                     && StringUtils.isNotBlank(permission.getAuth())) {
@@ -86,7 +86,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         PathMatcher pathMatcher = new AntPathMatcher();
         for (Map.Entry<String, Collection<ConfigAttribute>> item : map.entrySet()) {
             String resURL = item.getKey();
-            log.info("resURL:{},result:{}", resURL, map);
+            log.info("permissions:{}", resURL, map);
             if (StringUtils.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
                 return item.getValue();
             }

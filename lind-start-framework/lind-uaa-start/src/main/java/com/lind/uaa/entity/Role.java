@@ -1,25 +1,13 @@
 package com.lind.uaa.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.lind.mybatis.base.BaseEntity;
-import lombok.Data;
-
+import java.io.Serializable;
 
 /**
  * 角色.
  */
-@Data
-@TableName("t_role")
-public class Role extends BaseEntity {
+public interface Role extends Serializable {
 
-    private static final long serialVersionUID = 1L;
+    String getId();
 
-    private String name;
-
-    private Boolean defaultRole;
-
-    private String dataType;
-
-    private String description;
-
+    String getName();
 }

@@ -1,12 +1,10 @@
-   org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
    com.lind.uaa.config.AuthorizationServerConfig,\
    com.lind.uaa.config.PasswordEncoderConfig,\
    com.lind.uaa.config.ResourceServerConfig,\
    com.lind.uaa.config.RestAccessDeniedHandler,\
    com.lind.uaa.config.SecurityConfig,\
    com.lind.uaa.config.IgnoredUrlsProperties,\
-   com.lind.uaa.redis.RedisUtil,\
-   com.lind.uaa.redis.RedisConfig,\
    com.lind.uaa.permission.MyAccessDecisionManager,\
    com.lind.uaa.permission.MyFilterSecurityInterceptor,\
    com.lind.uaa.permission.MySecurityMetadataSource,\
@@ -14,5 +12,7 @@
    com.lind.uaa.impl.RedisAuthorizationCodeServices,\
    com.lind.uaa.impl.RedisClientDetailsService,\
    com.lind.uaa.impl.UserDetailServiceImpl,\
+   com.lind.uaa.controller.OAuth2Controller,\
    org.springframework.data.redis.connection.jedis.JedisConnectionFactory,\
-   com.lind.uaa.controller.OAuth2Controller
+   com.lind.uaa.redis.RedisConfig,\
+   com.lind.uaa.redis.RedisUtil

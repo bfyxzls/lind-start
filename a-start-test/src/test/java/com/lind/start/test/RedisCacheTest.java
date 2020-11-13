@@ -1,6 +1,6 @@
 package com.lind.start.test;
 
-import com.lind.redis.cache.service.RedisService;
+import com.lind.redis.service.RedisService;
 import com.lind.start.test.model.User;
 import org.junit.Assert;
 import org.junit.Test;

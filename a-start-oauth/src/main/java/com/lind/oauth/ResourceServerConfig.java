@@ -1,4 +1,4 @@
-package com.lind;
+package com.lind.oauth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
