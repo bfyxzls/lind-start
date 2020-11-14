@@ -10,7 +10,6 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
    com.lind.uaa.permission.MySecurityMetadataSource,\
    com.lind.uaa.impl.RandomAuthenticationKeyGenerator,\
    com.lind.uaa.impl.RedisAuthorizationCodeServices,\
-   com.lind.uaa.impl.RedisClientDetailsService,\
    com.lind.uaa.impl.UserDetailServiceImpl,\
    com.lind.uaa.controller.OAuth2Controller,\
    org.springframework.data.redis.connection.jedis.JedisConnectionFactory,\

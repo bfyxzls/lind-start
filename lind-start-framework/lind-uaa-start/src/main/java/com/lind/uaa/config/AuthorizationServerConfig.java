@@ -2,7 +2,7 @@ package com.lind.uaa.config;
 
 import com.lind.uaa.impl.RandomAuthenticationKeyGenerator;
 import com.lind.uaa.impl.RedisAuthorizationCodeServices;
-import com.lind.uaa.impl.RedisClientDetailsService;
+import com.lind.uaa.impl.AbstractRedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,7 +42,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private RedisAuthorizationCodeServices redisAuthorizationCodeServices;
     @Autowired
-    private RedisClientDetailsService redisClientDetailsService;
+    private AbstractRedisClientDetailsService abstractRedisClientDetailsService;
 
     /**
      * 令牌存储
@@ -118,8 +118,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.withClientDetails(redisClientDetailsService);
-        redisClientDetailsService.loadAllClientToCache();
+        clients.withClientDetails(abstractRedisClientDetailsService);
     }
 
 }

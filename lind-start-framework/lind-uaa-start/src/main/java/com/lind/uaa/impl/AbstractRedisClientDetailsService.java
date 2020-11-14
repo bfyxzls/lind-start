@@ -3,35 +3,35 @@ package com.lind.uaa.impl;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.provider.ClientDetails;
 import org.springframework.security.oauth2.provider.NoSuchClientException;
 import org.springframework.security.oauth2.provider.client.BaseClientDetails;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 /**
- * 将数据表oauth_client_details的数据读到redis.
+ * 操作oauth_client_details数据到redis，操作怎么把oauth_client_details数据读出来由子类实现.
  */
-@Service
 @Slf4j
-public class RedisClientDetailsService extends JdbcClientDetailsService {
+public abstract class AbstractRedisClientDetailsService extends JdbcClientDetailsService {
     /**
      * 缓存client的redis key，这里是hash结构存储
      */
-    private static final String CACHE_CLIENT_KEY = "client_details";
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
+    protected static final String CACHE_CLIENT_KEY = "client_details";
 
-    public RedisClientDetailsService(DataSource dataSource) {
+    public AbstractRedisClientDetailsService(DataSource dataSource, StringRedisTemplate stringRedisTemplate) {
         super(dataSource);
+        this.stringRedisTemplate=stringRedisTemplate;
+        loadAllClientToCache();
     }
+
+    /**
+     * redis对象,子类也使用这个对象.
+     */
+    protected StringRedisTemplate stringRedisTemplate;
 
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws InvalidClientException {
@@ -94,20 +94,5 @@ public class RedisClientDetailsService extends JdbcClientDetailsService {
     /**
      * 将oauth_client_details全表刷入redis
      */
-    public void loadAllClientToCache() {
-        if (stringRedisTemplate.hasKey(CACHE_CLIENT_KEY)) {
-            return;
-        }
-        log.info("将oauth_client_details全表刷入redis");
-
-        List<ClientDetails> list = super.listClientDetails();
-        if (CollectionUtils.isEmpty(list)) {
-            log.error("oauth_client_details表数据为空，请检查");
-            return;
-        }
-
-        list.parallelStream().forEach(client -> {
-            stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(client.getClientId(), JSONObject.toJSONString(client));
-        });
-    }
+    protected abstract void loadAllClientToCache();
 }
