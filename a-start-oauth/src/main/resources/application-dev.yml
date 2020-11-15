@@ -40,8 +40,8 @@ mybatis-plus:
       cache-enabled: false
       log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-security:
-   oauth2:
-      resource:
-         user-info-uri: http://localhost:6061/oauth/user-me
-         prefer-token-info: false
+#security:
+#   oauth2:
+#      resource:
+#         user-info-uri: http://localhost:6061/oauth/user-me
+#         prefer-token-info: false
