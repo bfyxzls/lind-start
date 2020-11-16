@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role implements com.lind.uaa.entity.Role {
+public class ResourceRole implements com.lind.uaa.entity.ResourceRole {
     private String id;
     private String name;
 }

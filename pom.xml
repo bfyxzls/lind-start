@@ -81,6 +81,7 @@
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
         <dependencies>
+
             <!--spring boot 版本-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

@@ -3,7 +3,6 @@ package com.lind.oauth;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -15,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
  * 资源服务配置
  */
 @EnableResourceServer
-@EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
     @Override
@@ -32,7 +30,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
                 .and().authorizeRequests()
                 .antMatchers("/oauth/**").permitAll() // 放开权限的url
                 .anyRequest().authenticated()
-                .and().httpBasic() ;
+                .and().httpBasic();
 
         http.headers().frameOptions().sameOrigin();
     }

@@ -2,7 +2,7 @@ package com.lind.uaa.impl;
 
 
 import com.lind.uaa.dto.SecurityUserDetails;
-import com.lind.uaa.entity.User;
+import com.lind.uaa.entity.ResourceUser;
 import com.lind.uaa.redis.RedisUtil;
 import com.lind.uaa.service.OauthUserService;
 import com.lind.uaa.util.UAAConstant;
@@ -38,7 +38,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
             System.out.println("登录错误次数超过限制，请" + timeRest + "分钟后再试");
             throw new UAAException("登录错误次数超过限制，请" + timeRest + "分钟后再试");
         }
-        User user = oauthUserService.getByUserName(username);
+        ResourceUser user = oauthUserService.getByUserName(username);
         if (user != null) {
             //持久化到redis
             redisService.set(UAAConstant.USER + username, user);

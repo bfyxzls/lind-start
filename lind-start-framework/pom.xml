@@ -28,5 +28,6 @@
         <module>lind-uaa-keycloak-start</module>
         <module>lind-bundle</module>
         <module>lind-kafka-start</module>
+        <module>lind-uaa-jwt-start</module>
     </modules>
 </project>

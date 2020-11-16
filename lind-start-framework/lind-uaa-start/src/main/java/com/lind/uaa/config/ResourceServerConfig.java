@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * org.springframework.security.oauth2.provider.authentication.OAuth2AuthenticationProcessingFilter<br>
  * 该filter帮我们从request里解析出access_token<br>
  * 并通过org.springframework.security.oauth2.provider.token.DefaultTokenServices根据access_token
- * 和认证服务器配置里的TokenStore从redis或者jwt里解析出用户
+ * 和认证服务器配置里的TokenStore从redis或者 jwt里解析出用户
  * 注意认证中心的@EnableResourceServer和别的微服务里的@EnableResourceServer有些不同<br>
  * 别的微服务是通过org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices来获取用户的
  */

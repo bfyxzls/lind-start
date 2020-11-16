@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 用户.
  */
-public interface User extends Serializable {
+public interface ResourceUser extends Serializable {
     String getId();
 
     /**
@@ -24,7 +24,7 @@ public interface User extends Serializable {
     /**
      * 用户拥有角色.
      */
-    List<Role> getRoles();
+    List<ResourceRole> getResourceRoles();
 
     /**
      * 用户拥有的权限.

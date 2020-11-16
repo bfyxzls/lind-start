@@ -1,8 +1,9 @@
 package com.lind.uaa.controller;
 
-import com.lind.uaa.entity.User;
+import com.lind.uaa.entity.ResourceUser;
 import com.lind.uaa.redis.RedisUtil;
 import com.lind.uaa.util.UAAConstant;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
+@Slf4j
 public class OAuth2Controller {
 
     @Autowired
@@ -46,13 +48,12 @@ public class OAuth2Controller {
             ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal, parameters);
             if (!ObjectUtils.isEmpty(responseEntity)) {
                 if (responseEntity.getStatusCodeValue() == 200) {
-                    User user = (User) redisService.get(UAAConstant.USER + responseEntity.getBody().getValue());
+                    ResourceUser user = (ResourceUser) redisService.get(UAAConstant.USER + responseEntity.getBody().getValue());
                     if (ObjectUtils.isEmpty(user)) {
-                        User user1 = (User) redisService.get(UAAConstant.USER + parameters.get("username"));
+                        ResourceUser user1 = (ResourceUser) redisService.get(UAAConstant.USER + parameters.get("username"));
                         if (!ObjectUtils.isEmpty(user1))
                             redisService.set(UAAConstant.USER + responseEntity.getBody().getValue(), user1, 86400L);
                     }
-
 
                 }
             }
@@ -100,13 +101,8 @@ public class OAuth2Controller {
     @GetMapping("/oauth/user-me")
     public Authentication principal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("user-me:{}" + authentication.getName());
+        log.info("user-me:{}" + authentication.getName());
         return authentication;
-    }
-
-    @GetMapping("/oauth/test")
-    public ResponseEntity ok() {
-        return ResponseEntity.ok("success");
     }
 
 

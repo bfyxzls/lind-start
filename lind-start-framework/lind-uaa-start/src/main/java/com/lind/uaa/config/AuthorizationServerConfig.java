@@ -1,8 +1,8 @@
 package com.lind.uaa.config;
 
+import com.lind.uaa.impl.AbstractRedisClientDetailsService;
 import com.lind.uaa.impl.RandomAuthenticationKeyGenerator;
 import com.lind.uaa.impl.RedisAuthorizationCodeServices;
-import com.lind.uaa.impl.AbstractRedisClientDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +49,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
      */
     @Bean
     public TokenStore tokenStore() {
-
         RedisTokenStore redisTokenStore = new RedisTokenStore(redisConnectionFactory);
         // 解决同一username每次登陆access_token都相同的问题
         redisTokenStore.setAuthenticationKeyGenerator(new RandomAuthenticationKeyGenerator());
@@ -90,7 +89,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(tokenStore());
         // 授权码模式下，code存储
         endpoints.authorizationCodeServices(redisAuthorizationCodeServices);
-
         endpoints.tokenEnhancer((accessToken, authentication) -> {
             addLoginUserInfo(accessToken, authentication);
             return accessToken;
@@ -120,6 +118,5 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.withClientDetails(abstractRedisClientDetailsService);
     }
-
 }
 

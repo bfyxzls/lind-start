@@ -1,7 +1,7 @@
 package com.lind.uaa.service;
 
-import com.lind.uaa.entity.User;
+import com.lind.uaa.entity.ResourceUser;
 
 public interface OauthUserService {
-    User getByUserName(String username);
+    ResourceUser getByUserName(String username);
 }

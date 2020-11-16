@@ -41,6 +41,7 @@
         <lind-mybatis-start-version>1.0.0</lind-mybatis-start-version>
     </properties>
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

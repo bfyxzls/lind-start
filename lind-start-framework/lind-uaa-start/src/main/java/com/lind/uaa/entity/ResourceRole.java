@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 角色.
  */
-public interface Role extends Serializable {
+public interface ResourceRole extends Serializable {
 
     String getId();
 

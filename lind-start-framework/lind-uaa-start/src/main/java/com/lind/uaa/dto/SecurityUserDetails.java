@@ -1,8 +1,8 @@
 package com.lind.uaa.dto;
 
 import com.lind.uaa.entity.ResourcePermission;
-import com.lind.uaa.entity.Role;
-import com.lind.uaa.entity.User;
+import com.lind.uaa.entity.ResourceRole;
+import com.lind.uaa.entity.ResourceUser;
 import com.lind.uaa.util.UAAException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -21,9 +21,9 @@ import java.util.List;
 public class SecurityUserDetails implements UserDetails {
 
 
-    private User user;
+    private ResourceUser user;
 
-    public SecurityUserDetails(User user) {
+    public SecurityUserDetails(ResourceUser user) {
         if (user == null) {
             throw new UAAException("请实现com.lind.uaa.entity.User接口");
         }
@@ -50,10 +50,10 @@ public class SecurityUserDetails implements UserDetails {
             }
         }
         // 添加角色
-        List<Role> roles = user.getRoles();
-        if (roles != null && roles.size() > 0) {
+        List<ResourceRole> resourceRoles = user.getResourceRoles();
+        if (resourceRoles != null && resourceRoles.size() > 0) {
             // lambda表达式
-            roles.forEach(item -> {
+            resourceRoles.forEach(item -> {
                 if (StringUtils.isNotBlank(item.getName())) {
                     authorityList.add(new SimpleGrantedAuthority(item.getName()));
                 }
