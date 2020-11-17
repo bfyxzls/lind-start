@@ -1,9 +1,8 @@
-# spring-security中核心概念
+# spring-security中核心概念（非oauth2)
 ##  AuthenticationManager
 用户认证的管理类，所有的认证请求（比如login）都会通过提交一个token给AuthenticationManager的authenticate()方法来实现。
 当然事情肯定不是它来做，具体校验动作会由AuthenticationManager将请求转发给具体的实现类来做。根据实现反馈的结果再调用具体的Handler来给用户以反馈。
 这个类基本等同于shiro的SecurityManager。
-
 ## AuthenticationProvider
 认证的具体实现类，一个provider是一种认证方式的实现，比如提交的用户名密码我是通过和DB中查出的user记录做比对实现的，那就有一个DaoProvider；
 如果我是通过CAS请求单点登录系统实现，那就有一个CASProvider。这个是不是和shiro的Realm的定义很像？基本上你可以帮他们当成同一个东西。
@@ -21,14 +20,13 @@
 ## 认证的流程
 提交-》AuthenticationToken-》AuthenticationManager-》AuthenticationProvider-》成功-》SecurityContext.setAuthentication
 ## 登录认证流程
-
 ### Filter
 对于用户登录行为，security通过定义一个Filter来拦截/login来实现的。spring security默认支持form方式登录，所以对于使用json发送登录信息的情况，我们自己定义一个Filter，
 这个Filter直接从AbstractAuthenticationProcessingFilter继承，只需要实现两部分，一个是RequestMatcher，指名拦截的Request类型；另外就是从json body中提取出
 username和password提交给AuthenticationManager。
 ### Provider
 前面的流程图中讲到了，封装后的token最终是交给provider来处理的。对于登录的provider，spring security已经提供了一个默认实现DaoAuthenticationProvider
-   我们可以直接使用，这个类继承了AbstractUserDetailsAuthenticationProvider我们来看下关键部分的源代码是怎么做的。
+我们可以直接使用，这个类继承了AbstractUserDetailsAuthenticationProvider我们来看下关键部分的源代码是怎么做的。
 ```$xslt
 public abstract class AbstractUserDetailsAuthenticationProvider implements
         AuthenticationProvider, InitializingBean, MessageSourceAware {

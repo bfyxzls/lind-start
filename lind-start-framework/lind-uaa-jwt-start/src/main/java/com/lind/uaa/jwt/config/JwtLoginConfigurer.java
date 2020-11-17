@@ -17,10 +17,13 @@ public class JwtLoginConfigurer<T extends JwtLoginConfigurer<T, B>, B extends Ht
 
     @Override
     public void configure(B http) throws Exception {
+        // 设置Filter使用的AuthenticationManager,这里取公共的即可
         authFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+        // 设置失败的Handler
         authFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler());
-
+        // 不将认证后的context放入session
         JwtAuthenticationFilter filter = postProcess(authFilter);
+        // 指定Filter的位置
         http.addFilterBefore(filter, LogoutFilter.class);
     }
 

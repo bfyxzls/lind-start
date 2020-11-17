@@ -28,6 +28,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 从请求中提取token进行校验.
+ */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final RequestMatcher requiresAuthenticationRequestMatcher;
@@ -39,6 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
     public JwtAuthenticationFilter() {
+        // 拦截header中带Authorization的请求
         this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Authorization");
     }
 
@@ -57,6 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        // header没带token的,直接放行.
         if (!requiresAuthentication(request, response)) {
             filterChain.doFilter(request, response);
             return;

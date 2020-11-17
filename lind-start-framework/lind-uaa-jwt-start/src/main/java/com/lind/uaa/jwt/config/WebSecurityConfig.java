@@ -3,7 +3,7 @@ package com.lind.uaa.jwt.config;
 
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
-import com.lind.uaa.jwt.service.JwtUserService;
+import com.lind.uaa.jwt.three.JwtUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -28,9 +28,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/image/**").permitAll()
-                .antMatchers("/admin/**").hasAnyRole("ADMIN")
-                .antMatchers("/article/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
@@ -103,6 +100,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new TokenClearLogoutHandler(jwtUserService());
     }
 
+    /**
+     * 跨域支持.
+     *
+     * @return
+     */
     @Bean
     protected CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();

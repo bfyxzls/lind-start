@@ -1,12 +1,10 @@
-package com.lind.uaa.permission;
+package com.lind.uaa.jwt.permission;
 
-import com.lind.uaa.entity.ResourcePermission;
-import com.lind.uaa.service.OauthPermissionService;
-import com.lind.uaa.util.UAAConstant;
+import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.service.OauthPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -29,7 +27,6 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-@ConditionalOnClass(OauthPermissionService.class)
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
 
@@ -47,10 +44,10 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<ResourcePermission> resourcePermissions = oauthPermissionService.getByType(UAAConstant.PERMISSION_OPERATION);
+        List<ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
         for (ResourcePermission resourcePermission : resourcePermissions) {
-            if (StringUtils.isNotBlank(resourcePermission.getAuth())
-                    && StringUtils.isNotBlank(resourcePermission.getPath())) {
+            if (StringUtils.isNotBlank(resourcePermission.getPath())
+                    && StringUtils.isNotBlank(resourcePermission.getAuth())) {
                 configAttributes = new ArrayList<>();
                 cfg = new SecurityConfig(resourcePermission.getAuth());
                 //作为MyAccessDecisionManager类的decide的第三个参数
