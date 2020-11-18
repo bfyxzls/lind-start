@@ -10,7 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler{
+/**
+ * 3. 登陆成功,返回jwt.
+ */
+public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private JwtUserService jwtUserService;
 
@@ -21,7 +24,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler{
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
-        String token = jwtUserService.saveUserLoginInfo((UserDetails)authentication.getPrincipal());
+        String token = jwtUserService.saveUserLoginInfo((UserDetails) authentication.getPrincipal());
         response.setHeader("Authorization", token);
     }
 

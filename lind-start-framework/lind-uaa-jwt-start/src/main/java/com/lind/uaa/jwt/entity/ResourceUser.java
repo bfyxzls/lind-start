@@ -27,4 +27,11 @@ public interface ResourceUser extends Serializable {
      * @return
      */
     List<ResourcePermission> getResourcePermissions();
+
+    /**
+     * 当前用户的角色.
+     *
+     * @return
+     */
+    List<ResourceRole> getResourceRoles();
 }

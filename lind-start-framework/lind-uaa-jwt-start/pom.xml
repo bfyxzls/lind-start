@@ -38,7 +38,11 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-redis-start</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>
