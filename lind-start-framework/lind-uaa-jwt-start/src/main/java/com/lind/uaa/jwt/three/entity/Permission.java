@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +23,8 @@ public class Permission implements ResourcePermission {
     /**
      * 类型：0菜单,1按钮.
      */
-    private String type;
+    private Integer type;
+    private String parentId;
+    private ResourcePermission parent;
+    private List<ResourcePermission> sons;
 }
