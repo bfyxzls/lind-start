@@ -51,6 +51,6 @@ public class EsBaseEntity {
      * 主键.
      */
     @Id
-    private String id = String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId());
+    private final String id = String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId());
 
 }

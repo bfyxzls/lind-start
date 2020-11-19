@@ -3,7 +3,8 @@ package com.lind.uaa.jwt.config;
 
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
-import com.lind.uaa.jwt.three.JwtUserService;
+import com.lind.uaa.jwt.three.service.JwtUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -25,6 +26,9 @@ import java.util.Arrays;
 
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    JwtUserService jwtUserService;
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -64,7 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean("jwtAuthenticationProvider")
     protected AuthenticationProvider jwtAuthenticationProvider() {
-        return new JwtAuthenticationProvider(jwtUserService());
+        return new JwtAuthenticationProvider(jwtUserService);
     }
 
     @Bean("daoAuthenticationProvider")
@@ -77,27 +81,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected UserDetailsService userDetailsService() {
-        return new JwtUserService();
-    }
-
-    @Bean("jwtUserService")
-    protected JwtUserService jwtUserService() {
-        return new JwtUserService();
+        return jwtUserService;
     }
 
     @Bean
     protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
-        return new JsonLoginSuccessHandler(jwtUserService());
+        return new JsonLoginSuccessHandler(jwtUserService);
     }
 
     @Bean
     protected JwtRefreshSuccessHandler jwtRefreshSuccessHandler() {
-        return new JwtRefreshSuccessHandler(jwtUserService());
+        return new JwtRefreshSuccessHandler(jwtUserService);
     }
 
     @Bean
     protected TokenClearLogoutHandler tokenClearLogoutHandler() {
-        return new TokenClearLogoutHandler(jwtUserService());
+        return new TokenClearLogoutHandler(jwtUserService);
     }
 
     /**

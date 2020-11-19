@@ -27,6 +27,15 @@ public class SecurityUserDetails implements UserDetails {
     }
 
     /**
+     * 获取用户对象.
+     *
+     * @return
+     */
+    public ResourceUser getUser() {
+        return user;
+    }
+
+    /**
      * 添加用户拥有的权限和角色
      *
      * @return
@@ -39,9 +48,9 @@ public class SecurityUserDetails implements UserDetails {
         // 添加请求权限
         if (resourcePermissions != null && resourcePermissions.size() > 0) {
             for (ResourcePermission resourcePermission : resourcePermissions) {
-                if (StringUtils.isNotBlank(resourcePermission.getAuth())
+                if (StringUtils.isNotBlank(resourcePermission.getTitle())
                         && StringUtils.isNotBlank(resourcePermission.getPath())) {
-                    authorityList.add(new SimpleGrantedAuthority(resourcePermission.getAuth()));
+                    authorityList.add(new SimpleGrantedAuthority(resourcePermission.getTitle()));
                 }
             }
         }

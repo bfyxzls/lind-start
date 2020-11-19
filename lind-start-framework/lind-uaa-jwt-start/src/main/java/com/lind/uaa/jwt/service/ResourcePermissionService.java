@@ -4,7 +4,7 @@ import com.lind.uaa.jwt.entity.ResourcePermission;
 
 import java.util.List;
 
-public interface OauthPermissionService {
+public interface ResourcePermissionService {
     /**
      * 获取所有资源权限.
      *
@@ -18,4 +18,12 @@ public interface OauthPermissionService {
      * @return
      */
     List<ResourcePermission> getByRoleId(String roleId);
+
+
+    /**
+     * 按着用户ID获取资源权限.
+     *
+     * @return
+     */
+    List<ResourcePermission> getByUserId(String userId);
 }

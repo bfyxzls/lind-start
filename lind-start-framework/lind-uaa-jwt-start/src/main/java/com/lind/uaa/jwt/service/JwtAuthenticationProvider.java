@@ -6,7 +6,8 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
-import com.lind.uaa.jwt.three.JwtUserService;
+import com.lind.uaa.jwt.three.service.JwtUserService;
+import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -27,6 +28,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
         this.userService = userService;
     }
 
+    @SneakyThrows
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();

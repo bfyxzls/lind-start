@@ -1,7 +1,7 @@
 package com.lind.uaa.jwt.permission;
 
 import com.lind.uaa.jwt.entity.ResourcePermission;
-import com.lind.uaa.jwt.service.OauthPermissionService;
+import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
 
     @Autowired
-    private OauthPermissionService oauthPermissionService;
+    private ResourcePermissionService oauthPermissionService;
 
     private Map<String, Collection<ConfigAttribute>> map = null;
 
@@ -46,13 +46,11 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         // 获取启用的权限操作请求
         List<ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
         for (ResourcePermission resourcePermission : resourcePermissions) {
-            if (StringUtils.isNotBlank(resourcePermission.getPath())
-                    && StringUtils.isNotBlank(resourcePermission.getAuth())) {
+            if (StringUtils.isNotBlank(resourcePermission.getTitle())
+                    && StringUtils.isNotBlank(resourcePermission.getPath())) {
                 configAttributes = new ArrayList<>();
-                cfg = new SecurityConfig(resourcePermission.getAuth());
-                //作为MyAccessDecisionManager类的decide的第三个参数
+                cfg = new SecurityConfig(resourcePermission.getTitle());//权限名称就是权限表里的title字段
                 configAttributes.add(cfg);
-                //用权限的path作为map的key，用ConfigAttribute的集合作为value
                 map.put(resourcePermission.getPath(), configAttributes);
             }
         }
@@ -60,7 +58,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
     /**
      * 判定用户请求的url是否在权限表中
-     * 如果在权限表中，则返回给decide方法，用来判定用户是否有此权限
+     * 如果在权限表中，则返回给decide方法，用来判定用户是否有此URL对应的权限
      * 如果不在权限表中则放行
      *
      * @param o

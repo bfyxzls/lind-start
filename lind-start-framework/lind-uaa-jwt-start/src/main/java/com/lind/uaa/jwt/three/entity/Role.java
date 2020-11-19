@@ -1,4 +1,4 @@
-package com.lind.uaa.jwt.three;
+package com.lind.uaa.jwt.three.entity;
 
 import com.lind.uaa.jwt.entity.ResourceRole;
 import lombok.AllArgsConstructor;

@@ -9,23 +9,12 @@ public interface ResourcePermission extends Serializable {
     String getId();
 
     /**
-     * 标题.
+     * 权限名称.
      */
     String getTitle();
 
     /**
-     * 页面路径/资源链接url.
+     * 页面路径/资源url.
      */
     String getPath();
-
-    /**
-     * 资源允许的权限
-     */
-    String getAuth();
-
-    /**
-     * 资源允许的scope
-     */
-    String getScope();
-
 }

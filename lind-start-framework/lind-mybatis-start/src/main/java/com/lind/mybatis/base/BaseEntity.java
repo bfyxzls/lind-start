@@ -1,5 +1,6 @@
 package com.lind.mybatis.base;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
@@ -25,9 +26,10 @@ public abstract class BaseEntity implements Serializable {
 
     /**
      * 主键.
+     * final保证了不会被其它实体override,例如由vo向entity赋值时,需要使用final来控制一下.
      */
-    @TableId
-    private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
+    @TableId(type = IdType.INPUT)
+    private final String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
 
     /**
      * 建立人Id,需要实现AuditorAware接口.

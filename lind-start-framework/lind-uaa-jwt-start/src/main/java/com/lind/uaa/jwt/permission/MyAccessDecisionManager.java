@@ -15,13 +15,15 @@ import java.util.Iterator;
 /**
  * 权限管理决断器
  * 判断用户拥有的权限或角色是否有资源访问权限
+ * configAttributes表示当前资源需要的权限,authentication.getAuthorities()表示当前用户所拥有的权限
  */
 @Slf4j
 @Component
 public class MyAccessDecisionManager implements AccessDecisionManager {
 
     @Override
-    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes)
+            throws AccessDeniedException, InsufficientAuthenticationException {
 
         if(configAttributes==null){
             return;

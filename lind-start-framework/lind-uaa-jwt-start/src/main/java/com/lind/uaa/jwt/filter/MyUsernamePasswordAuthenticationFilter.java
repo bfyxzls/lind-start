@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 /**
- * 1，拦截登陆接口,进行认证.
+ * 1.拦截登陆接口,进行认证.
  */
 public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 

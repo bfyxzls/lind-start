@@ -13,4 +13,13 @@ public class ArticleController {
 		return "This is my first blog";
 	}
 
+	@GetMapping("/audit")
+	public String audit() {
+		return "audit  my first blog";
+	}
+
+	@GetMapping("/create")
+	public String create() {
+		return "create  my first blog";
+	}
 }
