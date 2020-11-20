@@ -19,11 +19,6 @@ public interface ResourcePermission extends Serializable {
     String getPath();
 
     /**
-     * 资源允许的权限
-     */
-    String getAuth();
-
-    /**
      * 资源允许的scope
      */
     String getScope();

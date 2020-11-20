@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 public class PermissionServiceImpl implements ResourcePermissionService {
     static  List<ResourcePermission> list=Arrays.asList(
             new Permission("1","系统管理","/admin/**",0,null,null,null),
-            new Permission("2","文章列表","/article/**",0,"1",null,null),
-            new Permission("3","添加文章","/article/add**",1,"2",null,null),
-            new Permission("4","删除文章","/article/del**",1,"2",null,null),
+            new Permission("2","文章列表","/article/index*",0,"1",null,null),
+            new Permission("3","添加文章","/article/add*",1,"2",null,null),
+            new Permission("4","删除文章","/article/del*",1,"2",null,null),
             new Permission("5","信息管理","/admin/info-mgr**",0,"1",null,null)
 
     );
@@ -36,6 +36,6 @@ public class PermissionServiceImpl implements ResourcePermissionService {
 
     @Override
     public List<ResourcePermission> getByUserId(String userId) {
-        return list;
+        return list.stream().filter(o->o.getId()=="2" || o.getId()=="3").collect(Collectors.toList());
     }
 }

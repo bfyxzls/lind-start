@@ -43,7 +43,6 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             Algorithm algorithm = Algorithm.HMAC256(encryptSalt);
             JWTVerifier verifier = JWT.require(algorithm)
                     .withSubject(username)
-                    .withClaim("auth", JSON.toJSONString(user.getAuthorities()))
                     .build();
             verifier.verify(jwt.getToken());
         } catch (Exception e) {

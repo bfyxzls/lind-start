@@ -13,7 +13,7 @@ import java.util.List;
 public class Permission implements ResourcePermission {
     private String id;
     /**
-     * 权限名称.
+     * 菜单-按钮-名称.
      */
     private String title;
     /**
@@ -24,7 +24,16 @@ public class Permission implements ResourcePermission {
      * 类型：0菜单,1按钮.
      */
     private Integer type;
+    /**
+     * 上级Id
+     */
     private String parentId;
+    /**
+     * 父菜单.
+     */
     private ResourcePermission parent;
+    /**
+     * 子菜单列表.
+     */
     private List<ResourcePermission> sons;
 }
