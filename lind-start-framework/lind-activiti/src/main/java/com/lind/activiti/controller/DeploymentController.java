@@ -73,7 +73,7 @@ public class DeploymentController {
     }
 
     /**
-     * 挂起
+     * 挂起.
      *
      * @param id
      * @param response
@@ -85,7 +85,7 @@ public class DeploymentController {
     }
 
     /**
-     * 导出部署流程资源
+     * 导出部署流程资源.
      *
      * @param id
      * @param response

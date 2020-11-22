@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.lind.mybatis.util.SnowFlakeUtil;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -41,7 +40,6 @@ public abstract class BaseEntity implements Serializable {
     /**
      * 建立时间.
      */
-    @SuppressFBWarnings("EI_EXPOSE_REP")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @TableField("create_time")
     @CreatedDate
@@ -57,7 +55,6 @@ public abstract class BaseEntity implements Serializable {
     /**
      * 更新时间.
      */
-    @SuppressFBWarnings("EI_EXPOSE_REP")
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
     @TableField("update_time")
     @LastModifiedDate
@@ -69,7 +66,6 @@ public abstract class BaseEntity implements Serializable {
     @TableField("del_flag")
     @TableLogic
     private Integer delFlag = 0;
-
 
 
 }

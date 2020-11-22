@@ -8,26 +8,26 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
-    <artifactId>lind-mybatis-start</artifactId>
     <dependencyManagement>
         <dependencies>
             <!--spring boot 版本-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.3.3.RELEASE</version>
+                <version>2.2.6.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <artifactId>pkulaw-mybatis-start</artifactId>
 
     <dependencies>
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -60,24 +60,44 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>3.1.1</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
     <build>
         <plugins>
-            <!-- 跳过test项目 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 过滤器排除配置文件-->
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>**/*.properties</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <artifactSet>
+                                <!-- 捆绑包含,目标项目不需要再手动引用这个包了 -->
+                                <includes>
+                                    <include>com.baomidou:*</include>
+
+                                </includes>
+                                <!-- 排除调所有的properties配置文件-->
+                                <!-- <excludes>-->
+                                <!-- </excludes>-->
+                            </artifactSet>
+                            <createSourcesJar>true</createSourcesJar>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
-
 </project>
