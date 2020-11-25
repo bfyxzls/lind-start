@@ -13,6 +13,9 @@
         <module>a-start-gateway</module>
         <module>a-start-oauth</module>
         <module>lind-start-framework</module>
+        <module>a-start-hot-deploy</module>
+        <module>a-start-hot-dependency</module>
+        <module>a-start-hot-interface</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

@@ -1,6 +1,11 @@
 # 项目介绍 
 主要是由框架级目录和网关，授权，用例服务组成，用来介绍框架公用组件的定义和使用，start包的使用，nacos配置中心和注册中心的使用等。
 
+# springloaded热部署
+```$xslt
+java -javaagent:springloaded-1.2.5.RELEASE.jar -noverify -Dspringloaded="watchJars=a-start-hot-dependency-1.0.0.jar"   -jar a-start-hot-deploy-1.0.0.jar
+jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0.0.jar #更新
+```
 # 项目进行了spotbugs检测的项目
 1. lind-common
 2. lind-elasticsearch-start
