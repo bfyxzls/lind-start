@@ -26,10 +26,10 @@ public class ApplicationReadyEventListener implements ApplicationListener<Applic
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
+        logger.debug("ApplicationReadyEventListener start...");
         // 添加TASK_CREATED触发时订阅的事件
         runtimeService.addEventListener(assignRoleEventListener, ActivitiEventType.TASK_CREATED);
         // 添加TASK_COMPLETED触发时订阅的事件
         runtimeService.addEventListener(loggerEventListener, ActivitiEventType.TASK_COMPLETED);
-
     }
 }

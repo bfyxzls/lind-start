@@ -49,10 +49,10 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         // 获取启用的权限操作请求
         List<ResourcePermission> resourcePermissions = oauthPermissionService.getByType(UAAConstant.PERMISSION_OPERATION);
         for (ResourcePermission resourcePermission : resourcePermissions) {
-            if (StringUtils.isNotBlank(resourcePermission.getAuth())
+            if (StringUtils.isNotBlank(resourcePermission.getTitle())
                     && StringUtils.isNotBlank(resourcePermission.getPath())) {
                 configAttributes = new ArrayList<>();
-                cfg = new SecurityConfig(resourcePermission.getAuth());
+                cfg = new SecurityConfig(resourcePermission.getTitle());
                 //作为MyAccessDecisionManager类的decide的第三个参数
                 configAttributes.add(cfg);
                 //用权限的path作为map的key，用ConfigAttribute的集合作为value

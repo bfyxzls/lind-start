@@ -13,9 +13,9 @@ public class ArticleController {
 		return "This is my first blog";
 	}
 
-	@GetMapping("/audit")
-	public String audit() {
-		return "audit  my first blog";
+	@GetMapping("/del")
+	public String del() {
+		return "del  my first blog";
 	}
 
 	@GetMapping("/create")

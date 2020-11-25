@@ -2,81 +2,31 @@ package com.lind.uaa.jwt.three.service;
 
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
+import com.lind.uaa.jwt.three.entity.Permission;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PermissionServiceImpl implements ResourcePermissionService {
+    static  List<ResourcePermission> list=Arrays.asList(
+            new Permission("1","系统管理","/admin/**",0,null,null,null),
+            new Permission("2","文章列表","/article/index*",0,"1",null,null),
+            new Permission("3","添加文章","/article/add*",1,"2",null,null),
+            new Permission("4","删除文章","/article/del*",1,"2",null,null),
+            new Permission("5","信息管理","/admin/info-mgr**",0,"1",null,null)
+
+    );
     @Override
     public List<ResourcePermission> getAll() {
-        return Arrays.asList(
-                new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "1";
-                    }
+        return list;
+    }
 
-                    @Override
-                    public String getTitle() {
-                        return "文章列表";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/article/**";
-                    }
-                },
-                new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "1";
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return "文章审核";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/article/audit**";
-                    }
-                },
-                new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "1";
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return "文章添加";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/article/create**";
-                    }
-                },
-                new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "2";
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return "系统管理";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/admin/**";
-                    }
-                }
-        );
+    @Override
+    public List<ResourcePermission> getAllByType(Integer type) {
+        return getAll().stream().filter(o->o.getType().equals(type)).collect(Collectors.toList());
     }
 
     @Override
@@ -86,38 +36,6 @@ public class PermissionServiceImpl implements ResourcePermissionService {
 
     @Override
     public List<ResourcePermission> getByUserId(String userId) {
-        return Arrays.asList(
-                new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "1";
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return "文章列表";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/article/**";
-                    }
-
-                },   new ResourcePermission() {
-                    @Override
-                    public String getId() {
-                        return "1";
-                    }
-
-                    @Override
-                    public String getTitle() {
-                        return "文章添加";
-                    }
-
-                    @Override
-                    public String getPath() {
-                        return "/article/create**";
-                    }
-                });
+        return list.stream().filter(o->o.getId()=="2" || o.getId()=="3").collect(Collectors.toList());
     }
 }

@@ -67,8 +67,7 @@ public class JwtUserService implements UserDetailsService {
         JWTCreator.Builder jwt = JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withExpiresAt(date)
-                .withIssuedAt(new Date())
-                .withClaim("auth", JSON.toJSONString(userDetails.getAuthorities()));
+                .withIssuedAt(new Date());
         return jwt.sign(algorithm);
     }
 

@@ -30,7 +30,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.setHeader("Authorization", token);
         response.setHeader("Content-Type", "application/json;charset=utf-8");
         DecodedJWT jwt = JWT.decode(token);
-        response.getWriter().write(JSON.toJSONString(authentication.getPrincipal()));
+        response.getWriter().write(JSON.toJSONString(jwt));
     }
 
 }

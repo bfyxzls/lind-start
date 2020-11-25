@@ -6,7 +6,7 @@ package com.lind.uaa.keycloak.permission;
  */
 public interface ResourcePermission {
     /**
-     * 标题.
+     * 授权名称-菜单-按钮名称等.
      */
     String getTitle();
 
@@ -16,12 +16,7 @@ public interface ResourcePermission {
     String getPath();
 
     /**
-     * 资源允许的权限
-     */
-    String getAuth();
-
-    /**
-     * 资源允许的scope
+     * 资源允许的scope,可以为url资源进行多方式控制.
      */
     String getScope();
 }

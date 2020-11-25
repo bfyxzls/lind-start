@@ -1,8 +1,8 @@
 package com.lind.activiti.event;
 
-import com.lind.activiti.util.Constant;
 import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
+import com.lind.activiti.util.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.engine.RepositoryService;
@@ -24,7 +24,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Component
 @Transactional
-    public class AssignRoleEventListener implements org.activiti.engine.delegate.event.ActivitiEventListener {
+public class AssignRoleEventListener implements org.activiti.engine.delegate.event.ActivitiEventListener {
     @Autowired
     RepositoryService repositoryService;
     @Autowired

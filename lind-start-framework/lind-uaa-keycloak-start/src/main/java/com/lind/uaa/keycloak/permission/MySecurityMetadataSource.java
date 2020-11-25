@@ -50,8 +50,8 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         for (ResourcePermission permission : permissions) {
             configAttributes = new ArrayList<>();
             if (StringUtils.isNotBlank(permission.getPath())
-                    && StringUtils.isNotBlank(permission.getAuth())) {
-                cfg = new SecurityConfig(permission.getAuth());
+                    && StringUtils.isNotBlank(permission.getTitle())) {
+                cfg = new SecurityConfig(permission.getTitle());
                 configAttributes.add(cfg);
             }
             if (StringUtils.isNotBlank(permission.getPath())
