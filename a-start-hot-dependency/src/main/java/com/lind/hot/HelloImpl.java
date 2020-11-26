@@ -1,5 +1,6 @@
 package com.lind.hot;
 
+
 import com.lind.interfaces.Hello;
 
 public class HelloImpl implements Hello {
