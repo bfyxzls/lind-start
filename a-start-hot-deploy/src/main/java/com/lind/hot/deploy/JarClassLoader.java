@@ -22,7 +22,7 @@ public class JarClassLoader {
      *
      * @return jar包所在路径
      */
-    public static String getMainJarPath() {
+    public  String getMainJarPath() {
         ApplicationHome home = new ApplicationHome(JarClassLoader.class);
         String path = home.getSource().toURI().toString();
         if (path.endsWith(".jar")) {
@@ -40,7 +40,7 @@ public class JarClassLoader {
      * @return
      * @throws ClassNotFoundException
      */
-    public static <U> U joinOuterJarClass(String packageUrl, Class<U> clazz, String name) {
+    public  <U> U joinOuterJarClass(String packageUrl, Class<U> clazz, String name) {
         try {
             if (!getMainJarPath().startsWith("file:/")) {
                 packageUrl = getMainJarPath().concat(packageUrl);

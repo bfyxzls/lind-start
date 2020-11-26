@@ -13,18 +13,17 @@ public class RunApplication {
 
 
     public static void main(String[] args) {
-        Hello account = JarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
+        JarClassLoader jarClassLoader=new JarClassLoader();
+        Hello account = jarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "HelloImpl");
         Object ret = account.password();
-        System.out.println(ret);
         SpringApplication.run(RunApplication.class, args);
     }
 
 
     @GetMapping("dy")
     public ResponseEntity dy() {
-
-
-        Hello account = JarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
+        JarClassLoader jarClassLoader=new JarClassLoader();
+        Hello account = jarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
         Object ret = account.password();
         return ResponseEntity.ok(ret);
     }
