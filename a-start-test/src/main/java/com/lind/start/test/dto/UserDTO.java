@@ -1,6 +1,7 @@
 package com.lind.start.test.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.lind.uaa.keycloak.scope.ScopeSet;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ import java.util.Date;
 public class UserDTO {
 
     private String name;
+    @ScopeSet
     private String email;
     private Boolean sex;
     private Double total;

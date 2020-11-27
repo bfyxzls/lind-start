@@ -1,8 +1,10 @@
 package com.lind.start.test.controller;
 
+import com.lind.start.test.dto.UserDTO;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,14 @@ import java.security.Principal;
 public class KeyCloakTestController {
     final static Logger logger = LoggerFactory.getLogger(KeyCloakTestController.class);
 
+    @GetMapping(path = "/test")
+    public ResponseEntity test() {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setName("lind");
+        userDTO.setEmail("ok");
+        return ResponseEntity.ok(userDTO);
+    }
+
     @GetMapping("/products")
     public String products() {
         return "success products!";
@@ -26,7 +36,6 @@ public class KeyCloakTestController {
     public String write() {
         return "success write!";
     }
-
 
     @GetMapping(path = "/users")
     public String getUserInfo() {
@@ -46,4 +55,6 @@ public class KeyCloakTestController {
             return "logout fail";
         }
     }
+
+
 }

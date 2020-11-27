@@ -27,6 +27,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("token")
 public class TokenController {
+
     @Autowired
     KeycloakSpringBootProperties keycloakSpringBootProperties;
     /**
