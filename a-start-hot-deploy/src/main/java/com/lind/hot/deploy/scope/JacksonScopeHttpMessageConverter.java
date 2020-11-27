@@ -1,4 +1,4 @@
-package com.lind.uaa.keycloak.scope;
+package com.lind.hot.deploy.scope;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
