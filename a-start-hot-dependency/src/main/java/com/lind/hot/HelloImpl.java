@@ -1,6 +1,5 @@
 package com.lind.hot;
 
-
 import com.lind.interfaces.Hello;
 
 public class HelloImpl implements Hello {
@@ -11,6 +10,6 @@ public class HelloImpl implements Hello {
 
     @Override
     public String password() {
-        return "78910";
+        return "hello world!";
     }
 }

@@ -1,4 +1,4 @@
-package com.lind.hot.deploy;
+package com.lind.common.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,12 +22,13 @@ public class JarClassLoader {
      *
      * @return jar包所在路径
      */
-    public  String getMainJarPath() {
+    public static String getMainJarPath() {
         ApplicationHome home = new ApplicationHome(JarClassLoader.class);
         String path = home.getSource().toURI().toString();
         if (path.endsWith(".jar")) {
             path = path.substring(0, path.lastIndexOf("/") + 1);
         }
+        LOGGER.debug("getMainJarPath:{}", path);
         return path;
     }
 
@@ -40,13 +41,14 @@ public class JarClassLoader {
      * @return
      * @throws ClassNotFoundException
      */
-    public  <U> U joinOuterJarClass(String packageUrl, Class<U> clazz, String name) {
+    public static <U> U joinOuterJarClass(String packageUrl, Class<U> clazz, String name) {
         try {
-            if (!getMainJarPath().startsWith("file:/")) {
+            if (!packageUrl.startsWith("file:/")) {
                 packageUrl = getMainJarPath().concat(packageUrl);
             }
             URL url = new URL(packageUrl);
-            ClassLoader loader = new URLClassLoader(new URL[]{url}) {
+            // IDEA调试时与java运行时的ClassLoader是不同的,所以需要使用当前环境下的ClassLoader
+            ClassLoader loader = new URLClassLoader(new URL[]{url}, clazz.getClassLoader()) {
                 @Override
                 public Class<?> loadClass(String name) throws ClassNotFoundException {
                     try {
@@ -69,7 +71,6 @@ public class JarClassLoader {
             for (Class<?> c : obj.getClass().getInterfaces()) {
                 LOGGER.info(c.getName());
             }
-
             return clazz.cast(obj);
         } catch (RuntimeException e) {
             e.printStackTrace();

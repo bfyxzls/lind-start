@@ -1,5 +1,6 @@
 package com.lind.hot.deploy;
 
+import com.lind.common.util.JarClassLoader;
 import com.lind.interfaces.Hello;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,17 +14,14 @@ public class RunApplication {
 
 
     public static void main(String[] args) {
-        JarClassLoader jarClassLoader=new JarClassLoader();
-        Hello account = jarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "HelloImpl");
-        Object ret = account.password();
+        Hello account = JarClassLoader.joinOuterJarClass("a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
         SpringApplication.run(RunApplication.class, args);
     }
 
 
     @GetMapping("dy")
     public ResponseEntity dy() {
-        JarClassLoader jarClassLoader=new JarClassLoader();
-        Hello account = jarClassLoader.joinOuterJarClass("file:///d:/a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
+        Hello account = JarClassLoader.joinOuterJarClass("a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
         Object ret = account.password();
         return ResponseEntity.ok(ret);
     }
