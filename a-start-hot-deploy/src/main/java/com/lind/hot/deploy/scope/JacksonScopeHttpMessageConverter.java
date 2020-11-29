@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.BeanPropertyWriter;
 import com.fasterxml.jackson.databind.ser.BeanSerializerModifier;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 /**
  * scope授权范围序列化的限制.
  */
+@Component
 public class JacksonScopeHttpMessageConverter extends MappingJackson2HttpMessageConverter {
     public JacksonScopeHttpMessageConverter() {
         getObjectMapper().setSerializerFactory(
