@@ -37,6 +37,7 @@ public class JacksonScopeHttpMessageConverter extends MappingJackson2HttpMessage
         }
     }
 
+
     public class MyBeanSerializerModifier extends BeanSerializerModifier {
         @Override
         public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BeanDescription beanDesc, List<BeanPropertyWriter> beanProperties) {
