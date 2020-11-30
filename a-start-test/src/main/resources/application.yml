@@ -110,6 +110,6 @@ keycloak:
   cors: true
 
 uaa:
-  permitAll: /users,/kafka,/kafka/create,/test
+  permitAll: /users,/kafka,/kafka/create
   callbackUri: http://localhost:9090/token/authorizationCodeLogin
 

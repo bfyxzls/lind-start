@@ -1,4 +1,4 @@
-package com.lind.hot.deploy.scope;
+package com.lind.common.jackson.convert;
 
 import org.springframework.context.annotation.Import;
 
@@ -8,12 +8,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * 开启Uaa的Scope授权功能.
- */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({UaaScopeSerializerModifier.class, UaaScopeSerializerModifierConfig.class})
-public @interface EnableScoping {
+@Import({JacksonDateSerializerModifier.class, JacksonDateFormatSerializerModifierConfig.class})
+public @interface EnableJacksonDateFormatSerializerModifier {
 }

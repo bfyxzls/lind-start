@@ -15,7 +15,7 @@ import java.util.Date;
 public class UserDTO {
 
     private String name;
-    @ScopeSet
+    @ScopeSet(value="read")
     private String email;
     private Boolean sex;
     private Double total;

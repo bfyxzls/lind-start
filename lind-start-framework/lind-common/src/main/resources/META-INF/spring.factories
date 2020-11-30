@@ -2,7 +2,8 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.util.LindExecutorPool,\
   com.lind.common.otp.OneTimePasswordGeneratorConfig,\
-  com.lind.common.event.DefaultEventBusBusService
+  com.lind.common.event.DefaultEventBusBusService,\
+  com.lind.common.util.SpringContextUtils
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\

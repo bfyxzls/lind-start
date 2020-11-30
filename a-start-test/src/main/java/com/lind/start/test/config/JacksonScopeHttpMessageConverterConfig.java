@@ -1,6 +1,5 @@
 package com.lind.start.test.config;
 
-import com.lind.uaa.keycloak.scope.JacksonScopeHttpMessageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,6 +15,5 @@ public class JacksonScopeHttpMessageConverterConfig extends WebMvcConfigurationS
     protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         super.configureMessageConverters(converters);
         log.info("加载JacksonScopeHttpMessageConverter转换器");
-        converters.add(new JacksonScopeHttpMessageConverter());
     }
 }

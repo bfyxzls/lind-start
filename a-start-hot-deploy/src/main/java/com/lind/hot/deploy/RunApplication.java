@@ -1,5 +1,7 @@
 package com.lind.hot.deploy;
 
+import com.lind.common.jackson.convert.EnableJacksonDateFormatSerializerModifier;
+import com.lind.common.jackson.convert.EnableJacksonNullValueSerializerModifier;
 import com.lind.common.util.JarClassLoader;
 import com.lind.hot.deploy.dto.UserDTO;
 import com.lind.hot.deploy.scope.EnableScoping;
@@ -10,18 +12,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.TimeZone;
 
-@SuppressWarnings("deprecation")
 @SpringBootApplication
 @RestController
+@EnableJacksonDateFormatSerializerModifier
+@EnableJacksonNullValueSerializerModifier
 @EnableScoping
 public class RunApplication {
-
-
     public static void main(String[] args) {
-        SpringApplication.run(RunApplication.class, args);
+        SpringApplication app = new SpringApplication(RunApplication.class);
+        app.run(args);
     }
 
     @GetMapping(path = "/test")
@@ -29,10 +32,13 @@ public class RunApplication {
         UserDTO userDTO = new UserDTO();
         userDTO.setName("lind");
         userDTO.setEmail("123");
+        userDTO.setTotal(100d);
+        userDTO.setTotalMoney(BigDecimal.valueOf(5000));
         TimeZone time = TimeZone.getTimeZone("Etc/GMT-8");  //转换为中国时区
 
         TimeZone.setDefault(time);
         userDTO.setBirthday(new Date());
+        userDTO.setGetup(new Date());
         return ResponseEntity.ok(userDTO);
     }
 
