@@ -1,7 +1,6 @@
 package com.lind.hot.deploy;
 
-import com.lind.common.jackson.convert.EnableJacksonDateFormatSerializerModifier;
-import com.lind.common.jackson.convert.EnableJacksonNullValueSerializerModifier;
+import com.lind.common.jackson.convert.EnableJacksonFormatting;
 import com.lind.common.util.JarClassLoader;
 import com.lind.hot.deploy.dto.UserDTO;
 import com.lind.hot.deploy.scope.EnableScoping;
@@ -18,8 +17,7 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 @RestController
-@EnableJacksonDateFormatSerializerModifier
-@EnableJacksonNullValueSerializerModifier
+@EnableJacksonFormatting
 @EnableScoping
 public class RunApplication {
     public static void main(String[] args) {

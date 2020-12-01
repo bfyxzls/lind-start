@@ -54,11 +54,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
                 cfg = new SecurityConfig(permission.getTitle());
                 configAttributes.add(cfg);
             }
-            if (StringUtils.isNotBlank(permission.getPath())
-                    && StringUtils.isNotBlank(permission.getScope())) {
-                cfg = new SecurityConfig(permission.getScope());
-                configAttributes.add(cfg);
-            }
+
             if (!CollectionUtils.isEmpty(configAttributes)) {
                 map.put(permission.getPath(), configAttributes);
             }
@@ -86,7 +82,6 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         PathMatcher pathMatcher = new AntPathMatcher();
         for (Map.Entry<String, Collection<ConfigAttribute>> item : map.entrySet()) {
             String resURL = item.getKey();
-            log.info("permissions:{}", resURL, map);
             if (StringUtils.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
                 return item.getValue();
             }

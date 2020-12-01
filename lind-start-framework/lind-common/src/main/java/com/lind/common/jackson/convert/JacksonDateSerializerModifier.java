@@ -16,6 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+/**
+ * 日期格式化.
+ * jackson实体字段修改器,只在第一次序列化实体字段时执行一次,以后不再执行.
+ */
 @Slf4j
 public class JacksonDateSerializerModifier extends BeanSerializerModifier {
     @Override
@@ -24,7 +28,6 @@ public class JacksonDateSerializerModifier extends BeanSerializerModifier {
             BeanPropertyWriter writer = (BeanPropertyWriter) beanProperty;
             Class<?> clazz = writer.getType().getRawClass();
             if (clazz.equals(Date.class)) {
-                log.info("JacksonDateSerializerModifier:{}...",writer.getName());
                 writer.assignSerializer(new DateSerializer());
             }
         }

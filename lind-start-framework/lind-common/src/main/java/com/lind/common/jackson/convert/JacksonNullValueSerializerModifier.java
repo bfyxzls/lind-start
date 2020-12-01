@@ -18,6 +18,7 @@ import java.util.List;
 
 /**
  * 初始值转换.
+ * jackson实体字段修改器,只在第一次序列化实体字段时执行一次,以后不再执行.
  */
 @Slf4j
 public class JacksonNullValueSerializerModifier extends BeanSerializerModifier {
@@ -36,7 +37,6 @@ public class JacksonNullValueSerializerModifier extends BeanSerializerModifier {
             } else if (isDateType(writer)) {
                 writer.assignNullSerializer(new NullDateJsonSerializer());
             }
-            log.info("JacksonNullValueSerializerModifier:{}...", writer.getName());
         }
 
         return beanProperties;

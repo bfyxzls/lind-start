@@ -14,8 +14,8 @@ public class PermissionServiceImpl implements PermissionService {
     @Override
     public List<ResourcePermission> getAll() {
         return Arrays.asList(
-                new Permission("chanpin", "/products", "","email"),
-                new Permission("首页", "/index", "read","")
+                new Permission("chanpin", "/products", "read"),
+                new Permission("首页", "/index", "read")
                 );
     }
 

@@ -3,6 +3,9 @@ package com.lind.start.test.controller;
 import com.lind.common.event.EventBusService;
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.template.RedisUserManualLockTemplate;
+import com.lind.start.test.dto.Info;
+import com.lind.start.test.dto.Product;
+import com.lind.start.test.dto.Shop;
 import com.lind.start.test.dto.UserDTO;
 import com.lind.start.test.handler.UserEvent;
 import com.lind.start.test.handler.UserEventType;
@@ -32,6 +35,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +58,7 @@ public class HomeController {
     ImageCodeProcessor imageCodeProcessor;
     @Autowired
     ImageStreamCodeProcessor imageStreamCodeProcessor;
+
     @GetMapping("/index")
     public String index() {
         return "success index!";
@@ -82,15 +88,42 @@ public class HomeController {
 
     @GetMapping("/pget")
     public ResponseEntity pget() {
+
         return ResponseEntity.ok(
-                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null, null)
+                new UserDTO("zzl", "dudu", false, 5d, BigDecimal.valueOf(100), null, null,
+                        Arrays.asList(new Info("hello", "hello world"))
+                )
         );
     }
 
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
         return ResponseEntity.ok(
-                new UserDTO("zzl", null, false, 5d, BigDecimal.valueOf(100), null, null)
+                new UserDTO("zzl", "OK", false, 5d, BigDecimal.valueOf(100), null, null,
+                        Arrays.asList(new Info("hello", "hello world")))
+        );
+    }
+
+
+    @GetMapping("/no-test")
+    public ResponseEntity noTest() {
+        return ResponseEntity.ok(
+                new Info("hello", "hello world")
+        );
+    }
+
+    @GetMapping("/shop")
+    public ResponseEntity shop() {
+        return ResponseEntity.ok(
+                new Shop("苹果", "hello world",new Date()
+                        )
+        );
+    }
+
+    @GetMapping("/product")
+    public ResponseEntity product() {
+        return ResponseEntity.ok(
+                new Product("苹果", "hello world")
         );
     }
 

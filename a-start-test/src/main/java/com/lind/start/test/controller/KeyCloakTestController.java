@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.security.Principal;
+import java.util.Date;
+import java.util.TimeZone;
 
 @RestController
 public class KeyCloakTestController {
@@ -24,6 +27,13 @@ public class KeyCloakTestController {
         UserDTO userDTO = new UserDTO();
         userDTO.setName("lind");
         userDTO.setEmail("ok");
+        userDTO.setTotal(100d);
+        userDTO.setTotalMoney(BigDecimal.valueOf(5000));
+        TimeZone time = TimeZone.getTimeZone("Etc/GMT-8");  //转换为中国时区
+
+        TimeZone.setDefault(time);
+        userDTO.setBirthday(new Date());
+        userDTO.setGetup(new Date());
         return ResponseEntity.ok(userDTO);
     }
 

@@ -26,9 +26,5 @@ public class Permission implements ResourcePermission {
      */
     private String auth;
 
-    /**
-     * scope权限.
-     */
-    private String scope;
 
 }

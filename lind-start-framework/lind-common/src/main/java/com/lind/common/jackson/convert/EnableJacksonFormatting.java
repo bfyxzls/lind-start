@@ -8,9 +8,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * 开启json格式化.
+ */
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({JacksonDateSerializerModifier.class, JacksonDateFormatSerializerModifierConfig.class})
-public @interface EnableJacksonDateFormatSerializerModifier {
+@Import({JacksonFormatSerializerModifierConfig.class, JacksonDateSerializerModifier.class, JacksonNullValueSerializerModifier.class})
+public @interface EnableJacksonFormatting {
 }

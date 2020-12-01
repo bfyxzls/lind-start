@@ -14,9 +14,4 @@ public interface ResourcePermission {
      * 页面路径/资源链接url.
      */
     String getPath();
-
-    /**
-     * 资源允许的scope,可以为url资源进行多方式控制.
-     */
-    String getScope();
 }

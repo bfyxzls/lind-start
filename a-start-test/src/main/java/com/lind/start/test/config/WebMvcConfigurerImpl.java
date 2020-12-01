@@ -8,10 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,8 +20,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-@Configuration
-@EnableWebMvc //覆盖默认的配置
+//@Configuration
+//@EnableWebMvc //覆盖默认的配置
 public class WebMvcConfigurerImpl implements WebMvcConfigurer {
 //    @Autowired
 //    LimitRaterInterceptor limitRaterInterceptor;
