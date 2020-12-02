@@ -317,8 +317,9 @@ public class ViewController {
                     node.setTitle(element.getName());
                     ActReNode actReNode = actReNodeRepository.findByNodeIdAndProcessDefId(element.getId(), procDefId);
                     if (actReNode != null) {
-                        node.setAssignee(actReNode.getRoleId()); //指定的角色
+                        node.setRoleId(actReNode.getRoleId()); //指定的角色
                         node.setRejectFlag(actReNode.getRejectFlag());
+                        node.setDefaultUserId(actReNode.getDefaultUserId() == null ? "0" : actReNode.getDefaultUserId());
                     }
                     processNodeVos.add(node);
                 }

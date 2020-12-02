@@ -21,9 +21,22 @@ public class ActReNode {
     private Date updateTime;
     private String createBy;
     private String updateBy;
+    /**
+     * 流程定义.
+     */
     private String processDefId;
+    /**
+     * 节点.
+     */
     private String nodeId;
+    /**
+     * 审核角色ID.
+     */
     private String roleId;
+    /**
+     * 默认审核用户ID.
+     */
+    private String defaultUserId;
     private String tenantId;
     private Integer delFlag;
     /**
@@ -117,5 +130,13 @@ public class ActReNode {
 
     public void setDelFlag(Integer delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public String getDefaultUserId() {
+        return defaultUserId;
+    }
+
+    public void setDefaultUserId(String defaultUserId) {
+        this.defaultUserId = defaultUserId;
     }
 }

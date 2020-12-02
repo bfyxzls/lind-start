@@ -567,6 +567,7 @@ CREATE TABLE `act_re_node` (
   `process_def_id` varchar(255) DEFAULT NULL,
   `reject_flag` int DEFAULT NULL,
   `role_id` varchar(255) DEFAULT NULL,
+  `default_user_id` varchar(255) DEFAULT NULL,
   `tenant_id` varchar(255) DEFAULT NULL,
   `update_by` varchar(255) DEFAULT NULL,
   `update_time` datetime(6) DEFAULT NULL,

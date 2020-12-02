@@ -19,9 +19,13 @@ public class ProcessNodeVo {
      */
     private String title;
     /**
-     * 节点分配人.
+     * 节点分配角色.
      */
-    private String assignee;
+    private String roleId;
+    /**
+     * 节分配角色默认的用户,0表示没有默认的.
+     */
+    private String defaultUserId;
     /**
      * 是否显示驳回.
      */

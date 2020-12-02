@@ -206,11 +206,6 @@
             <artifactId>lind-uaa-keycloak-start</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-activiti</artifactId>
-            <version>1.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

@@ -16,6 +16,7 @@
         <module>a-start-hot-deploy</module>
         <module>a-start-hot-dependency</module>
         <module>a-start-hot-interface</module>
+        <module>a-start-activiti</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

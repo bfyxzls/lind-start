@@ -29,10 +29,14 @@
                     </span>
 
                 </select>
+                </td>
 
+                <td>
+                    审批角色：<input name="roleId" th:value="${item.roleId}">
                 </td>
                 <td>
-                    选择角色：<input name="assignee" th:value="${item.assignee}"></td>
+                    默认审批用户：<input name="defaultUserId" th:value="${item.defaultUserId}">
+                </td>
             </tr>
             <tr>
                 <td colspan="2">

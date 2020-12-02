@@ -2,11 +2,11 @@ package com.lind.activiti.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
-import com.lind.activiti.util.Constant;
 import com.lind.activiti.config.ActivitiConfig;
 import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
+import com.lind.activiti.util.Constant;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
@@ -307,7 +307,8 @@ public class ExecutionController {
                     "end", false,
                     "id", taskDefinition.getKey(),
                     "name", taskDefinition.getNameExpression().getExpressionText(),
-                    "role", actReNode.getRoleId());
+                    "role", actReNode.getRoleId(),
+                    "defaultUserId", actReNode.getDefaultUserId());
         }
         return ImmutableMap.of(
                 "end", true);

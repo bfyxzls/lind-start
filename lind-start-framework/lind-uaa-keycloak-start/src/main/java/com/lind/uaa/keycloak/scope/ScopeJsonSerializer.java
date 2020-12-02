@@ -13,6 +13,7 @@ import java.util.Arrays;
 
 /**
  * 自定义jackson序列列.
+ * 在应用的实体上使用注解 @JsonSerialize(using = ScopeJsonSerializer.class)
  *
  * @param <T>
  */

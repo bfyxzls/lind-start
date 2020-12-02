@@ -187,7 +187,7 @@ public class DeploymentController {
                     node.setTitle(element.getName());
                     ActReNode actReNode = actReNodeRepository.findByNodeIdAndProcessDefId(element.getId(), procDefId);
                     if (actReNode != null) {
-                        node.setAssignee(actReNode.getRoleId()); //指定的角色
+                        node.setRoleId(actReNode.getRoleId()); //指定的角色
                     }
                     processNodeVos.add(node);
                 }
@@ -202,21 +202,24 @@ public class DeploymentController {
      *
      * @param procDefId
      * @param nodeId
-     * @param assignee
+     * @param assignee     分配人或者角色
+     * @param assigneeType 分配类型 0角色,1用户
      * @param response
      * @throws IOException
      */
     @RequestMapping(value = "/deployment/node-save", method = RequestMethod.POST)
     public void saveProcessNode(@RequestParam String procDefId,
                                 String[] nodeId,
-                                String[] assignee,
+                                String[] roleId,
+                                String[] defaultUserId,
                                 String[] reject,
                                 HttpServletResponse response) throws IOException {
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
         Process process = bpmnModel.getMainProcess(); //获取主流程的，不考虑子流程
         for (int i = 0; i < nodeId.length; i++) {
             UserTask flowElement = (UserTask) process.getFlowElement(nodeId[i]);
-            flowElement.setOwner(assignee[i]);
+            flowElement.setOwner(roleId[i]);
+            flowElement.setAssignee(defaultUserId[i]);
             process.setValues(flowElement);//数据只保存在内存里，需要添加节点分配数据表才能实现
             ActReNode actReNode = actReNodeRepository.findByNodeIdAndProcessDefId(nodeId[i], procDefId);
             if (actReNode == null) {
@@ -225,7 +228,8 @@ public class DeploymentController {
                 actReNode.setCreateTime(new Date());
             }
             actReNode.setNodeId(nodeId[i]);
-            actReNode.setRoleId(assignee[i]);
+            actReNode.setRoleId(roleId[i]);
+            actReNode.setDefaultUserId(defaultUserId[i]);
             actReNode.setRejectFlag(Integer.parseInt(reject[i]));
             actReNode.setProcessDefId(procDefId);
             actReNodeRepository.save(actReNode);
@@ -237,7 +241,7 @@ public class DeploymentController {
      *
      * @param procDefId
      * @param nodeId
-     * @param assignee
+     * @param roleId
      * @param reject
      * @param response
      * @throws IOException
@@ -245,10 +249,11 @@ public class DeploymentController {
     @RequestMapping(value = "/deployment/node-save-redirect", method = RequestMethod.POST)
     public void getProcessNodeRedirect(@RequestParam String procDefId,
                                        String[] nodeId,
-                                       String[] assignee,
+                                       String[] roleId,
+                                       String[] defaultUserId,
                                        String[] reject,
                                        HttpServletResponse response) throws IOException {
-        saveProcessNode(procDefId, nodeId, assignee, reject, response);
+        saveProcessNode(procDefId, nodeId, roleId, defaultUserId, reject, response);
         response.sendRedirect("/view/deployment/list");
     }
 }
