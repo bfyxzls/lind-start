@@ -1,6 +1,7 @@
 package com.lind.uaa.keycloak.controller;
 
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
@@ -84,6 +85,7 @@ public class TokenController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("授权码认证")
     @GetMapping(path = "/authorizationCodeLogin")
     public void authorizationCodeLogin(@RequestParam(required = false) String code, HttpServletResponse response) throws IOException {
         if (StringUtils.isBlank(code)) {
@@ -112,6 +114,7 @@ public class TokenController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("客户端认证")
     @GetMapping(path = "/clientCredentialsLogin")
     public void clientCredentialsLogin(@RequestParam(required = false) String scope, HttpServletResponse response) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -136,6 +139,7 @@ public class TokenController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("密码认证")
     @PostMapping(path = "/passwordLogin")
     public void passwordLogin(String username, String password, HttpServletResponse response) throws IOException {
         RestTemplate restTemplate = new RestTemplate();

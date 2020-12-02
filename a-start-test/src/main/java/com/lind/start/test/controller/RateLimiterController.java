@@ -1,7 +1,7 @@
 package com.lind.start.test.controller;
 
 import com.google.common.util.concurrent.RateLimiter;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.text.SimpleDateFormat;
@@ -15,7 +15,7 @@ public class RateLimiterController {
     /**
      * tryAcquire尝试获取permit，默认超时时间是0，意思是拿不到就立即返回false
      */
-    @RequestMapping("/sayHello")
+    @GetMapping("/sayHello")
     public String sayHello() {
         if (rateLimiter.tryAcquire()) { //  一次拿1个
             System.out.println(sdf.format(new Date()));
@@ -33,7 +33,7 @@ public class RateLimiterController {
     /**
      * acquire拿不到就等待，拿到为止
      */
-    @RequestMapping("/sayHi")
+    @GetMapping("/sayHi")
     public String sayHi() {
         rateLimiter.acquire(5); //  一次拿5个
         System.out.println(sdf.format(new Date()));

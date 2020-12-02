@@ -1,6 +1,7 @@
 package com.lind.uaa.keycloak.permission;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 权限管理决断器
@@ -23,6 +26,8 @@ import java.util.Iterator;
 public class MyAccessDecisionManager implements AccessDecisionManager {
 
     public static final String ROLE_PREFIX = "ROLE_";
+    @Autowired
+    PermissionService permissionService;
 
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -31,24 +36,39 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
             return;
         }
         Iterator<ConfigAttribute> iterator = configAttributes.iterator();
-        int devote = 0;
         while (iterator.hasNext()) {
             ConfigAttribute c = iterator.next();
             String needPerm = c.getAttribute();
+            needPerm = removeRolePrefix(needPerm);//比较时都去掉前缀
             for (GrantedAuthority ga : authentication.getAuthorities()) {
-                if (!needPerm.startsWith(ROLE_PREFIX)) {
-                    needPerm = ROLE_PREFIX.concat(needPerm);
-                }
-                if (needPerm.trim().equals(ga.getAuthority())) {
-                    devote++;
+                //获取当前用户token里的权限字段
+                String userAuth = removeRolePrefix(ga.getAuthority());
+                if (needPerm.equals(userAuth)) {
+                    return;
+                } else {
+                    //通过角色取它的权限列表
+                    List<String> permissionList = permissionService.getByRoleId(userAuth)
+                            .stream()
+                            .map(permission -> permission.getTitle()).collect(Collectors.toList());
+                    if (permissionList.contains(needPerm)) {
+                        return;
+                    }
                 }
             }
         }
-        // 用户拥有的权限与资源需要的所有权限都匹配,才能访问资源.
-        if (devote == configAttributes.size()) {
-            return;
-        }
+
         throw new AccessDeniedException("抱歉，您没有访问权限");
+    }
+
+    /**
+     * 格式化权限.
+     *
+     * @param auth
+     * @return
+     */
+    private String removeRolePrefix(String auth) {
+        int index = auth.startsWith(ROLE_PREFIX) ? ROLE_PREFIX.length() : 0;
+        return auth.substring(index);
     }
 
     @Override

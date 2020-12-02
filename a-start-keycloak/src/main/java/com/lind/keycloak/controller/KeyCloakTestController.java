@@ -1,28 +1,30 @@
-package com.lind.start.test.controller;
+package com.lind.keycloak.controller;
 
-import com.lind.start.test.dto.UserDTO;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import com.lind.keycloak.dto.UserDTO;
+import com.lind.uaa.keycloak.permission.PermissionService;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.security.Principal;
 import java.util.Date;
 import java.util.TimeZone;
 
 @RestController
+
 public class KeyCloakTestController {
     final static Logger logger = LoggerFactory.getLogger(KeyCloakTestController.class);
+    @Autowired
+    PermissionService permissionService;
 
-    @GetMapping(path = "/test")
+    @ApiOperation("用户信息-scope授权测试")
+    @GetMapping(path = "/user/get")
     public ResponseEntity test() {
         UserDTO userDTO = new UserDTO();
         userDTO.setName("lind");
@@ -37,26 +39,14 @@ public class KeyCloakTestController {
         return ResponseEntity.ok(userDTO);
     }
 
+    @ApiOperation("产品列表-role授权")
     @GetMapping("/products")
     public String products() {
         return "success products!";
     }
 
-    @GetMapping("/write")
-    public String write() {
-        return "success write!";
-    }
-
-    @GetMapping(path = "/users")
-    public String getUserInfo() {
-        logger.info("/users get.");
-        KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext()
-                .getAuthentication();
-        final Principal principal = (Principal) authentication.getPrincipal();
-        return principal.getName();
-    }
-
-    @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation("退出")
+    @GetMapping(value = "/logout")
     public String logout(HttpServletRequest request) {
         try {
             request.logout();
@@ -66,5 +56,10 @@ public class KeyCloakTestController {
         }
     }
 
+    @ApiOperation("当前用户的角色对应的权限")
+    @GetMapping(value = "/permissions")
+    public ResponseEntity permissions() {
+        return ResponseEntity.ok(permissionService.getByRoleId("1"));
+    }
 
 }

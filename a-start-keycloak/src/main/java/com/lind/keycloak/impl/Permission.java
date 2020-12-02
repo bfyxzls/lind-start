@@ -1,4 +1,4 @@
-package com.lind.start.test.impl;
+package com.lind.keycloak.impl;
 
 import com.lind.uaa.keycloak.permission.ResourcePermission;
 import lombok.AllArgsConstructor;
@@ -21,10 +21,6 @@ public class Permission implements ResourcePermission {
      * 页面路径/资源链接url.
      */
     private String path;
-    /**
-     * 权限名称.
-     */
-    private String auth;
 
 
 }

@@ -156,12 +156,7 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <!--在引用时请在maven中央仓库搜索最新版本号-->
-            <version>2.0.2</version>
-        </dependency>
+
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
@@ -194,6 +189,11 @@
             <artifactId>lind-bundle</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-swagger-start</artifactId>
+            <version>1.0.0</version>
+        </dependency>
 
         <dependency>
             <groupId>com.lind</groupId>
@@ -201,11 +201,7 @@
             <version>1.0.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-uaa-keycloak-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

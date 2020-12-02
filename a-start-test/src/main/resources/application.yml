@@ -11,6 +11,12 @@ lind:
       autoRelease: false
       interrupt: true
       registryKey: lind-lock
+
+#  swagger:
+#    spring:
+#      authorization:
+#        tokenUrlList:
+#          - Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzVklWQV93bjJUUUhCclR0Yld4VTc1YWdFN2ctRmM2Sm5haGxvVUw0c3U4In0.eyJleHAiOjE2MDY4OTYxOTIsImlhdCI6MTYwNjg5MjU5MiwianRpIjoiMGQ4YTM1YjAtMDNkZC00ODA3LWJkZDQtMTZhMTQzYjAwMTFkIiwiaXNzIjoiaHR0cDovLzE5Mi4xNjguNC4yNjo4MDgwL2F1dGgvcmVhbG1zL2RlbW8iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiOTg1NGMwYjctM2Q5MS00YTdlLTllNzQtYzJmNzQzODA4MWFlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZGVtb2NsaWVudCIsInNlc3Npb25fc3RhdGUiOiJjY2Q5N2IxOS04NzM2LTQ5ZTUtODk2NS01YWQwNGVmYTNiNDciLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6ImRlbW91c2VyIn0.qa8ymaTAuIfhRFkFHCJV11D49vaTNdo1-hI0oDKNPiwv1wNeHy2rIVnzSxtyqaZ-kFE93eSzEJDi44vuNgk8HpnhJL-wkz96XV_Z1WOvGSS_CbJTyO5WFTHbmhWHKCl6jV1eiDsK8JrXwzKZ6lwrNQoYuZDURDoc8XIotCgSE-rtQuSR4i1GjQ6o4-UOqsLLvTdRWJ9QyHuVrHCY7du1_8puu_OVietAZrfhGO6gkfSioo08G_1ghGoGov5IC00WqQYzbKfO7RGKkMRDW4Ke7kiz52P3iI90_ogcasfD-fY0JAThnTFK-8qIWVBcIo6XODq0Ab3RaFAP9ddGApR-Xg
 spring:
   # Redis
   redis:
@@ -100,7 +106,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 # Keycloak Configuration
 keycloak:
-  auth-server-url: http://192.168.119.131:8080/auth
+  auth-server-url: http://192.168.4.26:8080/auth
   realm: demo
   resource: democlient
   client-key-password: 58e23419-c53f-49bc-bad6-b696756bba26
@@ -110,6 +116,6 @@ keycloak:
   cors: true
 
 uaa:
-  permitAll: /users,/kafka,/kafka/create
+  permitAll: /users,/kafka,/kafka/create,/doc.html
   callbackUri: http://localhost:9090/token/authorizationCodeLogin
 

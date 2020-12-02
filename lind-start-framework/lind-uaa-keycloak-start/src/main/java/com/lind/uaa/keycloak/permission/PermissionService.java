@@ -12,4 +12,11 @@ public interface PermissionService {
      * @return
      */
     List<ResourcePermission> getAll();
+
+    /**
+     * 按着角色ID获取资源权限.
+     *
+     * @return
+     */
+    List<ResourcePermission> getByRoleId(String roleIds);
 }

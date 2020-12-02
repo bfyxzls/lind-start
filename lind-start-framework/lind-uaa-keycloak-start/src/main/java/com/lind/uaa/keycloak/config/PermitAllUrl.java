@@ -21,6 +21,7 @@ public final class PermitAllUrl {
      */
     static final List<String> ENDPOINTS = ImmutableList.of("/actuator/**",
             "/v2/api-docs/**",
+            "/doc.html",
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/webjars/**",
