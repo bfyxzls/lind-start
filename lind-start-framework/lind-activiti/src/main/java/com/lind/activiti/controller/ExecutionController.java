@@ -7,6 +7,8 @@ import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
 import com.lind.activiti.util.Constant;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
@@ -101,10 +103,12 @@ public class ExecutionController {
      *
      * @param procDefId act_re_procdef.ID_
      */
+    @ApiOperation("启动流程实例")
     @RequestMapping(value = "/execution/start/{procDefId}", method = RequestMethod.GET)
-    public void createInstance(@PathVariable String procDefId,
-                               @RequestParam String title,
-                               HttpServletResponse response) throws IOException {
+    public void createInstance(
+            @ApiParam("流程定义ID") @PathVariable String procDefId,
+            @ApiParam("标题") @RequestParam String title,
+            HttpServletResponse response) throws IOException {
         // 启动流程
         ProcessInstance pi = runtimeService.startProcessInstanceById(procDefId);
         // 设置流程实例名称
@@ -118,8 +122,11 @@ public class ExecutionController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("任务强制完成")
     @RequestMapping(value = "/task/complete/{id}", method = RequestMethod.GET)
-    public void taskComplete(@PathVariable String id, HttpServletResponse response) throws IOException {
+    public void taskComplete(
+            @ApiParam("任务ID") @PathVariable String id,
+            HttpServletResponse response) throws IOException {
         taskService.complete(id);
     }
 
@@ -131,13 +138,15 @@ public class ExecutionController {
      * @param assignee   前端传过来的分配人,为空表示自己
      * @param comment    备注
      */
+    @ApiOperation("流程审批")
     @RequestMapping(value = "/execution/pass/{procInstId}/{taskId}", method = RequestMethod.GET)
-    public void pass(@PathVariable String procInstId,
-                     @PathVariable String taskId,
-                     @RequestParam(required = false) String assignee,
-                     @RequestParam(required = false) String comment,
-                     @RequestParam(required = false) String params,
-                     HttpServletResponse response
+    public void pass(
+            @ApiParam("流程实例ID") @PathVariable String procInstId,
+            @ApiParam("任务ID") @PathVariable String taskId,
+            @ApiParam("分配用户") @RequestParam(required = false) String assignee,
+            @ApiParam("审核备注") @RequestParam(required = false) String comment,
+            @ApiParam("其它参数") @RequestParam(required = false) String params,
+            HttpServletResponse response
     ) throws Exception {
 
         if (StringUtils.isBlank(comment)) {
@@ -184,12 +193,14 @@ public class ExecutionController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("审批驳回")
     @RequestMapping(value = "/execution/back/{procInstId}/{taskId}", method = RequestMethod.GET)
-    public void back(@PathVariable String procInstId,
-                     @PathVariable String taskId,
-                     @RequestParam(required = false) String comment,
-                     @RequestParam(required = false) String destTaskKey,
-                     HttpServletResponse response) throws IOException {
+    public void back(
+            @ApiParam("流程实例ID") @PathVariable String procInstId,
+            @ApiParam("任务ID") @PathVariable String taskId,
+            @ApiParam("审批备注") @RequestParam(required = false) String comment,
+            @ApiParam("驳回节点名称") @RequestParam(required = false) String destTaskKey,
+            HttpServletResponse response) throws IOException {
         if (comment == null) {
             comment = "";
         }
@@ -292,8 +303,10 @@ public class ExecutionController {
      * @param procInstId
      * @return
      */
+    @ApiOperation("获取当前节点的下一节点信息")
     @RequestMapping(value = "/process/next-node/{procInstId}", method = RequestMethod.GET)
-    public Object getNextNode(@PathVariable String procInstId) throws Exception {
+    public Object getNextNode(
+            @ApiParam("流程实例ID") @PathVariable String procInstId) throws Exception {
         TaskDefinition taskDefinition = activitiHelper.getNextTaskInfo(procInstId);
         String definitionId = runtimeService.createProcessInstanceQuery()
                 .processInstanceId(procInstId).singleResult().getProcessDefinitionId();
@@ -317,7 +330,7 @@ public class ExecutionController {
     /**
      * 根据任务id查询已经执行的任务节点信息
      */
-    public List<Map<String, String>> getRunNodes(String taskId) {
+    List<Map<String, String>> getRunNodes(String taskId) {
         // 获取流程历史中已执行节点，并按照节点在流程中执行先后顺序排序
         List<HistoricActivityInstance> historicActivityInstanceList = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(taskId)
@@ -343,6 +356,7 @@ public class ExecutionController {
     /**
      * 当前运行中的流程实例列表，应该是启动了的流程（/execution/start/会出现的流程）.
      */
+    @ApiOperation("运行中的流程实例列表")
     @RequestMapping(value = "/execution/list", method = RequestMethod.GET)
     public Object execution(org.springframework.ui.Model model,
                             @RequestParam(required = false, defaultValue = "1") int pageindex,
@@ -386,6 +400,7 @@ public class ExecutionController {
     /**
      * 已完成的历史记录列表.
      */
+    @ApiOperation("已完成的任务列表")
     @RequestMapping(value = "/task/list/{id}", method = RequestMethod.GET)
     public Object taskList(@PathVariable String id, org.springframework.ui.Model model) {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()
@@ -398,25 +413,9 @@ public class ExecutionController {
     }
 
     /**
-     * 历史流程列表.
-     */
-    @RequestMapping(value = "/history/list", method = RequestMethod.GET)
-    public Object historyList(org.springframework.ui.Model model,
-                              @RequestParam(required = false, defaultValue = "1") int pageindex,
-                              @RequestParam(required = false, defaultValue = "10") int pagesize) {
-        pageindex = (pageindex - 1) * pagesize;
-        List<HistoricProcessInstance> list = historyService.createHistoricProcessInstanceQuery()
-                //     .finished()
-                .orderByProcessInstanceStartTime()
-                .desc()
-                .listPage(pageindex, pagesize);
-
-        return list;
-    }
-
-    /**
      * 正在被处理的任务.
      */
+    @ApiOperation("正在被处理的任务")
     @RequestMapping(value = "/execution/getRunningProcess", method = RequestMethod.GET)
     public Object getRunningProcess(@RequestParam(required = false) String name,
                                     @RequestParam(required = false) String categoryId,
@@ -443,6 +442,7 @@ public class ExecutionController {
      *
      * @param procDefId act_re_procdef.ID_
      */
+    @ApiOperation("第一个流程节点")
     @RequestMapping(value = "/execution/getFirstNode/{procDefId}", method = RequestMethod.GET)
     public Object getFirstNode(@PathVariable String procDefId) {
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
@@ -479,6 +479,7 @@ public class ExecutionController {
      * @param procInstId 实例ID
      * @param response
      */
+    @ApiOperation("获取流程图片")
     @RequestMapping(value = "/execution/getHighlightImg/{procInstId}", method = RequestMethod.GET)
     public void getHighlightImg(@PathVariable String procInstId, HttpServletResponse response) {
         Map<String, Object> result = getInputStream(procInstId);
@@ -514,6 +515,7 @@ public class ExecutionController {
      * @return
      * @throws IOException
      */
+    @ApiOperation("输出图像")
     @RequestMapping(
             value = "/execution/getActivitiImg/{procInstId}",
             method = RequestMethod.GET,
@@ -572,6 +574,7 @@ public class ExecutionController {
     /**
      * 删除任务.
      */
+    @ApiOperation("删除任务")
     @RequestMapping(value = "/execution/delete/{ids}", method = RequestMethod.DELETE)
     public Object delete(@PathVariable String[] ids, @RequestParam(required = false) String reason) {
 
@@ -587,6 +590,7 @@ public class ExecutionController {
     /**
      * 删除任务历史.
      */
+    @ApiOperation("删除任务历史")
     @RequestMapping(value = "/execution/deleteHistoric/{ids}", method = RequestMethod.DELETE)
     public Object deleteHistoric(@PathVariable String[] ids) {
 
@@ -599,6 +603,7 @@ public class ExecutionController {
     /**
      * 通过id删除运行中的实例.
      */
+    @ApiOperation("通过id删除运行中的实例")
     @RequestMapping(value = "/execution/delInsByIds/{ids}", method = RequestMethod.GET)
     public Object delInsByIds(@PathVariable String[] ids,
                               @RequestParam(required = false) String reason) {
@@ -619,6 +624,7 @@ public class ExecutionController {
     /**
      * 当前任务列表.
      */
+    @ApiOperation("当前任务列表")
     @RequestMapping(value = "/task/list", method = RequestMethod.GET)
     public Object tasks() {
         List<Task> list =
@@ -643,6 +649,7 @@ public class ExecutionController {
     /**
      * 历史记录列表.
      */
+    @ApiOperation("历史记录列表")
     @RequestMapping(value = "/history/finished-list", method = RequestMethod.GET)
     public List<HistoricTaskInstance> historyList(org.springframework.ui.Model model) {
         List<HistoricTaskInstance> list = historyService.createHistoricTaskInstanceQuery()

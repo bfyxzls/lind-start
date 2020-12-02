@@ -6,6 +6,9 @@ import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
 import com.lind.activiti.vo.ProcessNodeVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.model.BpmnModel;
 import org.activiti.bpmn.model.FlowElement;
@@ -42,6 +45,7 @@ import java.util.UUID;
  * 流程部署相关.
  */
 @RestController
+@Api("流程部署相关")
 @Slf4j
 public class DeploymentController {
     @Autowired
@@ -66,8 +70,9 @@ public class DeploymentController {
      *
      * @param procDefId ACT_RE_PROCDEF.ID_
      */
+    @ApiOperation("激活流程定义")
     @RequestMapping(value = "/deployment/active/{procDefId}", method = RequestMethod.GET)
-    public String active(@PathVariable String procDefId) {
+    public String active(@ApiParam("流程定义ID") @PathVariable String procDefId) {
         repositoryService.activateProcessDefinitionById(procDefId, true, new Date());
         return "激活成功";
     }
@@ -75,26 +80,28 @@ public class DeploymentController {
     /**
      * 挂起.
      *
-     * @param id
+     * @param procDefId
      * @param response
      * @throws IOException
      */
-    @RequestMapping(value = "/deployment/suspend/{id}", method = RequestMethod.GET)
-    public void deploymentDel(@PathVariable String id, HttpServletResponse response) throws IOException {
-        processEngine.getRepositoryService().suspendProcessDefinitionById(id);
+    @ApiOperation("挂起")
+    @RequestMapping(value = "/deployment/suspend/{procDefId}", method = RequestMethod.GET)
+    public void deploymentDel(@ApiParam("流程定义ID") @PathVariable String procDefId, HttpServletResponse response) throws IOException {
+        processEngine.getRepositoryService().suspendProcessDefinitionById(procDefId);
     }
 
     /**
      * 导出部署流程资源.
      *
-     * @param id
+     * @param procDefId
      * @param response
      */
+    @ApiOperation("导出部署流程资源")
     @RequestMapping(value = "/deployment/export", method = RequestMethod.GET)
-    public void exportResource(@RequestParam String id,
+    public void exportResource(@ApiParam("流程定义ID") @RequestParam String procDefId,
                                HttpServletResponse response) {
         ProcessDefinition pd = repositoryService.createProcessDefinitionQuery()
-                .processDefinitionId(id).singleResult();
+                .processDefinitionId(procDefId).singleResult();
         String resourceName = pd.getResourceName();
         InputStream inputStream = repositoryService.getResourceAsStream(pd.getDeploymentId(),
                 resourceName);
@@ -117,11 +124,12 @@ public class DeploymentController {
     /**
      * 部署列表.
      */
+    @ApiOperation("部署列表")
     @RequestMapping(value = "/deployment/list", method = RequestMethod.GET)
     public Object deployment(org.springframework.ui.Model model,
-                             @RequestParam(required = false) String status,
-                             @RequestParam(required = false, defaultValue = "1") int pageindex,
-                             @RequestParam(required = false, defaultValue = "10") int pagesize) {
+                             @ApiParam("状态") @RequestParam(required = false) String status,
+                             @ApiParam("页码") @RequestParam(required = false, defaultValue = "1") int pageindex,
+                             @ApiParam("每页记录数") @RequestParam(required = false, defaultValue = "10") int pagesize) {
         pageindex = (pageindex - 1) * pagesize;
         List<Deployment> list = processEngine.getRepositoryService().createDeploymentQuery()
                 .orderByDeploymenTime()
@@ -173,8 +181,9 @@ public class DeploymentController {
      *
      * @param procDefId 流程定义ID
      */
+    @ApiOperation("通过流程定义id获取流程节点")
     @RequestMapping(value = "/deployment/node-list/{procDefId}", method = RequestMethod.GET)
-    public Object getProcessNode(@PathVariable String procDefId, org.springframework.ui.Model model) {
+    public Object getProcessNode(@ApiParam("流程定义ID") @PathVariable String procDefId, org.springframework.ui.Model model) {
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
         List<Process> processes = bpmnModel.getProcesses();
         List<ProcessNodeVo> processNodeVos = new ArrayList<>();
@@ -202,18 +211,20 @@ public class DeploymentController {
      *
      * @param procDefId
      * @param nodeId
-     * @param assignee     分配人或者角色
-     * @param assigneeType 分配类型 0角色,1用户
+     * @param roleId        分配者角色
+     * @param defaultUserId 默认分配用户
      * @param response
      * @throws IOException
      */
+    @ApiOperation("节点配置保存")
     @RequestMapping(value = "/deployment/node-save", method = RequestMethod.POST)
-    public void saveProcessNode(@RequestParam String procDefId,
-                                String[] nodeId,
-                                String[] roleId,
-                                String[] defaultUserId,
-                                String[] reject,
-                                HttpServletResponse response) throws IOException {
+    public void saveProcessNode(
+            @ApiParam("流程定义ID") @RequestParam String procDefId,
+            @ApiParam("节点ID") String[] nodeId,
+            @ApiParam("分配者角色") String[] roleId,
+            @ApiParam("默认分配用户") String[] defaultUserId,
+            @ApiParam("是否显示驳回") String[] reject,
+            HttpServletResponse response) throws IOException {
         BpmnModel bpmnModel = repositoryService.getBpmnModel(procDefId);
         Process process = bpmnModel.getMainProcess(); //获取主流程的，不考虑子流程
         for (int i = 0; i < nodeId.length; i++) {
@@ -246,12 +257,13 @@ public class DeploymentController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("节点配置保存并重定向")
     @RequestMapping(value = "/deployment/node-save-redirect", method = RequestMethod.POST)
-    public void getProcessNodeRedirect(@RequestParam String procDefId,
-                                       String[] nodeId,
-                                       String[] roleId,
-                                       String[] defaultUserId,
-                                       String[] reject,
+    public void getProcessNodeRedirect(@ApiParam("流程定义ID") @RequestParam String procDefId,
+                                       @ApiParam("节点ID") String[] nodeId,
+                                       @ApiParam("分配者角色") String[] roleId,
+                                       @ApiParam("默认分配用户") String[] defaultUserId,
+                                       @ApiParam("是否显示驳回") String[] reject,
                                        HttpServletResponse response) throws IOException {
         saveProcessNode(procDefId, nodeId, roleId, defaultUserId, reject, response);
         response.sendRedirect("/view/deployment/list");

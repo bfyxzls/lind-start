@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.lind.activiti.util.Constant;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -70,6 +71,7 @@ public class ModelController {
     /**
      * 建立页面，同时也保存.
      */
+    @ApiOperation("建立工作流模型")
     @GetMapping("/model/create")
     public void createModel(HttpServletRequest request, HttpServletResponse response) {
         try {
@@ -108,6 +110,7 @@ public class ModelController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("删除模型")
     @GetMapping("/model/delete")
     public void delModel(String modelId, HttpServletResponse response) throws IOException {
         repositoryService.deleteModel(modelId);
@@ -116,6 +119,7 @@ public class ModelController {
     /**
      * 模型部署成为流程.
      */
+    @ApiOperation("模型部署成为流程")
     @RequestMapping(value = "/model/deploy/{id}", method = RequestMethod.GET)
     public void deploy(@PathVariable String id, HttpServletResponse response) throws IOException {
 
@@ -156,6 +160,7 @@ public class ModelController {
     /**
      * 模模型列表.
      */
+    @ApiOperation("模模型列表")
     @RequestMapping(value = "/model/list", method = RequestMethod.GET)
     public Object modelist(org.springframework.ui.Model model,
                            @RequestParam(required = false, defaultValue = "1") int pageindex,
@@ -173,6 +178,7 @@ public class ModelController {
      *
      * @param file
      */
+    @ApiOperation("通过文件生成模型")
     @PostMapping(value = "deployByFile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void deployByFile(@RequestPart("file") MultipartFile file, HttpServletResponse response) throws IOException {
         String fileName = file.getOriginalFilename();
@@ -218,6 +224,7 @@ public class ModelController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation("导入再重定向")
     @PostMapping(value = "deploy-file-redirect", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void deployByFileRedirect(@RequestPart("file") MultipartFile file, HttpServletResponse response) throws IOException {
         deployByFile(file, response);
@@ -230,6 +237,7 @@ public class ModelController {
      * @param id
      * @return
      */
+    @ApiOperation("转化流程为模型")
     @RequestMapping(value = "/deployment/convertToModel/{id}", method = RequestMethod.GET)
     public void convertToModel(@PathVariable String id, HttpServletResponse response) throws IOException {
 
