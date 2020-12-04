@@ -22,6 +22,9 @@ import java.nio.charset.Charset;
  */
 public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+    /**
+     * 使用默认的登录接口.
+     */
     public MyUsernamePasswordAuthenticationFilter() {
         super(new AntPathRequestMatcher("/login", "POST"));
     }

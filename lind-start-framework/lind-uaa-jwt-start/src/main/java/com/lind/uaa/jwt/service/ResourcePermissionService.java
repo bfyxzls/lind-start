@@ -16,7 +16,7 @@ public interface ResourcePermissionService {
      *
      * @return
      */
-    List<ResourcePermission> getAll();
+    List<? extends ResourcePermission> getAll();
 
     /**
      * 通过类型得到权限列表.
@@ -24,28 +24,28 @@ public interface ResourcePermissionService {
      * @param type
      * @return
      */
-    List<ResourcePermission> getAllByType(Integer type);
+    List<? extends ResourcePermission> getAllByType(Integer type);
 
     /**
      * 按着角色ID获取资源权限.
      *
      * @return
      */
-    List<ResourcePermission> getByRoleId(String roleId);
+    List<? extends ResourcePermission> getByRoleId(String roleId);
 
     /**
      * 按着用户ID获取资源权限.
      *
      * @return
      */
-    List<ResourcePermission> getByUserId(String userId);
+    List<? extends ResourcePermission> getByUserId(String userId);
 
     /**
      * 得到树型结构.
      *
      * @return
      */
-    default List<ResourcePermission> getTreeMenus() {
+    default List<? extends ResourcePermission> getTreeMenus() {
         List<ResourcePermission> ones = getAllByType(0).stream()
                 .filter(o -> o.getParentId() == null)
                 .collect(Collectors.toList());
@@ -58,7 +58,7 @@ public interface ResourcePermissionService {
      *
      * @param ones
      */
-    default void getTreeMenuRzSons(List<ResourcePermission> ones) {
+    default void getTreeMenuRzSons(List<? extends ResourcePermission> ones) {
         for (ResourcePermission resourcePermission : ones) {
             if (resourcePermission != null) {
                 List<ResourcePermission> sons = getAll().stream()

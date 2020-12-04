@@ -4,16 +4,15 @@ import com.lind.common.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Path;
-import java.nio.file.AccessDeniedException;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
@@ -25,34 +24,28 @@ import java.util.Set;
 public class AbstractRestExceptionHandler {
 
     /**
-     * Exception.
+     * Exception 服务端异常500.
      *
      * @param e 异常
      * @return CommonResult
      */
     @ExceptionHandler({Exception.class, RuntimeException.class})
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public CommonResult handleException(Exception e) {
         String message = "系统内部异常";
         log.error(message, e);
         return CommonResult.serverFailure(message);
     }
 
-    @ExceptionHandler({HttpClientErrorException.class})
-    @ResponseStatus(HttpStatus.OK)
-    public CommonResult handleHttpErrorException(HttpClientErrorException e) {
-        log.error(e.getMessage(), e);
-        return CommonResult.failure(400, e.getMessage());
-    }
 
     /**
-     * 统一处理请求参数校验(普通传参).
+     * 统一处理请求参数校验(普通传参400).
      *
      * @param e ConstraintViolationException
      * @return CommonResult
      */
     @ExceptionHandler(value = ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult handleConstraintViolationException(ConstraintViolationException e) {
         StringBuilder message = new StringBuilder();
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
@@ -68,13 +61,13 @@ public class AbstractRestExceptionHandler {
     }
 
     /**
-     * 统一处理请求参数校验(json).
+     * 统一处理请求参数校验(json)400.
      *
      * @param e ConstraintViolationException
      * @return CommonResult
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult handlerMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         StringBuilder message = new StringBuilder();
         for (FieldError error : e.getBindingResult().getFieldErrors()) {
@@ -86,26 +79,15 @@ public class AbstractRestExceptionHandler {
     }
 
     /**
-     * AccessDeniedException.
+     * LindException业务型异常.
      *
-     * @return CommonResult
-     */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public CommonResult handleAccessDeniedException() {
-        return CommonResult.failure(HttpCodeEnum.UNAUTHORIZED);
-    }
-
-    /**
-     * LindException.
-     *
-     * @param lindException 异常
+     * @param lindException 业务型异常
      * @return CommonResult
      */
     @ExceptionHandler(value = LindException.class)
     @ResponseStatus(HttpStatus.OK)
     public CommonResult businessErrorException(LindException lindException) {
-        return CommonResult.failure(HttpStatus.BAD_REQUEST.value(), lindException.getMessage());
+        return CommonResult.clientFailure(lindException.getMessage());
     }
 
     /**
@@ -115,7 +97,7 @@ public class AbstractRestExceptionHandler {
      * @return CommonResult
      */
     @ExceptionHandler(NoSuchElementException.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult handlerNoSuchElementException(NoSuchElementException e) {
         String message = e.getMessage();
         log.error(message);
@@ -129,11 +111,24 @@ public class AbstractRestExceptionHandler {
      * @return CommonResult
      */
     @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public CommonResult<String> handlerIllegalArgumentException(IllegalArgumentException e) {
         String message = e.getMessage();
         log.error(message);
         return CommonResult.clientFailure(message);
     }
+
+    /**
+     * AccessDeniedException 权限不足403.
+     *
+     * @return CommonResult
+     */
+    @ExceptionHandler(value = AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public CommonResult handleAccessDeniedException() {
+        return CommonResult.failure(HttpCodeEnum.FORBIDDEN);
+    }
+
+
 
 }

@@ -20,12 +20,15 @@ public class PermissionServiceImpl implements PermissionService {
     }
 
     @Override
-    public List<ResourcePermission> getByRoleId(String roleIds) {
-        return Arrays.asList(
-                new Permission("商品管理", "/products"),
-                new Permission("商品添加", "/products/add"),
-                new Permission("商品删除", "/products/del")
-        );
+    public List<ResourcePermission> getByRoleId(String roleKey) {
+        if (roleKey.equals("商品管理员"))
+            return Arrays.asList(
+                    new Permission("商品管理", "/products"),
+                    new Permission("商品添加", "/products/add"),
+                    new Permission("商品删除", "/products/del")
+            );
+        else
+            return null;
     }
 
 }

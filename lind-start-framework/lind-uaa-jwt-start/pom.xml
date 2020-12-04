@@ -8,8 +8,9 @@
         <version>2.0.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>com.lind</groupId>
     <artifactId>lind-uaa-jwt-start</artifactId>
+    <version>1.0.0</version>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -43,6 +44,54 @@
             <artifactId>lind-redis-start</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-swagger-start</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>Nexus aliyun</name>
+            <layout>default</layout>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
 
+        <repository>
+            <id>spring-milestone</id>
+            <name>Spring Milestone</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>spring-snapshot</id>
+            <name>Spring Snapshot</name>
+            <url>https://repo.spring.io/snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://192.168.0.203:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

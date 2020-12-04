@@ -1,6 +1,9 @@
 package com.lind.uaa.jwt.config;
 
-import com.lind.uaa.jwt.three.service.JwtUserService;
+import com.lind.uaa.jwt.event.LogoutSuccessEvent;
+import com.lind.uaa.jwt.service.JwtUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -11,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 
 public class TokenClearLogoutHandler implements LogoutHandler {
 
+    @Autowired
+    ApplicationEventPublisher applicationEventPublisher;
     private JwtUserService jwtUserService;
 
     public TokenClearLogoutHandler(JwtUserService jwtUserService) {
@@ -23,11 +28,13 @@ public class TokenClearLogoutHandler implements LogoutHandler {
     }
 
     protected void clearToken(Authentication authentication) {
-        if(authentication == null)
+        if (authentication == null)
             return;
-        UserDetails user = (UserDetails)authentication.getPrincipal();
-        if(user!=null && user.getUsername()!=null)
-            jwtUserService.deleteUserLoginInfo(user.getUsername());
+        UserDetails user = (UserDetails) authentication.getPrincipal();
+        if (user != null && user.getUsername() != null) {
+            //清除jwt token的策略.
+            applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user));
+        }
     }
 
 }

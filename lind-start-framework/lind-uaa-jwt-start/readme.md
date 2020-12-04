@@ -1,4 +1,12 @@
 # spring-security中核心概念（非oauth2)
+## 登录
+```$xslt
+/login post
+{
+    "username":"Jack",
+    "password":"123456"
+}
+```
 ##  AuthenticationManager
 用户认证的管理类，所有的认证请求（比如login）都会通过提交一个token给AuthenticationManager的authenticate()方法来实现。
 当然事情肯定不是它来做，具体校验动作会由AuthenticationManager将请求转发给具体的实现类来做。根据实现反馈的结果再调用具体的Handler来给用户以反馈。

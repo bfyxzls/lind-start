@@ -1,12 +1,10 @@
 package com.lind.uaa.jwt.service;
 
-import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
-import com.lind.uaa.jwt.three.service.JwtUserService;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

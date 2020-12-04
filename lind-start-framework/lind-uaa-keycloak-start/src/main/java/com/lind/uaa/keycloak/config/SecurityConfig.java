@@ -1,5 +1,6 @@
 package com.lind.uaa.keycloak.config;
 
+import com.lind.uaa.keycloak.scope.ScopeSetInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.keycloak.adapters.KeycloakConfigResolver;
@@ -18,13 +19,17 @@ import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @KeycloakConfiguration
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
-class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
+    @Autowired(required = false)
+    ScopeSetInterceptor scopeSetInterceptor;
     @Value("${uaa.permitAll:''}")
     private String permitAll;
 
@@ -65,5 +70,11 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        if (scopeSetInterceptor != null) {
+            registry.addInterceptor(scopeSetInterceptor).addPathPatterns("/**");
+        }
+    }
 
 }

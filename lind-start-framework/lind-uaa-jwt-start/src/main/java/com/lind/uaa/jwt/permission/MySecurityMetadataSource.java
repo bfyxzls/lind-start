@@ -23,7 +23,7 @@ import java.util.Map;
  * 权限资源管理器
  * 为权限决断器提供支持
  *
- * @author Exrickx
+ * @author lind
  */
 @Slf4j
 @Component
@@ -44,7 +44,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
+        List<? extends ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
         for (ResourcePermission resourcePermission : resourcePermissions) {
             if (StringUtils.isNotBlank(resourcePermission.getTitle())
                     && StringUtils.isNotBlank(resourcePermission.getPath())) {

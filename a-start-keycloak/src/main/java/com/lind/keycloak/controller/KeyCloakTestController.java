@@ -2,6 +2,7 @@ package com.lind.keycloak.controller;
 
 import com.lind.keycloak.dto.UserDTO;
 import com.lind.uaa.keycloak.permission.PermissionService;
+import com.lind.uaa.keycloak.scope.ScopeSet;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +44,13 @@ public class KeyCloakTestController {
     @GetMapping("/products")
     public String products() {
         return "success products!";
+    }
+
+    @ApiOperation("scope资源-scope授权")
+    @GetMapping("/api/news")
+    @ScopeSet("news")
+    public String news() {
+        return "success news!";
     }
 
     @ApiOperation("退出")

@@ -3,7 +3,7 @@ package com.lind.uaa.jwt.config;
 
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
-import com.lind.uaa.jwt.three.service.JwtUserService;
+import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +28,14 @@ import java.util.Arrays;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    UserDetailsService userDetailsService;
+    @Autowired
     JwtUserService jwtUserService;
-
+    @Autowired
+    JwtConfig jwtConfig;
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/menu/**").permitAll()
+                .antMatchers(PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll())).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
@@ -82,8 +85,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected UserDetailsService userDetailsService() {
-        return jwtUserService;
+        return userDetailsService;
     }
+
 
     @Bean
     protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {

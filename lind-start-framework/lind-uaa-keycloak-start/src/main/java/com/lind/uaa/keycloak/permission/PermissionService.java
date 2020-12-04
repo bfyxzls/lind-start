@@ -14,9 +14,9 @@ public interface PermissionService {
     List<ResourcePermission> getAll();
 
     /**
-     * 按着角色ID获取资源权限.
+     * 按着角色Key获取资源权限,与用户没有一毛钱关系，这主要为了客户端对客户端的授权考虑的.
      *
      * @return
      */
-    List<ResourcePermission> getByRoleId(String roleIds);
+    List<ResourcePermission> getByRoleId(String roleKey);
 }

@@ -2,6 +2,7 @@ package com.lind.uaa.keycloak.permission;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -9,6 +10,7 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -28,6 +30,11 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     public static final String ROLE_PREFIX = "ROLE_";
     @Autowired
     PermissionService permissionService;
+    /**
+     * 当前资源服务器地址.
+     */
+    @Value("${keycloak.resource}")
+    private String currentClientId;
 
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
@@ -47,11 +54,12 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
                     return;
                 } else {
                     //通过角色取它的权限列表
-                    List<String> permissionList = permissionService.getByRoleId(userAuth)
-                            .stream()
-                            .map(permission -> permission.getTitle()).collect(Collectors.toList());
-                    if (permissionList.contains(needPerm)) {
-                        return;
+                    List<ResourcePermission> permissionList = permissionService.getByRoleId(userAuth);
+                    if (!CollectionUtils.isEmpty(permissionList)) {
+                        List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
+                        if (authTitles.contains(needPerm)) {
+                            return;
+                        }
                     }
                 }
             }
@@ -61,14 +69,20 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     }
 
     /**
-     * 格式化权限.
+     * 角色格式化，对客户端角色进行加工.
      *
      * @param auth
      * @return
      */
     private String removeRolePrefix(String auth) {
         int index = auth.startsWith(ROLE_PREFIX) ? ROLE_PREFIX.length() : 0;
-        return auth.substring(index);
+        auth = auth.substring(index);
+        if (auth.startsWith(currentClientId)) {
+            //currentClientId.length() + 1表示clientId/role里的/
+            index = auth.startsWith(currentClientId) ? currentClientId.length() + 1 : 0;
+            return auth.substring(index);
+        }
+        return auth;
     }
 
     @Override
