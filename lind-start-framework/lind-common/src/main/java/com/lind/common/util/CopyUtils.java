@@ -34,6 +34,27 @@ public class CopyUtils {
     }
 
     /**
+     * 类型转换.
+     *
+     * @param src
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    public static <T> T copyProperties(Object src, Class<T> clazz) {
+        T t = null;
+        try {
+            t = clazz.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        BeanUtils.copyProperties(src, t, getNullPropertyNames(src));
+        return t;
+    }
+
+    /**
      * 复制集合.
      *
      * @param src

@@ -45,13 +45,15 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
         List<? extends ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
-        for (ResourcePermission resourcePermission : resourcePermissions) {
-            if (StringUtils.isNotBlank(resourcePermission.getTitle())
-                    && StringUtils.isNotBlank(resourcePermission.getPath())) {
-                configAttributes = new ArrayList<>();
-                cfg = new SecurityConfig(resourcePermission.getTitle());//权限名称就是权限表里的title字段
-                configAttributes.add(cfg);
-                map.put(resourcePermission.getPath(), configAttributes);
+        if (resourcePermissions != null) {
+            for (ResourcePermission resourcePermission : resourcePermissions) {
+                if (StringUtils.isNotBlank(resourcePermission.getTitle())
+                        && StringUtils.isNotBlank(resourcePermission.getPath())) {
+                    configAttributes = new ArrayList<>();
+                    cfg = new SecurityConfig(resourcePermission.getTitle());//权限名称就是权限表里的title字段
+                    configAttributes.add(cfg);
+                    map.put(resourcePermission.getPath(), configAttributes);
+                }
             }
         }
     }

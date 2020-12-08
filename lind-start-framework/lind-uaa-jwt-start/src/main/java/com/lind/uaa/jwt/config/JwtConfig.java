@@ -15,18 +15,18 @@ public class JwtConfig {
     /**
      * jwt超时时间(分).
      */
-    private Integer expiresAt;
+    private Long expiresAt;
     /**
      * URL白名单.
      */
-    private String permitAll;
+    private String[] permitAll;
 
     /**
      * init.
      */
     public JwtConfig() {
         this.secret = "abc123";
-        this.expiresAt = 60;
-        this.permitAll = "";
+        this.expiresAt = 60L;
+        this.permitAll = new String[]{};
     }
 }

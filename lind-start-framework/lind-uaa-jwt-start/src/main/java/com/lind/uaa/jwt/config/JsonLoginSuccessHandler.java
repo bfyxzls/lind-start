@@ -3,6 +3,9 @@ package com.lind.uaa.jwt.config;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.entity.JwtUserAdapter;
+import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.entity.TokenResult;
 import com.lind.uaa.jwt.event.LoginSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
@@ -23,8 +26,11 @@ import java.io.IOException;
 public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    JwtConfig jwtConfig;
     private JwtUserService jwtUserService;
-
+@Autowired
+RedisService redisService;
     public JsonLoginSuccessHandler(JwtUserService jwtUserService) {
         this.jwtUserService = jwtUserService;
     }
@@ -41,6 +47,8 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         tokenResult.setSubject(jwt.getSubject());
         tokenResult.setToken(token);
         response.getWriter().write(JSON.toJSONString(tokenResult));
+        redisService.set("user::" + jwt.getSubject(), new JwtUserAdapter((ResourceUser) authentication.getPrincipal()), jwtConfig.getExpiresAt() * 60);
+
         // 登录成功后发布一个事件,外部可以订阅它.
         applicationEventPublisher.publishEvent(new LoginSuccessEvent(tokenResult));
     }

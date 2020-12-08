@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.header.Header;
 import org.springframework.security.web.header.writers.StaticHeadersWriter;
@@ -33,9 +35,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     JwtUserService jwtUserService;
     @Autowired
     JwtConfig jwtConfig;
+
     protected void configure(HttpSecurity http) throws Exception {
+        String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
         http.authorizeRequests()
-                .antMatchers(PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll())).permitAll()
+                .antMatchers(urls).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable()
@@ -62,7 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider()).authenticationProvider(jwtAuthenticationProvider());
+        auth.authenticationProvider(daoAuthenticationProvider())
+                .authenticationProvider(jwtAuthenticationProvider());
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
     @Bean
@@ -80,6 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //这里会默认使用BCryptPasswordEncoder比对加密后的密码，注意要跟createUser时保持一致
         DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
         daoProvider.setUserDetailsService(userDetailsService());
+        daoProvider.setPasswordEncoder(passwordEncoder());
         return daoProvider;
     }
 

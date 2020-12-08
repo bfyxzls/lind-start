@@ -27,13 +27,6 @@ public interface ResourcePermissionService {
     List<? extends ResourcePermission> getAllByType(Integer type);
 
     /**
-     * 按着角色ID获取资源权限.
-     *
-     * @return
-     */
-    List<? extends ResourcePermission> getByRoleId(String roleId);
-
-    /**
      * 按着用户ID获取资源权限.
      *
      * @return

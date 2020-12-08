@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface ResourceUser extends UserDetails {
     String getEmail();
-
+    String getId();
     /**
      * 当前用户的权限.
      *

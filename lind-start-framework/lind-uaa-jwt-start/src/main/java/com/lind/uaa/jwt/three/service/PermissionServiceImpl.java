@@ -30,11 +30,6 @@ public class PermissionServiceImpl implements ResourcePermissionService {
     }
 
     @Override
-    public List<Permission> getByRoleId(String roleId) {
-        return getAll();
-    }
-
-    @Override
     public List<Permission> getByUserId(String userId) {
         return list.stream().filter(o -> o.getId() == "2" || o.getId() == "3").collect(Collectors.toList());
     }

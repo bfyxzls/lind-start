@@ -6,15 +6,14 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.JwtConfig;
+import com.lind.uaa.jwt.entity.JwtUserAdapter;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -28,11 +27,8 @@ public class JwtUserService {
     UserDetailsService userDetailsService;
     @Autowired
     JwtConfig jwtConfig;
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+    @Autowired
+    RedisService redisService;
 
     /**
      * 带着token请求时，通过jwt里的username获取用户对象.
@@ -41,12 +37,17 @@ public class JwtUserService {
      * @return
      */
     public UserDetails getUserLoginInfo(String username) {
-        UserDetails user = userDetailsService.loadUserByUsername(username);
+        if (!redisService.hasKey("user::" + username)) {
+            return null;
+        }
+        JwtUserAdapter user = (JwtUserAdapter) redisService.get("user::" + username);
+
         return User.builder()
                 .username(user.getUsername())
                 .password(jwtConfig.getSecret())
                 .authorities(user.getAuthorities())
                 .build();
+
     }
 
     /**
@@ -57,7 +58,7 @@ public class JwtUserService {
      */
     public String generateJwtJoinUser(UserDetails userDetails) {
         Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
-        Date date = DateUtils.addMinutes(new Date(), jwtConfig.getExpiresAt());
+        Date date = DateUtils.addMinutes(new Date(), Integer.parseInt(jwtConfig.getExpiresAt().toString()));
         JWTCreator.Builder jwt = JWT.create()
                 .withSubject(userDetails.getUsername())
                 .withClaim(CLAIM_USER, JSON.toJSONString(userDetails))

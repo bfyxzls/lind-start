@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.config;
 
+import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.event.LogoutSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ public class TokenClearLogoutHandler implements LogoutHandler {
 
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    RedisService redisService;
     private JwtUserService jwtUserService;
 
     public TokenClearLogoutHandler(JwtUserService jwtUserService) {
@@ -33,6 +36,8 @@ public class TokenClearLogoutHandler implements LogoutHandler {
         UserDetails user = (UserDetails) authentication.getPrincipal();
         if (user != null && user.getUsername() != null) {
             //清除jwt token的策略.
+            redisService.del("user::" + authentication.getName());
+
             applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user));
         }
     }

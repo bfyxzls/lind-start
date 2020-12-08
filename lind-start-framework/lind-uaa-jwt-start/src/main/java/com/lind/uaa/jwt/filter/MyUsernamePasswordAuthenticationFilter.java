@@ -21,7 +21,6 @@ import java.nio.charset.Charset;
  * 1.拦截登陆接口,进行认证.
  */
 public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
     /**
      * 使用默认的登录接口.
      */
@@ -52,7 +51,6 @@ public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticati
         if (password == null)
             password = "";
         username = username.trim();
-
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
         // 对账号和密码进行认证

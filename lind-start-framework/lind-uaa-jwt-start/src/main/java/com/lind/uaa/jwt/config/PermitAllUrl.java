@@ -20,12 +20,12 @@ public final class PermitAllUrl {
     /**
      * 监控中心和swagger需要访问的url
      */
-    static final List<String> ENDPOINTS = ImmutableList.of("/actuator/**",
+    static final List<String> ENDPOINTS = ImmutableList.of(
+            "/actuator/**",
             "/v2/api-docs/**",
             "/doc.html",
             "/swagger-ui.html",
             "/swagger-resources/**",
-            "/webjars/**",
             "/webjars/**",
             "/oauth/token",
             "/oauth/test",
