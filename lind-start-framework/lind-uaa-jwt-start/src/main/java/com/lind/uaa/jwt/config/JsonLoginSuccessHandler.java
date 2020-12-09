@@ -3,12 +3,13 @@ package com.lind.uaa.jwt.config;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
-import com.lind.uaa.jwt.entity.JwtUserAdapter;
-import com.lind.uaa.jwt.entity.ResourceUser;
+import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.entity.TokenResult;
 import com.lind.uaa.jwt.event.LoginSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
+import com.lind.uaa.jwt.service.ResourcePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
@@ -19,18 +20,23 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 3. 登陆成功,返回jwt.
  */
 public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
+
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
     @Autowired
     JwtConfig jwtConfig;
+    @Autowired
+    RedisService redisService;
+    @Autowired
+    ResourcePermissionService resourcePermissionService;
     private JwtUserService jwtUserService;
-@Autowired
-RedisService redisService;
+
     public JsonLoginSuccessHandler(JwtUserService jwtUserService) {
         this.jwtUserService = jwtUserService;
     }
@@ -47,8 +53,17 @@ RedisService redisService;
         tokenResult.setSubject(jwt.getSubject());
         tokenResult.setToken(token);
         response.getWriter().write(JSON.toJSONString(tokenResult));
-        redisService.set("user::" + jwt.getSubject(), new JwtUserAdapter((ResourceUser) authentication.getPrincipal()), jwtConfig.getExpiresAt() * 60);
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        // 以json字符进行保存,方法按指定接口的不同实现类去反序列化
+        redisService.set(Constants.USER + jwt.getSubject(), objectMapper.writeValueAsString(authentication.getPrincipal()), jwtConfig.getExpiresAt() * 60);
+        // 初始化权限表到redis
+        if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
+            //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
+            List<? extends ResourcePermission> all = resourcePermissionService.getAll();
+            if (all != null) {
+                redisService.set(Constants.PERMISSION_ALL, new ObjectMapper().writeValueAsString(all));
+            }
+        }
         // 登录成功后发布一个事件,外部可以订阅它.
         applicationEventPublisher.publishEvent(new LoginSuccessEvent(tokenResult));
     }

@@ -1,11 +1,14 @@
 package com.lind.uaa.jwt.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
 import java.util.List;
 
 /**
  * 权限.
  */
+@JsonDeserialize(using = ResourcePermissionSerializer.class)
 public interface ResourcePermission extends Serializable {
     String getId();
 
@@ -33,11 +36,7 @@ public interface ResourcePermission extends Serializable {
      */
     Integer getType();
 
-    ResourcePermission getParent();
+    List<? extends ResourcePermission> getSons();
 
-    void setParent(ResourcePermission resourcePermission);
-
-    List<ResourcePermission> getSons();
-
-    void setSons(List<ResourcePermission> resourcePermissions);
+    void setSons(List<? extends ResourcePermission> resourcePermissions);
 }

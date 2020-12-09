@@ -19,27 +19,12 @@ public interface ResourcePermissionService {
     List<? extends ResourcePermission> getAll();
 
     /**
-     * 通过类型得到权限列表.
-     *
-     * @param type
-     * @return
-     */
-    List<? extends ResourcePermission> getAllByType(Integer type);
-
-    /**
-     * 按着用户ID获取资源权限.
-     *
-     * @return
-     */
-    List<? extends ResourcePermission> getByUserId(String userId);
-
-    /**
      * 得到树型结构.
      *
      * @return
      */
     default List<? extends ResourcePermission> getTreeMenus() {
-        List<ResourcePermission> ones = getAllByType(0).stream()
+        List<ResourcePermission> ones = getAll().stream()
                 .filter(o -> o.getParentId() == null)
                 .collect(Collectors.toList());
         getTreeMenuRzSons(ones);

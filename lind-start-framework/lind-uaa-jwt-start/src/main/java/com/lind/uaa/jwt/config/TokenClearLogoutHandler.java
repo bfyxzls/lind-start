@@ -36,7 +36,7 @@ public class TokenClearLogoutHandler implements LogoutHandler {
         UserDetails user = (UserDetails) authentication.getPrincipal();
         if (user != null && user.getUsername() != null) {
             //清除jwt token的策略.
-            redisService.del("user::" + authentication.getName());
+            redisService.del(Constants.USER + authentication.getName());
 
             applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user));
         }

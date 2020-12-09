@@ -37,5 +37,5 @@ public class Permission implements ResourcePermission {
     /**
      * 子菜单列表.
      */
-    private List<ResourcePermission> sons;
+    private List<? extends ResourcePermission> sons;
 }

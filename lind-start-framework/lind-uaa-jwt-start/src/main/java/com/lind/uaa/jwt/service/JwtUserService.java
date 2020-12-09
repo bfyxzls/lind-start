@@ -6,9 +6,12 @@ import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.JwtConfig;
-import com.lind.uaa.jwt.entity.JwtUserAdapter;
+import com.lind.uaa.jwt.entity.ResourceUser;
+import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -36,12 +39,13 @@ public class JwtUserService {
      * @param username
      * @return
      */
+    @SneakyThrows
     public UserDetails getUserLoginInfo(String username) {
-        if (!redisService.hasKey("user::" + username)) {
+        if (!redisService.hasKey(Constants.USER + username)) {
             return null;
         }
-        JwtUserAdapter user = (JwtUserAdapter) redisService.get("user::" + username);
-
+        String userStr =  redisService.get(Constants.USER + username).toString();
+        ResourceUser user = new ObjectMapper().readValue(userStr, ResourceUser.class);
         return User.builder()
                 .username(user.getUsername())
                 .password(jwtConfig.getSecret())

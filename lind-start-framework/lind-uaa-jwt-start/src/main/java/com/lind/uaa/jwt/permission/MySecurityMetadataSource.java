@@ -1,7 +1,9 @@
 package com.lind.uaa.jwt.permission;
 
+import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,22 +31,23 @@ import java.util.Map;
 @Component
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-
     @Autowired
-    private ResourcePermissionService oauthPermissionService;
-
+    RedisService redisService;
+    @Autowired
+    private ResourcePermissionService resourcePermissionService;
     private Map<String, Collection<ConfigAttribute>> map = null;
 
     /**
      * 加载权限表中所有操作请求权限
      */
+    @SneakyThrows
     public void loadResourceDefine() {
 
         map = new HashMap<>(16);
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<? extends ResourcePermission> resourcePermissions = oauthPermissionService.getAll();
+        List<? extends ResourcePermission> resourcePermissions = resourcePermissionService.getAll();
         if (resourcePermissions != null) {
             for (ResourcePermission resourcePermission : resourcePermissions) {
                 if (StringUtils.isNotBlank(resourcePermission.getTitle())

@@ -1,7 +1,6 @@
 package com.lind.uaa.jwt.three.service;
 
 import com.lind.uaa.jwt.service.ResourcePermissionService;
-import com.lind.uaa.jwt.three.entity.Permission;
 import com.lind.uaa.jwt.three.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Component
 public class UserServiceImpl implements UserDetailsService {
@@ -36,7 +34,6 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode("123456"));
         user.setUsername("Jack");
         user.setResourceRoles(Arrays.asList(new Role("1", "管理员")));
-        user.setResourcePermissions((List<Permission>) resourcePermissionService.getByUserId("1"));
         return user;
     }
 }

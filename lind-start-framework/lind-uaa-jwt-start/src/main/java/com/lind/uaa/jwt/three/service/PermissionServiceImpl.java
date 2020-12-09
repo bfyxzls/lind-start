@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class PermissionServiceImpl implements ResourcePermissionService {
@@ -22,15 +21,5 @@ public class PermissionServiceImpl implements ResourcePermissionService {
     @Override
     public List<Permission> getAll() {
         return list;
-    }
-
-    @Override
-    public List<Permission> getAllByType(Integer type) {
-        return getAll().stream().filter(o -> o.getType().equals(type)).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<Permission> getByUserId(String userId) {
-        return list.stream().filter(o -> o.getId() == "2" || o.getId() == "3").collect(Collectors.toList());
     }
 }
