@@ -1,11 +1,17 @@
 package com.lind.common;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -20,9 +26,13 @@ import java.util.List;
 
 @Slf4j
 public class JacksonTest extends AbstractTest {
+
+    /**
+     * 字符串序列化
+     */
     @SneakyThrows
     @Test
-    public void serializer() {
+    public void stringJackson() {
         DefaultResourceUser user = fromJson("jack.json", DefaultResourceUser.class);
         log.info("user:{}", user.getUsername());
         for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
@@ -31,6 +41,37 @@ public class JacksonTest extends AbstractTest {
 
     }
 
+    /**
+     * 具体类型序列化
+     */
+    @SneakyThrows
+    @Test
+    public void objectJackson() {
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance ,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.WRAPPER_ARRAY);
+        User user = new User();
+        user.setUsername("lind");
+        user.setEmail("zzl@sina.com");
+        String msg = om.writeValueAsString(user);
+        log.info(msg);
+        /**
+         * ["com.lind.common.JacksonTest$User",{"username":"lind","email":"zzl@sina.com","authorities":null}]
+         */
+    }
+
+    /**
+     * 序列化为具体类型，`无法反序列化接口`，即你用什么类型序列化的，就用什么类型反序列化
+     */
+    @SneakyThrows
+    @Test
+    public void objectJacksonRead() {
+        User user = fromJsonType("redis.json", User.class);
+        log.info("user:{}", user.getUsername());
+    }
 
     @JsonDeserialize(using = DefaultResourceUserSerializer.class)
     public interface DefaultResourceUser {
@@ -39,6 +80,15 @@ public class JacksonTest extends AbstractTest {
         String getEmail();
 
         Collection<? extends GrantedAuthority> getAuthorities();
+    }
+
+    @Data
+    public static class User {
+        private String username;
+
+        private String email;
+
+        private Collection<? extends GrantedAuthority> authorities;
     }
 
     public static class DefaultResourceUserSerializer extends JsonDeserializer<DefaultResourceUser> {

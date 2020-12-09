@@ -1,6 +1,10 @@
 package com.lind.common;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import org.junit.runner.RunWith;
@@ -49,5 +53,16 @@ public abstract class AbstractTest {
     public <T> T fromJson(String path, Class<T> cls) throws IOException {
         return objectMapper
                 .readValue(this.getStringFromJson(path, Charsets.UTF_8), cls);
+    }
+
+    public <T> T fromJsonType(String path, Class<T> cls) throws IOException {
+        String json = this.getStringFromJson(path, Charsets.UTF_8);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.WRAPPER_ARRAY);
+        return om.readValue(json, cls);
     }
 }
