@@ -3,10 +3,11 @@ package com.lind.activiti.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.lind.activiti.util.Constant;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
+import com.lind.activiti.util.Constant;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.bpmn.converter.BpmnXMLConverter;
 import org.activiti.bpmn.model.BpmnModel;
@@ -68,6 +69,16 @@ public class ModelController {
     @Autowired
     ActReNodeRepository actReNodeRepository;
 
+    @SneakyThrows
+    @ApiOperation("建立工作流模型")
+    @GetMapping("/redirect")
+    public void rerei(HttpServletRequest request, HttpServletResponse response) {
+       response.sendRedirect("http://www.baidu.com");
+    }
+    @GetMapping("/a404")
+    public void a404(HttpServletResponse response){
+        response.setStatus(404);
+    }
     /**
      * 建立页面，同时也保存.
      */
@@ -106,6 +117,7 @@ public class ModelController {
 
     /**
      * 删除模型.
+     *
      * @param modelId
      * @param response
      * @throws IOException

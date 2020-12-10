@@ -15,6 +15,29 @@
                 location.reload();
             })
         }
+
+
+        //测试一下http status
+        $.ajax({
+            type: "get",
+            url: "/redirect",
+            statusCode: {
+                401: function () {
+                    console.log("401");
+                },
+                404: function () {
+                    console.log("404");
+                },
+                200: function () {
+                    console.log("OK");
+                },
+                302: function () {//获取不到，直接为目标页的状态，目标页返回是404，则前端接收就是404,当然如果目标页存在跨域的情况，那前端是没有状态返回的
+                    alert("302");
+                    console.log("302");
+                }
+            }
+        });
+
     </script>
     <ol class="breadcrumb">
         <li>工作流</li>
@@ -22,7 +45,7 @@
     </ol>
     <p>
         <a target="_blank" class="btn btn-primary btn-sm" th:href="@{/model/create}">添加模型</a>
-        <a  class="btn btn-success btn-sm" th:href="@{/view/deployByFile}">上传模型</a>
+        <a class="btn btn-success btn-sm" th:href="@{/view/deployByFile}">上传模型</a>
     </p>
     <!--遍历数组-->
     <table class="table table-bordered table_number">

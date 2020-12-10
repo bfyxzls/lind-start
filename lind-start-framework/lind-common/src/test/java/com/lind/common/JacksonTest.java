@@ -15,10 +15,10 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -89,6 +89,46 @@ public class JacksonTest extends AbstractTest {
         private String email;
 
         private Collection<? extends GrantedAuthority> authorities;
+    }
+    public interface GrantedAuthority extends Serializable {
+        String getAuthority();
+    }
+    public static  class SimpleGrantedAuthority implements GrantedAuthority {
+
+        private final String role;
+
+        public SimpleGrantedAuthority(String role) {
+            Assert.hasText(role, "A granted authority textual representation is required");
+            this.role = role;
+        }
+
+        @Override
+        public String getAuthority() {
+            return role;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+
+            if (obj instanceof SimpleGrantedAuthority) {
+                return role.equals(((SimpleGrantedAuthority) obj).role);
+            }
+
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return this.role.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            return this.role;
+        }
     }
 
     public static class DefaultResourceUserSerializer extends JsonDeserializer<DefaultResourceUser> {

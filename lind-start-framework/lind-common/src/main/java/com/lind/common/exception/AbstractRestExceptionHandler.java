@@ -4,7 +4,6 @@ import com.lind.common.util.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -117,18 +116,5 @@ public class AbstractRestExceptionHandler {
         log.error(message);
         return CommonResult.clientFailure(message);
     }
-
-    /**
-     * AccessDeniedException 权限不足403.
-     *
-     * @return CommonResult
-     */
-    @ExceptionHandler(value = AccessDeniedException.class)
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public CommonResult handleAccessDeniedException() {
-        return CommonResult.failure(HttpCodeEnum.FORBIDDEN);
-    }
-
-
 
 }
