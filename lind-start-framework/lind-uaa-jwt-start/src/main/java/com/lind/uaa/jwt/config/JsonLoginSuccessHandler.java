@@ -53,9 +53,6 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         tokenResult.setSubject(jwt.getSubject());
         tokenResult.setToken(token);
         response.getWriter().write(JSON.toJSONString(tokenResult));
-        ObjectMapper objectMapper = new ObjectMapper();
-        // 以json字符进行保存,方法按指定接口的不同实现类去反序列化
-        redisService.set(Constants.USER + jwt.getSubject(), objectMapper.writeValueAsString(authentication.getPrincipal()), jwtConfig.getExpiresAt() * 60);
         // 初始化权限表到redis
         if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
             //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis

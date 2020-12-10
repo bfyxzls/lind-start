@@ -1,5 +1,7 @@
 package com.lind.uaa.jwt.three.entity;
 
+import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.entity.ResourceRole;
 import com.lind.uaa.jwt.entity.ResourceUser;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +18,6 @@ public class User implements ResourceUser {
     private String username;
     private String password;
     private String email;
-    private List<Permission> resourcePermissions;
-    private List<Role> resourceRoles;
+    private List<? extends ResourcePermission> resourcePermissions;
+    private List<? extends ResourceRole> resourceRoles;
 }

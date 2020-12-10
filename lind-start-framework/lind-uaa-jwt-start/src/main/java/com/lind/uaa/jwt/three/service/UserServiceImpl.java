@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserDetailsService {
         user.setPassword(passwordEncoder.encode("123456"));
         user.setUsername("Jack");
         user.setResourceRoles(Arrays.asList(new Role("1", "管理员")));
+        user.setResourcePermissions(resourcePermissionService.getAll());
         return user;
     }
 }

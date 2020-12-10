@@ -27,7 +27,10 @@ public class ResourceUserSerializer extends JsonDeserializer<ResourceUser> {
         ResourceUser userAccountAuthentication = new ResourceUser() {
             @Override
             public String getEmail() {
-                return node.get("email").asText();
+                if (node.get("email") != null) {
+                    return node.get("email").asText();
+                }
+                return null;
             }
 
             @Override

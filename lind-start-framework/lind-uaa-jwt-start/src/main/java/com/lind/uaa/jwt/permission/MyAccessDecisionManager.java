@@ -24,8 +24,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
-        log.info("configAttributes:{}", configAttributes);
-        log.info("auth:{}", authentication.getAuthorities());
+        log.info("path permission:{}", configAttributes);
+        log.info("current user auth:{}", authentication.getAuthorities());
         if (configAttributes == null) {
             return;
         }
