@@ -11,6 +11,6 @@ keycloak:
   use-resource-role-mappings: false #如果设置为true，则适配器将在令牌内部查找用户的应用程序级角色映射。 如果为false，它将查看用户角色映射的领域级别。 这是可选的。 默认值为false。
   cors: true
 uaa:
-  permitAll: /users,/kafka,/kafka/create,/doc.html,/api/news,/redirect
-  callbackUri: http://localhost:9090/token/authorizationCodeLogin
+  permitAll: /users,/kafka,/kafka/create,/doc.html,/api/news,/redirect,/index
+  callbackUri: http://localhost:9090/token/authorizationCodeLogin #认证中心地址
 

@@ -15,7 +15,7 @@ public class PermissionServiceImpl implements PermissionService {
     public List<ResourcePermission> getAll() {
         return Arrays.asList(
                 new Permission("商品管理", "/products"),
-                new Permission("首页", "/index")
+                new Permission("用户管理", "/users")
         );
     }
 

@@ -32,13 +32,15 @@ public class ScopeSetInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws AccessDeniedException {
         // scope授权范围
-        if (((HandlerMethod) handler).getMethodAnnotation(ScopeSet.class) != null) {
-            log.info("ScopeSet HandlerInterceptor:[{}].[{}]",
-                    ((HandlerMethod) handler).getBean().getClass().getName(),
-                    ((HandlerMethod) handler).getMethod().getName());
-            String value = ((HandlerMethod) handler).getMethodAnnotation(ScopeSet.class).value();
-            if (!Arrays.asList(SecurityUser.getScope()).contains(value)) {
-                throw new AccessDeniedException("抱歉，您没有访问权限");
+        if (handler instanceof HandlerMethod) {
+            if (((HandlerMethod) handler).getMethodAnnotation(ScopeSet.class) != null) {
+                log.info("ScopeSet HandlerInterceptor:[{}].[{}]",
+                        ((HandlerMethod) handler).getBean().getClass().getName(),
+                        ((HandlerMethod) handler).getMethod().getName());
+                String value = ((HandlerMethod) handler).getMethodAnnotation(ScopeSet.class).value();
+                if (!Arrays.asList(SecurityUser.getScope()).contains(value)) {
+                    throw new AccessDeniedException("抱歉，您没有访问权限");
+                }
             }
         }
         return true;

@@ -12,5 +12,5 @@ keycloak:
   cors: true
 uaa:
   permitAll: /users,/kafka,/kafka/create,/doc.html
-  callbackUri: http://localhost:9090/token/authorizationCodeLogin
+  callbackUri: http://localhost:9090/token/authorizationCodeLogin #认证中心地址
 

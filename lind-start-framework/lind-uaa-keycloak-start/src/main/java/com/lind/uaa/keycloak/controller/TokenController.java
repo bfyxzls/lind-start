@@ -102,7 +102,6 @@ public class TokenController {
             map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
             map.add("redirect_uri", callbackUri);
             writeToken(response, map, headers);
-            return;
         }
 
     }
