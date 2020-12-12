@@ -20,7 +20,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <artifactId>pkulaw-mybatis-start</artifactId>
+    <artifactId>lind-mybatis-start</artifactId>
 
     <dependencies>
         <!-- mybatis plus -->
