@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.three.event;
 
+import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.entity.TokenResult;
 import com.lind.uaa.jwt.event.LoginSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
@@ -20,7 +21,7 @@ public class LoginSuccessListener implements ApplicationListener<LoginSuccessEve
         TokenResult tokenResult = (TokenResult) event.getSource();
         System.out.println("login success:" + tokenResult.getSubject() + ",token:" + tokenResult.getToken());
         log.info("login success\nname:{}\ntoken:{}\n", tokenResult.getSubject(), tokenResult.getToken());
-        User userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken(), User.class);
+        ResourceUser userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken(), ResourceUser.class);
         log.info("user:{}", userDetails);
     }
 }

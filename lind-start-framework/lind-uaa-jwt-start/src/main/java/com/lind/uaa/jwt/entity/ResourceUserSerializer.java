@@ -1,75 +1,22 @@
 package com.lind.uaa.jwt.entity;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.ObjectCodec;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
 
-/**
- * DefaultResourceUser反序列化工具.
- */
-public class ResourceUserSerializer extends JsonDeserializer<ResourceUser> {
-
+public class ResourceUserSerializer extends JsonSerializer<ResourceUser> {
     @Override
-    public ResourceUser deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-            throws IOException {
-        ObjectCodec oc = jsonParser.getCodec();
-        JsonNode node = oc.readTree(jsonParser);
-        ResourceUser userAccountAuthentication = new ResourceUser() {
-            @Override
-            public String getEmail() {
-                if (node.get("email") != null) {
-                    return node.get("email").asText();
-                }
-                return null;
-            }
-
-            @Override
-            public String getId() {
-                return node.get("id").asText();
-            }
-
-            @Override
-            public List<? extends ResourcePermission> getResourcePermissions() {
-                return null;
-            }
-
-            @Override
-            public List<? extends ResourceRole> getResourceRoles() {
-                return null;
-            }
-
-            @Override
-            public String getPassword() {
-                return node.get("password").asText();
-            }
-
-            @Override
-            public String getUsername() {
-                return node.get("username").asText();
-            }
-
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-                Iterator<JsonNode> elements = node.get("authorities").elements();
-                while (elements.hasNext()) {
-                    JsonNode next = elements.next();
-                    JsonNode authority = next.get("authority");
-                    simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.asText()));
-                }
-                return simpleGrantedAuthorities;
-            }
-        };
-        return userAccountAuthentication;
+    public void serialize(ResourceUser resourceUser, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+        if (resourceUser != null) {
+            jsonGenerator.writeStartObject();
+            jsonGenerator.writeStringField("id", resourceUser.getId());
+            jsonGenerator.writeStringField("username", resourceUser.getUsername());
+            jsonGenerator.writeStringField("email", resourceUser.getEmail());
+            jsonGenerator.writeStringField("authorities", new ObjectMapper().writeValueAsString(resourceUser.getAuthorities()));
+            jsonGenerator.writeEndObject();
+        }
     }
 }

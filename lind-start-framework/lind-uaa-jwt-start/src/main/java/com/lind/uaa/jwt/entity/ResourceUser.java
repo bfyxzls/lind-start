@@ -1,6 +1,7 @@
 package com.lind.uaa.jwt.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,10 +14,13 @@ import java.util.List;
 /**
  * 用户.
  */
-@JsonDeserialize(using = ResourceUserSerializer.class)
+@JsonDeserialize(using = ResourceUserDeserializer.class)
+@JsonSerialize(using = ResourceUserSerializer.class)
 public interface ResourceUser extends UserDetails {
     String getEmail();
+
     String getId();
+
     /**
      * 当前用户的权限.
      *
