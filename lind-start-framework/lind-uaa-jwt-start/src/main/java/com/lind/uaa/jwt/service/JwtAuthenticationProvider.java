@@ -40,7 +40,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             throw new NonceExpiredException("Token expires");
         String username = jwt.getSubject();
         UserDetails user = new ObjectMapper().readValue(jwt.getClaim("user").asString(), ResourceUser.class);
-        if (user == null || user.getPassword() == null)
+        if (user == null)
             throw new NonceExpiredException("Token expires");
         try {
             // 验证jwt token的合法性.

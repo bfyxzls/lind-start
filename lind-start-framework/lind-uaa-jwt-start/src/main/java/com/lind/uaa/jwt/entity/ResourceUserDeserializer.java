@@ -50,7 +50,7 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
 
             @Override
             public String getPassword() {
-                return node.get("password").asText();
+                return null;
             }
 
             @Override
@@ -64,7 +64,7 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
                 Iterator<JsonNode> elements = node.get("authorities").elements();
                 while (elements.hasNext()) {
                     JsonNode next = elements.next();
-                    JsonNode authority = next.get("authority");
+                    JsonNode authority = next.get("name");
                     simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.asText()));
                 }
                 return simpleGrantedAuthorities;

@@ -38,4 +38,9 @@ public class DefaultResourcePermissionService implements ResourcePermissionServi
 
         return null;
     }
+
+    @Override
+    public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
+        return null;
+    }
 }
