@@ -1,6 +1,9 @@
 package com.lind.uaa.jwt.permission;
 
+import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.ConfigAttribute;
@@ -8,9 +11,12 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 权限管理决断器
@@ -20,6 +26,9 @@ import java.util.Iterator;
 @Slf4j
 @Component
 public class MyAccessDecisionManager implements AccessDecisionManager {
+
+    @Autowired
+    ResourcePermissionService resourcePermissionService;
 
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes)
@@ -35,8 +44,19 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
             String needPerm = c.getAttribute();
             for (GrantedAuthority ga : authentication.getAuthorities()) {
                 // 匹配用户拥有的ga 和 系统中的needPerm
-                if (needPerm.trim().equals(ga.getAuthority())) {
+                String userAuth = ga.getAuthority();
+
+                if (needPerm.trim().equals(userAuth)) {
                     return;
+                } else {
+                    //通过角色取它的权限列表
+                    List<? extends ResourcePermission> permissionList = resourcePermissionService.getAllByRoleId(userAuth);
+                    if (!CollectionUtils.isEmpty(permissionList)) {
+                        List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
+                        if (authTitles.contains(needPerm)) {
+                            return;
+                        }
+                    }
                 }
             }
         }

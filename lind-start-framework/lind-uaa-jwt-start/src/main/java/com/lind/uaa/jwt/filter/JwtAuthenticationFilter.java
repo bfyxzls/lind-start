@@ -73,6 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = getJwtToken(request);
             if (StringUtils.isNotBlank(token)) {
                 JwtAuthenticationToken authToken = new JwtAuthenticationToken(JWT.decode(token));
+                //JwtAuthenticationProvider.authenticate
                 authResult = this.getAuthenticationManager().authenticate(authToken);
             } else {
                 failed = new InsufficientAuthenticationException("JWT is Empty");

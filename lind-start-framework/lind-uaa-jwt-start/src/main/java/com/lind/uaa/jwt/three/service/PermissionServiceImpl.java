@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.three.service;
 
+import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import com.lind.uaa.jwt.three.entity.Permission;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,11 @@ public class PermissionServiceImpl implements ResourcePermissionService {
 
     @Override
     public List<Permission> getAll() {
+        return list;
+    }
+
+    @Override
+    public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
         return list;
     }
 }

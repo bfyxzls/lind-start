@@ -45,7 +45,6 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
                                         Authentication authentication) throws IOException, ServletException {
         String token = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
-        response.setHeader("Authorization", token);
         response.setHeader("Content-Type", "application/json;charset=utf-8");
         DecodedJWT jwt = JWT.decode(token);
         TokenResult tokenResult = new TokenResult();
