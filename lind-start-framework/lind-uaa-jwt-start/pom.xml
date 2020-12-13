@@ -99,4 +99,45 @@
             <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.4.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 过滤器排除配置文件-->
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>**/*.properties</exclude>
+                                        <exclude>com/lind/uaa/jwt/three/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <artifactSet>
+                                <!-- 捆绑包含,目标项目不需要再手动引用这个包了 -->
+                                <includes>
+                                    <include>com.baomidou:*</include>
+                                </includes>
+                                <!-- 排除调所有的properties配置文件-->
+<!--                                 <excludes>-->
+<!--                                     <exclude>com.lind.uaa.jwt.three:*</exclude>-->
+<!--                                 </excludes>-->
+                            </artifactSet>
+                            <createSourcesJar>true</createSourcesJar>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

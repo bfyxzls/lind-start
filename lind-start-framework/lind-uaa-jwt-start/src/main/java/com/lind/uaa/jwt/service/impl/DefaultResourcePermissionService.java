@@ -39,8 +39,16 @@ public class DefaultResourcePermissionService implements ResourcePermissionServi
         return null;
     }
 
+    @SneakyThrows
     @Override
     public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
+        if (redisService.hasKey(Constants.ROLE_PERMISSION + "::" + roleId)) {
+            log.info("从缓存读取role-permission数据");
+            return new ObjectMapper().readValue(
+                    redisService.get(Constants.ROLE_PERMISSION + "::" + roleId).toString(),
+                    new TypeReference<List<ResourcePermission>>() {
+                    });
+        }
         return null;
     }
 }

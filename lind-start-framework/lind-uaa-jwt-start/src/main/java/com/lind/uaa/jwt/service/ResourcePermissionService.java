@@ -37,7 +37,7 @@ public interface ResourcePermissionService {
      * @param roleId
      * @return
      */
-    List<? extends ResourcePermission>  getAllByRoleId(String roleId);
+    List<? extends ResourcePermission> getAllByRoleId(String roleId);
 
     /**
      * 递归找子孙.
