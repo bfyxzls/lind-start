@@ -2,6 +2,7 @@ package com.lind.uaa.jwt.config;
 
 
 import com.lind.uaa.jwt.filter.MyUsernamePasswordAuthenticationFilter;
+import com.lind.uaa.jwt.handler.HttpStatusLoginFailureHandler;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

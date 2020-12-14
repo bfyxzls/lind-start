@@ -1,6 +1,7 @@
 package com.lind.uaa.jwt.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.lind.uaa.jwt.entity.serialize.ResourcePermissionDeserializer;
 
 import java.io.Serializable;
 import java.util.List;

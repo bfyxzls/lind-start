@@ -1,10 +1,14 @@
-package com.lind.uaa.jwt.entity;
+package com.lind.uaa.jwt.entity.serialize;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.entity.ResourceRole;
+import com.lind.uaa.jwt.entity.ResourceUser;
+import com.lind.uaa.jwt.entity.RoleGrantedAuthority;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.IOException;
@@ -40,16 +44,6 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
             }
 
             @Override
-            public List<? extends ResourcePermission> getResourcePermissions() {
-                return null;
-            }
-
-            @Override
-            public void setResourcePermissions(List<? extends ResourcePermission> resourcePermission) {
-
-            }
-
-            @Override
             public List<? extends ResourceRole> getResourceRoles() {
                 return this.resourceRoles;
             }
@@ -69,19 +63,23 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
                 return node.get("username").asText();
             }
 
+            /**
+             * 重写getAuthorities，主要在AccessDecisionManager.decide中使用.
+             * @return
+             */
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
-                List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+                List<GrantedAuthority> roleGrantedAuthority = new ArrayList<>();
                 if (node.get("authorities") != null) {
                     Iterator<JsonNode> elements = node.get("authorities").elements();
                     while (elements.hasNext()) {
                         JsonNode next = elements.next();
                         String id = next.get("id").asText();
                         String name = next.get("name").asText();
-                        simpleGrantedAuthorities.add(new RoleGrantedAuthority(name, id));
+                        roleGrantedAuthority.add(new RoleGrantedAuthority(name, id));
                     }
                 }
-                return simpleGrantedAuthorities;
+                return roleGrantedAuthority;
             }
         };
         return userAccountAuthentication;

@@ -1,8 +1,10 @@
-package com.lind.uaa.jwt.entity;
+package com.lind.uaa.jwt.entity.serialize;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.lind.uaa.jwt.entity.ResourceRole;
+import com.lind.uaa.jwt.entity.ResourceUser;
 import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
@@ -16,6 +18,8 @@ public class ResourceUserSerializer extends JsonSerializer<ResourceUser> {
             jsonGenerator.writeStringField("username", resourceUser.getUsername());
             jsonGenerator.writeStringField("email", resourceUser.getEmail());
             jsonGenerator.writeStringField("password", resourceUser.getPassword());
+
+            // 重写getAuthorities，主要在AccessDecisionManager.decide中使用.
             if (!CollectionUtils.isEmpty(resourceUser.getResourceRoles())) {
                 jsonGenerator.writeArrayFieldStart("authorities");
                 for (ResourceRole role : resourceUser.getResourceRoles()) {

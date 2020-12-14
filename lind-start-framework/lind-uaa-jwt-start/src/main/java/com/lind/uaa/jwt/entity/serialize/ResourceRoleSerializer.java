@@ -1,8 +1,9 @@
-package com.lind.uaa.jwt.entity;
+package com.lind.uaa.jwt.entity.serialize;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.lind.uaa.jwt.entity.ResourceRole;
 
 import java.io.IOException;
 

@@ -1,10 +1,12 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.jwt.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
+import com.lind.uaa.jwt.config.JwtConfig;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.entity.RoleGrantedAuthority;

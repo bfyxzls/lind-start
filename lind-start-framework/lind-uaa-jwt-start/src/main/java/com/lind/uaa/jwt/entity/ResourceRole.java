@@ -2,6 +2,8 @@ package com.lind.uaa.jwt.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lind.uaa.jwt.entity.serialize.ResourceRoleDeserializer;
+import com.lind.uaa.jwt.entity.serialize.ResourceRoleSerializer;
 
 import java.io.Serializable;
 

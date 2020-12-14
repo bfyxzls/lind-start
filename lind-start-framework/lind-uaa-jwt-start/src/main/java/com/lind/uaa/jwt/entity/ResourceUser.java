@@ -2,6 +2,8 @@ package com.lind.uaa.jwt.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lind.uaa.jwt.entity.serialize.ResourceUserDeserializer;
+import com.lind.uaa.jwt.entity.serialize.ResourceUserSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,17 +20,7 @@ import java.util.List;
 @JsonSerialize(using = ResourceUserSerializer.class)
 public interface ResourceUser extends UserDetails {
     String getEmail();
-
     String getId();
-
-    /**
-     * 当前用户的权限.
-     *
-     * @return
-     */
-    List<? extends ResourcePermission> getResourcePermissions();
-
-    void setResourcePermissions(List<? extends ResourcePermission> resourcePermission);
 
     /**
      * 当前用户的角色.
@@ -42,13 +34,12 @@ public interface ResourceUser extends UserDetails {
     default Collection<? extends GrantedAuthority> getAuthorities() {
 
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<? extends ResourcePermission> resourcePermissions = getResourcePermissions();
-        // 添加请求权限
+        List<? extends ResourceRole> resourcePermissions = getResourceRoles();
+        // 添加权限（角色）
         if (resourcePermissions != null && resourcePermissions.size() > 0) {
-            for (ResourcePermission resourcePermission : resourcePermissions) {
-                if (StringUtils.isNotBlank(resourcePermission.getTitle())
-                        && StringUtils.isNotBlank(resourcePermission.getPath())) {
-                    authorityList.add(new SimpleGrantedAuthority(resourcePermission.getTitle()));
+            for (ResourceRole resourceRole : resourcePermissions) {
+                if (StringUtils.isNotBlank(resourceRole.getName())) {
+                    authorityList.add(new SimpleGrantedAuthority(resourceRole.getName()));
                 }
             }
         }

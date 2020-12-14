@@ -1,6 +1,7 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.jwt.handler;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.jwt.handler;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

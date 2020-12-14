@@ -1,6 +1,7 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.jwt.handler;
 
 import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.event.LogoutSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;
