@@ -34,7 +34,7 @@ public class TokenController {
     /**
      * 回调地址，需要在授权服务器配置.
      */
-    @Value("${uaa.callbackUri:http://localhost:9090/token/authorizationCodeLogin}")
+    @Value("${uaa.callbackUri:http://localhost:9090/token/authorizationCodeRedirect}")
     private String callbackUri;
 
     private void writeToken(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
@@ -52,6 +52,18 @@ public class TokenController {
         //使用OutputStream流向客户端输出字节数组
         response.setHeader("Content-Type", "application/json;charset=utf-8");
         outputStream.write(dataByteArr);
+    }
+
+    private void writeTokenRedirect(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+        //获取OutputStream输出流
+        OutputStream outputStream = response.getOutputStream();
+        Map maps = restTemplate.postForEntity(
+                getTokenUri(),
+                request,
+                Map.class).getBody();
+        response.sendRedirect("http://localhost:9090/index?token=" + maps.get("access_token"));
     }
 
     /**
@@ -79,7 +91,7 @@ public class TokenController {
     }
 
     /**
-     * 授权码认证.
+     * 授权码认证-统一登陆的回调地址通过它获取token.
      *
      * @param code
      * @param response
@@ -106,6 +118,26 @@ public class TokenController {
 
     }
 
+    @ApiOperation("授权码认证")
+    @GetMapping(path = "/authorizationCodeRedirect")
+    public void authorizationCodeRedirect(@RequestParam(required = false) String code, HttpServletResponse response) throws IOException {
+        if (StringUtils.isBlank(code)) {
+            // step1
+            response.sendRedirect(getCodeUri());
+        } else {
+            // step2
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("grant_type", "authorization_code");
+            map.add("code", code);
+            map.add("client_id", keycloakSpringBootProperties.getResource());
+            map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
+            map.add("redirect_uri", callbackUri);
+            writeTokenRedirect(response, map, headers);
+        }
+
+    }
     /**
      * 客户端认证.
      *

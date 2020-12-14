@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * DefaultSourcePermission反序列化工具
  */
-public class ResourcePermissionSerializer extends JsonDeserializer<ResourcePermission> {
+public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePermission> {
     @Override
     public ResourcePermission deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         ObjectCodec oc = jsonParser.getCodec();

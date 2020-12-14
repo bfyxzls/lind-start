@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 权限.
  */
-@JsonDeserialize(using = ResourcePermissionSerializer.class)
+@JsonDeserialize(using = ResourcePermissionDeserializer.class)
 public interface ResourcePermission extends Serializable {
     String getId();
 

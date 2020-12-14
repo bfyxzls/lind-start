@@ -28,12 +28,16 @@ public interface ResourceUser extends UserDetails {
      */
     List<? extends ResourcePermission> getResourcePermissions();
 
+    void setResourcePermissions(List<? extends ResourcePermission> resourcePermission);
+
     /**
      * 当前用户的角色.
      *
      * @return
      */
     List<? extends ResourceRole> getResourceRoles();
+
+    void setResourceRoles(List<? extends ResourceRole> resourceRoles);
 
     default Collection<? extends GrantedAuthority> getAuthorities() {
 

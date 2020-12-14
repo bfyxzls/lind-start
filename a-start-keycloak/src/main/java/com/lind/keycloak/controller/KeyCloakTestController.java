@@ -40,11 +40,6 @@ public class KeyCloakTestController {
         return ResponseEntity.ok(userDTO);
     }
 
-    @GetMapping("/index")
-    public String index() {
-        return "success index！";
-    }
-
     @ApiOperation("产品列表-role授权")
     @GetMapping("/products")
     public String products() {

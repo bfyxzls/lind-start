@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +24,8 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);
         ResourceUser userAccountAuthentication = new ResourceUser() {
+            List<? extends ResourceRole> resourceRoles;
+
             @Override
             public String getEmail() {
                 if (node.get("email") != null) {
@@ -44,13 +45,23 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
             }
 
             @Override
+            public void setResourcePermissions(List<? extends ResourcePermission> resourcePermission) {
+
+            }
+
+            @Override
             public List<? extends ResourceRole> getResourceRoles() {
-                return null;
+                return this.resourceRoles;
+            }
+
+            @Override
+            public void setResourceRoles(List<? extends ResourceRole> resourceRoles) {
+                this.resourceRoles = resourceRoles;
             }
 
             @Override
             public String getPassword() {
-                return null;
+                return node.get("password").asText();
             }
 
             @Override
@@ -61,11 +72,14 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
                 List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-                Iterator<JsonNode> elements = node.get("authorities").elements();
-                while (elements.hasNext()) {
-                    JsonNode next = elements.next();
-                    JsonNode authority = next.get("name");
-                    simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.asText()));
+                if (node.get("authorities") != null) {
+                    Iterator<JsonNode> elements = node.get("authorities").elements();
+                    while (elements.hasNext()) {
+                        JsonNode next = elements.next();
+                        String id = next.get("id").asText();
+                        String name = next.get("name").asText();
+                        simpleGrantedAuthorities.add(new RoleGrantedAuthority(name, id));
+                    }
                 }
                 return simpleGrantedAuthorities;
             }

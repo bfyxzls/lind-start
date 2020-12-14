@@ -15,6 +15,7 @@ public class ResourceUserSerializer extends JsonSerializer<ResourceUser> {
             jsonGenerator.writeStringField("id", resourceUser.getId());
             jsonGenerator.writeStringField("username", resourceUser.getUsername());
             jsonGenerator.writeStringField("email", resourceUser.getEmail());
+            jsonGenerator.writeStringField("password", resourceUser.getPassword());
             if (!CollectionUtils.isEmpty(resourceUser.getResourceRoles())) {
                 jsonGenerator.writeArrayFieldStart("authorities");
                 for (ResourceRole role : resourceUser.getResourceRoles()) {
