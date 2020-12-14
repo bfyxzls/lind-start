@@ -1,6 +1,9 @@
 package com.lind.uaa.jwt.permission;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.SneakyThrows;
@@ -15,11 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 权限资源管理器
@@ -47,7 +46,17 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<? extends ResourcePermission> resourcePermissions = resourcePermissionService.getAll();
+        if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
+            //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
+            List<? extends ResourcePermission> all = resourcePermissionService.getAll();
+            if (all != null) {
+                redisService.set(Constants.PERMISSION_ALL, new ObjectMapper().writeValueAsString(all));
+            }
+        }
+        List<? extends ResourcePermission> resourcePermissions =
+                new ObjectMapper().readValue(redisService.get(Constants.PERMISSION_ALL).toString(),
+                        new TypeReference<List<ResourcePermission>>() {
+                });
         if (resourcePermissions != null) {
             for (ResourcePermission resourcePermission : resourcePermissions) {
                 if (StringUtils.isNotBlank(resourcePermission.getTitle())

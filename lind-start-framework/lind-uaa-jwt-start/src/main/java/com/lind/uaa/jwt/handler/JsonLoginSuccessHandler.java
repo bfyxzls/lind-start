@@ -58,14 +58,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
         tokenResult.setSubject(jwt.getSubject());
         tokenResult.setToken(token);
         response.getWriter().write(JSON.toJSONString(tokenResult));
-        // 权限表缓存
-        if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
-            //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
-            List<? extends ResourcePermission> all = resourcePermissionService.getAll();
-            if (all != null) {
-                redisService.set(Constants.PERMISSION_ALL, new ObjectMapper().writeValueAsString(all));
-            }
-        }
+
         ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token, ResourceUser.class);
         //角色权限缓存
         if (!CollectionUtils.isEmpty(userDetails.getAuthorities())) {
