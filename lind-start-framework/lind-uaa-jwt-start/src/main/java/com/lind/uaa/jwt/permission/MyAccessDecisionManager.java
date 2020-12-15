@@ -1,11 +1,9 @@
 package com.lind.uaa.jwt.permission;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
-import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.entity.RoleGrantedAuthority;
+import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +31,8 @@ import java.util.stream.Collectors;
 public class MyAccessDecisionManager implements AccessDecisionManager {
     @Autowired
     RedisService redisService;
+    @Autowired
+    ResourcePermissionService resourcePermissionService;
 
     @SneakyThrows
     @Override
@@ -55,20 +55,14 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
                         return;
                     } else {
                         //通过角色取它的权限列表
-                        String rolePermissionKey = Constants.ROLE_PERMISSION.concat(userAuth.getId());
-                        if (redisService.hasKey(rolePermissionKey)) {
-                            List<? extends ResourcePermission> permissionList =
-                                    new ObjectMapper().readValue(
-                                            redisService.get(rolePermissionKey).toString(),
-                                            new TypeReference<List<ResourcePermission>>() {
-                                            });
-                            if (!CollectionUtils.isEmpty(permissionList)) {
-                                List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
-                                if (authTitles.contains(needPerm)) {
-                                    return;
-                                }
+                        List<? extends ResourcePermission> permissionList = resourcePermissionService.getAllByRoleId(userAuth.getId());
+                        if (!CollectionUtils.isEmpty(permissionList)) {
+                            List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
+                            if (authTitles.contains(needPerm)) {
+                                return;
                             }
                         }
+
                     }
                 }
             }

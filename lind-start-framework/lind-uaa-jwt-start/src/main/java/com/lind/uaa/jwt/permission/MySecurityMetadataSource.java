@@ -1,6 +1,5 @@
 package com.lind.uaa.jwt.permission;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
@@ -18,7 +17,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 权限资源管理器
@@ -46,17 +49,17 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求，授权服务登陆后会写到redis，其它服务直接从redis里读数据
+        List<? extends ResourcePermission> resourcePermissions;
         if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
             //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
-            List<? extends ResourcePermission> all = resourcePermissionService.getAll();
-            if (all != null) {
-                redisService.set(Constants.PERMISSION_ALL, new ObjectMapper().writeValueAsString(all));
+            resourcePermissions = resourcePermissionService.getAll();
+            if (resourcePermissions != null) {
+                redisService.set(Constants.PERMISSION_ALL,
+                        new ObjectMapper().writeValueAsString(resourcePermissions));
             }
+        } else {
+            resourcePermissions = resourcePermissionService.getAll();
         }
-        List<? extends ResourcePermission> resourcePermissions =
-                new ObjectMapper().readValue(redisService.get(Constants.PERMISSION_ALL).toString(),
-                        new TypeReference<List<ResourcePermission>>() {
-                });
         if (resourcePermissions != null) {
             for (ResourcePermission resourcePermission : resourcePermissions) {
                 if (StringUtils.isNotBlank(resourcePermission.getTitle())
