@@ -32,7 +32,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
     @Autowired
     RedisService redisService;
-    @Autowired
+    @Autowired(required = false)
     private ResourcePermissionService resourcePermissionService;
     private Map<String, Collection<ConfigAttribute>> map = null;
 
@@ -45,7 +45,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         map = new HashMap<>(16);
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
-        // 获取启用的权限操作请求
+        // 获取启用的权限操作请求，授权服务登陆后会写到redis，其它服务直接从redis里读数据
         if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
             //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
             List<? extends ResourcePermission> all = resourcePermissionService.getAll();

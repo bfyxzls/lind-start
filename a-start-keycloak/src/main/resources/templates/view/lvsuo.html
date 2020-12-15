@@ -17,29 +17,25 @@
         }
 
         $(function () {
-            var token = getQueryVariable("token");
-            if (token == "" || token == undefined || token == false) {
-                token = $.cookie('access_token');
+            var token=getQueryVariable("token");
+            if(token=="" || token==undefined){
+                token=$.cookie('access_token');
             }
-            console.log(token);
             $.ajax({
                 type: "get",
                 headers: {"Authorization": "bearer " + token},
-                url: "/products",
+                url: "/data/lvsuo",
                 statusCode: {
                     401: function () {
                         alert("401未授权...将去登录")
-                        location.href = "http://localhost:9090/auth/realms/demo/protocol/openid-connect/auth?scope=openid&response_type=code&client_id=democlient&redirect_uri=http://localhost:9090/token/authorizationCodeLogin";
                     },
                     403: function () {
                         alert("403无权访问");
                     },
-                    200: function () {
-
+                    200: function(){
                     }
                 },
                 success: function (data) {
-                    $.cookie('access_token', getQueryVariable("token"));
                     $("#data-info").html(data);
                 }
             })

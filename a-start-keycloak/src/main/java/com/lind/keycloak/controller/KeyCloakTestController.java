@@ -40,10 +40,28 @@ public class KeyCloakTestController {
         return ResponseEntity.ok(userDTO);
     }
 
+    @ApiOperation("司法案例")
+    @GetMapping("/data/sifa")
+    public String sifa() {
+        return "司法案例-数据...";
+    }
+
+    @ApiOperation("律所实务")
+    @GetMapping("/data/lvsuo")
+    public String lvsuo() {
+        return "律所实务-数据...";
+    }
+
+    @ApiOperation("法学期刊")
+    @GetMapping("/data/faxue")
+    public String faxue() {
+        return "法学期刊-数据...";
+    }
+
     @ApiOperation("产品列表-role授权")
     @GetMapping("/products")
     public String products() {
-        return "success products!";
+        return "首页数据...";
     }
 
     @ApiOperation("scope资源-scope授权")

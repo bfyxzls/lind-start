@@ -4,11 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>activiti管理器</title>
+    <title>北大法宝</title>
     <!-- 资源文件夹形式引入/META-INF/resources/webjars/  -->
     <link th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}" rel="stylesheet">
-    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script th:src="@{js/jquery.min.js}"></script>
     <script th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.js}"></script>
+    <script th:src="@{js/jquery.cookie.js}"></script>
     <script type="text/ecmascript">
         function getUrlRelativePath() {
             var url = document.location.toString();
@@ -23,7 +24,7 @@
 
         $(function () {
             //高亮导航
-            var o = $(".nav").find("li").find("a[href$='"+getUrlRelativePath()+"']");
+            var o = $(".nav").find("li").find("a[href$='" + getUrlRelativePath() + "']");
             o.closest("li").addClass("active").siblings().removeClass("active");
         });
 
@@ -33,15 +34,15 @@
 <header class="header">
     <div class="container-fluid">
         <ul class="nav nav-pills">
-            <li role="presentation"><a th:href="@{/view/model/list}">模型列表</a></li>
-            <li role="presentation"><a th:href="@{/view/deployment/list}">部署流程列表</a></li>
-            <li role="presentation"><a th:href="@{/view/execution/list}">正在运行的流程</a></li>
-            <li role="presentation"><a th:href="@{/view/history/list}">历史流程</a></li>
+            <li role="presentation"><a th:href="@{/index}" }>首页</a></li>
+            <li role="presentation"><a th:href="@{/sifa}">司法案例</a></li>
+            <li role="presentation"><a th:href="@{/lvsuo}">律所实务</a></li>
+            <li role="presentation"><a th:href="@{/faxue}">法学期刊</a></li>
         </ul>
     </div>
 </header>
 
-<div class="container-fluid"  layout:fragment="content">
+<div class="container-fluid" layout:fragment="content">
 
 </div>
 

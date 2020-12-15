@@ -36,6 +36,8 @@ public class TokenController {
      */
     @Value("${uaa.callbackUri:http://localhost:9090/token/authorizationCodeRedirect}")
     private String callbackUri;
+    @Value("${uaa.redirectUri:http://localhost:9090/index}")
+    private String redirectUri;
 
     private void writeToken(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -63,7 +65,7 @@ public class TokenController {
                 getTokenUri(),
                 request,
                 Map.class).getBody();
-        response.sendRedirect("http://localhost:9090/index?token=" + maps.get("access_token"));
+        response.sendRedirect(redirectUri + "?token=" + maps.get("access_token"));
     }
 
     /**
@@ -138,6 +140,7 @@ public class TokenController {
         }
 
     }
+
     /**
      * 客户端认证.
      *

@@ -7,13 +7,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * 这个是为非授权服务提供的默认实现，不做任务事.
+ */
 @Service
 @Slf4j
 @ConditionalOnMissingBean(UserDetailsService.class)
 public class DefaultUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        log.info("具体服务应该先实现ResourcePermissionService接口，其它服务从缓存读取");
         return null;
     }
 }

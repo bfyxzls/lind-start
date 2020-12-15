@@ -1,7 +1,12 @@
 package com.lind.uaa.jwt.permission;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.entity.ResourcePermission;
-import com.lind.uaa.jwt.service.ResourcePermissionService;
+import com.lind.uaa.jwt.entity.RoleGrantedAuthority;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDecisionManager;
@@ -26,10 +31,10 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class MyAccessDecisionManager implements AccessDecisionManager {
-
     @Autowired
-    ResourcePermissionService resourcePermissionService;
+    RedisService redisService;
 
+    @SneakyThrows
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
@@ -44,17 +49,25 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
             String needPerm = c.getAttribute();
             for (GrantedAuthority ga : authentication.getAuthorities()) {
                 // 匹配用户拥有的ga 和 系统中的needPerm
-                String userAuth = ga.getAuthority();
-
-                if (needPerm.trim().equals(userAuth)) {
-                    return;
-                } else {
-                    //通过角色取它的权限列表
-                    List<? extends ResourcePermission> permissionList = resourcePermissionService.getAllByRoleId(userAuth);
-                    if (!CollectionUtils.isEmpty(permissionList)) {
-                        List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
-                        if (authTitles.contains(needPerm)) {
-                            return;
+                if (ga instanceof RoleGrantedAuthority) {
+                    RoleGrantedAuthority userAuth = (RoleGrantedAuthority) ga;
+                    if (needPerm.trim().equals(userAuth.getName())) {
+                        return;
+                    } else {
+                        //通过角色取它的权限列表
+                        String rolePermissionKey = Constants.ROLE_PERMISSION.concat(userAuth.getId());
+                        if (redisService.hasKey(rolePermissionKey)) {
+                            List<? extends ResourcePermission> permissionList =
+                                    new ObjectMapper().readValue(
+                                            redisService.get(rolePermissionKey).toString(),
+                                            new TypeReference<List<ResourcePermission>>() {
+                                            });
+                            if (!CollectionUtils.isEmpty(permissionList)) {
+                                List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
+                                if (authTitles.contains(needPerm)) {
+                                    return;
+                                }
+                            }
                         }
                     }
                 }

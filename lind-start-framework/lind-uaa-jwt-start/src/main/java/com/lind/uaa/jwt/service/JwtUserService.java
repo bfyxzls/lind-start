@@ -25,8 +25,6 @@ import java.util.Date;
 public class JwtUserService {
     public static final String CLAIM_USER = "user";
     @Autowired
-    ResourcePermissionService resourcePermissionService;
-    @Autowired
     UserDetailsService userDetailsService;
     @Autowired
     JwtConfig jwtConfig;
