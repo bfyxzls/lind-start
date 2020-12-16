@@ -9,6 +9,9 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
     "password":"123456"
 }
 ```
+## 使用
+1. 认证和授权的服务引用lind-uaa-jwt-start之后，需要实现ResourcePermissionService和UserDetailsService接口
+2. 其它业务服务直接引用lind-uaa-jwt-start之后，通过SecurityUtil来获取当前登陆的用户信息
 ##  AuthenticationManager
 用户认证的管理类，所有的认证请求（比如login）都会通过提交一个token给AuthenticationManager的authenticate()方法来实现。
 当然事情肯定不是它来做，具体校验动作会由AuthenticationManager将请求转发给具体的实现类来做。根据实现反馈的结果再调用具体的Handler来给用户以反馈。

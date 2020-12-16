@@ -28,19 +28,16 @@
                 url: "/products",
                 statusCode: {
                     401: function () {
-                        alert("401未授权...将去登录")
-                        location.href = "http://localhost:9090/auth/realms/demo/protocol/openid-connect/auth?scope=openid&response_type=code&client_id=democlient&redirect_uri=http://localhost:9090/token/authorizationCodeLogin";
+                        alert("401未授权...将去登录...后端无法在ajax模式下完成重定向...需要在前端重定向")
+                        // location.href = "http://localhost:9090/auth/realms/demo/protocol/openid-connect/auth?scope=openid&response_type=code&client_id=democlient&redirect_uri=http://localhost:9090/token/authorizationCodeLogin";
                     },
                     403: function () {
                         alert("403无权访问");
-                    },
-                    200: function () {
-
                     }
                 },
-                success: function (data) {
-                    $.cookie('access_token', getQueryVariable("token"));
-                    $("#data-info").html(data);
+                success: function (XMLHttpRequest, textStatus,data) {
+                        $.cookie('access_token', getQueryVariable("token"));
+                        $("#data-info").html(data);
                 }
             })
         });

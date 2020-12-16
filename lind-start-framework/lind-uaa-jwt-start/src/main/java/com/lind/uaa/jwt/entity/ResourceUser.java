@@ -23,21 +23,29 @@ public interface ResourceUser extends UserDetails {
     String getId();
 
     /**
-     * 当前用户的角色.
+     * 返回用户角色.
      *
      * @return
      */
     List<? extends ResourceRole> getResourceRoles();
 
+    /**
+     * 设置用户角色.
+     * @param resourceRoles
+     */
     void setResourceRoles(List<? extends ResourceRole> resourceRoles);
 
+    /**
+     * 将用户角色进行返回
+     *
+     * @return
+     */
     default Collection<? extends GrantedAuthority> getAuthorities() {
-
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<? extends ResourceRole> resourcePermissions = getResourceRoles();
+        List<? extends ResourceRole> role = getResourceRoles();
         // 添加权限（角色）
-        if (resourcePermissions != null && resourcePermissions.size() > 0) {
-            for (ResourceRole resourceRole : resourcePermissions) {
+        if (role != null && role.size() > 0) {
+            for (ResourceRole resourceRole : role) {
                 if (StringUtils.isNotBlank(resourceRole.getName())) {
                     authorityList.add(new SimpleGrantedAuthority(resourceRole.getName()));
                 }

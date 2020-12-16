@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,20 +35,19 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 
     @SneakyThrows
     @Override
-    public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> configAttributes)
+    public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
         log.info("path permission:{}", configAttributes);
-        log.info("current user auth:{}", authentication.getAuthorities());
+        log.info("current user role:{}", authentication.getAuthorities());
         if (configAttributes == null) {
             return;
         }
-        Iterator<ConfigAttribute> iterator = configAttributes.iterator();
-        while (iterator.hasNext()) {
-            ConfigAttribute c = iterator.next();
-            String needPerm = c.getAttribute();
+        // 遍历当前path所需的权限进行断言
+        for (ConfigAttribute configAttribute : configAttributes) {
             for (GrantedAuthority ga : authentication.getAuthorities()) {
                 // 匹配用户拥有的ga 和 系统中的needPerm
                 if (ga instanceof RoleGrantedAuthority) {
+                    String needPerm = configAttribute.getAttribute();
                     RoleGrantedAuthority userAuth = (RoleGrantedAuthority) ga;
                     if (needPerm.trim().equals(userAuth.getName())) {
                         return;
@@ -65,6 +63,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 
                     }
                 }
+
             }
         }
         throw new AccessDeniedException("抱歉，您没有访问权限");
