@@ -6,4 +6,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.uaa.keycloak.permission.MyAccessDecisionManager,\
   com.lind.uaa.keycloak.permission.MyFilterSecurityInterceptor,\
   com.lind.uaa.keycloak.permission.MySecurityMetadataSource,\
-  com.lind.uaa.keycloak.controller.TokenController
+  com.lind.uaa.keycloak.controller.TokenController,\
+  com.lind.uaa.keycloak.config.UaaProperties

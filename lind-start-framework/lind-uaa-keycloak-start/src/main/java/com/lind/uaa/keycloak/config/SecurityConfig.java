@@ -66,7 +66,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic().and().csrf().disable();
+                .httpBasic().and().csrf().disable().cors();
 
     }
 

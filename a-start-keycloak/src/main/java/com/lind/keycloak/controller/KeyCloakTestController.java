@@ -4,6 +4,7 @@ import com.lind.keycloak.dto.UserDTO;
 import com.lind.uaa.keycloak.permission.PermissionService;
 import com.lind.uaa.keycloak.scope.ScopeSet;
 import io.swagger.annotations.ApiOperation;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,6 +81,12 @@ public class KeyCloakTestController {
         } catch (ServletException e) {
             return "logout fail";
         }
+    }
+
+    @SneakyThrows
+    @GetMapping("/ok")
+    public String ok() {
+        return "ok";
     }
 
     @ApiOperation("当前用户的角色对应的权限")
