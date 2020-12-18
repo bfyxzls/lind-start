@@ -1,7 +1,10 @@
 package com.lind.keycloak.controller;
 
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class ViewController {
@@ -9,6 +12,13 @@ public class ViewController {
     @GetMapping("/index")
     public String index() {
         return "view/index";
+    }
+
+
+    @SneakyThrows
+    @GetMapping("/redirect")
+    public void index(HttpServletResponse response) {
+        response.sendRedirect("http://192.168.3.181:9090/ok");
     }
 
     @GetMapping("/sifa")

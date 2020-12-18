@@ -1,4 +1,4 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.keycloak.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties("jwt")
-public class JwtConfig {
+public class UaaProperties {
     /**
      * jwt算法密钥.
      */
@@ -24,7 +24,7 @@ public class JwtConfig {
     /**
      * init.
      */
-    public JwtConfig() {
+    public UaaProperties() {
         this.secret = "abc123";
         this.expiresAt = 60L;
         this.permitAll = new String[]{};
