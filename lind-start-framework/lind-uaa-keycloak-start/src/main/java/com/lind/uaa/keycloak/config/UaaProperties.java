@@ -9,13 +9,13 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("uaa")
 public class UaaProperties {
     /**
-     * jwt算法密钥.
+     *  
      */
     private String callbackUri;
     /**
-     * jwt超时时间(分).
+     *
      */
-    private Long redirectUri;
+    private String redirectUri;
     /**
      * URL白名单.
      */
