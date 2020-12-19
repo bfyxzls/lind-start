@@ -11,7 +11,7 @@ import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcess
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;
 
@@ -22,11 +22,9 @@ public class KeycloackAuthenticationProcessingFilterPostProcessor implements Bea
 
     private static final Logger logger = LoggerFactory.getLogger(KeycloackAuthenticationProcessingFilterPostProcessor.class);
 
-    /**
-     * 回调地址，需要在授权服务器配置.
-     */
-    @Value("${uaa.callbackUri:http://localhost:9090/token/authorizationCodeLogin}")
-    private String callbackUri;
+
+    @Autowired
+    UaaProperties uaaProperties;
 
     private void process(KeycloakAuthenticationProcessingFilter filter) {
         filter.setRequestAuthenticatorFactory(new SpringSecurityRequestAuthenticatorFactory() {
@@ -40,7 +38,7 @@ public class KeycloackAuthenticationProcessingFilterPostProcessor implements Bea
 
                             @Override
                             protected String getRequestUrl() {
-                                return callbackUri;
+                                return uaaProperties.getCallbackUri();
                             }
                         };
                     }
