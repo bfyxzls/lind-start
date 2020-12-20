@@ -96,6 +96,7 @@
                     <password>#</password><!-- #表示启动时不需要密码，事实上对于代码混淆来说，这个密码没什么用，它只是一个启动密码 -->
                     <packages>com.lind.common</packages><!-- 加密的包名，多个包用逗号分开-->
                     <excludes>org.spring</excludes>
+                    <cfgfiles>spring.factories</cfgfiles>
                 </configuration>
                 <executions>
                     <execution>
