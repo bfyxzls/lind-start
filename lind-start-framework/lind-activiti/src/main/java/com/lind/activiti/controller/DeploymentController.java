@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableMap;
 import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
+import com.lind.activiti.vo.ProcessDefinitionVo;
 import com.lind.activiti.vo.ProcessNodeVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -268,4 +269,18 @@ public class DeploymentController {
         saveProcessNode(procDefId, nodeId, roleId, defaultUserId, reject, response);
         response.sendRedirect("/view/deployment/list");
     }
+
+    @ApiOperation("按模块的key获取当前被激活的流程定义ID")
+    @RequestMapping(value = "/deployment/processDefinition", method = RequestMethod.GET)
+    public ProcessDefinitionVo getProcessDefinitionByKey(String key) {
+        ProcessDefinition deployment = processEngine.getRepositoryService().createProcessDefinitionQuery().active()
+                .processDefinitionKey(key).singleResult();
+        ProcessDefinitionVo processDefinitionVo = new ProcessDefinitionVo();
+        processDefinitionVo.setCategory(deployment.getCategory());
+        processDefinitionVo.setKey(deployment.getKey());
+        processDefinitionVo.setName(deployment.getName());
+        processDefinitionVo.setProDefId(deployment.getId());
+        return processDefinitionVo;
+    }
+
 }

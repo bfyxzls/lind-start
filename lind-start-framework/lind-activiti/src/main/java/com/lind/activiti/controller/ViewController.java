@@ -110,7 +110,7 @@ public class ViewController {
 
     @GetMapping("deployByFile")
     public String deployByFile() {
-        return "/view/model-upload";
+        return "view/model-upload";
     }
 
     /**

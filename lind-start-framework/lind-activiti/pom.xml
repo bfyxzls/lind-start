@@ -89,8 +89,9 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-swagger-start</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

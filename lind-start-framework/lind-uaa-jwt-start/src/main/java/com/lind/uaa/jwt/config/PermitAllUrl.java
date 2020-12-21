@@ -30,7 +30,17 @@ public final class PermitAllUrl {
             "/oauth/token",
             "/oauth/test",
             "/token/**",
-            "/login");
+            "/login",
+            "/view/**",
+            "/deployByFile*",
+            "/modeler.html*",
+            "/editor-app/**",
+            "/model/**",
+            "/deployment/**",
+            "/task/**",
+            "/execution/**",
+            "/editor/**",
+            "/logo,png");
 
     /**
      * 需要放开权限的url
