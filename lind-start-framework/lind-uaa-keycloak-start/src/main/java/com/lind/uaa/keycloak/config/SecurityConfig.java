@@ -30,9 +30,8 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
 
     @Autowired(required = false)
     ScopeSetInterceptor scopeSetInterceptor;
-    @Value("${uaa.permitAll:''}")
-    private String permitAll;
-
+    @Autowired
+    UaaProperties uaaProperties;
     /**
      * Registers the MyKeycloakAuthenticationProvider with the authentication manager.
      */
@@ -59,7 +58,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String[] urls = StringUtils.split(permitAll, ",");
+        String[] urls = uaaProperties.getPermitAll();
         super.configure(http);
         http.authorizeRequests()
                 .antMatchers(PermitAllUrl.permitAllUrl(urls)).permitAll()

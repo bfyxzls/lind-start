@@ -1,6 +1,7 @@
 package com.lind.uaa.keycloak.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.lind.uaa.keycloak.config.UaaProperties;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -12,11 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -31,13 +28,9 @@ public class TokenController {
 
     @Autowired
     KeycloakSpringBootProperties keycloakSpringBootProperties;
-    /**
-     * 回调地址，需要在授权服务器配置.
-     */
-    @Value("${uaa.callbackUri:http://localhost:9090/token/authorizationCodeRedirect}")
-    private String callbackUri;
-    @Value("${uaa.redirectUri:http://localhost:9090/index}")
-    private String redirectUri;
+    @Autowired
+    UaaProperties uaaProperties;
+
 
     private void writeToken(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -65,7 +58,7 @@ public class TokenController {
                 getTokenUri(),
                 request,
                 Map.class).getBody();
-        response.sendRedirect(redirectUri + "?token=" + maps.get("access_token"));
+        response.sendRedirect(uaaProperties.getRedirectUri() + "?token=" + maps.get("access_token"));
     }
 
     /**
@@ -78,7 +71,7 @@ public class TokenController {
                 keycloakSpringBootProperties.getAuthServerUrl(),
                 keycloakSpringBootProperties.getRealm(),
                 keycloakSpringBootProperties.getResource(),
-                callbackUri);
+                uaaProperties.getCallbackUri());
     }
 
     /**
@@ -114,7 +107,7 @@ public class TokenController {
             map.add("code", code);
             map.add("client_id", keycloakSpringBootProperties.getResource());
             map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
-            map.add("redirect_uri", callbackUri);
+            map.add("redirect_uri", uaaProperties.getCallbackUri());
             writeToken(response, map, headers);
         }
 
@@ -135,7 +128,7 @@ public class TokenController {
             map.add("code", code);
             map.add("client_id", keycloakSpringBootProperties.getResource());
             map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
-            map.add("redirect_uri", callbackUri);
+            map.add("redirect_uri", uaaProperties.getCallbackUri());
             writeTokenRedirect(response, map, headers);
         }
 

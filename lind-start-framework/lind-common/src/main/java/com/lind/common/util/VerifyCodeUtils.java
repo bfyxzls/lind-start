@@ -1,5 +1,8 @@
 package com.lind.common.util;
 
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.stereotype.Component;
+
 import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,6 +15,7 @@ import java.util.Random;
 /**
  * 随机字符验证码生成工具类.
  */
+@Component
 public class VerifyCodeUtils {
 
     Random random = new Random();

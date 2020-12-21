@@ -6,27 +6,24 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties("jwt")
+@ConfigurationProperties("uaa")
 public class UaaProperties {
     /**
-     * jwt算法密钥.
+     *  
      */
-    private String secret;
+    private String callbackUri;
     /**
-     * jwt超时时间(分).
+     *
      */
-    private Long expiresAt;
+    private String redirectUri;
     /**
      * URL白名单.
      */
     private String[] permitAll;
 
     /**
-     * init.
+     * 除了permitAll里的地址，其它地址需要有allowRoles包含的角色，才能访问.
      */
-    public UaaProperties() {
-        this.secret = "abc123";
-        this.expiresAt = 60L;
-        this.permitAll = new String[]{};
-    }
+    private String[] allowRoles;
+
 }
