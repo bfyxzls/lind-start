@@ -25,6 +25,7 @@ import java.util.TimeZone;
 @EnableScoping
 public class RunApplication {
     public static void main(String[] args) {
+        System.out.print("main run...");
         SpringApplication app = new SpringApplication(RunApplication.class);
         app.run(args);
     }
