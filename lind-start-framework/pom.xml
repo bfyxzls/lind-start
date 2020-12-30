@@ -29,5 +29,6 @@
         <module>lind-bundle</module>
         <module>lind-kafka-start</module>
         <module>lind-uaa-jwt-start</module>
+        <module>lind-websocket-start</module>
     </modules>
 </project>

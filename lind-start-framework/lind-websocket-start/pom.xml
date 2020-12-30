@@ -3,27 +3,23 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>lind-start</artifactId>
+        <artifactId>lind-start-framework</artifactId>
         <groupId>com.lind</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>a-start-activiti</artifactId>
+    <artifactId>lind-websocket-start</artifactId>
+
     <dependencies>
         <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-activiti</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-websocket</artifactId>
+            <version>2.3.0.RELEASE</version>
         </dependency>
         <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-swagger-start</artifactId>
-            <version>1.0.0</version>
+        <groupId>cn.hutool</groupId>
+        <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
 </project>

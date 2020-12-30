@@ -1,7 +1,6 @@
 package com.lind.activiti.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.ImmutableMap;
 import com.lind.activiti.entity.ActReNode;
 import com.lind.activiti.repository.ActReNodeRepository;
 import com.lind.activiti.util.ActivitiHelper;
@@ -38,6 +37,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -143,32 +143,21 @@ public class DeploymentController {
                     .createProcessDefinitionQuery()
                     .deploymentId(item.getId())
                     .singleResult();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("id", item.getId());
+            map.put("time", item.getDeploymentTime());
+            map.put("name", item.getName());
+            map.put("key", processDefinition.getKey());
+            map.put("proDefId", processDefinition.getId());
+            map.put("isSuspended", processDefinition.isSuspended());
             if (StringUtils.isBlank(status)) {
-                result.add(ImmutableMap.of(
-                        "id", item.getId(),
-                        "time", item.getDeploymentTime(),
-                        "name", item.getName(),
-                        "proDefId", processDefinition.getId(),
-                        "isSuspended", processDefinition.isSuspended()
-                ));
+                result.add(map);
             } else if (status.equals("1")) {
                 if (!processDefinition.isSuspended())
-                    result.add(ImmutableMap.of(
-                            "id", item.getId(),
-                            "time", item.getDeploymentTime(),
-                            "name", item.getName(),
-                            "proDefId", processDefinition.getId(),
-                            "isSuspended", processDefinition.isSuspended()
-                    ));
+                    result.add(map);
             } else if (status.equals("2")) {
                 if (processDefinition.isSuspended())
-                    result.add(ImmutableMap.of(
-                            "id", item.getId(),
-                            "time", item.getDeploymentTime(),
-                            "name", item.getName(),
-                            "proDefId", processDefinition.getId(),
-                            "isSuspended", processDefinition.isSuspended()
-                    ));
+                    result.add(map);
             }
 
         }

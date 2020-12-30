@@ -39,6 +39,7 @@
         <tr>
             <th>ID</th>
             <th>proDefId</th>
+            <th>key</th>
             <th>name</th>
             <th>是否挂起</th>
             <th>time</th>
@@ -49,6 +50,7 @@
         <tr th:each="item:${result}">
             <td th:text="${item.id}"></td>
             <td th:text="${item.proDefId}"></td>
+            <td th:text="${item.key}"></td>
             <td th:text="${item.name}"></td>
             <td th:text="${item.isSuspended}"></td>
 

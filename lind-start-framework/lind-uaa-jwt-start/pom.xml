@@ -134,6 +134,7 @@
 <!--                                 </excludes>-->
                             </artifactSet>
                             <createSourcesJar>true</createSourcesJar>
+                            <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
                         </configuration>
                     </execution>
                 </executions>

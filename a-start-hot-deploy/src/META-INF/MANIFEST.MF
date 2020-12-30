@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: com.lind.hot.deploy.RunApplication
-Premain-Class: com.lind.hot.deploy.DemoJavaAgent
-Can-Redefine-Classes: true

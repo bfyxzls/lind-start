@@ -49,6 +49,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -171,32 +172,21 @@ public class ViewController {
                     .createProcessDefinitionQuery()
                     .deploymentId(item.getId())
                     .singleResult();
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("id", item.getId());
+            map.put("time", item.getDeploymentTime());
+            map.put("name", item.getName());
+            map.put("key", processDefinition.getKey());
+            map.put("proDefId", processDefinition.getId());
+            map.put("isSuspended", processDefinition.isSuspended());
             if (StringUtils.isBlank(status)) {
-                result.add(ImmutableMap.of(
-                        "id", item.getId(),
-                        "time", item.getDeploymentTime(),
-                        "name", item.getName(),
-                        "proDefId", processDefinition.getId(),
-                        "isSuspended", processDefinition.isSuspended()
-                ));
+                result.add(map);
             } else if (status.equals("1")) {
                 if (!processDefinition.isSuspended())
-                    result.add(ImmutableMap.of(
-                            "id", item.getId(),
-                            "time", item.getDeploymentTime(),
-                            "name", item.getName(),
-                            "proDefId", processDefinition.getId(),
-                            "isSuspended", processDefinition.isSuspended()
-                    ));
+                    result.add(map);
             } else if (status.equals("2")) {
                 if (processDefinition.isSuspended())
-                    result.add(ImmutableMap.of(
-                            "id", item.getId(),
-                            "time", item.getDeploymentTime(),
-                            "name", item.getName(),
-                            "proDefId", processDefinition.getId(),
-                            "isSuspended", processDefinition.isSuspended()
-                    ));
+                    result.add(map);
             }
 
         }

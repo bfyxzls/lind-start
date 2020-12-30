@@ -13,8 +13,6 @@ import org.activiti.engine.impl.persistence.entity.TaskEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
-
 /**
  * 自动将节点配置的角色分(Owner)配到当前任务上.
  * 所有任务在建立时出发的事件,在流程实例启动时添加的.
@@ -23,7 +21,6 @@ import javax.transaction.Transactional;
  */
 @Slf4j
 @Component
-@Transactional
 public class AssignRoleEventListener implements org.activiti.engine.delegate.event.ActivitiEventListener {
     @Autowired
     RepositoryService repositoryService;

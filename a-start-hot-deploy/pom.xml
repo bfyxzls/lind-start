@@ -152,7 +152,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>com.lind.hot.deploy.RunApplication</mainClass>
-
                 </configuration>
                 <executions>
                     <execution>
@@ -160,11 +159,23 @@
                             <goal>repackage</goal>
                         </goals>
                     </execution>
-
-
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <!--Premain-Class为key，这个<Premain-Class>中的值为value -->
+                            <Premain-Class>com.lind.hot.deploy.DemoJavaAgent</Premain-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
 
         </plugins>
     </build>

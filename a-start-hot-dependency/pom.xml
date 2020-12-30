@@ -28,50 +28,6 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <!-- JAR Maven 管理-->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <!-- 配置主程序 java -jar 默认Class -->
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <!--Main程序入口-->
-<!--                            <mainClass>com.xdja.dsc.DscApplication</mainClass>-->
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-            <!-- maven 打包集成插件 -->
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <descriptorRefs>
-                        <!-- 将依赖一起打包到 JAR -->
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <!-- 配置主程序 java -jar 默认Class -->
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-<!--                            <mainClass>com.xdja.dsc.DscApplication</mainClass>-->
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-
         </plugins>
     </build>
 

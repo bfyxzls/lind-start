@@ -18,11 +18,12 @@ import org.springframework.stereotype.Component;
 public class ApplicationReadyEventListener implements ApplicationListener<ApplicationReadyEvent> {
     private static Logger logger = LoggerFactory.getLogger(ApplicationReadyEventListener.class);
     @Autowired
-    AssignRoleEventListener assignRoleEventListener;
-    @Autowired
     LoggerEventListener loggerEventListener;
     @Autowired
+    AssignRoleEventListener assignRoleEventListener;
+    @Autowired
     RuntimeService runtimeService;
+
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {

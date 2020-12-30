@@ -1,11 +1,13 @@
-package com.lind.activiti;
+package com.lind.websocket;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ActivitiApplication {
+public class Application {
+
     public static void main(String[] args) {
-        SpringApplication.run(ActivitiApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
+
 }
