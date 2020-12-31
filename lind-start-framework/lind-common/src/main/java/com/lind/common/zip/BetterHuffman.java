@@ -1,4 +1,4 @@
-package com.lind.common.huffman;
+package com.lind.common.zip;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

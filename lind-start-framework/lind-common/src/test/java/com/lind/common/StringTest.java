@@ -1,6 +1,6 @@
 package com.lind.common;
 
-import com.lind.common.util.EncryptionUtils;
+import com.lind.common.encrypt.HashUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -56,6 +56,6 @@ public class StringTest {
 
     @Test
     public void md5Test(){
-        log.info(EncryptionUtils.md5("1970324841128405bdyh"));
+        log.info(HashUtils.md5("1970324841128405bdyh"));
     }
 }

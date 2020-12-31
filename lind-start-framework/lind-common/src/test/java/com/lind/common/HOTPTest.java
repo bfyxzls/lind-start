@@ -1,7 +1,7 @@
 package com.lind.common;
 
+import com.lind.common.encrypt.DESUtils;
 import com.lind.common.otp.TimeBasedOneTimePasswordGenerator;
-import com.lind.common.util.EncryptionUtils;
 import com.lind.common.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -60,12 +60,12 @@ public class HOTPTest extends AbstractTest {
 
         // 加密
         String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-        String result = EncryptionUtils.encryptDES(passKey, plaintext);
+        String result = DESUtils.encrypt(passKey, plaintext);
         log.info("encryptDES result={}", result);
         for (int i = 0; i < 30; i++) {
             // 解密
             passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-            log.info("{} decryptDES result={}", i, EncryptionUtils.decryptDES(passKey, result));
+            log.info("{} decryptDES result={}", i, DESUtils.decrypt(passKey, result));
             TimeUnit.SECONDS.sleep(1);
         }
     }
@@ -78,7 +78,7 @@ public class HOTPTest extends AbstractTest {
         for (int i = 0; i < 5; i++) {
             // 解密
             String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-            log.info("{} decryptDES result={}", i, EncryptionUtils.decryptDES(passKey, result));
+            log.info("{} decryptDES result={}", i, DESUtils.decrypt(passKey, result));
             TimeUnit.SECONDS.sleep(1);
         }
     }

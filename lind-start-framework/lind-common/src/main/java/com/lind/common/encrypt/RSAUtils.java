@@ -1,4 +1,4 @@
-package com.lind.common.util;
+package com.lind.common.encrypt;
 
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.util.Base64Utils;
