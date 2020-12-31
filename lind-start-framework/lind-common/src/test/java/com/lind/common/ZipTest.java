@@ -31,7 +31,7 @@ public class ZipTest {
     @SneakyThrows
     @Test
     public void rle() {
-        String code = "DBDCDDDEDFDGDHDIFPGGFPDCDADCDADADGDBDCFPEEFPDBDADAFPFGDG";
+        String code = "DBDCDDDEDFDGDHDIDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDADAFPFGDG";
         System.out.println("rle=" + RLEUtils.encode(code));
     }
 
