@@ -8,7 +8,7 @@ public class LZWUtils {
     public LZWUtils() {
     }
 
-    public static String lzw_compress(String input) {
+    public static String compress(String input) {
         HashMap<String, Integer> dictionary = new LinkedHashMap<>();
         String[] data = (input + "").split("");
         String out = "";
@@ -23,8 +23,12 @@ public class LZWUtils {
             } else {
                 if (phrase.length() > 1) {
                     temp_out.add(Character.toString((char) dictionary.get(phrase).intValue()));
+                    System.out.println("phrase>1"+(char) dictionary.get(phrase).intValue());
+
                 } else {
                     temp_out.add(Character.toString((char) Character.codePointAt(phrase, 0)));
+                    System.out.println((char) Character.codePointAt(phrase, 0));
+
                 }
 
                 dictionary.put(phrase + currentChar, code);
@@ -37,6 +41,7 @@ public class LZWUtils {
             temp_out.add(Character.toString((char) dictionary.get(phrase).intValue()));
         } else {
             temp_out.add(Character.toString((char) Character.codePointAt(phrase, 0)));
+
         }
 
         for (String outchar : temp_out) {
@@ -45,7 +50,7 @@ public class LZWUtils {
         return out;
     }
 
-    public static String lzw_extract(String input) {
+    public static String decompress(String input) {
         HashMap<Integer, String> dictionary = new LinkedHashMap<>();
         String[] data = (input + "").split("");
         String currentChar = data[0];

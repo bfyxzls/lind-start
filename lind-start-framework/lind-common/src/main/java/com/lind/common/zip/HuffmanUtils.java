@@ -132,14 +132,16 @@ public class HuffmanUtils {
         System.out.println("Decoded string is " + stringBuilder.toString());
 
     }
-}
 
-class HuffmanNode implements Comparable<HuffmanNode> {
-    int frequency;
-    char data;
-    HuffmanNode left, right;
+    static class HuffmanNode implements Comparable<HuffmanNode> {
+        int frequency;
+        char data;
+        HuffmanNode left, right;
 
-    public int compareTo(HuffmanNode node) {
-        return frequency - node.frequency;
+        public int compareTo(HuffmanNode node) {
+            return frequency - node.frequency;
+        }
     }
+
 }
+

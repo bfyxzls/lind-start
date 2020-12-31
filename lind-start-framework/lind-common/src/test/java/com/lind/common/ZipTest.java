@@ -1,10 +1,7 @@
 package com.lind.common;
 
 import com.lind.common.encrypt.AESNetUtils;
-import com.lind.common.zip.DeflaterUtils;
-import com.lind.common.zip.LZString;
-import com.lind.common.zip.LZW;
-import com.lind.common.zip.RLEUtils;
+import com.lind.common.zip.*;
 import lombok.SneakyThrows;
 import org.junit.Test;
 
@@ -37,9 +34,18 @@ public class ZipTest {
 
     @SneakyThrows
     @Test
-    public void lzwUtils() {
+    public void lzw() {
         String code = "abcaaabbbb";
         System.out.println("rle=" + LZW.compress(code));
         System.out.println("rle=" + LZW.decompress(LZW.compress(code)));
+    }
+
+    @SneakyThrows
+    @Test
+    public void lzwUtils() {
+        String code = "abcd123WQAab123";
+        String encode=LZWUtils.compress(code);
+        System.out.println("rle=" + encode);
+        System.out.println("rle=" + LZWUtils.decompress(encode));
     }
 }

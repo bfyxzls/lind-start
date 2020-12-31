@@ -749,15 +749,16 @@ public class LZString {
 
         System.out.println("Decompressed: " + decompressedBase64);
     }
-}
 
-class Data {
-    public int val;
-    public String string;
-    public int position;
-    public int index;
+    static class Data {
+        public int val;
+        public String string;
+        public int position;
+        public int index;
 
-    public static Data getInstance() {
-        return new Data();
+        public static Data getInstance() {
+            return new Data();
+        }
     }
 }
+
