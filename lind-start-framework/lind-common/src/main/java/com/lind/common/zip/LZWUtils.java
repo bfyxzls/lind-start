@@ -26,7 +26,7 @@ public class LZWUtils {
                     System.out.println("phrase>1"+(char) dictionary.get(phrase).intValue());
 
                 } else {
-                    temp_out.add(Character.toString((char) Character.codePointAt(phrase, 0)));
+                        temp_out.add(Character.toString((char) Character.codePointAt(phrase, 0)));
                     System.out.println((char) Character.codePointAt(phrase, 0));
 
                 }
