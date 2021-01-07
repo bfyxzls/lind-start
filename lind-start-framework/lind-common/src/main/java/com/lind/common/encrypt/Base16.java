@@ -1,5 +1,8 @@
 package com.lind.common.encrypt;
 
+/**
+ * 自定义了Base16,将生成A到P这16个字符.
+ */
 public class Base16 {
     private final static char[] HEX = new char[]{
             'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',

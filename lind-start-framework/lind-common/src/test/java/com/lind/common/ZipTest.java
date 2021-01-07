@@ -9,13 +9,6 @@ import org.junit.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ZipTest {
-
-    @Test
-    public void deflater() {
-        String base64Input = "e6d77akTgmWrDaKTO86yCY/pYs4tJd/6EkSFdeW6S3A=";
-        System.out.println(DeflaterUtils.zipString(base64Input));
-    }
-
     @SneakyThrows
     @Test
     public void aes_base16_lz() {

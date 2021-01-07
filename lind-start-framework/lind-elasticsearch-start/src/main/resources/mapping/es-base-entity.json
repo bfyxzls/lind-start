@@ -1,0 +1,26 @@
+{
+  "properties": {
+    "id": {
+      "type": "keyword"
+    },
+    "createUser": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
+    },
+    "updateUser": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
+    },
+    "delFlag": {
+      "type": "boolean"
+    },
+    "createTime": {
+      "type": "date"
+    },
+    "updateTime": {
+      "type": "date"
+    }
+  }
+}
