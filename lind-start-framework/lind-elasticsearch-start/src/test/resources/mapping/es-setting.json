@@ -3,24 +3,25 @@
     "id": {
       "type": "keyword"
     },
-    "createUser": {
+    "name": {
       "type": "text",
       "analyzer": "ik_max_word",
       "search_analyzer": "ik_max_word"
     },
-    "updateUser": {
+    "memo": {
       "type": "text",
       "analyzer": "ik_max_word",
       "search_analyzer": "ik_max_word"
     },
-    "delFlag": {
-      "type": "boolean"
+    "desc": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
     },
-    "createTime": {
-      "type": "date"
-    },
-    "updateTime": {
-      "type": "date"
+    "address": {
+      "type": "text",
+      "analyzer": "ik_max_word",
+      "search_analyzer": "ik_max_word"
     }
   }
 }
