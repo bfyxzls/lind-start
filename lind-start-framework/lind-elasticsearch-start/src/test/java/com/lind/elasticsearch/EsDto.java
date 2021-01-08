@@ -8,22 +8,23 @@ import lombok.ToString;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.Setting;
 
 import java.io.Serializable;
 
+/**
+ * 注意：在test项目里，当没有添加@RunWith(SpringRunner.class)时，通过insert插入实体时建立的索引是有问题的（解决方法是手动运行createIndex和putMapping），
+ */
 @Data
-@Document(indexName = "esdto", shards = 1, replicas = 0)
 @ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-//@Mapping(mappingPath = "mapping/es-esdto.json")
+@Document(indexName = "esdto", shards = 1, replicas = 0)
+@Setting(settingPath = "mapping/es-setting.json")//@Setting里的配置会覆盖@Document里的配置
 public class EsDto extends EsBaseEntity implements Serializable {
 
     /**
      * keyword类型不自动分词；text类型会自动分词.
-     * analyzer表示开启分词功能.
-     *
-     * @filed里的analyzer是不行的，只能通过@Mapping实现,而且它会复盖实体的@field注解
      */
     @Field(type = FieldType.Keyword)
     private String name;

@@ -2,13 +2,13 @@ package com.lind.hot.deploy;
 
 import com.lind.common.jackson.convert.EnableJacksonFormatting;
 import com.lind.common.util.JarClassLoader;
+import com.lind.common.zip.LZWUtils;
 import com.lind.hot.deploy.dto.UserDTO;
 import com.lind.hot.deploy.scope.EnableScoping;
 import com.lind.interfaces.Hello;
 import lombok.SneakyThrows;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,8 +26,10 @@ import java.util.TimeZone;
 public class RunApplication {
     public static void main(String[] args) {
         System.out.print("main run...");
-        SpringApplication app = new SpringApplication(RunApplication.class);
-        app.run(args);
+        String code = "DBDCDDDEDFDGDHDIFPGGFPDCDADCDADADGDBDCFPEEFPDBDADAFPFGDG";
+        System.out.println("rle=" + LZWUtils.lzw_compress(code));
+     //   SpringApplication app = new SpringApplication(RunApplication.class);
+     //   app.run(args);
     }
     protected final Log log = LogFactory.getLog(this.getClass());
     @SneakyThrows

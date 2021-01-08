@@ -11,6 +11,11 @@ import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+/**
+ * es基础实体.
+ *
+ * @Field注解需要手动调用createIndex()和putMapping才能初始化.
+ */
 @Data
 public class EsBaseEntity {
 
@@ -18,6 +23,11 @@ public class EsBaseEntity {
             + "||yyyy-MM-dd HH:mm:ss||yyyy/MM/dd HH:mm:ss"
             + "||yyyy-MM-dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS"
             + "||yyyy-MM-dd'T'HH:mm:ss.SSS";
+    /**
+     * 主键.
+     */
+    @Id
+    private final String id = String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId());
     /**
      * 创建时间.
      */
@@ -29,7 +39,7 @@ public class EsBaseEntity {
      */
     @Field(type = FieldType.Keyword)
     @CreatedBy
-    protected String creator;
+    protected String createUser;
     /**
      * 更新时间.
      */
@@ -45,12 +55,7 @@ public class EsBaseEntity {
     /**
      * 删除标记.
      */
-    @Field(type = FieldType.Keyword)
+    @Field(type = FieldType.Boolean)
     protected boolean delFlag;
-    /**
-     * 主键.
-     */
-    @Id
-    private final String id = String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId());
 
 }

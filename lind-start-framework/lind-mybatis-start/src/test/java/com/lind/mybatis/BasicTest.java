@@ -1,7 +1,9 @@
 package com.lind.mybatis;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.lind.mybatis.dto.PageDTO;
 import com.lind.mybatis.entity.TUser;
+import com.lind.mybatis.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +40,13 @@ public class BasicTest {
         userService.update(user);
         print("lind修改");
     }
-
+    @Test
+    public void servicePageList() {
+        PageDTO pageVo = new PageDTO();
+        pageVo.setPageNumber(1);
+        pageVo.setPageSize(2);
+        userService.findByCondition(PageUtil.initPage(pageVo));
+    }
     @Test
     public void pageList() {
         for (int i = 0; i < 10; i++) {

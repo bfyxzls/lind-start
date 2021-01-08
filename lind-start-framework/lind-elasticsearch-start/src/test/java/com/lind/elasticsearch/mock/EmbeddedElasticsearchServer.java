@@ -3,7 +3,6 @@ package com.lind.elasticsearch.mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import pl.allegro.tech.embeddedelasticsearch.EmbeddedElastic;
 import pl.allegro.tech.embeddedelasticsearch.PopularProperties;
 
@@ -13,7 +12,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-@Component //先注释，这个zip包总是下载失败
+//@Component //先注释，这个zip包总是下载失败
 public class EmbeddedElasticsearchServer {
     static final String ES_PATH = "http://localhost/elasticsearch-6.0.0.zip";
     @Autowired

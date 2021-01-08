@@ -46,9 +46,9 @@ public class PageUtil {
                 d = Sort.Direction.valueOf(order.toUpperCase());
             }
             Sort s = Sort.by(d, sort);
-            pageable = PageRequest.of(pageNumber - 1, pageSize, s);
+            pageable = PageRequest.of(pageNumber, pageSize, s);
         } else {
-            pageable = PageRequest.of(pageNumber - 1, pageSize);
+            pageable = PageRequest.of(pageNumber, pageSize);
         }
         return pageable;
     }

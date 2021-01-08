@@ -1,27 +1,10 @@
 {
-  "properties": {
-    "id": {
-      "type": "keyword"
-    },
-    "name": {
-      "type": "text",
-      "analyzer": "ik_max_word",
-      "search_analyzer": "ik_max_word"
-    },
-    "memo": {
-      "type": "text",
-      "analyzer": "ik_max_word",
-      "search_analyzer": "ik_max_word"
-    },
-    "desc": {
-      "type": "text",
-      "analyzer": "ik_max_word",
-      "search_analyzer": "ik_max_word"
-    },
-    "address": {
-      "type": "text",
-      "analyzer": "ik_max_word",
-      "search_analyzer": "ik_max_word"
-    }
+  "index": {
+    // 分页数
+    "max_result_window": 1000000,
+    // 翻页最大值
+    "number_of_shards": 1,
+    // 分片数
+    "number_of_replicas": 1
   }
 }
