@@ -1,11 +1,13 @@
 package com.lind.common.util;
 
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.system.ApplicationHome;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -28,7 +30,7 @@ public class JarClassLoader {
         if (path.endsWith(".jar")) {
             path = path.substring(0, path.lastIndexOf("/") + 1);
         }
-        LOGGER.debug("getMainJarPath:{}", path);
+        LOGGER.info("getMainJarPath:{}", path);
         return path;
     }
 
@@ -41,11 +43,10 @@ public class JarClassLoader {
      * @return
      * @throws ClassNotFoundException
      */
-    public static <U> U joinOuterJarClass(String packageUrl, Class<U> clazz, String name) {
+    public static <U> U joinOuterJarClass(Class<U> clazz, String packageUrl, String name) {
         try {
-            if (!packageUrl.startsWith("file:/")) {
-                packageUrl = getMainJarPath().concat(packageUrl);
-            }
+
+            LOGGER.info("packageUrl:{}", packageUrl);
             URL url = new URL(packageUrl);
             // IDEA调试时与java运行时的ClassLoader是不同的,所以需要使用当前环境下的ClassLoader
             ClassLoader loader = new URLClassLoader(new URL[]{url}, clazz.getClassLoader()) {
@@ -86,4 +87,30 @@ public class JarClassLoader {
         throw new RuntimeException("findClassLoader.error");
     }
 
+    /**
+     * 将jar包添加到当前类加载器.
+     *
+     * @param path
+     * @param clazz
+     */
+    @SneakyThrows
+    public static void joinJar(Class clazz, String path) {
+        // 将本地jar文件加载至classloader
+        URLClassLoader loader = (URLClassLoader) clazz.getClassLoader();
+        URL targetUrl = new URL(path);
+
+        boolean isLoader = false;
+        for (URL url : loader.getURLs()) {
+            if (url.equals(targetUrl)) {
+                isLoader = true;
+                break;
+            }
+        }
+        // 如果没有加载
+        if (!isLoader) {
+            Method add = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            add.setAccessible(true);
+            add.invoke(loader, targetUrl);
+        }
+    }
 }

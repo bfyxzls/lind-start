@@ -1,0 +1,3 @@
+plugins:
+  helloProvider:
+     path: file:/d:/plugins

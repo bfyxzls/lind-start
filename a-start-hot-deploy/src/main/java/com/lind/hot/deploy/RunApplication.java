@@ -1,67 +1,60 @@
 package com.lind.hot.deploy;
 
+import cn.hutool.core.io.FileUtil;
 import com.lind.common.jackson.convert.EnableJacksonFormatting;
 import com.lind.common.util.JarClassLoader;
-import com.lind.common.zip.LZWUtils;
-import com.lind.hot.deploy.dto.UserDTO;
 import com.lind.hot.deploy.scope.EnableScoping;
-import com.lind.interfaces.Hello;
+import com.lind.hot.deploy.spi.SpiRun;
+import com.lind.interfaces.HelloProvider;
 import lombok.SneakyThrows;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletResponse;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.TimeZone;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
 @EnableJacksonFormatting
 @EnableScoping
 public class RunApplication {
-    public static void main(String[] args) {
-        System.out.print("main run...");
-        String code = "DBDCDDDEDFDGDHDIFPGGFPDCDADCDADADGDBDCFPEEFPDBDADAFPFGDG";
-        System.out.println("rle=" + LZWUtils.lzw_compress(code));
-     //   SpringApplication app = new SpringApplication(RunApplication.class);
-     //   app.run(args);
-    }
-    protected final Log log = LogFactory.getLog(this.getClass());
+    final static Logger LOGGER = LoggerFactory.getLogger(JarClassLoader.class);
+    @Value("${plugins.helloProvider.path}")
+    String path;
+
     @SneakyThrows
-    @GetMapping(path = "/redirect")
-    public void redirect(ServletResponse response) {
-        log.debug("hello world!");
-        log.info("hello world!");
-        log.warn("end.");
-      //  HttpServletResponse httpServletResponse = (HttpServletResponse)response;
-     //   httpServletResponse.sendRedirect("http://ca.cupl.edu.cn/tpass/login?service=http://contract.cupl.edu.cn:5051");
+    public static void main(String[] args) {
+        SpiRun.run();
+        String path = "file:/d:/plugins/a-start-hot-dependency-1.0.0.jar";
+        JarClassLoader.joinJar(RunApplication.class, path);
+        SpringApplication.run(RunApplication.class, args);
+
     }
 
-    @GetMapping(path = "/test")
-    public ResponseEntity test() {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setName("lind");
-        userDTO.setEmail("123");
-        userDTO.setTotal(100d);
-        userDTO.setTotalMoney(BigDecimal.valueOf(5000));
-        TimeZone time = TimeZone.getTimeZone("Etc/GMT-8");  //转换为中国时区
+    @SneakyThrows
+    @GetMapping("list")
+    public ResponseEntity list() {
 
-        TimeZone.setDefault(time);
-        userDTO.setBirthday(new Date());
-        userDTO.setGetup(new Date());
-        return ResponseEntity.ok(userDTO);
+        List<String> fileList = new ArrayList<>();
+        for (File file : FileUtil.ls(path)) {
+            fileList.add(file.getName());
+        }
+        SpiRun.run();
+        return ResponseEntity.ok(fileList);
     }
 
-    @GetMapping("dy")
-    public ResponseEntity dy() {
-        Hello account = JarClassLoader.joinOuterJarClass("a-start-hot-dependency-1.0.0.jar", Hello.class, "com.lind.hot.HelloImpl");
-        Object ret = account.password();
+    @GetMapping("load/{name}")
+    public ResponseEntity load(@PathVariable String name) {
+        HelloProvider account = JarClassLoader.joinOuterJarClass(HelloProvider.class, path + "/a-start-hot-dependency-1.0.0.jar", "com.lind.hot.EmailHelloProvider");
+        Object ret = account.getName();
         return ResponseEntity.ok(ret);
     }
-
 }
