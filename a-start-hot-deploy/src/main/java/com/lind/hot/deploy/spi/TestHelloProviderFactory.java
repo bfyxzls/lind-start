@@ -1,8 +1,8 @@
 package com.lind.hot.deploy.spi;
 
-import com.lind.interfaces.HelloProviderFactory;
+import com.lind.spi.ProviderFactory;
 
-public class TestHelloProviderFactory implements HelloProviderFactory<TestHelloProvider> {
+public class TestHelloProviderFactory implements ProviderFactory<TestHelloProvider> {
 
     @Override
     public TestHelloProvider create() {
@@ -14,8 +14,4 @@ public class TestHelloProviderFactory implements HelloProviderFactory<TestHelloP
         return "TestHelloProvider";
     }
 
-    @Override
-    public String getName() {
-        return "TestHelloProvider";
-    }
 }

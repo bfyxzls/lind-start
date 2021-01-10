@@ -1,8 +1,8 @@
 package com.lind.hot;
 
-import com.lind.interfaces.HelloProvider;
+import com.lind.spi.Provider;
 
-public class EmailHelloProvider implements HelloProvider {
+public class EmailHelloProvider implements Provider {
 
     @Override
     public String login() {

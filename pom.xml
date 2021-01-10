@@ -19,6 +19,7 @@
         <module>a-start-activiti</module>
         <module>a-start-keycloak</module>
         <module>a-start-keycloak-client</module>
+        <module>lind-start-framework/lind-spi</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

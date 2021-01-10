@@ -6,15 +6,11 @@
         <artifactId>lind-start</artifactId>
         <groupId>com.lind</groupId>
         <version>1.0.0</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>a-start-hot-interface</artifactId>
+    <artifactId>lind-spi</artifactId>
 
-<dependencies>
-    <dependency>
-        <groupId>com.lind</groupId>
-        <artifactId>lind-spi</artifactId>
-        <version>1.0.0</version>
-    </dependency></dependencies>
+
 </project>

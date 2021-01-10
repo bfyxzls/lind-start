@@ -1,8 +1,8 @@
 package com.lind.hot;
 
-import com.lind.interfaces.HelloProviderFactory;
+import com.lind.spi.ProviderFactory;
 
-public class EmailHelloProviderFactory implements HelloProviderFactory<EmailHelloProvider> {
+public class EmailHelloProviderFactory implements ProviderFactory<EmailHelloProvider> {
 
     @Override
     public EmailHelloProvider create() {
@@ -14,8 +14,4 @@ public class EmailHelloProviderFactory implements HelloProviderFactory<EmailHell
         return "EmailHelloProvider";
     }
 
-    @Override
-    public String getName() {
-        return "EmailHelloProvider";
-    }
 }

@@ -1,8 +1,8 @@
 package com.lind.hot.deploy.spi;
 
-import com.lind.interfaces.HelloProvider;
+import com.lind.spi.Provider;
 
-public class CarHelloProvider implements HelloProvider {
+public class CarHelloProvider implements Provider {
     @Override
     public String login() {
         return "CarHelloProvider";

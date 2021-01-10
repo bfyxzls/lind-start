@@ -112,28 +112,10 @@ public class JarClassLoader {
         }
         // 如果没有加载
         if (!isLoader) {
-            Method add = URLClassLoader.class.getDeclaredMethod("addURL", new Class[]{URL.class});
+            Method add = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             add.setAccessible(true);
             add.invoke(loader, targetUrl);
         }
-    }
-
-    /**
-     * 获取指定类型的实现
-     *
-     * @param clazz
-     * @param classLoader
-     * @param <U>
-     * @return
-     */
-    public static <U> List<U> getService(Class<U> clazz, ClassLoader classLoader) {
-        ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
-        List<U> list = new ArrayList<>();
-        Iterator<U> loadIterator = load.iterator();
-        while (loadIterator.hasNext()) {
-            list.add(loadIterator.next());
-        }
-        return list;
     }
 
 }

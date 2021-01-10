@@ -1,8 +1,8 @@
 package com.lind.hot.deploy.spi;
 
-import com.lind.interfaces.HelloProviderFactory;
+import com.lind.spi.ProviderFactory;
 
-public class CarHelloProviderFactory implements HelloProviderFactory<CarHelloProvider> {
+public class CarHelloProviderFactory implements ProviderFactory<CarHelloProvider> {
 
     @Override
     public CarHelloProvider create() {
@@ -11,11 +11,6 @@ public class CarHelloProviderFactory implements HelloProviderFactory<CarHelloPro
 
     @Override
     public String getId() {
-        return "CarHelloProvider";
-    }
-
-    @Override
-    public String getName() {
         return "CarHelloProvider";
     }
 }

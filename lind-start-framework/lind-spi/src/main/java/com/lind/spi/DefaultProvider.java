@@ -1,6 +1,6 @@
-package com.lind.interfaces;
+package com.lind.spi;
 
-public class DefaultHelloProvider implements HelloProvider {
+public class DefaultProvider implements Provider {
     @Override
     public String login() {
         return "DefaultHelloProvider";

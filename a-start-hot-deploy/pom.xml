@@ -92,7 +92,11 @@
             <artifactId>hutool-all</artifactId>
             <version>5.5.7</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-spi</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <repositories>
