@@ -4,7 +4,7 @@ import com.lind.interfaces.HelloProvider;
 
 public class CarHelloProvider implements HelloProvider {
     @Override
-    public String getName() {
+    public String login() {
         return "CarHelloProvider";
     }
 }

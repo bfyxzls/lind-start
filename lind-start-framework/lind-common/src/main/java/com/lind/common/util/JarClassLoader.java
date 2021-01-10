@@ -11,6 +11,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ServiceLoader;
 
 /**
  * 外部Jar类型加载器.
@@ -113,4 +117,23 @@ public class JarClassLoader {
             add.invoke(loader, targetUrl);
         }
     }
+
+    /**
+     * 获取指定类型的实现
+     *
+     * @param clazz
+     * @param classLoader
+     * @param <U>
+     * @return
+     */
+    public static <U> List<U> getService(Class<U> clazz, ClassLoader classLoader) {
+        ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
+        List<U> list = new ArrayList<>();
+        Iterator<U> loadIterator = load.iterator();
+        while (loadIterator.hasNext()) {
+            list.add(loadIterator.next());
+        }
+        return list;
+    }
+
 }

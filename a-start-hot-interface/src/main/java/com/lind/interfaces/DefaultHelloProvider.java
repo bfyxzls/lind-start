@@ -2,7 +2,7 @@ package com.lind.interfaces;
 
 public class DefaultHelloProvider implements HelloProvider {
     @Override
-    public String getName() {
+    public String login() {
         return "DefaultHelloProvider";
     }
 }

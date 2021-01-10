@@ -6,6 +6,7 @@ import com.lind.common.util.JarClassLoader;
 import com.lind.hot.deploy.scope.EnableScoping;
 import com.lind.hot.deploy.spi.SpiRun;
 import com.lind.interfaces.HelloProvider;
+import com.lind.interfaces.HelloProviderFactory;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceLoader;
 
 @SpringBootApplication
 @RestController
@@ -39,6 +42,18 @@ public class RunApplication {
 
     }
 
+    public static <U extends HelloProviderFactory> U getServiceProvider(Class<U> clazz, String name, ClassLoader classLoader) {
+        ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
+        List<U> list = new ArrayList<>();
+        Iterator<U> loadIterator = load.iterator();
+        while (loadIterator.hasNext()) {
+            if (loadIterator.next().getName().equals(name)) {
+                return loadIterator.next();
+            }
+        }
+        return null;
+    }
+
     @SneakyThrows
     @GetMapping("list")
     public ResponseEntity list() {
@@ -47,14 +62,15 @@ public class RunApplication {
         for (File file : FileUtil.ls(path)) {
             fileList.add(file.getName());
         }
-        SpiRun.run();
-        return ResponseEntity.ok(fileList);
+        HelloProviderFactory helloProviderFactory = getServiceProvider(HelloProviderFactory.class, "EmailProviderFactory", this.getClass().getClassLoader());
+
+        return ResponseEntity.ok(helloProviderFactory.create().login());
     }
 
     @GetMapping("load/{name}")
     public ResponseEntity load(@PathVariable String name) {
         HelloProvider account = JarClassLoader.joinOuterJarClass(HelloProvider.class, path + "/a-start-hot-dependency-1.0.0.jar", "com.lind.hot.EmailHelloProvider");
-        Object ret = account.getName();
+        Object ret = account.login();
         return ResponseEntity.ok(ret);
     }
 }
