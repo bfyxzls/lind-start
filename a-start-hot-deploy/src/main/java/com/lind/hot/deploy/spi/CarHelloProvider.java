@@ -2,9 +2,9 @@ package com.lind.hot.deploy.spi;
 
 import com.lind.spi.Provider;
 
-public class CarHelloProvider implements Provider {
-    @Override
-    public String login() {
-        return "CarHelloProvider";
-    }
+/**
+ * CarHello业务实现者，会有个性化方法.
+ */
+public interface CarHelloProvider extends Provider {
+    void start();
 }

@@ -1,14 +1,9 @@
 package com.lind.hot.deploy;
 
 import cn.hutool.core.io.FileUtil;
-import com.lind.common.jackson.convert.EnableJacksonFormatting;
-import com.lind.common.util.JarClassLoader;
-import com.lind.hot.deploy.scope.EnableScoping;
-import com.lind.spi.ProviderFactory;
+import com.lind.hot.deploy.spi.CarHelloProviderFactory;
 import com.lind.spi.SpiFactory;
 import lombok.SneakyThrows;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,10 +17,7 @@ import java.util.List;
 
 @SpringBootApplication
 @RestController
-@EnableJacksonFormatting
-@EnableScoping
 public class RunApplication {
-    final static Logger LOGGER = LoggerFactory.getLogger(JarClassLoader.class);
     @Value("${plugins.helloProvider.path}")
     String path;
 
@@ -46,11 +38,17 @@ public class RunApplication {
         for (File file : FileUtil.ls(path)) {
             fileList.add(file.getName());
         }
-        ProviderFactory helloProviderFactory = SpiFactory.getProviderFactory(
-                "EmailHelloProvider",
-                this.getClass().getClassLoader());
 
-        return ResponseEntity.ok(helloProviderFactory.create().login());
+        CarHelloProviderFactory carHelloProviderFactory = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
+                "BusCarHelloProvider",
+                this.getClass().getClassLoader());
+        carHelloProviderFactory.create().start();
+
+        CarHelloProviderFactory carHelloProviderFactory2 = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
+                "PrivateCarHelloProvider",
+                this.getClass().getClassLoader());
+         carHelloProviderFactory2.create().start();
+        return ResponseEntity.ok("ok");
     }
 
 

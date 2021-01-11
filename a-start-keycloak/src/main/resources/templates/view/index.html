@@ -3,49 +3,9 @@
         xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
         layout:decorator="layout">
 <div layout:fragment="content">
-    <script>
-        function getQueryVariable(variable) {
-            var query = window.location.search.substring(1);
-            var vars = query.split("&");
-            for (var i = 0; i < vars.length; i++) {
-                var pair = vars[i].split("=");
-                if (pair[0] == variable) {
-                    return pair[1];
-                }
-            }
-            return (false);
-        }
-
-        $(function () {
-            var token = getQueryVariable("token");
-            if (token == "" || token == undefined || token == false) {
-                token = $.cookie('access_token');
-            }
-            console.log(token);
-            $.ajax({
-                type: "get",
-                headers: {"Authorization": "bearer " + token},
-                url: "/products",
-                statusCode: {
-                    401: function () {
-                        alert("401未授权...将去登录...后端无法在ajax模式下完成重定向...需要在前端重定向")
-                        // location.href = "http://localhost:9090/auth/realms/demo/protocol/openid-connect/auth?scope=openid&response_type=code&client_id=democlient&redirect_uri=http://localhost:9090/token/authorizationCodeLogin";
-                    },
-                    403: function () {
-                        alert("403无权访问");
-                    }
-                },
-                success: function (XMLHttpRequest, textStatus,data) {
-                        $.cookie('access_token', getQueryVariable("token"));
-                        $("#data-info").html(data);
-                }
-            })
-        });
-    </script>
-
     <!--遍历数组-->
     <div id="data-info">
-        未授权...
+        公开访问...
     </div>
 </div>
 </html>

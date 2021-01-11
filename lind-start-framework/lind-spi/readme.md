@@ -11,7 +11,8 @@ spi是一种将服务接口与服务实现分离以达到解耦、大大提升�
 
 # sdk spi
 > 文件路是：META-INF/services
-这里的文件名称是接口的全名，如com.lind.interfaces包下面的HelloProvider接口，它的名称就是`com.lind.interfaces.HelloProvider`
+这里的文件名称是接口的全名，如com.lind.interfaces包下面的HelloProvider接口，它的名称就是`com.lind.interfaces.HelloProvider`,它里
+>面的内容为这个接口的实现类.
 
 # spring spi
 > 文件路径：META-INF/spring.factories

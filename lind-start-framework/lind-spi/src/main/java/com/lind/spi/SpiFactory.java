@@ -10,6 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+/**
+ * spi插件加载器.
+ */
 public class SpiFactory {
 
     /**
@@ -41,7 +44,7 @@ public class SpiFactory {
 
 
     /**
-     * 得到指定的providerFactory.
+     * 从具体的providerFactory中得到指定的providerFactory.
      *
      * @param clazz
      * @param id
@@ -49,21 +52,21 @@ public class SpiFactory {
      * @param <U>
      * @return
      */
-    public static <U extends ProviderFactory> ProviderFactory getProviderFactory(Class<U> clazz, String id, ClassLoader classLoader) {
+    public static <U extends ProviderFactory> U getProviderFactory(Class<U> clazz, String id, ClassLoader classLoader) {
         ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
         Iterator<U> loadIterator = load.iterator();
         while (loadIterator.hasNext()) {
-            ProviderFactory helloProviderFactory = loadIterator.next();
-            System.out.println(">" + helloProviderFactory.getId());
-            if (helloProviderFactory.getId().equals(id)) {
-                return helloProviderFactory;
+            U providerFactory = loadIterator.next();
+            System.out.println(">" + providerFactory.getId());
+            if (providerFactory.getId().equals(id)) {
+                return providerFactory;
             }
         }
         return null;
     }
 
     /**
-     * 得到所有providerFactory.
+     * 返回所有具体的providerFactory列表.
      *
      * @param clazz
      * @param classLoader
@@ -81,7 +84,7 @@ public class SpiFactory {
     }
 
     /**
-     * 得到所有providerFactory.
+     * 从所有providerFactory中得到指定的providerFactory.
      *
      * @param id
      * @param classLoader
@@ -92,7 +95,7 @@ public class SpiFactory {
     }
 
     /**
-     * 得到所有providerFactory.
+     * 返回所有providerFactory列表.
      *
      * @param classLoader
      * @return
