@@ -1,12 +1,11 @@
 package com.lind.spi;
 
-import lombok.SneakyThrows;
-
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -16,29 +15,47 @@ import java.util.ServiceLoader;
 public class SpiFactory {
 
     /**
-     * 将jar包添加到当前类加载器.
-     *
-     * @param path
-     * @param clazz
+     * Parameters of the method to add an URL to the System classes.
      */
-    @SneakyThrows
-    public static void joinJar(Class clazz, String path) {
-        // 将本地jar文件加载至classloader
-        URLClassLoader loader = (URLClassLoader) clazz.getClassLoader();
-        URL targetUrl = new URL(path);
+    private static final Class<?>[] parameters = new Class[]{URL.class};
 
-        boolean isLoader = false;
-        for (URL url : loader.getURLs()) {
-            if (url.equals(targetUrl)) {
-                isLoader = true;
-                break;
-            }
-        }
-        // 如果没有加载
-        if (!isLoader) {
-            Method add = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
-            add.setAccessible(true);
-            add.invoke(loader, targetUrl);
+    /**
+     * Adds a file to the classpath.
+     *
+     * @param s a String pointing to the file
+     * @throws IOException
+     */
+    public static void addFile(String s, ClassLoader classLoader) throws IOException {
+        File f = new File(s);
+        addFile(f, classLoader);
+    }
+
+    /**
+     * Adds a file to the classpath
+     *
+     * @param f the file to be added
+     * @throws IOException
+     */
+    public static void addFile(File f, ClassLoader classLoader) throws IOException {
+        addURL(f.toURI().toURL(), classLoader);
+    }
+
+    /**
+     * 加载jar到当前的classLoader.
+     *
+     * @param u the URL pointing to the content to be added
+     * @throws IOException
+     */
+    public static void addURL(URL u, ClassLoader classLoader) throws IOException {
+        URLClassLoader sysloader = (URLClassLoader) classLoader;
+        Class<?> sysclass = URLClassLoader.class;
+        try {
+            Method method = sysclass.getDeclaredMethod("addURL", parameters);
+            method.setAccessible(true);
+            method.invoke(sysloader, new Object[]{u});
+        } catch (Throwable t) {
+            t.printStackTrace();
+            throw new IOException("Error, could not add URL to system classloader");
         }
     }
 
@@ -54,10 +71,10 @@ public class SpiFactory {
      */
     public static <U extends ProviderFactory> U getProviderFactory(Class<U> clazz, String id, ClassLoader classLoader) {
         ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
-        Iterator<U> loadIterator = load.iterator();
-        while (loadIterator.hasNext()) {
-            U providerFactory = loadIterator.next();
-            System.out.println(">" + providerFactory.getId());
+        for (U providerFactory : load) {
+            System.out.println("getProviderFactory:" + providerFactory.getId());
+        }
+        for (U providerFactory : load) {
             if (providerFactory.getId().equals(id)) {
                 return providerFactory;
             }
@@ -76,9 +93,8 @@ public class SpiFactory {
     public static <U extends ProviderFactory> List<U> getProviderFactory(Class<U> clazz, ClassLoader classLoader) {
         ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
         List<U> list = new ArrayList<>();
-        Iterator<U> loadIterator = load.iterator();
-        while (loadIterator.hasNext()) {
-            list.add(loadIterator.next());
+        for (U providerFactory : load) {
+            list.add(providerFactory);
         }
         return list;
     }
@@ -101,6 +117,6 @@ public class SpiFactory {
      * @return
      */
     public static List<ProviderFactory> getProviderFactory(ClassLoader classLoader) {
-        return getProviderFactory(classLoader);
+        return getProviderFactory(ProviderFactory.class, classLoader);
     }
 }

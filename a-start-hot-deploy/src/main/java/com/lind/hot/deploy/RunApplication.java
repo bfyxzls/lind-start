@@ -1,7 +1,6 @@
 package com.lind.hot.deploy;
 
-import cn.hutool.core.io.FileUtil;
-import com.lind.hot.deploy.spi.CarHelloProviderFactory;
+import com.lind.spi.ProviderFactory;
 import com.lind.spi.SpiFactory;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,10 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootApplication
 @RestController
 public class RunApplication {
@@ -23,32 +18,28 @@ public class RunApplication {
 
     @SneakyThrows
     public static void main(String[] args) {
-        String path = "file:/d:/plugins/a-start-hot-dependency-1.0.0.jar";
-        SpiFactory.joinJar(RunApplication.class, path);
         SpringApplication.run(RunApplication.class, args);
-
     }
 
 
     @SneakyThrows
     @GetMapping("list")
     public ResponseEntity list() {
+        String path = "d:\\plugins\\a-start-hot-dependency-1.0.0.jar";
 
-        List<String> fileList = new ArrayList<>();
-        for (File file : FileUtil.ls(path)) {
-            fileList.add(file.getName());
-        }
+//        CarHelloProviderFactory carHelloProviderFactory = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
+//                "BusCarHelloProvider",
+//                this.getClass().getClassLoader());
+//        carHelloProviderFactory.create().start();
+//
+//        CarHelloProviderFactory carHelloProviderFactory2 = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
+//                "PrivateCarHelloProvider",
+//                this.getClass().getClassLoader());
+//        carHelloProviderFactory2.create().start();
 
-        CarHelloProviderFactory carHelloProviderFactory = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
-                "BusCarHelloProvider",
-                this.getClass().getClassLoader());
-        carHelloProviderFactory.create().start();
-
-        CarHelloProviderFactory carHelloProviderFactory2 = SpiFactory.getProviderFactory(CarHelloProviderFactory.class,
-                "PrivateCarHelloProvider",
-                this.getClass().getClassLoader());
-         carHelloProviderFactory2.create().start();
-        return ResponseEntity.ok("ok");
+        SpiFactory.addFile(path, this.getClass().getClassLoader());
+        ProviderFactory providerFactory = SpiFactory.getProviderFactory("EmailHelloProvider", this.getClass().getClassLoader());
+        return ResponseEntity.ok(providerFactory.create().login());
     }
 
 

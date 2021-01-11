@@ -6,6 +6,6 @@ public class EmailHelloProvider implements Provider {
 
     @Override
     public String login() {
-        return "EmailHelloProvider";
+        return "磊dddddddddd";
     }
 }
