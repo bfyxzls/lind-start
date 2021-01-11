@@ -5,6 +5,6 @@ import com.lind.spi.Provider;
 public class PrinterProvider implements Provider {
     @Override
     public String login() {
-        return "DefaultHelloProvider";
+        return "PrinterProvider...";
     }
 }

@@ -25,9 +25,9 @@ public class SpiFactory {
      * @param s a String pointing to the file
      * @throws IOException
      */
-    public static void addFile(String s, ClassLoader classLoader) throws IOException {
+    public static void addFile(String s) throws IOException {
         File f = new File(s);
-        addFile(f, classLoader);
+        addFile(f);
     }
 
     /**
@@ -36,8 +36,8 @@ public class SpiFactory {
      * @param f the file to be added
      * @throws IOException
      */
-    public static void addFile(File f, ClassLoader classLoader) throws IOException {
-        addURL(f.toURI().toURL(), classLoader);
+    public static void addFile(File f) throws IOException {
+        addURL(f.toURI().toURL());
     }
 
     /**
@@ -46,8 +46,8 @@ public class SpiFactory {
      * @param u the URL pointing to the content to be added
      * @throws IOException
      */
-    public static void addURL(URL u, ClassLoader classLoader) throws IOException {
-        URLClassLoader sysloader = (URLClassLoader) classLoader;
+    public static void addURL(URL u) throws IOException {
+        URLClassLoader sysloader = (URLClassLoader) ClassLoader.getSystemClassLoader();
         Class<?> sysclass = URLClassLoader.class;
         try {
             Method method = sysclass.getDeclaredMethod("addURL", parameters);
@@ -75,7 +75,7 @@ public class SpiFactory {
             System.out.println("getProviderFactory:" + providerFactory.getId());
         }
         for (U providerFactory : load) {
-            if (providerFactory.getId().equals(id)) {
+            if (providerFactory.getId().toLowerCase().equals(id.toLowerCase())) {
                 return providerFactory;
             }
         }
