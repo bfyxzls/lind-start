@@ -1,10 +1,20 @@
 package com.lind.spi;
 
+import cn.hutool.core.io.FileUtil;
+import lombok.SneakyThrows;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
@@ -18,6 +28,74 @@ public class SpiFactory {
      * Parameters of the method to add an URL to the System classes.
      */
     private static final Class<?>[] parameters = new Class[]{URL.class};
+    public static List<DynamicClassLoader> dynamicClassLoaders=new ArrayList<>();
+
+    /**
+     * 初始化时，应该对插件读出后，写到一个Map里，插件名称是key，DynamicClassLoader是value.
+     *
+     * @param path
+     */
+    @SneakyThrows
+    static void initClassLoader(String path) {
+        for (File file : FileUtil.loopFiles(path)) {
+            System.out.println("load jar:" + file.getName());
+            URL url = file.toURI().toURL();
+            DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(new URL[]{url}, ClassLoader.getSystemClassLoader());
+            dynamicClassLoaders.add(dynamicClassLoader);
+        }
+    }
+
+    /**
+     * 目录监控.
+     *
+     * @param path
+     */
+    public static void watchDir(String path) {
+        initClassLoader(path);
+        try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
+            //给path路径加上文件观察服务
+            Paths.get(path).register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
+                    StandardWatchEventKinds.ENTRY_MODIFY,
+                    StandardWatchEventKinds.ENTRY_DELETE);
+            while (true) {
+                final WatchKey key = watchService.take();
+
+                for (WatchEvent<?> watchEvent : key.pollEvents()) {
+
+                    final WatchEvent.Kind<?> kind = watchEvent.kind();
+
+                    if (kind == StandardWatchEventKinds.OVERFLOW) {
+                        continue;
+                    }
+                    //创建事件
+                    if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
+                        System.out.println("[新建]");
+                    }
+                    //修改事件
+                    if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
+                        System.out.println("修改]");
+                    }
+                    //删除事件
+                    if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
+                        System.out.println("[删除]");
+                    }
+                    // get the filename for the event
+                    final WatchEvent<Path> watchEventPath = (WatchEvent<Path>) watchEvent;
+                    final Path filename = watchEventPath.context();
+                    // print it out
+                    System.out.println(kind + " -> " + filename);
+                    initClassLoader(path);
+                }
+                boolean valid = key.reset();
+                if (!valid) {
+                    break;
+                }
+            }
+
+        } catch (IOException | InterruptedException ex) {
+            System.err.println(ex);
+        }
+    }
 
     /**
      * Adds a file to the classpath.

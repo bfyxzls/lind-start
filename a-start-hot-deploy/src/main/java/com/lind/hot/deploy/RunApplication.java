@@ -1,6 +1,5 @@
 package com.lind.hot.deploy;
 
-import cn.hutool.core.io.FileUtil;
 import com.lind.hot.deploy.spi.CarHelloProviderFactory;
 import com.lind.spi.DynamicClassLoader;
 import com.lind.spi.ProviderFactory;
@@ -13,11 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 @SpringBootApplication
 @RestController
 public class RunApplication {
@@ -27,6 +21,7 @@ public class RunApplication {
     @SneakyThrows
     public static void main(String[] args) {
         SpringApplication.run(RunApplication.class, args);
+        SpiFactory.watchDir("d:\\plugins");
     }
 
     @SneakyThrows
@@ -41,28 +36,12 @@ public class RunApplication {
         return ResponseEntity.ok(carHelloProviderFactory.create().login());
     }
 
-    /**
-     * 初始化时，应该对插件读出后，写到一个Map里，插件名称是key，DynamicClassLoader是value
-     * @param path
-     * @return
-     */
-    @SneakyThrows
-    List<DynamicClassLoader> initClassLoader(String path) {
-        List<DynamicClassLoader> dynamicClassLoaderList = new ArrayList<>();
-        for (File file : FileUtil.loopFiles(path)) {
-            URL url = file.toURI().toURL();
-            DynamicClassLoader dynamicClassLoader = new DynamicClassLoader(new URL[]{url}, this.getClass().getClassLoader());
-            dynamicClassLoaderList.add(dynamicClassLoader);
-        }
-        return dynamicClassLoaderList;
-    }
 
     @SneakyThrows
     @GetMapping("list")
     public ResponseEntity list(String name) {
         //EmailHelloProvider
-        String path = "d:\\plugins";
-        for (DynamicClassLoader dynamicClassLoader : initClassLoader(path)) {
+        for (DynamicClassLoader dynamicClassLoader : SpiFactory.dynamicClassLoaders) {
             try {
                 ProviderFactory providerFactory = SpiFactory.getProviderFactory(name, dynamicClassLoader);
                 if (providerFactory != null) {
