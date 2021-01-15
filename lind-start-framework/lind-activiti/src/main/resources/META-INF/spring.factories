@@ -1,7 +1,6 @@
 # 自动注入的bean
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.lind.activiti.config.ActivitiConfig,\
-    com.lind.activiti.config.SwaggerAutoConfiguration,\
     com.lind.activiti.event.MangerSignCompleteEventListener,\
     com.lind.activiti.event.MangerSignCreateEventListener,\
     com.lind.activiti.event.LoggerEventListener,\
