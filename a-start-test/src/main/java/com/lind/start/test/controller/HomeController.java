@@ -183,17 +183,6 @@ public class HomeController {
         response.sendRedirect("http://www.baidu.com?token=" + token);
     }
 
-    @GetMapping("/event2")
-    public void event2() {
-        userEventService.addEventListener(emailEventListener, UserEventType.LOGIN.name());
-
-    }
-
-    @GetMapping("/event1")
-    public void event1() {
-        userEventService.addEventListener(smsEventListener, UserEventType.LOGIN.name());
-        userEventService.publisher(new UserEvent("1", "hello"), UserEventType.LOGIN.name());
-    }
 
     @GetMapping("/test/image-code")
     public void imageGenerate(ServletWebRequest request, HttpServletResponse response) throws Exception {

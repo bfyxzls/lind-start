@@ -10,16 +10,16 @@
 
     <modules>
         <module>a-start-test</module>
-        <module>a-start-gateway</module>
-        <module>a-start-oauth</module>
+        <module>a-start-micro-service/a-start-gateway</module>
+        <module>a-start-micro-service/a-start-oauth</module>
         <module>lind-start-framework</module>
-        <module>a-start-hot-deploy</module>
-        <module>a-start-hot-dependency</module>
-        <module>a-start-hot-interface</module>
+        <module>a-start-hot-deployment/a-start-hot-dependency</module>
+        <module>a-start-hot-deployment/a-start-hot-deploy</module>
+        <module>a-start-hot-deployment/a-start-hot-interface</module>
         <module>a-start-activiti</module>
-        <module>a-start-keycloak</module>
+        <module>a-start-keycloak-demo/a-start-keycloak</module>
         <module>lind-start-framework/lind-spi</module>
-        <module>keycloak-service-spi</module>
+        <module>a-start-keycloak-demo/keycloak-service-spi</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

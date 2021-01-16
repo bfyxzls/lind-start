@@ -1,0 +1,52 @@
+spring:
+  # Redis
+  redis:
+    # host: 127.0.0.1
+    password: bdyh@2020
+    # 数据库索引 默认0
+    database: 10
+    # port: 6379
+    # 超时时间 Duration类型 3秒
+    timeout: 3S
+    cluster: #集群环境
+      nodes:
+        - 192.168.10.118:6379
+        - 192.168.10.118:6380
+        - 192.168.10.119:6379
+        - 192.168.10.119:6380
+        - 192.168.10.121:6379
+        - 192.168.10.121:6380
+      max-redirects: 3 # 获取失败 最大重定向次数
+
+  elasticsearch:
+    rest:
+      uris: 192.168.0.204:9200
+
+  kafka:
+    bootstrap-servers: 192.168.10.11:9091,192.168.10.12:9092,192.168.10.13:9097
+    listener:
+      missing-topics-fatal: false # 没有主题就自动建立
+    consumer:
+      group-id: lind1
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.4.26:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+
+
+# hbase配置
+hbase:
+    zookeeper:
+      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+    name-space: nezha
+zookeeper:
+  znode:
+    parent: /hbase

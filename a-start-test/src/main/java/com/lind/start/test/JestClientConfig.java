@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 /**
  * springboot2.3.0之后不支持自动注册，只能手动写注册配置文件.
  */
-@Component
+//@Component
 public class JestClientConfig {
     @Bean
     public io.searchbox.client.JestClient getJestCline() {
         JestClientFactory factory = new JestClientFactory();
         factory.setHttpClientConfig(new HttpClientConfig
-                .Builder("http://localhost:9200")
+                .Builder("http://localhost:9092")
                 .gson(new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create())
                 .multiThreaded(true)
                 .readTimeout(10000)

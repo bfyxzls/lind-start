@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageSender {
-    public static String kafkaTopic = "topic.quick.demo";
+    public static String kafkaTopic = "demo";
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 

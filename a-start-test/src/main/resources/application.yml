@@ -12,37 +12,20 @@ lind:
       interrupt: true
       registryKey: lind-lock
 
-#  swagger:
-#    spring:
-#      authorization:
-#        tokenUrlList:
-#          - Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzVklWQV93bjJUUUhCclR0Yld4VTc1YWdFN2ctRmM2Sm5haGxvVUw0c3U4In0.eyJleHAiOjE2MDY4OTYxOTIsImlhdCI6MTYwNjg5MjU5MiwianRpIjoiMGQ4YTM1YjAtMDNkZC00ODA3LWJkZDQtMTZhMTQzYjAwMTFkIiwiaXNzIjoiaHR0cDovLzE5Mi4xNjguNC4yNjo4MDgwL2F1dGgvcmVhbG1zL2RlbW8iLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiOTg1NGMwYjctM2Q5MS00YTdlLTllNzQtYzJmNzQzODA4MWFlIiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiZGVtb2NsaWVudCIsInNlc3Npb25fc3RhdGUiOiJjY2Q5N2IxOS04NzM2LTQ5ZTUtODk2NS01YWQwNGVmYTNiNDciLCJhY3IiOiIxIiwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbIm9mZmxpbmVfYWNjZXNzIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInByZWZlcnJlZF91c2VybmFtZSI6ImRlbW91c2VyIn0.qa8ymaTAuIfhRFkFHCJV11D49vaTNdo1-hI0oDKNPiwv1wNeHy2rIVnzSxtyqaZ-kFE93eSzEJDi44vuNgk8HpnhJL-wkz96XV_Z1WOvGSS_CbJTyO5WFTHbmhWHKCl6jV1eiDsK8JrXwzKZ6lwrNQoYuZDURDoc8XIotCgSE-rtQuSR4i1GjQ6o4-UOqsLLvTdRWJ9QyHuVrHCY7du1_8puu_OVietAZrfhGO6gkfSioo08G_1ghGoGov5IC00WqQYzbKfO7RGKkMRDW4Ke7kiz52P3iI90_ogcasfD-fY0JAThnTFK-8qIWVBcIo6XODq0Ab3RaFAP9ddGApR-Xg
 spring:
   # Redis
   redis:
-    # host: 127.0.0.1
-    password: bdyh@2020
+    host: 127.0.0.1
     # 数据库索引 默认0
     database: 10
-    # port: 6379
-    # 超时时间 Duration类型 3秒
-    timeout: 3S
-    cluster: #集群环境
-      nodes:
-        - 192.168.10.118:6379
-        - 192.168.10.118:6380
-        - 192.168.10.119:6379
-        - 192.168.10.119:6380
-        - 192.168.10.121:6379
-        - 192.168.10.121:6380
-      max-redirects: 3 # 获取失败 最大重定向次数
+
 
   elasticsearch:
     rest:
-      uris: 192.168.0.204:9200
+      uris: localhost:9200
 
   kafka:
-    bootstrap-servers: 192.168.10.11:9091,192.168.10.12:9092,192.168.10.13:9097
+    bootstrap-servers: localhost:9092
     listener:
       missing-topics-fatal: false # 没有主题就自动建立
     consumer:
@@ -56,7 +39,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://192.168.4.26:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
 
@@ -64,58 +47,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-
-  activiti:
-    check-process-definitions: false
-    font:
-      activityFontName: 宋体
-      labelFontName: 宋体
-
-# hbase配置
-hbase:
-    zookeeper:
-      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
-    name-space: nezha
-zookeeper:
-  znode:
-    parent: /hbase
-# Mybatis-plus
-mybatis-plus:
-  mapper-locations: classpath:/mapper/*.xml
-  # 实体扫描，多个package用逗号或者分号分隔
-  typeAliasesPackage: com.lind.test.entity,com.lind.testshade.entity
-  global-config:
-    # 主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
-    id-type: 2
-    # 字段策略 0:"忽略判断",1:"非 NULL 判断",2:"非空判断"
-    field-strategy: 2
-    # 驼峰下划线转换
-    db-column-underline: true
-    # 刷新mapper 调试神器
-    refresh-mapper: true
-    # 数据库大写下划线转换
-    #capital-mode: true
-    # 逻辑删除配置（下面3个配置）
-    logic-delete-value: 0
-    logic-not-delete-value: 1
-    # SQL 解析缓存，开启后多租户 @SqlParser 注解生效
-    sql-parser-cache: true
-  configuration:
-    map-underscore-to-camel-case: true
-    cache-enabled: false
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-# Keycloak Configuration
-keycloak:
-  auth-server-url: http://192.168.4.26:8080/auth
-  realm: demo
-  resource: democlient
-  client-key-password: 58e23419-c53f-49bc-bad6-b696756bba26
-  public-client: false #如果设置为true，则适配器不会将客户端的凭据发送到Keycloak。 这是可选的。 默认值为false。
-  principal-attribute: preferred_username
-  use-resource-role-mappings: false #如果设置为true，则适配器将在令牌内部查找用户的应用程序级角色映射。 如果为false，它将查看用户角色映射的领域级别。 这是可选的。 默认值为false。
-  cors: true
-
-uaa:
-  permitAll: /users,/kafka,/kafka/create,/doc.html
-  callbackUri: http://localhost:9090/token/authorizationCodeLogin
-

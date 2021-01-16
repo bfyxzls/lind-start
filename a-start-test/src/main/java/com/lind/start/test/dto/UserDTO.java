@@ -19,9 +19,7 @@ public class UserDTO {
     private Boolean sex;
     private Double total;
     private BigDecimal totalMoney;
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("EI_EXPOSE_REP")
     private Date birthday;
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("EI_EXPOSE_REP")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date getup;
     private List<Info> infoList;

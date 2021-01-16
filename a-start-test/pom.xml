@@ -11,17 +11,10 @@
 
     <artifactId>a-start-test</artifactId>
     <properties>
-        <keycloak-adapter-bom.version>11.0.2</keycloak-adapter-bom.version>
-        <keycloak-admin-client.version>3.2.1.Final</keycloak-admin-client.version>
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
     </properties>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.keycloak</groupId>
-                <artifactId>keycloak-admin-client</artifactId>
-                <version>${keycloak-admin-client.version}</version>
-            </dependency>
 
             <dependency>
                 <groupId>com.lind</groupId>
@@ -49,13 +42,6 @@
                 <artifactId>spring-boot-starter-json</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>${keycloak-adapter-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -77,7 +63,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -123,56 +108,12 @@
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>6.5.4</version>
         </dependency>
-        <!-- feign-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.elasticsearch.client</groupId>
-            <artifactId>elasticsearch-rest-high-level-client</artifactId>
-        </dependency>
 
-
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.data</groupId>-->
-        <!--            <artifactId>spring-data-hadoop-hbase</artifactId>-->
-        <!--            <version>2.5.0.RELEASE</version>-->
-        <!--        </dependency>-->
-
-
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-shaded-client</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>3.1.3</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>pl.allegro.tech</groupId>
-            <artifactId>embedded-elasticsearch</artifactId>
-            <version>2.7.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
         <!-- 公用库 -->
         <dependency>
             <groupId>com.lind</groupId>
@@ -182,11 +123,6 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-hbase-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-bundle</artifactId>
             <version>1.0.0</version>
         </dependency>
         <dependency>
@@ -201,8 +137,6 @@
             <version>1.0.0</version>
         </dependency>
 
-
-
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -216,6 +150,18 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-lock-start</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-limit-start</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
