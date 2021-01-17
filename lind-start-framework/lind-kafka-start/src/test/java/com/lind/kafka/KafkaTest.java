@@ -13,7 +13,8 @@ public class KafkaTest {
     MessageSender messageSender;
 
     @Test
-    public void testReceivingKafkaEvents() {
+    public void testReceivingKafkaEvents() throws InterruptedException {
         messageSender.send("ok");
+        Thread.sleep(1000);
     }
 }
