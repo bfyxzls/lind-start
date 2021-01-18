@@ -5,6 +5,7 @@ import com.lind.kafka.handler.FailureHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.springframework.kafka.support.Acknowledgment;
 
 import java.util.Optional;

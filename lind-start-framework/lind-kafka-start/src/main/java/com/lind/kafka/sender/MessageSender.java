@@ -13,7 +13,6 @@ public interface MessageSender<T extends MessageEntity> {
 
     void send(String topic, T message) throws JsonProcessingException;
 
-
     void send(String topic, T message, SuccessHandler successHandler) throws JsonProcessingException;
 
     void send(String topic, T message, FailureHandler failureHandler) throws JsonProcessingException;

@@ -61,7 +61,9 @@ public class WinterKafkaProviderConfig {
     @Bean
     public ProducerFactory<?, ?> kafkaProducerFactory() {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.119.131:9092");
+       // props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.119.131:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.6:9092");
+
         //重试次数
         props.put(ProducerConfig.RETRIES_CONFIG, 10);
         //批量发送数量，这里规定为1，保证发送的成功性
