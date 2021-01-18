@@ -1,12 +1,16 @@
 package com.lind.kafka;
 
-import org.junit.runner.RunWith;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.handler.FailureHandler;
+import com.lind.kafka.receiver.MessageReceiver;
+import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+@Component
+public class ApplicationTests implements MessageReceiver<MessageEntity> {
 
-@RunWith(SpringRunner.class)
-public class ApplicationTests {
-    public void contextLoads() throws IOException {
+    @Override
+    public boolean messageReceive(MessageEntity message, FailureHandler failureHandler) {
+        System.out.println(message.getData());
+        return true;
     }
 }

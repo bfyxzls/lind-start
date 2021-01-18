@@ -1,5 +1,8 @@
 package com.lind.kafka;
 
+import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.sender.MessageSender;
+import lombok.SneakyThrows;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +15,12 @@ public class KafkaTest {
     @Autowired
     MessageSender messageSender;
 
+    @SneakyThrows
     @Test
     public void testReceivingKafkaEvents() throws InterruptedException {
-        messageSender.send("ok");
+        MessageEntity testMessageEntity = new MessageEntity();
+        testMessageEntity.setData("hello");
+        messageSender.send("demo", testMessageEntity);
         Thread.sleep(1000);
     }
 }
