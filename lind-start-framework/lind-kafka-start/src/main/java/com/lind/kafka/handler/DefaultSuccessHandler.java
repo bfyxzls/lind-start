@@ -9,9 +9,8 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.springframework.kafka.support.SendResult;
 
 /**
- * @Description TODO
- * @date 2020/7/7 11:30
- **/
+ * 消息发送成功默认事件.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class DefaultSuccessHandler implements SuccessHandler {
@@ -28,7 +27,7 @@ public class DefaultSuccessHandler implements SuccessHandler {
             int partition = recordMetadata.partition();
             long offset = recordMetadata.offset();
 
-            log.info("sent topic={} data={} with offset={} partition={}", topic, value,
+            log.info("success sent topic={} data={} with offset={} partition={}", topic, value,
                     offset, partition);
         } catch (JsonProcessingException e) {
             log.error("json反序列化失败", e);
