@@ -64,6 +64,10 @@ public class KafkaProviderConfig {
         return new DefaultMessageSenderImpl(successHandler, failureHandler, kafkaTemplate, objectMapper);
     }
 
+    /**
+     * 生产者自定义配置.
+     * @return
+     */
     @Bean
     public DefaultKafkaProducerFactory<String, String> kafkaProducerFactory() {
         Map<String, Object> paras = new HashMap<>();
@@ -93,6 +97,10 @@ public class KafkaProviderConfig {
     }
 
 
+    /**
+     * 消费者自定义配置.
+     * @return
+     */
     @Bean
     public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
@@ -104,7 +112,7 @@ public class KafkaProviderConfig {
         }
         factory.getContainerProperties().setPollTimeout(1000);
         // 手动提交的时候需要设置AckMode为 MANUAL或MANUAL_IMMEDIATE
-        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.BATCH);
 
         return factory;
     }
