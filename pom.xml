@@ -20,6 +20,7 @@
         <module>a-start-keycloak-demo/a-start-keycloak</module>
         <module>lind-start-framework/lind-spi</module>
         <module>a-start-keycloak-demo/keycloak-service-spi</module>
+        <module>a-start-keycloak-demo/keycloak-service-self-spi</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
