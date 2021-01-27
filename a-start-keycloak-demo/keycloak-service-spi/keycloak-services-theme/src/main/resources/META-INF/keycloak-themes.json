@@ -1,12 +1,12 @@
 {
     "themes": [{
-        "name" : "address",
+        "name" : "self",
         "types": [ "admin", "account", "login" ]
     }, {
-        "name" : "logo-example",
+        "name" : "red",
         "types": [ "admin", "account", "login", "welcome" ]
     }, {
-        "name" : "sunrise",
+        "name" : "green",
         "types": [ "login" ]
     }]
 }
