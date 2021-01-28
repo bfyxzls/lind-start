@@ -1,3 +1,0 @@
-uaa:
-  callbackUri: http://192.168.4.26:9090/token/authorizationCodeRedirect #认证中心地址
-  redirectUri: http://192.168.4.26:9090/index

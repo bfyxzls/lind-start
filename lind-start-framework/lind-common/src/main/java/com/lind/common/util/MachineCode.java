@@ -1,6 +1,10 @@
-package keycloak.client.demo;
+package com.lind.common.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigInteger;
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -11,12 +15,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * 此小程序是为了获取部署服务器的机机器码
- * 使用方法：
- * 将此程序打成jar包
- * 运行 java -jar name.jar 即可得到输出
- */
 public class MachineCode {
 
     private static final String LINUX = "LINUX";
@@ -24,11 +22,7 @@ public class MachineCode {
     private static final String WINDOWS = "WINDOWS";
 
     /**
-     * @param args
-     * @return void
-     * @Author Guoqiang.Bai
-     * @Description main
-     * @Date 9:37 2020/3/20
+     * @param 打印
      **/
     public static void print() {
         System.out.print("当前机器码输出:  ");

@@ -85,7 +85,12 @@
             <artifactId>hutool-core</artifactId>
             <version>5.4.0</version>
         </dependency>
-
+        <!-- 服务注册 -->
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc5</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

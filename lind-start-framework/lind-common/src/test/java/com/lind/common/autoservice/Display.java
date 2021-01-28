@@ -1,4 +1,6 @@
 package com.lind.common.autoservice;
 
-public class Display {
+public interface Display {
+    String display();
 }
+
