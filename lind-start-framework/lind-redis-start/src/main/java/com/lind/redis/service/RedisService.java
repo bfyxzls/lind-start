@@ -2,7 +2,6 @@ package com.lind.redis.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.concurrent.TimeUnit;
 /**
  * 定义常用的 Redis操作.
  */
-@Component
 public class RedisService {
 
     @Autowired

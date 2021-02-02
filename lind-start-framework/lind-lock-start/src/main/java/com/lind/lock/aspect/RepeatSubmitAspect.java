@@ -2,13 +2,12 @@ package com.lind.lock.aspect;
 
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.exception.RepeatSubmitException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -23,8 +22,8 @@ import static org.springframework.util.Assert.notNull;
  * URL重复提交拦截器.
  */
 @Slf4j
-@Component
 @Aspect
+@RequiredArgsConstructor
 public class RepeatSubmitAspect {
     /**
      * 拦截器执行顺序.
@@ -34,8 +33,7 @@ public class RepeatSubmitAspect {
      * @around after
      * @after
      */
-    @Autowired
-    RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Around("@annotation(repeatSubmit)")
     public Object around(ProceedingJoinPoint proceedingJoinPoint, RepeatSubmit repeatSubmit) throws Throwable {

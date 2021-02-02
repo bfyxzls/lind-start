@@ -1,11 +1,16 @@
 package com.lind.lock.config;
 
+import com.lind.lock.aspect.RepeatSubmitAspect;
+import com.lind.lock.template.RedisLockTemplate;
+import com.lind.lock.template.RedisUserManualLockTemplate;
+import com.lind.lock.template.UserIdAuditorAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 import org.springframework.integration.support.locks.LockRegistry;
 
@@ -23,5 +28,26 @@ public class RedisLockConfig {
     @ConditionalOnMissingBean(LockRegistry.class)
     public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory) {
         return new RedisLockRegistry(redisConnectionFactory, redisLockProperty.getRegistryKey());
+    }
+
+    @Bean
+    public RepeatSubmitAspect repeatSubmitAspect(RedisTemplate redisTemplate) {
+        return new RepeatSubmitAspect(redisTemplate);
+    }
+
+    @Bean
+    public RedisLockTemplate redisLockTemplate(
+            RedisLockRegistry redisLockRegistry,
+            RedisLockProperty redisLockProperty) {
+        return new RedisLockTemplate(redisLockRegistry, redisLockProperty);
+    }
+
+    @Bean
+    public RedisUserManualLockTemplate redisUserManualLockTemplate(
+            RedisTemplate<String, String> redisTemplate,
+            RedisLockProperty redisLockProperty,
+            RedisLockTemplate redisLockTemplate,
+            UserIdAuditorAware auditorAware) {
+        return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate, auditorAware);
     }
 }
