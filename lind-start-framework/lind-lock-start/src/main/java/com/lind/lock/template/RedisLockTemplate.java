@@ -1,25 +1,20 @@
 package com.lind.lock.template;
 
 import com.lind.lock.config.RedisLockProperty;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.integration.redis.util.RedisLockRegistry;
-import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 
 @Slf4j
-@Component
-@ConditionalOnProperty(value = "redis.lock.enable", havingValue = "true", matchIfMissing = true)
+@RequiredArgsConstructor
 public class RedisLockTemplate implements DistributedLockTemplate {
 
-    @Autowired
-    private RedisLockRegistry redisLockRegistry;
-    @Autowired
-    private RedisLockProperty redisLockProperty;
+    private final RedisLockRegistry redisLockRegistry;
+    private final RedisLockProperty redisLockProperty;
 
     @SneakyThrows //向上层抛出异常
     @Override

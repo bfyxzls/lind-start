@@ -3,12 +3,11 @@ package com.lind.lock.template;
 import com.google.common.collect.ImmutableMap;
 import com.lind.lock.config.RedisLockProperty;
 import com.lind.lock.exception.RedisUserManualLockException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -22,18 +21,14 @@ import static org.springframework.util.Assert.notNull;
  * 基于redis实现的当前用户手动锁.
  * 功能：根据当前用户去锁定某个资源,之后手动释放,否则超时释放.
  */
-@Component
 @Slf4j
+@RequiredArgsConstructor
 @ConditionalOnBean(RedisLockTemplate.class)
 public class RedisUserManualLockTemplate {
-    @Autowired
-    RedisTemplate<String, String> redisTemplate;
-    @Autowired
-    RedisLockProperty redisLockProperty;
-    @Autowired
-    RedisLockTemplate redisLockTemplate;
-    @Autowired
-    UserIdAuditorAware auditorAware;
+    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisLockProperty redisLockProperty;
+    private final RedisLockTemplate redisLockTemplate;
+    private final UserIdAuditorAware auditorAware;
 
     /**
      * 执行手动锁.
@@ -69,7 +64,7 @@ public class RedisUserManualLockTemplate {
      */
     void onGetLockValidate(String key, String user) {
         Boolean isExist = redisTemplate.hasKey(key);
-        if (isExist!=null && isExist) {
+        if (isExist != null && isExist) {
             String currentValue = redisTemplate.opsForValue().get(key);
             if (StringUtils.isBlank(currentValue) || !currentValue.equals(user)) {
                 Long expire = redisTemplate.getExpire(key);
