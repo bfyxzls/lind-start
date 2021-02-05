@@ -1,4 +1,4 @@
-package com.pkulaw.test.enums;
+package com.lind.elasticsearch.enums;
 
 import lombok.RequiredArgsConstructor;
 

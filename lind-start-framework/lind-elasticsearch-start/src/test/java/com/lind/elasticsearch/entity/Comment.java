@@ -1,9 +1,8 @@
-package com.pkulaw.test.entity;
+package com.lind.elasticsearch.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.pkulaw.elasticsearch.entity.EsBaseEntity;
-import com.pkulaw.test.enums.CommentType;
-import com.pkulaw.test.enums.Status;
+import com.lind.elasticsearch.enums.CommentType;
+import com.lind.elasticsearch.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

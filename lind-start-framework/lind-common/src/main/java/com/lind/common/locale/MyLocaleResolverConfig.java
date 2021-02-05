@@ -1,7 +1,9 @@
-package com.lind.keycloak;
+package com.lind.common.locale;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
@@ -13,9 +15,7 @@ import java.util.Locale;
 /**
  * @ClassName MyLocaleResolverConfig
  * @Description 自定义本地国际化
- * @Author yuxiang
- * @Date 2020/9/15
- * @Version 1.0
+ * /resources/i18n/messages.properties文件
  **/
 @Component
 public class MyLocaleResolverConfig implements LocaleResolver {
@@ -56,4 +56,11 @@ public class MyLocaleResolverConfig implements LocaleResolver {
         return new MyLocaleResolverConfig();
     }
 
+    @Bean
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("i18n.message");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 }

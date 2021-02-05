@@ -1,5 +1,6 @@
 package com.lind.elasticsearch;
 
+import com.lind.elasticsearch.entity.Reply;
 import com.lind.elasticsearch.util.EsPageUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
@@ -14,6 +15,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
 import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
 import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.junit.Before;
@@ -312,4 +314,41 @@ public class TestApp {
         Assert.notNull(optional.orElse(null));
         log.info(optional.get().toString());
     }
+
+
+    @Test
+    public void aggregateTopHitsTotal() {
+        // 创建一个查询条件对象
+        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+        // 拼接查询条件
+        queryBuilder.should(QueryBuilders.termQuery("createUser", "1"));
+        // 创建聚合查询条件
+        TermsAggregationBuilder operateTypeAggBuilder = AggregationBuilders.terms("commentId")
+                .field("commentId").size(10000);
+        operateTypeAggBuilder.subAggregation(AggregationBuilders.topHits("top").size(2)
+                .fetchSource("content", "delFlag"));
+        // 创建查询对象
+        SearchQuery build = new NativeSearchQueryBuilder()
+                .withQuery(queryBuilder) //添加查询条件
+                .addAggregation(operateTypeAggBuilder) // 添加聚合条件
+                .withPageable(PageRequest.of(0, 1)) //符合查询条件的文档分页，如果文档比较大，可以把这个分页改小（不是聚合的分页）
+                .build();
+
+        AggregatedPage<Reply> testEntities = elasticsearchTemplate.queryForPage(build, Reply.class);
+        Aggregations entitiesAggregations = testEntities.getAggregations();
+        Terms terms = (Terms) entitiesAggregations.asMap().get("commentId");
+        // 遍历取出聚合字段列的值，与对应的数量
+        for (Terms.Bucket bucket : terms.getBuckets()) {
+            // We ask for top_hits for each bucket
+            TopHits topHits = bucket.getAggregations().get("top");
+            for (SearchHit hit : topHits.getHits().getHits()) {
+                log.info(" -> id [{}], _source [{}]", hit.getId(), hit.getSourceAsString());
+            }
+            System.out.println(bucket.getKeyAsString() + "\t" +
+                    bucket.getDocCount());
+
+        }
+
+    }
+
 }

@@ -1,4 +1,4 @@
-package com.pkulaw.test.entity;
+package com.lind.elasticsearch.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
