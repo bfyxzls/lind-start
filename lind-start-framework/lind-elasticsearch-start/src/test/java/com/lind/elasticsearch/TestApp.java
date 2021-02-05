@@ -340,12 +340,11 @@ public class TestApp {
         // 遍历取出聚合字段列的值，与对应的数量
         for (Terms.Bucket bucket : terms.getBuckets()) {
             // We ask for top_hits for each bucket
+            log.info("commentId:{}", bucket.getKeyAsString());
             TopHits topHits = bucket.getAggregations().get("top");
             for (SearchHit hit : topHits.getHits().getHits()) {
                 log.info(" -> id [{}], _source [{}]", hit.getId(), hit.getSourceAsString());
             }
-            System.out.println(bucket.getKeyAsString() + "\t" +
-                    bucket.getDocCount());
 
         }
 
