@@ -1,3 +1,6 @@
+# jboss docker
+参考：https://github.com/jboss-dockerfiles/wildfly
+
 # 热部署,动态加载,插件化
 ## ClassLoader 
 1. 解决思路就是先获取当前类的Class，然后获取当前类的加载器，在自定义的加载器或者URLClassLoader加载器创建时指定为它们的父加载器，这样问题就会游刃而解了，可能平常我们测试写个简单的例子没遇到这个问题，因为我们那时的URLClassLoader或者自定义的加载器的父加载器都是JVM的第三次加载器即应用程序加载，它是专门加载classpath下边的或者指定的类或者jar的，依照双亲委托模型，肯定会找到引入路径的那个类或者jar的。
