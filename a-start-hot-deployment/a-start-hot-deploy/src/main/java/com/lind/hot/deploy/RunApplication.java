@@ -1,6 +1,8 @@
 package com.lind.hot.deploy;
 
+import com.lind.hot.deploy.spi.CarHelloProviderFactory;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class RunApplication extends SpringBootServletInitializer {
+
+    @Autowired
+    CarHelloProviderFactory carHelloProviderFactory;
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -26,6 +31,8 @@ public class RunApplication extends SpringBootServletInitializer {
 
     @GetMapping("hello")
     public ResponseEntity hello() {
+
+        carHelloProviderFactory.create().start();
         return ResponseEntity.ok("hello world");
     }
 
