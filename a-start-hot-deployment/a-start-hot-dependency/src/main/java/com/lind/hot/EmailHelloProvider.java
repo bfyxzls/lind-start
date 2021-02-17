@@ -1,11 +1,12 @@
 package com.lind.hot;
 
-import com.lind.spi.Provider;
+import com.lind.interfaces.PrinterProvider;
 
-public class EmailHelloProvider implements Provider {
+public class EmailHelloProvider extends PrinterProvider {
+
 
     @Override
     public String login() {
-        return "ddd";
+        return "EmailHelloProvider";
     }
 }

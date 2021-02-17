@@ -1,8 +1,9 @@
 package com.lind.hot;
 
+import com.lind.hot.deploy.spi.CarHelloProviderFactory;
 import com.lind.spi.ProviderFactory;
 
-public class EmailHelloProviderFactory implements ProviderFactory<EmailHelloProvider> {
+public class EmailHelloProviderFactory implements CarHelloProviderFactory<EmailHelloProvider> {
 
     @Override
     public EmailHelloProvider create() {
