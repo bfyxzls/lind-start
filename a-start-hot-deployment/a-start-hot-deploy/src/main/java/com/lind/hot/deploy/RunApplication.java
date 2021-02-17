@@ -7,21 +7,21 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ServiceLoader;
 
 @SpringBootApplication
 @RestController
 public class RunApplication extends SpringBootServletInitializer {
 
-    @Autowired
-    CarHelloProviderFactory carHelloProviderFactory;
 
     @SneakyThrows
     public static void main(String[] args) {
         SpringApplication.run(RunApplication.class, args);
         // SpiFactory.watchDir("d:\\plugins");
+
     }
 
     @Override
@@ -30,10 +30,12 @@ public class RunApplication extends SpringBootServletInitializer {
     }
 
     @GetMapping("hello")
-    public ResponseEntity hello() {
+    public void hello() {
 
-        carHelloProviderFactory.create().start();
-        return ResponseEntity.ok("hello world");
+        ServiceLoader<CarHelloProviderFactory> carHelloProviderFactories = ServiceLoader.load(CarHelloProviderFactory.class);
+        for (CarHelloProviderFactory u : carHelloProviderFactories) {
+            u.create().start();
+        }
     }
 
 
