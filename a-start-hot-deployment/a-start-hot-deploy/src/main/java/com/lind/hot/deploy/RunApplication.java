@@ -1,16 +1,17 @@
 package com.lind.hot.deploy;
 
-import com.lind.hot.deploy.spi.CarHelloProviderFactory;
+import com.lind.spi.ProviderFactory;
+import com.lind.spi.SpiFactory;
 import lombok.SneakyThrows;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ServiceLoader;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
@@ -20,22 +21,20 @@ public class RunApplication extends SpringBootServletInitializer {
     @SneakyThrows
     public static void main(String[] args) {
         SpringApplication.run(RunApplication.class, args);
-        // SpiFactory.watchDir("d:\\plugins");
+        SpiFactory.watchDir("d:\\jar");
 
     }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(RunApplication.class);
-    }
 
+    @SneakyThrows
     @GetMapping("hello")
-    public void hello() {
+    public ResponseEntity hello() {
 
-        ServiceLoader<CarHelloProviderFactory> carHelloProviderFactories = ServiceLoader.load(CarHelloProviderFactory.class);
-        for (CarHelloProviderFactory u : carHelloProviderFactories) {
-            u.create().start();
+        List<String> result = new ArrayList<>();
+        for (ProviderFactory u : SpiFactory.getProviderFactory(ProviderFactory.class)) {
+            result.add(u.create().login());
         }
+        return ResponseEntity.ok(result);
     }
 
 

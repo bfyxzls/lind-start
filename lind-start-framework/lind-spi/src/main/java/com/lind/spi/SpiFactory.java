@@ -18,6 +18,7 @@ import java.nio.file.WatchService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
 /**
  * spi插件加载器.
@@ -28,7 +29,7 @@ public class SpiFactory {
      * Parameters of the method to add an URL to the System classes.
      */
     private static final Class<?>[] parameters = new Class[]{URL.class};
-    public static List<DynamicClassLoader> dynamicClassLoaders=new ArrayList<>();
+    public static List<DynamicClassLoader> dynamicClassLoaders = new ArrayList<>();
 
     /**
      * 初始化时，应该对插件读出后，写到一个Map里，插件名称是key，DynamicClassLoader是value.
@@ -59,30 +60,13 @@ public class SpiFactory {
                     StandardWatchEventKinds.ENTRY_DELETE);
             while (true) {
                 final WatchKey key = watchService.take();
-
                 for (WatchEvent<?> watchEvent : key.pollEvents()) {
-
                     final WatchEvent.Kind<?> kind = watchEvent.kind();
-
                     if (kind == StandardWatchEventKinds.OVERFLOW) {
                         continue;
                     }
-                    //创建事件
-                    if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                        System.out.println("[新建]");
-                    }
-                    //修改事件
-                    if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
-                        System.out.println("修改]");
-                    }
-                    //删除事件
-                    if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                        System.out.println("[删除]");
-                    }
-                    // get the filename for the event
                     final WatchEvent<Path> watchEventPath = (WatchEvent<Path>) watchEvent;
                     final Path filename = watchEventPath.context();
-                    // print it out
                     System.out.println(kind + " -> " + filename);
                     initClassLoader(path);
                 }
@@ -196,5 +180,45 @@ public class SpiFactory {
      */
     public static List<ProviderFactory> getProviderFactory(ClassLoader classLoader) {
         return getProviderFactory(ProviderFactory.class, classLoader);
+    }
+
+    /**
+     * 返回所有具体的providerFactory列表，使用dynamicClassLoaders加载器
+     *
+     * @param clazz
+     * @param <U>
+     * @return
+     */
+    public static <U extends ProviderFactory> U getProviderFactory(Class<U> clazz, String id) {
+        for (ClassLoader classLoader : dynamicClassLoaders) {
+            ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
+            for (U providerFactory : load) {
+                if (providerFactory.getId().equals(id)) {
+                    return providerFactory;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 返回所有具体的providerFactory工厂，使用dynamicClassLoaders加载器
+     *
+     * @param clazz
+     * @param <U>
+     * @return
+     */
+    public static <U extends ProviderFactory> List<U> getProviderFactory(Class<U> clazz) {
+        List<U> list = new ArrayList<>();
+        for (ClassLoader classLoader : dynamicClassLoaders) {
+            ServiceLoader<U> load = ServiceLoader.load(clazz, classLoader);
+            List<String> idList = list.stream().map(o -> o.getId()).collect(Collectors.toList());
+            for (U providerFactory : load) {
+                if (!idList.contains(providerFactory.getId())) {
+                    list.add(providerFactory);
+                }
+            }
+        }
+        return list;
     }
 }

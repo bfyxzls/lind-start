@@ -1,8 +1,8 @@
 package com.lind.hot;
 
-import com.lind.interfaces.PrinterProvider;
+import com.lind.spi.Provider;
 
-public class EmailHelloProvider extends PrinterProvider {
+public class EmailHelloProvider implements Provider {
 
 
     @Override
