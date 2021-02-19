@@ -7,13 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +61,9 @@ public class TokenController {
                 getTokenUri(),
                 request,
                 Map.class).getBody();
-        response.sendRedirect(uaaProperties.getRedirectUri() + "?token=" + maps.get("access_token"));
+        response.sendRedirect(uaaProperties.getRedirectUri()
+                + "?access_token=" + maps.get("access_token")
+                + "&refresh_token=" + maps.get("refresh_token"));
     }
 
     /**
