@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 //@ActiveProfiles("dev")
@@ -20,8 +22,8 @@ public class KafkaTest {
     @Test
     public void testReceivingKafkaEvents() throws InterruptedException {
         MessageEntity testMessageEntity = new MessageEntity();
-        UserDTO userDTO =new UserDTO();
-        userDTO.setTitle("世界你好");
+        UserDTO userDTO = new UserDTO();
+        userDTO.setTitle("世界你好" + new Date());
         testMessageEntity.setData(userDTO);
         messageSender.send("demo", testMessageEntity);
         Thread.sleep(10000);
