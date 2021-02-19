@@ -12,8 +12,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 /**
-  * @Description TODO
- * @date 2020/7/7 12:45
+ * 默认消息发送者.
  **/
 @RequiredArgsConstructor
 public class DefaultMessageSenderImpl implements MessageSender<MessageEntity> {

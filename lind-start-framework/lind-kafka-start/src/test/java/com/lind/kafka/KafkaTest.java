@@ -7,12 +7,11 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
+//@ActiveProfiles("dev")
 public class KafkaTest {
     @Autowired
     MessageSender messageSender;
@@ -21,8 +20,10 @@ public class KafkaTest {
     @Test
     public void testReceivingKafkaEvents() throws InterruptedException {
         MessageEntity testMessageEntity = new MessageEntity();
-        testMessageEntity.setData("hello");
+        UserDTO userDTO =new UserDTO();
+        userDTO.setTitle("世界你好");
+        testMessageEntity.setData(userDTO);
         messageSender.send("demo", testMessageEntity);
-        Thread.sleep(1000);
+        Thread.sleep(10000);
     }
 }

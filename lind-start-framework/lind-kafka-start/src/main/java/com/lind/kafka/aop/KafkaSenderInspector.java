@@ -14,9 +14,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 /**
- * @Description TODO
- * @date 2020/7/7 11:37
- **/
+ * 消息发送拦截器.
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor

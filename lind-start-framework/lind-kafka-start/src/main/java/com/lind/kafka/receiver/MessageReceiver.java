@@ -5,10 +5,9 @@ import com.lind.kafka.entity.MessageEntity;
 import com.lind.kafka.handler.FailureHandler;
 
 /**
- * @author BD-PC220
+ * 订阅者.
  */
 public interface MessageReceiver<T extends MessageEntity> {
-
 
     /**
      * 接收消息
@@ -18,6 +17,4 @@ public interface MessageReceiver<T extends MessageEntity> {
      * @return
      */
     boolean messageReceive(T message, FailureHandler failureHandler);
-
-
 }

@@ -6,9 +6,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * @Description TODO
- * @date 2020/7/6 22:20
- **/
+ * 消息实体.
+ * @param <T>
+ */
 @Data
 public class MessageEntity<T> implements Serializable {
     private static final long serialVersionUID = 3377490669064560046L;

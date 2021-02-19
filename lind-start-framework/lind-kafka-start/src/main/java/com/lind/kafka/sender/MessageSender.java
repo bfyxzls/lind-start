@@ -6,8 +6,7 @@ import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
 
 /**
-  * @Description TODO
- * @date 2020/7/7 8:31
+ * 发送者.
  **/
 public interface MessageSender<T extends MessageEntity> {
 

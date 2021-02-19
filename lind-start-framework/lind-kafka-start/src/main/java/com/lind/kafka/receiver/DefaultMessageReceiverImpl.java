@@ -5,15 +5,13 @@ import com.lind.kafka.handler.FailureHandler;
 import lombok.extern.slf4j.Slf4j;
 
 /**
-  * @Description TODO
- * @date 2020/7/7 13:43
- **/
+ * 默认订阅者.
+ */
 @Slf4j
 public class DefaultMessageReceiverImpl implements MessageReceiver {
 
     @Override
     public boolean messageReceive(MessageEntity message, FailureHandler failureHandler) {
-
         return false;
     }
 }

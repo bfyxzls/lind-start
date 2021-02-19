@@ -32,17 +32,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description TODO
- * @date 2020/6/10 16:08
- **/
-
+ * 自动装配管理.
+ */
 @Configuration
 @ConditionalOnProperty(prefix = "spring.kafka", value = "enabled", matchIfMissing = true, havingValue = "true")
 @EnableConfigurationProperties(KafkaProperties.class)
 @RequiredArgsConstructor
 public class KafkaProviderConfig {
 
-    static String host = "192.168.119.131:9092";
     @Autowired
     private KafkaProperties kafkaProperties;
 
@@ -66,6 +63,7 @@ public class KafkaProviderConfig {
 
     /**
      * 生产者自定义配置.
+     *
      * @return
      */
     @Bean
@@ -99,6 +97,7 @@ public class KafkaProviderConfig {
 
     /**
      * 消费者自定义配置.
+     *
      * @return
      */
     @Bean
