@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorator="layout">
+<div layout:fragment="content">
+
+    <!--遍历数组-->
+    <table class="table table-bordered table_number">
+        <thead>
+        <tr>
+            <th>jobClassName</th>
+            <th>jobName</th>
+            <th>groupName</th>
+            <th>triggerName</th>
+            <th>triggerGroupName</th>
+            <th>cronExpression</th>
+            <th>time</th>
+            <th>status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item:${result}">
+            <td th:text="${item.jobClassName}"></td>
+            <td th:text="${item.jobName}"></td>
+            <td th:text="${item.groupName}"></td>
+            <td th:text="${item.triggerName}"></td>
+            <td th:text="${item.triggerGroupName}"></td>
+            <td th:text="${item.cronExpression}"></td>
+            <td th:text="${item.time}"></td>
+            <td th:text="${item.status}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</html>

@@ -1,4 +1,4 @@
-package com.pkulaw.schedule;
+package com.pkulaw.schedule.controller;
 
 import com.pkulaw.schedule.dto.JobDto;
 import com.pkulaw.schedule.service.QuartzService;
