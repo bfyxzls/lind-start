@@ -10,7 +10,7 @@ import java.util.Base64;
 /**
  * DES对称加密算法
  */
-public class DESUtils {
+public class DESCbcUtils {
 
     /**
      * 偏移变量，固定占8位字节.

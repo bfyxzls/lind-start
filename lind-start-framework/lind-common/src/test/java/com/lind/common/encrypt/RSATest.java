@@ -1,6 +1,5 @@
-package com.lind.common;
+package com.lind.common.encrypt;
 
-import com.lind.common.encrypt.RSAUtils;
 import org.junit.Test;
 import org.springframework.util.Base64Utils;
 

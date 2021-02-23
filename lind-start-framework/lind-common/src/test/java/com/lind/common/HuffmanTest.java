@@ -1,6 +1,5 @@
 package com.lind.common;
 
-import com.lind.common.encrypt.AESNetUtils;
 import com.lind.common.encrypt.HashUtils;
 import com.lind.common.zip.BetterHuffman;
 import com.lind.common.zip.HumanByte;
@@ -29,14 +28,6 @@ public class HuffmanTest {
 //        System.out.println("code:" + BetterHuffman.expand(HashUtils.decryptBASE62(huff)));
     }
 
-    @SneakyThrows
-    @Test
-    public void aesHuffmanTest() {
-        String code = AESNetUtils.encrypt("v6_12345678_D_ff_20201231_999", "passwordpassword");
-        System.out.println("base64:" + code);
-        System.out.println("code:" + AESNetUtils.decrypt(code, "passwordpassword"));
-
-    }
 
     @Test
     public void base62() {

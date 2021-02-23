@@ -1,5 +1,6 @@
 package com.lind.common.encrypt;
 
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,8 @@ public class AESNetUtils {
      * @return
      * @throws Exception
      */
-    public static String encrypt(String content, String key) throws Exception {
+    @SneakyThrows
+    public static String encrypt(String content, String key) {
         String IV = key;
         if (key.length() > 16) {
             // IV为商户MD5密钥后16位
@@ -41,7 +43,8 @@ public class AESNetUtils {
      * @return
      * @throws Exception
      */
-    public static String decrypt(String content, String key) throws Exception {
+    @SneakyThrows
+    public static String decrypt(String content, String key) {
         String IV = key;
         if (key.length() > 16) {
             // IV为商户MD5密钥后16位
@@ -69,7 +72,7 @@ public class AESNetUtils {
             IvParameterSpec ivspec = new IvParameterSpec(IV.getBytes());
             cipher.init(Cipher.ENCRYPT_MODE, keyspec, ivspec);
             byte[] encrypted = cipher.doFinal(plaintext);
-            String result = HashUtils.encryptBASE16(encrypted);
+            String result = HashUtils.encryptBASE64(encrypted);
             log.info("encrypt:{}", result);
             return result;
         } catch (Exception e) {
@@ -86,7 +89,7 @@ public class AESNetUtils {
      */
     public static String decryptData(String data, String key, String IV) throws Exception {
         try {
-            byte[] encrypted1 =  HashUtils.decryptBASE16(data);
+            byte[] encrypted1 = HashUtils.decryptBASE64(data);
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             SecretKeySpec keyspec = new SecretKeySpec(key.getBytes(), "AES");
             IvParameterSpec ivspec = new IvParameterSpec(IV.getBytes());

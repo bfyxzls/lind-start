@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.encrypt;
 
 import com.lind.common.encrypt.HashUtils;
 import org.junit.Test;
