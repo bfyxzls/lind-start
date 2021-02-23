@@ -136,8 +136,9 @@ public class DESTest {
     @SneakyThrows
     @Test
     public void ecb3() {
-        log.info(
-                DESNetUtils.EncryptUtil.encryptToBase64("123456", "keyphrase"));
+        String msg = DESNetUtils.EncryptUtil.encryptToBase64("123456", "keyphrase");
+        log.info("ens={}", msg);
+        log.info(DESNetUtils.EncryptUtil.decryptFromBase64(msg, "keyphrase"));
     }
 
 }
