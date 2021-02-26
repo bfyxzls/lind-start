@@ -18,7 +18,8 @@
         <module>a-start-hot-deployment/a-start-hot-interface</module>
         <module>a-start-activiti</module>
         <module>lind-start-framework/lind-spi</module>
-     </modules>
+        <module>lind-start-framework/lind-office-convert</module>
+    </modules>
     <properties>
         <skipTests>true</skipTests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
