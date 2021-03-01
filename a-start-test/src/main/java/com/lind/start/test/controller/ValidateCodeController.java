@@ -4,7 +4,7 @@ import com.lind.verification.code.CodeConstants;
 import com.lind.verification.code.ValidateCodeException;
 import com.lind.verification.code.ValidateCodeProcessor;
 import com.lind.verification.code.ValidateCodeProcessorHolder;
-import com.lind.common.util.CommonResult;
+import com.lind.common.rest.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

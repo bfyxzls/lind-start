@@ -3504,7 +3504,7 @@ ORYX.Core.SVG.SVGMarker = Clazz.extend({
 	 * Writes the changed values into the SVG marker.
 	 */
 	update: function() {
-		//TODO mache marker resizebar!!! aber erst wenn der rest der connectingshape funzt!
+		//TODO mache marker resizebar!!! aber erst wenn der com.lind.common.rest der connectingshape funzt!
 
 //		//update marker attributes
 //		if(this.refX != this.oldRefX) {

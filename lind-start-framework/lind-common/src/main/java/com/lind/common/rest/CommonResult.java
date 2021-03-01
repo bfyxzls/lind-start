@@ -1,4 +1,4 @@
-package com.lind.common.util;
+package com.lind.common.rest;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lind.common.exception.HttpCodeEnum;

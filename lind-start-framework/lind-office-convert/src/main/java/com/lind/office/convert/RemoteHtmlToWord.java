@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
  * @since 2018-06-14 11:31
  */
 @Service
-public class Html2Doc {
-    protected static final Logger logger = LoggerFactory.getLogger(Html2Doc.class);
+public class RemoteHtmlToWord {
+    protected static final Logger logger = LoggerFactory.getLogger(RemoteHtmlToWord.class);
 
     /**
      * 解析生成PDF
@@ -215,4 +215,5 @@ public class Html2Doc {
         m_img.appendTail(html_sb);
         return html_sb.toString();
     }
+
 }

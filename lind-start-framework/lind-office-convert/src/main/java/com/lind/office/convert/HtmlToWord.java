@@ -1,4 +1,4 @@
-package com.lind.office.convert.utils.com.lind.office.convert;
+package com.lind.office.convert;
 
 import com.lind.office.convert.utils.CustomXWPFDocument;
 import com.lind.office.convert.utils.OfficeUtil;
@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -140,12 +141,18 @@ public class HtmlToWord {
                 bais.close();
                 ostream.close();
 
+                InputStream in = new FileInputStream(fileName);
+                XWPFDocument document = new XWPFDocument(in);
+                FileOutputStream fileOutputStream = new FileOutputStream("D:\\wordFile\\temp.docx");
+                document.write(fileOutputStream);
+
                 if (imgs.size() > 0) {
                     // 临时文件（手动改好的docx文件）,需要使用office另存为office2007格式的文件
                     CustomXWPFDocument doc = OfficeUtil.generateWord(param, "D:\\wordFile\\temp.docx");
                     //最终生成的带图片的word文件
                     FileOutputStream fopts = new FileOutputStream("D:\\wordFile\\final.docx");
                     doc.write(fopts);
+
                     fopts.close();
                 }
                 return fileName;

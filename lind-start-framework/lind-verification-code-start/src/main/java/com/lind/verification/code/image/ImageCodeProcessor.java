@@ -12,7 +12,7 @@
 package com.lind.verification.code.image;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.common.util.CommonResult;
+import com.lind.common.rest.CommonResult;
 import com.lind.verification.code.ValidateCodeGenerator;
 import com.lind.verification.code.ValidateCodeRepository;
 import com.lind.verification.code.impl.AbstractValidateCodeProcessor;

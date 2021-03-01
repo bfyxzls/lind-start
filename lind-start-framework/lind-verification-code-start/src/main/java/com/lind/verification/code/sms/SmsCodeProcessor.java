@@ -9,7 +9,7 @@ import com.lind.verification.code.ValidateCodeGenerator;
 import com.lind.verification.code.ValidateCodeRepository;
 import com.lind.verification.code.impl.AbstractValidateCodeProcessor;
 import com.lind.verification.code.properties.ValidateCodeProperties;
-import com.lind.common.util.CommonResult;
+import com.lind.common.rest.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
