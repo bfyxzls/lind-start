@@ -19,6 +19,7 @@
         <module>a-start-activiti</module>
         <module>lind-start-framework/lind-spi</module>
         <module>lind-start-framework/lind-office-convert</module>
+        <module>lind-start-framework/lind-feign-start</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
