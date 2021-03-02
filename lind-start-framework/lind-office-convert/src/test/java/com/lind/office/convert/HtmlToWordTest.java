@@ -1,5 +1,6 @@
 package com.lind.office.convert;
 
+import com.lind.office.convert.word.HtmlToWord;
 import lombok.SneakyThrows;
 import org.junit.Test;
 

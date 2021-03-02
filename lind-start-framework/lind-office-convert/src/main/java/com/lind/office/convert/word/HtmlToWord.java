@@ -1,4 +1,4 @@
-package com.lind.office.convert;
+package com.lind.office.convert.word;
 
 import com.lind.office.convert.utils.CustomXWPFDocument;
 import com.lind.office.convert.utils.OfficeUtil;
@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class HtmlToWord {
     //获取html中的图片元素信息
-    public static List<HashMap<String, String>> getImgStr(String htmlStr) {
+    static List<HashMap<String, String>> getImgStr(String htmlStr) {
         List<HashMap<String, String>> pics = new ArrayList<HashMap<String, String>>();
 
         Document doc = Jsoup.parse(htmlStr);
@@ -57,7 +57,7 @@ public class HtmlToWord {
      * @param filePath
      * @return
      */
-    public static String readfile(String filePath) {
+    static String readfile(String filePath) {
         File file = new File(filePath);
         InputStream input = null;
         try {
@@ -77,12 +77,6 @@ public class HtmlToWord {
         return buffer.toString();
     }
 
-    @SneakyThrows
-    public static String readResourceFile(String path) {
-        File htmlPath = new File(ResourceUtils.getURL("classpath:").getPath());
-        String targetFileName = htmlPath.getAbsolutePath() + "\\static\\test2.html";
-        return readfile(targetFileName);
-    }
 
     /**
      * 写成word文件

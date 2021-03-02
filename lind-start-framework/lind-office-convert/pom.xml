@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
     <properties>
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
-        <poi.version>3.14</poi.version>
+        <poi.version>4.1.2</poi.version>
     </properties>
     <artifactId>lind-office-convert</artifactId>
 
@@ -67,6 +67,12 @@
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <scope>test</scope>
+        </dependency>
+
 
     </dependencies>
 </project>

@@ -1,4 +1,4 @@
-package com.lind.office.convert;
+package com.lind.office.convert.word;
 
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
