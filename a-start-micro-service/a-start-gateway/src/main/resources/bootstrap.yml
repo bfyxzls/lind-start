@@ -1,17 +1,17 @@
-server.port: 6060
+server.port: 8080
 spring:
-   application.name: gateway
-   profiles.active: dev
-   cloud:
-      gateway:
-         discovery:
-            locator:
-               enabled: true
-               lower-case-service-id: true
-         routes:
-            - id: start-oauth
-              uri: lb://start-oauth
-              predicates:
-                 - Path= /oauth/**
-              filters:
-                 - StripPrefix=1
+  application.name: gateway
+  profiles.active: dev
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: start-oauth
+          uri: lb://start-oauth
+          predicates:
+            - Path= /oauth/**
+          filters:
+            - StripPrefix=1

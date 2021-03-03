@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class GatewayApplication {
-    @Value("${auth}")
+    @Value("${auth:lind}")
     private String auth;
 
-    @Value("${email}")
+    @Value("${email:lind@sina.com}")
     private String email;
 
     public static void main(String[] args) {
