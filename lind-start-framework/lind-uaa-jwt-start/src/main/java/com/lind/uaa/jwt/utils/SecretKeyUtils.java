@@ -1,41 +1,54 @@
 package com.lind.uaa.jwt.utils;
 
+import com.lind.uaa.jwt.config.PermitAllUrl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.ResourceUtils;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.Key;
+import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * KeyPairGenerator https://www.jianshu.com/p/4de1ee0e7206  key的生成使用方法
+ * KeyPairGenerator生成器，目前存储在内存里，如果多应用共用，应该把它存储到磁盘上，对应用端公开publicKey来完成签名的验证过程.
+ * 使用SecretKeyUtils.main方法生成公私钥并存储到resources目录
+ * 公钥公开，用于进行签名验证
  */
 public class SecretKeyUtils {
 
     public static final String KEY_ALGORITHM = "RSA";
     private static final String PUBLIC_KEY = "RSAPublicKey";
     private static final String PRIVATE_KEY = "RSAPrivateKey";
-
+    private static final Logger logger = LoggerFactory.getLogger(PermitAllUrl.class);
     private static RSA256Key rsa256Key;
 
     //获得公钥
     public static String getPublicKey(Map<String, Object> keyMap) throws Exception {
         //获得map中的公钥对象 转为key对象
         Key key = (Key) keyMap.get(PUBLIC_KEY);
-        //byte[] publicKey = key.getEncoded();
-        //编码返回字符串
         return encryptBASE64(key.getEncoded());
     }
 
     public static String getPublicKey(RSA256Key rsa256Key) throws Exception {
         //获得map中的公钥对象 转为key对象
         Key key = rsa256Key.getPublicKey();
-        //byte[] publicKey = key.getEncoded();
-        //编码返回字符串
         return encryptBASE64(key.getEncoded());
     }
 
@@ -43,8 +56,6 @@ public class SecretKeyUtils {
     public static String getPrivateKey(Map<String, Object> keyMap) throws Exception {
         //获得map中的私钥对象 转为key对象
         Key key = (Key) keyMap.get(PRIVATE_KEY);
-        //byte[] privateKey = key.getEncoded();
-        //编码返回字符串
         return encryptBASE64(key.getEncoded());
     }
 
@@ -52,8 +63,6 @@ public class SecretKeyUtils {
     public static String getPrivateKey(RSA256Key rsa256Key) throws Exception {
         //获得map中的私钥对象 转为key对象
         Key key = rsa256Key.getPrivateKey();
-        //byte[] privateKey = key.getEncoded();
-        //编码返回字符串
         return encryptBASE64(key.getEncoded());
     }
 
@@ -82,9 +91,58 @@ public class SecretKeyUtils {
         RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
         //公私钥对象存入map中
         Map<String, Object> keyMap = new HashMap<String, Object>(2);
-        keyMap.put(PUBLIC_KEY, publicKey);
-        keyMap.put(PRIVATE_KEY, privateKey);
+        String priKeyBase64 = readFile(ResourceUtils.getFile("classpath:private.key"));
+        byte[] encPriKey = new BASE64Decoder().decodeBuffer(priKeyBase64);
+        PKCS8EncodedKeySpec priPKCS8 = new PKCS8EncodedKeySpec(encPriKey);
+        PrivateKey privateKey1 = KeyFactory.getInstance("RSA").generatePrivate(priPKCS8);
+
+        String pubKeyBase64 = readFile(ResourceUtils.getFile("classpath:public.key"));
+        byte[] encPubKey = new BASE64Decoder().decodeBuffer(pubKeyBase64);
+        X509EncodedKeySpec encPubKeySpec = new X509EncodedKeySpec(encPubKey);
+        PublicKey publicKey1 = KeyFactory.getInstance("RSA").generatePublic(encPubKeySpec);
+        // 这边改成了从文件读取公私钥，以便将公钥公开到其它客户端，以后jwt校验由自己端校验
+        keyMap.put(PUBLIC_KEY, publicKey1);
+        keyMap.put(PRIVATE_KEY, privateKey1);
+
+        logger.info("\npub:{}\nsub:{}", getPublicKey(keyMap), getPrivateKey(keyMap));
         return keyMap;
+    }
+
+    /**
+     * 读取密钥文件
+     *
+     * @param file
+     * @return
+     * @throws IOException
+     */
+    public static String readFile(File file) throws IOException {
+        InputStream in = null;
+        ByteArrayOutputStream out = null;
+        try {
+            in = new FileInputStream(file);
+            out = new ByteArrayOutputStream();
+            byte[] buf = new byte[1024];
+            int len = -1;
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
+            }
+            out.flush();
+            byte[] data = out.toByteArray();
+            return new String(data);
+        } finally {
+            close(in);
+            close(out);
+        }
+    }
+
+    public static void close(Closeable c) {
+        if (c != null) {
+            try {
+                c.close();
+            } catch (IOException e) {
+                // nothing
+            }
+        }
     }
 
     /**
@@ -101,6 +159,7 @@ public class SecretKeyUtils {
                     Map<String, Object> map = initKey();
                     rsa256Key.setPrivateKey((RSAPrivateKey) map.get(SecretKeyUtils.PRIVATE_KEY));
                     rsa256Key.setPublicKey((RSAPublicKey) map.get(SecretKeyUtils.PUBLIC_KEY));
+
                 }
             }
         }
