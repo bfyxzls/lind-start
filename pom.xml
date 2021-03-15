@@ -20,6 +20,7 @@
         <module>lind-start-framework/lind-spi</module>
         <module>lind-start-framework/lind-office-convert</module>
         <module>lind-start-framework/lind-feign-start</module>
+        <module>a-start-http2</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
