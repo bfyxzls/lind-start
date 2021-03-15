@@ -1,12 +1,12 @@
 package com.lind.http2.controller;
 
 import cn.hutool.core.io.FileUtil;
+import com.lind.http2.config.HttpClientUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -15,16 +15,46 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @RestController
 @Slf4j
 public class Http2SSLController {
+    /**
+     * test http2.
+     *
+     * @param client
+     * @param request
+     * @return
+     */
+    private static String sendRequest(OkHttpClient client, Request request) {
+        String result = null;
+        String protocolName = null;
+        try {
+            Response response = client.newCall(request).execute();
+            if (response != null) {
+                protocolName = response.protocol().name();
+                result = response.body().string();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        log.info("测试app的http协议：{}", protocolName);
+        return result + ": " + protocolName;
+    }
+
     @GetMapping("/hello")
     public String hello() {
-        return "hello world";
+
+        String url = "https://localhost:8443/test";
+        Request request = new Request.Builder().url(url).build();
+        OkHttpClient client = HttpClientUtils.getTLSOKHttp();
+        return sendRequest(client, request);
+    }
+
+    @GetMapping("/test")
+    public String test() {
+        return "test";
     }
 
     @SneakyThrows
@@ -32,16 +62,9 @@ public class Http2SSLController {
     public ResponseEntity ok() {
         String path = "D:\\test\\";
         List<String> names = FileUtil.listFileNames(path);
-        List<Protocol> protocols = new ArrayList<>();
-        protocols.add(Protocol.HTTP_1_1); // 这里如果，只指定h2的话会抛异常
-        protocols.add(Protocol.HTTP_2); // 这里如果，只指定h2的话会抛异常
         for (String name : names) {
             String url = "https://localhost:8443/get-file?path=" + name;
-            OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                    .connectTimeout(15, TimeUnit.SECONDS)
-                    .readTimeout(15, TimeUnit.SECONDS)
-                    .writeTimeout(15, TimeUnit.SECONDS)
-                    .build();//配置
+            OkHttpClient okHttpClient = HttpClientUtils.getTLSOKHttp();
             final Request request = new Request.Builder()
                     .url(url)
                     .get()//默认就是GET请求，可以不写
