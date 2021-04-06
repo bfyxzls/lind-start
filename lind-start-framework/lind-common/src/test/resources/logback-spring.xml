@@ -5,27 +5,14 @@
     <property name="logPath" value="${log.path}"/>
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
     <property name="appName" value="sys:spring.application.name"/>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%date-%level-%X{X-B3-TraceId:-}-%X{X-B3-SpanId:-}-[%file:%line]-%msg%n</pattern>
-        </encoder>
-    </appender>
 
-   <appender name="lineLog" filePermissions="rw-r--r--" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${springAppName} [%thread] %-5level %logger{50} - %msg%n</pattern>
-            <charset>UTF-8</charset> <!-- 设置字符集 -->
-        </encoder>
-        <!--滚动策略-->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--路径-->
-            <fileNamePattern>${logPath}/info_line.%d.log</fileNamePattern>
-            <maxHistory>7</maxHistory>
-        </rollingPolicy>
+    <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${springAppName} [%thread] %-5level - %msg%n</pattern>
+        </layout>
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="lineLog" />
+        <appender-ref ref="consoleLog" />
     </root>
 </configuration>
