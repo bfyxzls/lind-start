@@ -6,7 +6,6 @@ import lombok.SneakyThrows;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -54,11 +53,10 @@ public class HtmlToWord {
     /**
      * 读文件内容
      *
-     * @param filePath
+     * @param file
      * @return
      */
-    static String readfile(String filePath) {
-        File file = new File(filePath);
+    static String readfile(File file) {
         InputStream input = null;
         try {
             input = new FileInputStream(file);
@@ -79,7 +77,7 @@ public class HtmlToWord {
 
 
     /**
-     * 写成word文件
+     * 写成word文件.
      */
     @SneakyThrows
     public static String writeWordFile(String content, String outDir) {
@@ -135,11 +133,6 @@ public class HtmlToWord {
                 bais.close();
                 ostream.close();
 
-                InputStream in = new FileInputStream(fileName);
-                XWPFDocument document = new XWPFDocument(in);
-                FileOutputStream fileOutputStream = new FileOutputStream("D:\\wordFile\\temp.docx");
-                document.write(fileOutputStream);
-
                 if (imgs.size() > 0) {
                     // 临时文件（手动改好的docx文件）,需要使用office另存为office2007格式的文件
                     CustomXWPFDocument doc = OfficeUtil.generateWord(param, "D:\\wordFile\\temp.docx");
@@ -156,5 +149,16 @@ public class HtmlToWord {
 
         }
         return null;
+    }
+
+    /**
+     * 从html文件写到word文件.
+     *
+     * @param file
+     * @param outDir
+     * @return
+     */
+    public static String writeWordFile(File file, String outDir) {
+        return writeWordFile(readfile(file), outDir);
     }
 }

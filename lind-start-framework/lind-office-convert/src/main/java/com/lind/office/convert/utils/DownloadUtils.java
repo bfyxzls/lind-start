@@ -3,7 +3,15 @@ package com.lind.office.convert.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.CookiePolicy;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,6 +24,7 @@ import java.net.URL;
  **/
 public class DownloadUtils {
     protected static final Logger logger = LoggerFactory.getLogger(DownloadUtils.class);
+    public static final int CONNECT_TIMEOUT = 100000;
 
     /**
      * 从网络Url中下载文件
@@ -26,7 +35,7 @@ public class DownloadUtils {
      * @throws IOException
      */
     public static void downLoadFromUrl(String urlStr, String fileName, String savePath) {
-        downLoadFromUrl(urlStr, fileName, savePath, 3000);
+        downLoadFromUrl(urlStr, fileName, savePath, CONNECT_TIMEOUT);
     }
 
     /**
@@ -75,7 +84,7 @@ public class DownloadUtils {
      * @throws IOException
      */
     public static String getContentFromUrl(String urlStr) {
-        return getContentFromUrl(urlStr, 3000);
+        return getContentFromUrl(urlStr, CONNECT_TIMEOUT);
     }
 
     /**
@@ -117,7 +126,7 @@ public class DownloadUtils {
      * @return
      */
     public static InputStream getInputStreaFromUrl(String urlStr) {
-        return getInputStreamFromUrl(urlStr, 3000);
+        return getInputStreamFromUrl(urlStr, CONNECT_TIMEOUT);
     }
 
     /**
@@ -138,6 +147,8 @@ public class DownloadUtils {
         }
         HttpURLConnection conn = null;
         try {
+            //防止Server redirected too many times (20)
+            CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
             conn = (HttpURLConnection) url.openConnection();
         } catch (IOException e) {
             logger.error("连接异常！", e);
