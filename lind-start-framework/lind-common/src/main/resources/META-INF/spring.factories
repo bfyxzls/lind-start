@@ -8,4 +8,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 
 # Application Listeners
 org.springframework.context.ApplicationListener=\
-  com.lind.common.listener.MessageDbListener
+  com.lind.start.test.listener.MessageDbListener

@@ -2,22 +2,25 @@ package com.lind.common.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 直接获取bean.
  */
 @Component("springContextUtils")
-public class SpringContextUtils implements ApplicationContextAware {
+public class SpringContextUtils {
 
-    /**
-     * 上下文对象实例.
-     */
-    private static ApplicationContext applicationContext;
+    private static ApplicationContext applicationContext = null;
+
+    public static void setApplicationContext(ApplicationContext app) throws BeansException {
+        applicationContext = app;
+    }
+
 
     /**
      * 通过name获取 Bean.
@@ -39,6 +42,22 @@ public class SpringContextUtils implements ApplicationContextAware {
     public static <T> T getBean(Class<T> clazz) {
         return applicationContext.getBean(clazz);
 
+    }
+
+    /**
+     * 通过class获取Bean.
+     *
+     * @param clazz .
+     * @param <T>   .
+     * @return .
+     */
+    public static <T> List<T> getAllBeans(Class<T> clazz) {
+        String[] names = applicationContext.getBeanNamesForType(clazz);
+        List<T> list = new ArrayList<>();
+        for (String name : names) {
+            list.add((T) applicationContext.getBean(name));
+        }
+        return list;
     }
 
     /**
@@ -71,16 +90,6 @@ public class SpringContextUtils implements ApplicationContextAware {
      */
     public static String[] getAllBeanNames() {
         return applicationContext.getBeanDefinitionNames();
-    }
-
-    /**
-     * 设置上下文.
-     *
-     * @param applicationContext
-     */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 
 }

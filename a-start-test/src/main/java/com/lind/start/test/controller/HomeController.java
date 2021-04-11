@@ -8,9 +8,9 @@ import com.lind.start.test.dto.Product;
 import com.lind.start.test.dto.Shop;
 import com.lind.start.test.dto.UserDTO;
 import com.lind.start.test.handler.UserEvent;
-import com.lind.start.test.handler.UserEventType;
 import com.lind.start.test.handler.listener.EmailEventBusListener;
 import com.lind.start.test.handler.listener.SmsEventBusListener;
+import com.lind.start.test.listener.UserModelListener;
 import com.lind.verification.code.image.ImageCodeProcessor;
 import com.lind.verification.code.image.ImageStreamCodeProcessor;
 import io.swagger.annotations.Api;
@@ -21,14 +21,7 @@ import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +51,8 @@ public class HomeController {
     ImageCodeProcessor imageCodeProcessor;
     @Autowired
     ImageStreamCodeProcessor imageStreamCodeProcessor;
+    @Autowired
+    EventBusService eventBusService;
 
     @GetMapping("/index")
     public String index() {
@@ -96,6 +91,13 @@ public class HomeController {
         );
     }
 
+    @GetMapping("/pub-event")
+    public ResponseEntity event() {
+        eventBusService.publisher(new UserEvent("1", "zzl"));
+
+        return ResponseEntity.ok("发布成功");
+    }
+
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
         return ResponseEntity.ok(
@@ -115,8 +117,8 @@ public class HomeController {
     @GetMapping("/shop")
     public ResponseEntity shop() {
         return ResponseEntity.ok(
-                new Shop("苹果", "hello world",new Date()
-                        )
+                new Shop("苹果", "hello world", new Date()
+                )
         );
     }
 

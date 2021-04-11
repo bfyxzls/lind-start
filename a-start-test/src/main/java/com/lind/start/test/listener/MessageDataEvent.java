@@ -1,4 +1,4 @@
-package com.lind.common.listener;
+package com.lind.start.test.listener;
 
 import org.springframework.context.ApplicationEvent;
 

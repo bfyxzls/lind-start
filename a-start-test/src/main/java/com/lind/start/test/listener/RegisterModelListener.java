@@ -6,8 +6,8 @@ import org.springframework.stereotype.Component;
 
 // auto register bean.
 @Component
-public class UserModelListener implements EventBusListener<UserEvent> {
+public class RegisterModelListener implements EventBusListener<UserEvent> {
     public void onEvent(UserEvent event) {
-        System.out.println("user update.");
+        System.out.println("register user.");
     }
 }
