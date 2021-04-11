@@ -9,7 +9,7 @@
 ## EventBusService
 事件总线接口，定义了添加事件，触发事件的方法
 ## DefaultEventBusBusService
-默认的事件总线实现，采用内存hash表来存储事件
+默认的事件总线实现，采用内存hash表来存储事件,init()方法添加了@PostConstruct注解，完成了事件的自动注册
 # 加密
 ## util.RSAUtils
 用于非对称加密，生成公钥和私钥，可以实例前端到后端请求的敏感字符加密，把公钥给前端，然后对数据加密，在后端通过私钥进行解密，当然，

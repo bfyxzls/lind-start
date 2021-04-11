@@ -59,22 +59,12 @@ public class DefaultEventBusBusService implements EventBusService {
         List<Type> a = Arrays.asList(eventBusListener.getClass().getGenericInterfaces());
 
         //直接实现的EventBusListener接口
-        Type mainType = a.stream().filter(
-                o -> o.equals(EventBusListener.class)
-                        ||
-                        o instanceof ParameterizedTypeImpl
-                                && ((ParameterizedTypeImpl) o).getRawType().equals(EventBusListener.class)
-        ).findFirst().orElse(null);
+        Type mainType = getEventBusListenerGenericType(a);
 
         //继承接口
         if (mainType == null) {
             a = Arrays.asList(((Class) a.get(0)).getGenericInterfaces());
-            mainType = a.stream().filter(
-                    o -> o.equals(EventBusListener.class)
-                            ||
-                            o instanceof ParameterizedTypeImpl
-                                    && ((ParameterizedTypeImpl) o).getRawType().equals(EventBusListener.class)
-            ).findFirst().orElse(null);
+            mainType = getEventBusListenerGenericType(a);
         }
         if (mainType == null) {
             throw new IllegalArgumentException("listener must implement EventBusListener:" + eventBusListener.toString());
@@ -87,6 +77,15 @@ public class DefaultEventBusBusService implements EventBusService {
         }
         return temp.getTypeName();
 
+    }
+
+    private Type getEventBusListenerGenericType(List<Type> a) {
+        return a.stream().filter(
+                o -> o.equals(EventBusListener.class)
+                        ||
+                        o instanceof ParameterizedTypeImpl
+                                && ((ParameterizedTypeImpl) o).getRawType().equals(EventBusListener.class)
+        ).findFirst().orElse(null);
     }
 
     /**
