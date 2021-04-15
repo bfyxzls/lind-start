@@ -1,3 +1,15 @@
+# 功能介绍
+* encrypt 加密解密，hash,非对称，对称等
+* event 观察者模式，事件发布与订阅的实现，完成了对订阅者的自动初始化
+* execption 异常管理，包含基类和control的异常拦截器
+* jackson.convert 对springboot在http响应时，对jackson序列化的重写
+* locale 国际化组件
+* opt 通过时间（TOTP）或者数量（HOTP）进行校验，一般用在二步验证上面
+* rest restful接口的返回值封装
+* typetools 类型处理工具
+* util 工具类
+* zip 压缩工具
+
 # 事件处理
 主要实现业务相关代码的解耦，使用了发布订阅的机制，订阅方需要实现ObjectEventListener接口，
 事件相关对象需要实现ObjectEvent类型，使用方法使用ObjectEventService注入的实例即可完成事件
