@@ -35,7 +35,15 @@ public class TokenController {
     UaaProperties uaaProperties;
 
 
-    private void writeToken(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
+    /**
+     * 直接在响应体上输出token信息.
+     *
+     * @param response
+     * @param map
+     * @param headers
+     * @throws IOException
+     */
+    private void writeTokenResponse(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         //获取OutputStream输出流
@@ -52,6 +60,14 @@ public class TokenController {
         outputStream.write(dataByteArr);
     }
 
+    /**
+     * 重定向并附加token信息.
+     *
+     * @param response
+     * @param map
+     * @param headers
+     * @throws IOException
+     */
     private void writeTokenRedirect(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -113,13 +129,14 @@ public class TokenController {
             map.add("client_id", keycloakSpringBootProperties.getResource());
             map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
             map.add("redirect_uri", uaaProperties.getCallbackUri());
-            writeToken(response, map, headers);
+            writeTokenResponse(response, map, headers);
         }
 
     }
 
+
     @ApiOperation("授权码认证")
-    @GetMapping(path = "/authorizationCodeRedirect")
+    @GetMapping(path = "/authorizationCodeToken")
     public void authorizationCodeRedirect(@RequestParam(required = false) String code, HttpServletResponse response) throws IOException {
         if (StringUtils.isBlank(code)) {
             // step1
@@ -136,7 +153,6 @@ public class TokenController {
             map.add("redirect_uri", uaaProperties.getCallbackUri());
             writeTokenRedirect(response, map, headers);
         }
-
     }
 
     /**
@@ -160,7 +176,7 @@ public class TokenController {
         }
         map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        writeToken(response, map, headers);
+        writeTokenResponse(response, map, headers);
     }
 
     /**
@@ -184,6 +200,6 @@ public class TokenController {
         map.add("username", username);
         map.add("password", password);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        writeToken(response, map, headers);
+        writeTokenResponse(response, map, headers);
     }
 }
