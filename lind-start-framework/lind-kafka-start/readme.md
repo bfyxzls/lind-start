@@ -41,3 +41,26 @@ docker run --cpus 4 -d -m 4g \
 -v /var/run/docker.sock:/var/run/docker.sock \
 wurstmeister/kafka:2.12-2.5.0
 ```
+# docker-compose版本
+```yml
+version: '2'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    hostname: zookeeper1
+    network_mode: bridge
+    ports:
+      - "2181:2181"
+  kafka:
+    image: wurstmeister/kafka:2.11-0.11.0.3
+    hostname: kafka1
+    network_mode: bridge
+    links:
+      - zookeeper
+    ports:
+      - "9092:9092" #表示宿主机的端口为随机，这样方便使用docker-compose scale 进行扩容
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://:9092
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+```
