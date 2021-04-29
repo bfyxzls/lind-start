@@ -10,38 +10,42 @@ import java.util.Properties;
 
 public class Producer {
 
-	private final static String BOOTSTRAP_SERVER = "192.168.4.26:9092";
+    private final static String BOOTSTRAP_SERVER = "192.168.4.26:9092";
 
-	public static void publishEvent(String topic, String value){
-		//reset thread context
-		resetThreadContext();
-		// create the producer
+    public static void publishEvent(String topic, String value) {
+        publishEvent(topic, null, value);
+    }
 
-		KafkaProducer<String, String> producer = new KafkaProducer<String, String>(getProperties());
-		// create a producer record
-		ProducerRecord<String, String> eventRecord =
-				new ProducerRecord<String, String>(topic, value);
+    public static void publishEvent(String topic, String key, String value) {
+        //reset thread context
+        resetThreadContext();
+        // create the producer
 
-		// send data - asynchronous
-		producer.send(eventRecord);
+        KafkaProducer<String, String> producer = new KafkaProducer<String, String>(getProperties());
+        // create a producer record
+        ProducerRecord<String, String> eventRecord =
+                new ProducerRecord<String, String>(topic, key, value);
 
-		// flush data
-		producer.flush();
-		// flush and close producer
-		producer.close();
-	}
+        // send data - asynchronous
+        producer.send(eventRecord);
 
-	private static void resetThreadContext() {
-		Thread.currentThread().setContextClassLoader(null);
-	}
+        // flush data
+        producer.flush();
+        // flush and close producer
+        producer.close();
+    }
 
-	public static Properties getProperties() {
-		Properties properties = new Properties();
-		properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-		properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-		return properties;
-	}
+    private static void resetThreadContext() {
+        Thread.currentThread().setContextClassLoader(null);
+    }
+
+    public static Properties getProperties() {
+        Properties properties = new Properties();
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        return properties;
+    }
 
 
 }

@@ -16,7 +16,19 @@ public class Test {
 
     @org.junit.Test
     public void publish() {
-        Producer.publishEvent("topic001", "hello");
+        // 没有配置key，消息都分发到多个partition
+        Producer.publishEvent("topic001", "hello1");
+        Producer.publishEvent("topic001", "hello2");
+        Producer.publishEvent("topic001", "hello3");
+    }
+
+    @org.junit.Test
+    public void publishKey() {
+        // 配置key之后，消息发到同一个partition，从而保证了消息的有序性
+        Producer.publishEvent("topic001", "2", "hello4");
+        Producer.publishEvent("topic001", "2", "hello5");
+        Producer.publishEvent("topic001", "2", "hello6");
+
     }
 
     @org.junit.Test

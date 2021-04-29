@@ -9,7 +9,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lind-common</artifactId>
-
+    <properties>
+        <!-- jdk版本 1.8有一些新的语法 -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -35,11 +39,6 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.github.phantomthief</groupId>
-            <artifactId>adaptive-executor</artifactId>
-            <version>0.1.4</version>
-        </dependency>
         <dependency>
             <groupId>com.github.phantomthief</groupId>
             <artifactId>simple-pool</artifactId>
