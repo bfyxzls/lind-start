@@ -1,6 +1,8 @@
 spring:
   kafka:
-    bootstrap-servers: 192.168.4.26:32770
+    bootstrap-servers: 192.168.4.26:9092
+    key.serializer: org.apache.kafka.common.serialization.StringSerializer
+    value.serializer: org.apache.kafka.common.serialization.StringSerializer
     listener:
       missing-topics-fatal: false
     consumer:

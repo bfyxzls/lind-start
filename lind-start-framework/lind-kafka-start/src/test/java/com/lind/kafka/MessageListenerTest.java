@@ -20,6 +20,16 @@ public class MessageListenerTest {
                 message,
                 new TypeReference<MessageEntity<UserDTO>>() {
                 });
-        System.out.println(userDTOMessageEntity.getData());
+        System.out.println("default" + userDTOMessageEntity.getData());
+    }
+
+    @SneakyThrows
+    @KafkaListener(topics = "demo", groupId = "order-service")
+    public void orderMessageReceive(String message) {
+        MessageEntity<UserDTO> userDTOMessageEntity = objectMapper.readValue(
+                message,
+                new TypeReference<MessageEntity<UserDTO>>() {
+                });
+        System.out.println("order" + userDTOMessageEntity.getData());
     }
 }

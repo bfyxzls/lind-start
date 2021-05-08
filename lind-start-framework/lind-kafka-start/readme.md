@@ -1,3 +1,8 @@
+# 组件说明
+* 对生产者producer封装，统一发送消息
+* 添加aop模块，对发消息时进行拦截，对公用字段统一赋值 
+* 添加当前用户接口`CurrentUserAware`，由使用者去实现它
+* 去掉了kafka-receiver包，感觉封装意义不大
 # docker简单部署
 ```js
 # zk
