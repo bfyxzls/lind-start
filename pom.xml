@@ -21,6 +21,7 @@
         <module>lind-start-framework/lind-office-convert</module>
         <module>lind-start-framework/lind-feign-start</module>
         <module>a-start-http2</module>
+        <module>a-start-kafka-stream</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
