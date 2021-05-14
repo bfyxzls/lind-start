@@ -1,14 +1,25 @@
 package com.lind.common;
 
-import com.lind.common.encrypt.AESNetUtils;
 import com.lind.common.encrypt.HashUtils;
-import com.lind.common.zip.*;
+import com.lind.common.zip.LZW;
+import com.lind.common.zip.LZWUtils;
+import com.lind.common.zip.RLEUtils;
+import com.lind.common.zip.ZLibUtils;
+import com.lind.common.zip.ZipUtils;
 import lombok.SneakyThrows;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ZipTest {
+
+    @Test
+    public void zipUtils() throws Exception {
+        // 压缩文件
+        ZipUtils.compress("d:\\20210513会议纪要.docx");
+        // 压缩目录
+        ZipUtils.compress("d:\\zip");
+    }
 
     @SneakyThrows
     @Test
