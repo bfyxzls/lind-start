@@ -1,4 +1,4 @@
-package com.lind.common.proxyimpl;
+package com.lind.common.proxy;
 
 import com.lind.common.proxy.SpringDynamicProxyTest;
 import org.springframework.stereotype.Component;
