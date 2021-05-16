@@ -1,18 +1,13 @@
 package com.lind.common.proxy;
 
-import com.lind.common.proxy.SpringDynamicProxyTest;
 import org.springframework.stereotype.Component;
 
+/**
+ * 接口的代理，类似于mybatis的实现
+ */
 @Component
-public class CalculateServiceImpl implements SpringDynamicProxyTest.CalculateService {
+public interface NormalCalculateService extends SpringDynamicProxyTest.CalculateService<SpringDynamicProxyTest.Peo> {
 
-    @Override
-    public String getResult(String name) {
-        return "ok";
-    }
+     void compose() ;
 
-    @Override
-    public void insert(String entity) {
-        System.out.println("insert entity");
-    }
 }

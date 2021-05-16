@@ -3,9 +3,7 @@ package com.lind.common.proxy;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.junit4.SpringRunner;
 
 /**
@@ -14,29 +12,33 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SpringDynamicProxyTest {
-    @Qualifier(value = "calculateServiceImpl")
     @Autowired
-    CalculateService calculateService;
-    @Autowired
-    TestService testService;
+    NormalCalculateService calculateService;
 
     @Test
     public void testProxy() {
-        calculateService.getResult("lind");
-        calculateService.insert("ok");
+        Peo peo = new Peo();
+        peo.setName("lind");
+        calculateService.send(peo);
 
     }
 
-    public interface CalculateService {
+    public interface CalculateService<T> {
 
-        String getResult(String name);
-
-        void insert(String entity);
+        void send(T entity);
     }
 
 
-    public interface TestService {
+    public class Peo {
 
-        String getList(String code, String name);
+        private String name;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
