@@ -1,70 +1,61 @@
 package com.lind.common.proxy;
 
+
+import com.lind.common.proxy.anno.EnableServiceProvider;
+import com.lind.common.proxy.anno.MessageProvider;
+import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ResourceLoaderAware;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * 用于Spring动态注入自定义接口
- *
- * @author lind
- */
-@Component
-public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPostProcessor,
-        ResourceLoaderAware, ApplicationContextAware {
+ * 装载目录下的bean，为MessageProvider注释的.
+ **/
+@ConditionalOnClass(EnableServiceProvider.class)
+public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, BeanFactoryAware {
 
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
     private MetadataReaderFactory metadataReaderFactory;
     private ResourcePatternResolver resourcePatternResolver;
-    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
 
     @Override
-    public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        //这里一般我们是通过反射获取需要代理的接口的clazz列表
-        //比如判断包下面的类，或者通过某注解标注的类等等
-        Set<Class<?>> beanClazzs = scannerPackages("com.lind.common.proxy");
-        for (Class beanClazz : beanClazzs) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
-            GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+        this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
+    }
 
-            // 在这里，我们可以给该对象的属性注入对应的实例。
-            // 比如mybatis，就在这里注入了dataSource和sqlSessionFactory，
-            // 注意，如果采用definition.getPropertyValues()方式的话，
-            // 类似definition.getPropertyValues().add("interfaceType", beanClazz);
-            // 则要求在FactoryBean（本应用中即ServiceFactory）提供setter方法，否则会注入失败
-            // 如果采用definition.getConstructorArgumentValues()，
-            // 则FactoryBean中需要提供包含该属性的构造方法，否则会注入失败
-            definition.getConstructorArgumentValues().addGenericArgumentValue(beanClazz);
-
-            //注意，这里的BeanClass是生成Bean实例的工厂，不是Bean本身。
-            // FactoryBean是一种特殊的Bean，其返回的对象不是指定类的一个实例，
-            // 其返回的是该工厂Bean的getObject方法所返回的对象。
-            definition.setBeanClass(ServiceFactory.class);
-
-            //这里采用的是byType方式注入，类似的还有byName等
-            definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-            registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
-        }
+    /**
+     * 用"/"替换包路径中"."
+     *
+     * @param path
+     * @return
+     */
+    private String replaceDotByDelimiter(String path) {
+        return StringUtils.replace(path, ".", "/");
     }
 
     /**
@@ -76,7 +67,7 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
     private Set<Class<?>> scannerPackages(String basePackage) {
         Set<Class<?>> set = new LinkedHashSet<>();
         String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                resolveBasePackage(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
+                replaceDotByDelimiter(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
         try {
             Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
             for (Resource resource : resources) {
@@ -86,7 +77,9 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
                     Class<?> clazz;
                     try {
                         clazz = Class.forName(className);
-                        set.add(clazz);
+                        if (clazz.isAnnotationPresent(MessageProvider.class)) {
+                            set.add(clazz);
+                        }
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -98,27 +91,61 @@ public class ServiceBeanDefinitionRegistry implements BeanDefinitionRegistryPost
         return set;
     }
 
-    protected String resolveBasePackage(String basePackage) {
-        return ClassUtils.convertClassNameToResourcePath(this.getEnvironment().resolveRequiredPlaceholders(basePackage));
+    @SneakyThrows
+    @Override
+    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
+                                        BeanDefinitionRegistry beanDefinitionRegistry) {
+
+
+        //获取所有注解的属性和值
+        AnnotationAttributes annotationAttributes =
+                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableServiceProvider.class.getName()));
+        //获取到basePackages的值
+        String[] basePackages = annotationAttributes.getStringArray("basePackages");
+        //如果没有设置basePackages 扫描路径,就扫描对应包下面的值
+        if (basePackages.length == 0) {
+            // junit里这里是SimpleAnnotationMetadata，而在非junit里是StandardAnnotationMetadata
+             basePackages =
+             new String[]{((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName()};
+         }
+
+        Set<Class<?>> classes = new HashSet<>();
+        // 装截MessageProvider注解的对象
+        for (String basePackage : basePackages) {
+            classes.addAll(scannerPackages(basePackage));
+        }
+        for (Class beanClazz : classes) {
+            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
+            GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+
+            //在这里，我们可以给该对象的属性注入对应的实例。
+            //比如mybatis，就在这里注入了dataSource和sqlSessionFactory，
+            // 注意，如果采用definition.getPropertyValues()方式的话，
+            // 类似definition.getPropertyValues().add("interfaceType", beanClazz);
+            // 则要求在FactoryBean提供setter方法，否则会注入失败
+            // 如果采用definition.getConstructorArgumentValues()，
+            // 则FactoryBean中需要提供包含该属性的构造方法，否则会注入失败
+            //definition.getConstructorArgumentValues().addGenericArgumentValue(beanClazz);
+            MutablePropertyValues propertyValues = definition.getPropertyValues();
+            propertyValues.add("interfaceType", beanClazz);
+            propertyValues.add("applicationContext", beanFactory);
+
+            //注意，这里的BeanClass是生成Bean实例的工厂，不是Bean本身。
+            // FactoryBean是一种特殊的Bean，其返回的对象不是指定类的一个实例，
+            // 其返回的是该工厂Bean的getObject方法所返回的对象。
+            definition.setBeanClass(ServiceFactoryBean.class);
+
+            //这里采用的是byName方式注入，类似的还有byType等
+            definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
+            beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+
+        }
+
     }
+
 
     @Override
-    public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
-    }
-
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
-    private Environment getEnvironment() {
-        return applicationContext.getEnvironment();
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
     }
 }

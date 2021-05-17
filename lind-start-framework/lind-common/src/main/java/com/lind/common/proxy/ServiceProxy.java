@@ -1,7 +1,14 @@
 package com.lind.common.proxy;
 
-import com.alibaba.fastjson.JSON;
+import com.lind.common.proxy.anno.MessageSend;
+import com.lind.common.proxy.handler.EventHandler;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.EmbeddedValueResolver;
+import org.springframework.util.Assert;
+import org.springframework.util.StringValueResolver;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -12,23 +19,49 @@ import java.lang.reflect.Method;
  * @author lind
  */
 @Slf4j
+@Data
 public class ServiceProxy<T> implements InvocationHandler {
 
-    private Class<T> interfaceType;
+    private MessageSender messageSender;
+    private BeanFactory applicationContext;
 
-    public ServiceProxy(Class<T> intefaceType) {
-        this.interfaceType = interfaceType;
+    public ServiceProxy(BeanFactory applicationContext) {
+        this.applicationContext = applicationContext;
+        this.messageSender = applicationContext.getBean(MessageSender.class);
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (Object.class.equals(method.getDeclaringClass())) {
-            return method.invoke(this, args);
+        if (args.length != 1) {
+            throw new IllegalArgumentException("发送的消息只能是MessageEntity的子类且只能有一个参数");
         }
-        Object result = JSON.toJSONString(args);
-        log.info("proxy 方法:{},参数:{},值:{}", method.getName(), args, result);
-        //这里可以得到参数数组和方法等，可以通过反射，注解等，进行结果集的处理
-        //mybatis就是在这里获取参数和相关注解，然后根据返回值类型，进行结果集的转换
-        return result;
+        Object arg = args[0];
+        if (!MessageEntity.class.isAssignableFrom(arg.getClass())) {
+            throw new IllegalArgumentException("参数必须是MessageEntity的子类");
+        }
+        // 从MessageSend注解中拿到topic和handler的信息
+        if (method.isAnnotationPresent(MessageSend.class)) {
+            MessageSend annotation = method.getAnnotation(MessageSend.class);
+            String topic = annotation.topic();
+
+            Assert.hasText(topic, "发送主题不能为空，支持springEL表达式，请重新设置");
+            //解析springEL表达式
+            topic = evaluateExpression(topic);
+            Class<? extends EventHandler> eventHandlerType = annotation.eventHandler();
+            EventHandler eventHandler = applicationContext.getBean(eventHandlerType);
+            messageSender.send(topic, (MessageEntity) arg, eventHandler);
+        }
+        return null;
+    }
+
+    /**
+     * 解析springEL表达式
+     *
+     * @param myString
+     * @return
+     */
+    public String evaluateExpression(String myString) {
+        StringValueResolver str = new EmbeddedValueResolver((ConfigurableBeanFactory) applicationContext);
+        return str.resolveStringValue(myString);
     }
 }

@@ -20,7 +20,6 @@
         <module>lind-elasticsearch-start</module>
         <module>lind-mybatis-start</module>
         <module>lind-uaa-start</module>
-        <module>lind-hbase2-start</module>
         <module>lind-lock-start</module>
         <module>lind-limit-start</module>
         <module>lind-verification-code-start</module>
