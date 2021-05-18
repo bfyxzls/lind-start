@@ -1,4 +1,4 @@
-package com.lind.kafka.sender;
+package com.lind.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.lind.kafka.entity.MessageEntity;

@@ -1,4 +1,4 @@
-package com.lind.common.proxy;
+package com.lind.kafka.proxy;
 
 import lombok.Data;
 import org.springframework.beans.factory.BeanFactory;

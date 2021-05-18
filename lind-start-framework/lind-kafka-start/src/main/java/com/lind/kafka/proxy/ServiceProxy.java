@@ -1,7 +1,10 @@
-package com.lind.common.proxy;
+package com.lind.kafka.proxy;
 
-import com.lind.common.proxy.anno.MessageSend;
-import com.lind.common.proxy.handler.EventHandler;
+import com.lind.kafka.anno.MqSend;
+import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.handler.FailureHandler;
+import com.lind.kafka.handler.SuccessHandler;
+import com.lind.kafka.producer.MessageSender;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.BeanFactory;
@@ -40,16 +43,18 @@ public class ServiceProxy<T> implements InvocationHandler {
             throw new IllegalArgumentException("参数必须是MessageEntity的子类");
         }
         // 从MessageSend注解中拿到topic和handler的信息
-        if (method.isAnnotationPresent(MessageSend.class)) {
-            MessageSend annotation = method.getAnnotation(MessageSend.class);
+        if (method.isAnnotationPresent(MqSend.class)) {
+            MqSend annotation = method.getAnnotation(MqSend.class);
             String topic = annotation.topic();
 
             Assert.hasText(topic, "发送主题不能为空，支持springEL表达式，请重新设置");
             //解析springEL表达式
             topic = evaluateExpression(topic);
-            Class<? extends EventHandler> eventHandlerType = annotation.eventHandler();
-            EventHandler eventHandler = applicationContext.getBean(eventHandlerType);
-            messageSender.send(topic, (MessageEntity) arg, eventHandler);
+            Class<? extends SuccessHandler> sccessHandlerType = annotation.successHandler();
+            SuccessHandler successHandler = applicationContext.getBean(sccessHandlerType);
+            Class<? extends FailureHandler> failureHandlerType = annotation.failureHandler();
+            FailureHandler failureHandler = applicationContext.getBean(failureHandlerType);
+            messageSender.send(topic, (MessageEntity) arg, successHandler, failureHandler);
         }
         return null;
     }

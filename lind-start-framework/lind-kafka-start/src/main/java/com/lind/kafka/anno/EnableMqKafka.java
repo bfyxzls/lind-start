@@ -1,8 +1,7 @@
-package com.lind.common.proxy.anno;
+package com.lind.kafka.anno;
 
-import com.lind.common.proxy.DefaultMessageSender;
-import com.lind.common.proxy.ServiceBeanDefinitionRegistry;
-import com.lind.common.proxy.handler.DefaultEventHandler;
+import com.lind.kafka.config.KafkaProviderConfig;
+import com.lind.kafka.proxy.ServiceBeanDefinitionRegistry;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 
@@ -12,11 +11,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Import({ServiceBeanDefinitionRegistry.class, DefaultMessageSender.class, DefaultEventHandler.class})
+@Import({ServiceBeanDefinitionRegistry.class, KafkaProviderConfig.class})
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
-public @interface EnableServiceProvider {
+public @interface EnableMqKafka {
 
     /**
      * 扫描的基础包，默认为启动类所在包.

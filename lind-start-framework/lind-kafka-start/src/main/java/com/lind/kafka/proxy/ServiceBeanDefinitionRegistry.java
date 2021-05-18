@@ -1,8 +1,7 @@
-package com.lind.common.proxy;
+package com.lind.kafka.proxy;
 
-
-import com.lind.common.proxy.anno.EnableServiceProvider;
-import com.lind.common.proxy.anno.MessageProvider;
+import com.lind.kafka.anno.EnableMqKafka;
+import com.lind.kafka.anno.MqProducer;
 import lombok.SneakyThrows;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
@@ -24,6 +23,7 @@ import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * 装载目录下的bean，为MessageProvider注释的.
  **/
-@ConditionalOnClass(EnableServiceProvider.class)
+@ConditionalOnClass(EnableMqKafka.class)
 public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, BeanFactoryAware {
 
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
@@ -77,7 +77,7 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
                     Class<?> clazz;
                     try {
                         clazz = Class.forName(className);
-                        if (clazz.isAnnotationPresent(MessageProvider.class)) {
+                        if (clazz.isAnnotationPresent(MqProducer.class)) {
                             set.add(clazz);
                         }
                     } catch (ClassNotFoundException e) {
@@ -95,19 +95,21 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
     @Override
     public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
                                         BeanDefinitionRegistry beanDefinitionRegistry) {
-
-
         //获取所有注解的属性和值
         AnnotationAttributes annotationAttributes =
-                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableServiceProvider.class.getName()));
+                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableMqKafka.class.getName()));
         //获取到basePackages的值
         String[] basePackages = annotationAttributes.getStringArray("basePackages");
         //如果没有设置basePackages 扫描路径,就扫描对应包下面的值
         if (basePackages.length == 0) {
-            // junit里这里是SimpleAnnotationMetadata，而在非junit里是StandardAnnotationMetadata
-             basePackages =
-             new String[]{((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName()};
-         }
+            if (!(annotationMetadata instanceof StandardAnnotationMetadata)) {
+                Class<?> aClass = null;
+                aClass = ClassUtils.forName(annotationMetadata.getClassName(), null);
+                annotationMetadata = new StandardAnnotationMetadata(aClass, true);
+            }
+            basePackages =
+                    new String[]{((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName()};
+        }
 
         Set<Class<?>> classes = new HashSet<>();
         // 装截MessageProvider注解的对象
@@ -118,24 +120,10 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
             BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
             GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
 
-            //在这里，我们可以给该对象的属性注入对应的实例。
-            //比如mybatis，就在这里注入了dataSource和sqlSessionFactory，
-            // 注意，如果采用definition.getPropertyValues()方式的话，
-            // 类似definition.getPropertyValues().add("interfaceType", beanClazz);
-            // 则要求在FactoryBean提供setter方法，否则会注入失败
-            // 如果采用definition.getConstructorArgumentValues()，
-            // 则FactoryBean中需要提供包含该属性的构造方法，否则会注入失败
-            //definition.getConstructorArgumentValues().addGenericArgumentValue(beanClazz);
             MutablePropertyValues propertyValues = definition.getPropertyValues();
             propertyValues.add("interfaceType", beanClazz);
             propertyValues.add("applicationContext", beanFactory);
-
-            //注意，这里的BeanClass是生成Bean实例的工厂，不是Bean本身。
-            // FactoryBean是一种特殊的Bean，其返回的对象不是指定类的一个实例，
-            // 其返回的是该工厂Bean的getObject方法所返回的对象。
             definition.setBeanClass(ServiceFactoryBean.class);
-
-            //这里采用的是byName方式注入，类似的还有byType等
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 

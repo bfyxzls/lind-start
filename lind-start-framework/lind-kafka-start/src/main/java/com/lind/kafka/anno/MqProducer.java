@@ -1,4 +1,4 @@
-package com.lind.common.proxy.anno;
+package com.lind.kafka.anno;
 
 import org.springframework.core.annotation.AliasFor;
 
@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface MessageProvider {
+public @interface MqProducer {
 
     @AliasFor("value")
     String name() default "";

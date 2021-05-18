@@ -24,7 +24,7 @@ public class KafkaSenderInspector {
     @Autowired
     CurrentUserAware currentUserAware;
 
-    @Pointcut("execution(* com.lind.kafka.sender.MessageSender.send(..))")
+    @Pointcut("execution(* com.lind.kafka.producer.MessageSender.send(..))")
     public void pointcut() {
 
     }

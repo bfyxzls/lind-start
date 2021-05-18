@@ -6,8 +6,8 @@ import com.lind.kafka.handler.DefaultFailureHandler;
 import com.lind.kafka.handler.DefaultSuccessHandler;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
-import com.lind.kafka.sender.DefaultMessageSenderImpl;
-import com.lind.kafka.sender.MessageSender;
+import com.lind.kafka.producer.DefaultMessageSender;
+import com.lind.kafka.producer.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -58,7 +58,7 @@ public class KafkaProviderConfig {
     @Bean("messageSender")
     @ConditionalOnMissingBean
     public MessageSender<? extends MessageEntity> messageSender(SuccessHandler successHandler, FailureHandler failureHandler, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
-        return new DefaultMessageSenderImpl(successHandler, failureHandler, kafkaTemplate, objectMapper);
+        return new DefaultMessageSender(successHandler, failureHandler, kafkaTemplate, objectMapper);
     }
 
     /**

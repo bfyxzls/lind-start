@@ -1,4 +1,4 @@
-package com.lind.kafka.sender;
+package com.lind.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * 默认消息发送者.
  **/
 @RequiredArgsConstructor
-public class DefaultMessageSenderImpl implements MessageSender<MessageEntity> {
+public class DefaultMessageSender implements MessageSender<MessageEntity> {
 
     private final SuccessHandler successHandler;
 
@@ -63,14 +63,16 @@ public class DefaultMessageSenderImpl implements MessageSender<MessageEntity> {
 
                     @Override
                     public void onFailure(Throwable ex) {
-
-                        failureHandler.onFailure(topic, message, ex);
+                        if (failureHandler != null) {
+                            failureHandler.onFailure(topic, message, ex);
+                        }
                     }
 
                     @Override
                     public void onSuccess(SendResult<String, String> result) {
-
-                        successHandler.onSuccess(result);
+                        if (successHandler != null) {
+                            successHandler.onSuccess(result);
+                        }
                     }
                 }
         );

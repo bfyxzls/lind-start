@@ -3,6 +3,7 @@
 * 添加aop模块，对发消息时进行拦截，对公用字段统一赋值 
 * 添加当前用户接口`CurrentUserAware`，由使用者去实现它
 * 去掉了kafka-receiver包，感觉封装意义不大
+* 使用时先添加注解`@EnableMqKafka`
 # docker简单部署
 ```js
 # zk
@@ -69,3 +70,13 @@ services:
       KAFKA_LISTENERS: PLAINTEXT://:9092
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 ```
+# spring代理
+* 对接口进行代理，不能有实现类，主要效仿在mybatis的实现
+* 一般代理一个基接口，然后由不同的泛型子接口去继承它，从而代码这些子接口，完成统一的处理
+# 代理的注册
+* 使用springboot提供的注解直接注册
+* 实现spring的ImportBeanDefinitionRegistrar,FactoryBean等接口完成注册
+# 默认实现与附加行为
+* 添加接口默认实现类
+* 添加附加接口类，一般理解为回调方法的接口，或者函数式接口
+* 使用者直接自定自己的接口，但需要声明`@MessageProvider`和`@MessageSend`注解，以便让代理可以找到你
