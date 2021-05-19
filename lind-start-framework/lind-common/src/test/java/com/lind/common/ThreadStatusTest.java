@@ -1,10 +1,33 @@
 package com.lind.common;
 
+import lombok.SneakyThrows;
 import org.junit.Test;
 
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ThreadStatusTest {
+    /**
+     * 测试结果，有7个线程执行成功，3个线程走拒绝策略，7个成功的就是池子只能容纳maximumPoolSize+ArrayBlockingQueue的线程.
+     * 调整corePoolSize的值，可以加快任务处理，但对rejected没有影响，是否走拒绝策略的依据是maximumPoolSize+ArrayBlockingQueue与你的任务数量的关系
+     * 任务数量大于了maximumPoolSize+ArrayBlockingQueue，就被走拒绝策略.
+     */
+    @SneakyThrows
+    @Test
+    public void threadPoolExecutor() {
+        RejectedExecutionHandler handler = new MyIgnorePolicy();
+        ThreadPoolExecutor executor = new ThreadPoolExecutor(3, 4, 10, TimeUnit.SECONDS, new ArrayBlockingQueue<>(3),
+                handler);
+        for (int i = 1; i <= 10; i++) {
+            MyTask task = new MyTask(String.valueOf(i));
+            executor.execute(task);
+        }
+
+        System.in.read(); //阻塞主线程
+    }
+
     @Test
     public void runnableState() {
         new Thread(() -> {
@@ -50,6 +73,46 @@ public class ThreadStatusTest {
         TimeUnit.SECONDS.sleep(2L);
         System.out.println(thread.getState());//RUNNABLE
     }
+
+    public static class MyIgnorePolicy implements RejectedExecutionHandler {
+
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor e) {
+            doLog(r, e);
+        }
+
+        private void doLog(Runnable r, ThreadPoolExecutor e) {
+            // 可做日志记录等
+            System.err.println(r.toString() + " rejected");
+        }
+    }
+
+    static class MyTask implements Runnable {
+        private String name;
+
+        public MyTask(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            try {
+                System.out.println(this.toString() + " is running!");
+                Thread.sleep(3000); //让任务执行慢点
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return "MyTask [name=" + name + "]";
+        }
+    }
+
     private class ValuableResource {
         private Object lock = new Object();
 

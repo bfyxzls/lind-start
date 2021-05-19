@@ -1,7 +1,7 @@
 package com.lind.common.proxy.register;
 
-import com.lind.common.proxy.anno.CarAnno;
-import com.lind.common.proxy.anno.EnableCar;
+import com.lind.common.proxy.anno.MessageProvider;
+import com.lind.common.proxy.anno.EnableMessage;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.MutablePropertyValues;
@@ -29,8 +29,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Slf4j
-@ConditionalOnClass(EnableCar.class)
-public class CarBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+@ConditionalOnClass(EnableMessage.class)
+public class MessageBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
     private ResourceLoader resourceLoader;
     private MetadataReaderFactory metadataReaderFactory;
     private ResourcePatternResolver resourcePatternResolver;
@@ -54,7 +54,7 @@ public class CarBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar,
                     Class<?> clazz;
                     try {
                         clazz = Class.forName(className);
-                        if (clazz.isAnnotationPresent(CarAnno.class)) {
+                        if (clazz.isAnnotationPresent(MessageProvider.class)) {
                             set.add(clazz);
                         }
                     } catch (ClassNotFoundException e) {
@@ -72,7 +72,7 @@ public class CarBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar,
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
         // 获取MapperScan注解属性信息
-        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableCar.class.getName()));
+        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableMessage.class.getName()));
         // 获取注解的属性值,拿到定义的扫描路径
         String[] basePackages = annotationAttributes.getStringArray("basePackages");
         if (basePackages == null || basePackages.length == 0) {
@@ -90,7 +90,7 @@ public class CarBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar,
 
             MutablePropertyValues propertyValues = definition.getPropertyValues();
             propertyValues.add("interfaceType", beanClazz);
-            definition.setBeanClass(CarProxyFactoryBean.class);
+            definition.setBeanClass(MessageProxyFactoryBean.class);
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 
