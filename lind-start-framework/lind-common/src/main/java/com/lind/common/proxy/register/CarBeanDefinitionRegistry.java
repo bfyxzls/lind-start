@@ -1,11 +1,13 @@
-package com.lind.kafka.proxy;
+package com.lind.common.proxy.register;
 
-import com.lind.kafka.anno.EnableMqKafka;
-import com.lind.kafka.anno.MqProducer;
+import com.lind.common.proxy.anno.CarAnno;
+import com.lind.common.proxy.anno.EnableCar;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.MutablePropertyValues;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.BeanNameGenerator;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ResourceLoaderAware;
@@ -16,11 +18,9 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
-import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -28,31 +28,12 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * 装载目录下的bean，为MessageProvider注释的.
- **/
-@ConditionalOnClass(EnableMqKafka.class)
-public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
-
-    private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
+@Slf4j
+@ConditionalOnClass(EnableCar.class)
+public class CarBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+    private ResourceLoader resourceLoader;
     private MetadataReaderFactory metadataReaderFactory;
     private ResourcePatternResolver resourcePatternResolver;
-
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
-    }
-
-    /**
-     * 用"/"替换包路径中"."
-     *
-     * @param path
-     * @return
-     */
-    private String replaceDotByDelimiter(String path) {
-        return StringUtils.replace(path, ".", "/");
-    }
 
     /**
      * 根据包路径获取包及子包下的所有类
@@ -63,7 +44,7 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
     private Set<Class<?>> scannerPackages(String basePackage) {
         Set<Class<?>> set = new LinkedHashSet<>();
         String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                replaceDotByDelimiter(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
+                StringUtils.replace(basePackage, ".", "/") + "/**/*.class";
         try {
             Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
             for (Resource resource : resources) {
@@ -73,7 +54,7 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
                     Class<?> clazz;
                     try {
                         clazz = Class.forName(className);
-                        if (clazz.isAnnotationPresent(MqProducer.class)) {
+                        if (clazz.isAnnotationPresent(CarAnno.class)) {
                             set.add(clazz);
                         }
                     } catch (ClassNotFoundException e) {
@@ -89,26 +70,17 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
 
     @SneakyThrows
     @Override
-    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
-                                        BeanDefinitionRegistry beanDefinitionRegistry) {
-        //获取所有注解的属性和值
-        AnnotationAttributes annotationAttributes =
-                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableMqKafka.class.getName()));
-        //获取到basePackages的值
+    public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
+        // 获取MapperScan注解属性信息
+        AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(importingClassMetadata.getAnnotationAttributes(EnableCar.class.getName()));
+        // 获取注解的属性值,拿到定义的扫描路径
         String[] basePackages = annotationAttributes.getStringArray("basePackages");
-        //如果没有设置basePackages 扫描路径,就扫描对应包下面的值
-        if (basePackages.length == 0) {
-            if (!(annotationMetadata instanceof StandardAnnotationMetadata)) {
-                Class<?> aClass = null;
-                aClass = ClassUtils.forName(annotationMetadata.getClassName(), null);
-                annotationMetadata = new StandardAnnotationMetadata(aClass, true);
-            }
-            basePackages =
-                    new String[]{((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName()};
+        if (basePackages == null || basePackages.length == 0) {
+            basePackages = new String[]{Class.forName(importingClassMetadata.getClassName()).getPackage().getName()};
         }
 
+        // 使用自定义扫描器扫描
         Set<Class<?>> classes = new HashSet<>();
-        // 装截MessageProvider注解的对象
         for (String basePackage : basePackages) {
             classes.addAll(scannerPackages(basePackage));
         }
@@ -118,12 +90,16 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
 
             MutablePropertyValues propertyValues = definition.getPropertyValues();
             propertyValues.add("interfaceType", beanClazz);
-            definition.setBeanClass(ServiceFactoryBean.class);
+            definition.setBeanClass(CarProxyFactoryBean.class);
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-            beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+            registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 
         }
-
     }
 
+    @Override
+    public void setResourceLoader(ResourceLoader resourceLoader) {
+        this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+        this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
+    }
 }
