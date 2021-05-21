@@ -1,0 +1,15 @@
+package event;
+
+import org.springframework.context.ApplicationEvent;
+
+public class A1Event extends ApplicationEvent {
+    /**
+     * Create a new {@code ApplicationEvent}.
+     *
+     * @param source the object on which the event initially occurred or with
+     *               which the event is associated (never {@code null})
+     */
+    public A1Event(Object source) {
+        super(source);
+    }
+}
