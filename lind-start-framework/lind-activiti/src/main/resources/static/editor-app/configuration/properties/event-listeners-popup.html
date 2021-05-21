@@ -30,7 +30,7 @@
             			<div class="form-group">
             	        	<label for="userField">{{'PROPERTY.EVENTLISTENERS.EVENTS' | translate}}</label>
             	            <div ng-repeat="eventDefinition in selectedListeners[0].events">
-            	            	<select id="eventField" class="form-control" ng-model="eventDefinition.event" ng-change="listenerDetailsChanged()">
+            	            	<select id="eventField" class="form-control" ng-model="eventDefinition.com.lind.common.event" ng-change="listenerDetailsChanged()">
             	            		<option title="{{'EVENT_TYPE.ACTIVITY.COMPENSATE.TOOLTIP' | translate}}">ACTIVITY_COMPENSATE</option>
             	            		<option title="{{'EVENT_TYPE.ACTIVITY.COMPLETED.TOOLTIP' | translate}}">ACTIVITY_COMPLETED</option>
             	            		<option title="bla">ACTIVITY_ERROR_RECEIVED</option>
@@ -68,7 +68,7 @@
             				</div>
             	       	</div>
                      </div>
-                     <div ng-show="selectedListeners.length > 0 && selectedListeners[0].events[0].event" class="col-xs-6">
+                     <div ng-show="selectedListeners.length > 0 && selectedListeners[0].events[0].com.lind.common.event" class="col-xs-6">
                      	<div class="form-group" ng-if="!selectedListeners[0].rethrowEvent">
             		   		<label for="classField">{{'PROPERTY.EVENTLISTENERS.CLASS' | translate}}</label>
             		   		<input type="text" id="classField" class="form-control" ng-model="selectedListeners[0].className" ng-change="listenerDetailsChanged()" placeholder="{{'PROPERTY.EVENTLISTENERS.CLASS.PLACEHOLDER' | translate}}" />

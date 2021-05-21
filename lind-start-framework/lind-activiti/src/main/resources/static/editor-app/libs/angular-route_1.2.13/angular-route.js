@@ -105,9 +105,9 @@ function $RouteProvider(){
    *      will wait for them all to be resolved or one to be rejected before the controller is
    *      instantiated.
    *      If all the promises are resolved successfully, the values of the resolved promises are
-   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} event is
+   *      injected and {@link ngRoute.$route#$routeChangeSuccess $routeChangeSuccess} com.lind.common.event is
    *      fired. If any of the promises are rejected the
-   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} event is fired. The map object
+   *      {@link ngRoute.$route#$routeChangeError $routeChangeError} com.lind.common.event is fired. The map object
    *      is:
    *
    *      - `key` – `{string}`: a name of a dependency to be injected into the controller.
@@ -135,7 +135,7 @@ function $RouteProvider(){
    *      or `$location.hash()` changes.
    *
    *      If the option is set to `false` and url in the browser changes, then
-   *      `$routeUpdate` event is broadcasted on the root scope.
+   *      `$routeUpdate` com.lind.common.event is broadcasted on the root scope.
    *
    *    - `[caseInsensitiveMatch=false]` - {boolean=} - match routes without being case sensitive
    *
@@ -369,7 +369,7 @@ function $RouteProvider(){
      */
 
     /**
-     * @ngdoc event
+     * @ngdoc com.lind.common.event
      * @name ngRoute.$route#$routeChangeStart
      * @eventOf ngRoute.$route
      * @eventType broadcast on root scope
@@ -380,13 +380,13 @@ function $RouteProvider(){
      * defined in `resolve` route property. Once  all of the dependencies are resolved
      * `$routeChangeSuccess` is fired.
      *
-     * @param {Object} angularEvent Synthetic event object.
+     * @param {Object} angularEvent Synthetic com.lind.common.event object.
      * @param {Route} next Future route information.
      * @param {Route} current Current route information.
      */
 
     /**
-     * @ngdoc event
+     * @ngdoc com.lind.common.event
      * @name ngRoute.$route#$routeChangeSuccess
      * @eventOf ngRoute.$route
      * @eventType broadcast on root scope
@@ -395,28 +395,28 @@ function $RouteProvider(){
      * {@link ngRoute.directive:ngView ngView} listens for the directive
      * to instantiate the controller and render the view.
      *
-     * @param {Object} angularEvent Synthetic event object.
+     * @param {Object} angularEvent Synthetic com.lind.common.event object.
      * @param {Route} current Current route information.
      * @param {Route|Undefined} previous Previous route information, or undefined if current is
      * first route entered.
      */
 
     /**
-     * @ngdoc event
+     * @ngdoc com.lind.common.event
      * @name ngRoute.$route#$routeChangeError
      * @eventOf ngRoute.$route
      * @eventType broadcast on root scope
      * @description
      * Broadcasted if any of the resolve promises are rejected.
      *
-     * @param {Object} angularEvent Synthetic event object
+     * @param {Object} angularEvent Synthetic com.lind.common.event object
      * @param {Route} current Current route information.
      * @param {Route} previous Previous route information.
      * @param {Route} rejection Rejection of the promise. Usually the error of the failed promise.
      */
 
     /**
-     * @ngdoc event
+     * @ngdoc com.lind.common.event
      * @name ngRoute.$route#$routeUpdate
      * @eventOf ngRoute.$route
      * @eventType broadcast on root scope
@@ -814,7 +814,7 @@ ngRouteModule.directive('ngView', ngViewFillContentFactory);
 
 
 /**
- * @ngdoc event
+ * @ngdoc com.lind.common.event
  * @name ngRoute.directive:ngView#$viewContentLoaded
  * @eventOf ngRoute.directive:ngView
  * @eventType emit on the current ngView scope

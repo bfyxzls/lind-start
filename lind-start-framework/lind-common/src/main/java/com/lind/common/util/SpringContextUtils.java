@@ -1,7 +1,9 @@
 package com.lind.common.util;
 
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
@@ -13,14 +15,24 @@ import java.util.Map;
  * 直接获取bean.
  */
 @Component("springContextUtils")
-public class SpringContextUtils {
+public class SpringContextUtils implements ApplicationContextAware, DisposableBean {
 
     private static ApplicationContext applicationContext = null;
 
-    public static void setApplicationContext(ApplicationContext app) throws BeansException {
-        applicationContext = app;
+    /**
+     * 取得存储在静态变量中的ApplicationContext.
+     */
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
+    /**
+     * 实现ApplicationContextAware接口, 注入Context到静态变量中.
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        SpringContextUtils.applicationContext = applicationContext;
+    }
 
     /**
      * 通过name获取 Bean.
@@ -92,4 +104,21 @@ public class SpringContextUtils {
         return applicationContext.getBeanDefinitionNames();
     }
 
+    /**
+     * 发布事件.
+     *
+     * @param event
+     */
+    public static void publishEvent(ApplicationEvent event) {
+        if (applicationContext == null) {
+            return;
+        }
+        applicationContext.publishEvent(event);
+    }
+
+
+    @Override
+    public void destroy() throws Exception {
+        applicationContext = null;
+    }
 }

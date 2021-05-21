@@ -1,4 +1,4 @@
-package event;
+package com.lind.common.event;
 
 import com.lind.common.util.SpringContextUtils;
 import org.junit.Test;

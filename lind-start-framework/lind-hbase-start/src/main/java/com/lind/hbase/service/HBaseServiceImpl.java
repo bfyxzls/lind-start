@@ -32,7 +32,8 @@ public class HBaseServiceImpl implements HBaseService {
     private static final byte[] FAMILY_NAME_BYTE = Bytes.toBytes(FAMILY_NAME);
     private final HBaseTemplate hBaseTemplate;
     /**
-     * HBase的命名空间,需要提前定义,通过构造方法赋值
+     * HBase的命名空间,需要提前定义,通过构造方法赋值.
+     * hbase.nameSpace: default
      */
     private final String NAME_SPACE;
 

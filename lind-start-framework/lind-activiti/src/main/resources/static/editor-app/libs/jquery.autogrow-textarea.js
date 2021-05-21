@@ -42,7 +42,7 @@
                                     .replace(/\n/g, '<br/>')
                                     .replace(/ {2,}/g, function(space){ return times('&nbsp;', space.length - 1) + ' ' });
 
-                                // Did enter get pressed?  Resize in this keydown event so that the flicker doesn't occur.
+                                // Did enter get pressed?  Resize in this keydown com.lind.common.event so that the flicker doesn't occur.
                                 if (event && event.data && event.data.event === 'keydown' && event.keyCode === 13) {
                                         val += '<br />';
                                 }

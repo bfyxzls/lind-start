@@ -24,6 +24,8 @@ public class EventTest {
 
     }
 
+
+
     class OrderEvent extends AbstractEvent {
     }
 

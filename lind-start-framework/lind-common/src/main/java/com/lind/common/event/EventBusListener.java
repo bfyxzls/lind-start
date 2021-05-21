@@ -5,9 +5,9 @@ package com.lind.common.event;
  */
 public interface EventBusListener<T extends AbstractEvent> {
     /**
-     * Called when an event has been fired
+     * Called when an com.lind.common.event has been fired
      *
-     * @param event the event
+     * @param event the com.lind.common.event
      */
     void onEvent(T event);
 }

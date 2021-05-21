@@ -1,4 +1,4 @@
-package event;
+package com.lind.common.event;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

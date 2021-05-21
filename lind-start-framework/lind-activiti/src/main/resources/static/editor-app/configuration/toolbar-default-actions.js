@@ -400,7 +400,7 @@ var SaveModelCtrl = [ '$rootScope', '$scope', '$http', '$route', '$location',
                 $scope.status.loading = false;
                 $scope.$hide();
 
-                // Fire event to all who is listening
+                // Fire com.lind.common.event to all who is listening
                 var saveEvent = {
                     type: KISBPM.eventBus.EVENT_TYPE_MODEL_SAVED,
                     model: params,

@@ -1,5 +1,6 @@
 package com.lind.common;
 
+import lombok.SneakyThrows;
 import org.junit.Test;
 
 import java.util.Random;
@@ -121,18 +122,30 @@ public class CompletableFutureTest {
             } catch (InterruptedException e) {
             }
             if (new Random().nextInt() % 2 >= 0) {
-                int i = 12 / 0;
+                int i = 12 / 1;
             }
-            System.out.println("run end ...");
+            System.out.println("run end ..." + Thread.currentThread().getId());
         });
 
         future.whenComplete(new BiConsumer<Void, Throwable>() {
+            @SneakyThrows
             @Override
             public void accept(Void t, Throwable action) {
-                System.out.println("执行完成！");
+                Thread.sleep(10);//占用这个线程
+                System.out.println("sync执行完成！" + Thread.currentThread().getId());
             }
 
         });
+
+        // 异步执行
+        future.whenCompleteAsync(new BiConsumer<Void, Throwable>() {
+            @Override
+            public void accept(Void t, Throwable action) {
+                System.out.println("async执行完成！" + Thread.currentThread().getId());
+            }
+
+        });
+
         future.exceptionally(new Function<Throwable, Void>() {
             @Override
             public Void apply(Throwable t) {

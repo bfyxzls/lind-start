@@ -37,7 +37,7 @@ public class AssignRoleEventListener implements org.activiti.engine.delegate.eve
             ActivitiEntityEvent entityEvent = (ActivitiEntityEvent) event;
             taskEntity = entityEvent.getEntity();
         } else {
-            log.info("activiti event type not support!");
+            log.info("activiti com.lind.common.event type not support!");
         }
 
         if (taskEntity != null && taskEntity instanceof TaskEntity) {

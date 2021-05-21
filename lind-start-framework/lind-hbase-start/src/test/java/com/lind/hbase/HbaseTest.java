@@ -14,7 +14,7 @@ import java.io.IOException;
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class HbaseTest {
-    static final String TABLE_NAME = "lind";
+    static final String TABLE_NAME = "lind-test";
     @Autowired
     HBaseService hBaseService;
 

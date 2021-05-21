@@ -13,11 +13,11 @@ import java.util.UUID;
 @ToString
 public abstract class AbstractEvent implements Serializable {
     /**
-     * event id.
+     * com.lind.common.event id.
      */
     private final String id = UUID.randomUUID().toString();
     /**
-     * event source name.
+     * com.lind.common.event source name.
      */
     private String name = this.getClass().getName();
 }

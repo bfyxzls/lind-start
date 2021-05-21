@@ -113,7 +113,7 @@ public class DefaultEventBusBusService implements EventBusService {
     public void publisher(AbstractEvent abstractEvent) {
         List<EventBusListener> eventBusListeners = handlers.get(abstractEvent.getClass().getName());
         if (!CollectionUtils.isEmpty(eventBusListeners)) {
-            System.out.println("event:" + abstractEvent.getName());
+            System.out.println("com.lind.common.event:" + abstractEvent.getName());
             for (EventBusListener handler : eventBusListeners) {
                 handler.onEvent(abstractEvent);
             }

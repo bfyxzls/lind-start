@@ -19,9 +19,9 @@
 			    </div>
 			    <div class="detail-group clearfix">
                     <div class="col-xs-12 editor-item-picker">
-			            <div ng-if="!state.loadingSubprocesses && !state.subprocessError" class="col-xs-4 editor-item-picker-component" ng-repeat="sub in subProcesses" ng-class="{'selected' : sub.id == selectedSubProcess.id}" ng-click="selectSubProcess(sub, $event)">
+			            <div ng-if="!state.loadingSubprocesses && !state.subprocessError" class="col-xs-4 editor-item-picker-component" ng-repeat="sub in subProcesses" ng-class="{'selected' : sub.id == selectedSubProcess.id}" ng-click="selectSubProcess(sub, $com.lind.common.event)">
 			               <div class="controls">
-			                   <input type="checkbox" value="option1" ng-click="selectSubProcess(sub, $event)" ng-checked="sub.id == selectedSubProcess.id" />
+			                   <input type="checkbox" value="option1" ng-click="selectSubProcess(sub, $com.lind.common.event)" ng-checked="sub.id == selectedSubProcess.id" />
 			               </div>
 			               <h4>{{sub.name}}</h4>
 			               <img src="{{config.contextRoot}}/app/com.lind.common.rest/models/{{sub.id}}/thumbnail" />

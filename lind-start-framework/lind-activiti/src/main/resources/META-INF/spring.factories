@@ -1,10 +1,10 @@
 # 自动注入的bean
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
     com.lind.activiti.config.ActivitiConfig,\
-    com.lind.activiti.event.MangerSignCompleteEventListener,\
-    com.lind.activiti.event.MangerSignCreateEventListener,\
-    com.lind.activiti.event.LoggerEventListener,\
-    com.lind.activiti.event.AssignRoleEventListener,\
+    com.lind.activiti.com.lind.common.event.MangerSignCompleteEventListener,\
+    com.lind.activiti.com.lind.common.event.MangerSignCreateEventListener,\
+    com.lind.activiti.com.lind.common.event.LoggerEventListener,\
+    com.lind.activiti.com.lind.common.event.AssignRoleEventListener,\
     com.lind.activiti.controller.DeploymentController,\
     com.lind.activiti.controller.ExecutionController,\
     com.lind.activiti.controller.ModelController,\

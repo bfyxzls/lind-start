@@ -25,6 +25,7 @@
                 <scope>import</scope>
             </dependency>
 
+
             <!--spring boot 版本 2.3.0对org.springframework.data.elasticsearch.core.query.SearchQuery引用有问题-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>

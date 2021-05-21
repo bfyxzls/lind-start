@@ -22,7 +22,7 @@ import java.util.concurrent.ThreadFactory;
 public class DisruptorTest {
     @Test
     public void test() throws Exception {
-        // The factory for the event
+        // The factory for the com.lind.common.event
         LongEventFactory factory = new LongEventFactory();
 
         // Specify the size of the ring buffer, must be power of 2.
@@ -62,7 +62,7 @@ public class DisruptorTest {
         ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
         /**
-         * 1 eventFactory: 消息(event)工厂对象
+         * 1 eventFactory: 消息(com.lind.common.event)工厂对象
          * 2 ringBufferSize: 容器的长度
          * 3 executor: 线程池(建议使用自定义线程池) RejectedExecutionHandler
          * 4 ProducerType: 单生产者 还是 多生产者

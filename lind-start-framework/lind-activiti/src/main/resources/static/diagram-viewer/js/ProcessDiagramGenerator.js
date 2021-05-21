@@ -17,7 +17,7 @@ var ProcessDiagramGenerator = {
 	diagramBreadCrumbs: null,
 	
 	init: function(){
-		// start event
+		// start com.lind.common.event
 		this.activityDrawInstructions["startEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -26,7 +26,7 @@ var ProcessDiagramGenerator = {
 			processDiagramCanvas.drawNoneStartEvent(activityImpl.getX(), activityImpl.getY(), activityImpl.getWidth(), activityImpl.getHeight());
 		};
 		
-		// start timer event
+		// start timer com.lind.common.event
 		this.activityDrawInstructions["startTimerEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -36,7 +36,7 @@ var ProcessDiagramGenerator = {
 			processDiagramCanvas.drawTimerStartEvent(activityImpl.getX(), activityImpl.getY(), activityImpl.getWidth(), activityImpl.getHeight(), isInterrupting, activityImpl.getProperty("name"));
 		};
 		
-		// start event
+		// start com.lind.common.event
 		this.activityDrawInstructions["messageStartEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -46,7 +46,7 @@ var ProcessDiagramGenerator = {
 			processDiagramCanvas.drawMessageStartEvent(activityImpl.getX(), activityImpl.getY(), activityImpl.getWidth(), activityImpl.getHeight(), isInterrupting, activityImpl.getProperty("name"));
 		};
 		
-		// start signal event
+		// start signal com.lind.common.event
 		this.activityDrawInstructions["startSignalEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -56,7 +56,7 @@ var ProcessDiagramGenerator = {
 			processDiagramCanvas.drawSignalStartEvent(activityImpl.getX(), activityImpl.getY(), activityImpl.getWidth(), activityImpl.getHeight(), isInterrupting, activityImpl.getProperty("name"));
 		};
 		
-		// start multiple event
+		// start multiple com.lind.common.event
 		this.activityDrawInstructions["startMultipleEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -162,7 +162,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// end event
+		// end com.lind.common.event
 		this.activityDrawInstructions["endEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -171,7 +171,7 @@ var ProcessDiagramGenerator = {
 			processDiagramCanvas.drawNoneEndEvent(activityImpl.getX(), activityImpl.getY(), activityImpl.getWidth(), activityImpl.getHeight());
 		};
 		
-		// error end event
+		// error end com.lind.common.event
 		this.activityDrawInstructions["errorEndEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -184,7 +184,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// message end event
+		// message end com.lind.common.event
 		this.activityDrawInstructions["messageEndEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -197,7 +197,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// signal end event
+		// signal end com.lind.common.event
 		this.activityDrawInstructions["signalEndEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -210,7 +210,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// multiple end event
+		// multiple end com.lind.common.event
 		this.activityDrawInstructions["multipleEndEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -223,7 +223,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// terminate end event
+		// terminate end com.lind.common.event
 		this.activityDrawInstructions["terminateEndEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -236,7 +236,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// error start event
+		// error start com.lind.common.event
 		this.activityDrawInstructions["errorStartEvent"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -391,7 +391,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 		
-		// Boundary signal event
+		// Boundary signal com.lind.common.event
 		this.activityDrawInstructions["boundarySignal"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
@@ -405,7 +405,7 @@ var ProcessDiagramGenerator = {
         processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
 		};
 
-    // Boundary message event
+    // Boundary message com.lind.common.event
     this.activityDrawInstructions["boundaryMessage"] = function(){
         var activityImpl = this.activity;
         var processDiagramCanvas = this.processDiagramCanvas;
@@ -419,7 +419,7 @@ var ProcessDiagramGenerator = {
             processDiagramCanvas.drawLabel(label.text, label.x, label.y, label.width, label.height);
     };
 		
-		// timer catch event
+		// timer catch com.lind.common.event
 		this.activityDrawInstructions["intermediateTimer"] = function(){
 			var activityImpl = this.activity;
 			var processDiagramCanvas = this.processDiagramCanvas;
