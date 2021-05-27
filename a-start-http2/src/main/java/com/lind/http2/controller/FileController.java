@@ -1,6 +1,9 @@
 package com.lind.http2.controller;
 
+import com.lind.http2.feign.SelfClient;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,6 +18,9 @@ import java.net.URLDecoder;
 @RestController
 @Slf4j
 public class FileController {
+    @Autowired
+    SelfClient selfClient;
+
     /**
      * 响应体加入文件流
      *
@@ -86,5 +92,40 @@ public class FileController {
         buildExcelDocument(response, path);
     }
 
+    @GetMapping("send2")
+    public String send2() {
+        log.info("read send2");
+        selfClient.send3();
+        return "ok send2";
+    }
+
+    @SneakyThrows
+    @GetMapping("send3")
+    public String send3() {
+        log.info("read send3");
+        Thread.sleep(1000);
+        selfClient.send4();
+        return "ok send3";
+    }
+
+    @GetMapping("send4")
+    public String send4() {
+        log.info("read send4");
+        selfClient.send5();
+        return "ok send4";
+    }
+
+    @GetMapping("send5")
+    public String send5() {
+        log.info("read send5");
+        return "ok send5";
+    }
+
+    @GetMapping("send")
+    public void send(HttpServletResponse response, String path) {
+        log.info("read send1");
+        selfClient.send2();
+    }
 }
+
 

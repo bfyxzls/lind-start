@@ -46,9 +46,18 @@ public class HbaseTest {
 
     @Test
     public void search() {
-        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "305849083174588416");
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618432");
         System.out.print(dataRecord.toString());
     }
+
+    @Test
+    public void existRowKey() {
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618432", "id");
+        System.out.print(dataRecord != null);
+        dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618431", "id");
+        System.out.print(dataRecord != null);
+    }
+
 
     @Test
     public void update() {
