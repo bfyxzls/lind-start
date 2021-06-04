@@ -92,7 +92,7 @@ public class HomeController {
 
         return ResponseEntity.ok(
                 new UserDTO("zzl", "dudu", false, 5d, BigDecimal.valueOf(100), null, null,
-                        Arrays.asList(new Info("hello", "hello world"))
+                        Arrays.asList(new Info("hello", "hello world", new Date()))
                 )
         );
     }
@@ -108,7 +108,7 @@ public class HomeController {
     public ResponseEntity noGet() {
         return ResponseEntity.ok(
                 new UserDTO("zzl", "OK", false, 5d, BigDecimal.valueOf(100), null, null,
-                        Arrays.asList(new Info("hello", "hello world")))
+                        Arrays.asList(new Info("hello", "hello world", new Date())))
         );
     }
 
@@ -116,7 +116,7 @@ public class HomeController {
     @GetMapping("/no-test")
     public ResponseEntity noTest() {
         return ResponseEntity.ok(
-                new Info("hello", "hello world")
+                new Info("hello", "hello world", new Date())
         );
     }
 

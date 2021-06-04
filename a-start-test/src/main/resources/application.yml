@@ -58,3 +58,11 @@ spring:
   mvc:
     static-path-pattern: /static         # 设置静态文件路径，js,css等
 
+# hbase配置
+hbase:
+  zookeeper:
+    quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+  name-space: nezha
+zookeeper:
+  znode:
+    parent: /hbase
