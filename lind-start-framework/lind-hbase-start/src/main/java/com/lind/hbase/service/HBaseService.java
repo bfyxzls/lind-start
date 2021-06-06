@@ -6,11 +6,9 @@ import com.lind.hbase.entity.DataRecord;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * @author 赵阳
- * @Description
- * @date 2020/7/20 9:03
- **/
+/***
+ * HBase业务操作规范.
+ */
 public interface HBaseService {
 
     /**

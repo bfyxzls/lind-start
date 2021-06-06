@@ -12,18 +12,8 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.hadoop.hbase.Cell;
-import org.apache.hadoop.hbase.CellScanner;
-import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Admin;
-import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.Mutation;
-import org.apache.hadoop.hbase.client.Put;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.Table;
+import org.apache.hadoop.hbase.*;
+import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.springframework.util.Assert;
 import org.springframework.util.SerializationUtils;
@@ -34,11 +24,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author 赵阳
- * @Description TODO
- * @date 2020/7/20 9:05
- **/
-@SuppressWarnings("all")
+ * HBaseService封装，列族空间为info.
+ */
 @Slf4j
 @RequiredArgsConstructor
 public class HBaseServiceImpl implements HBaseService {
