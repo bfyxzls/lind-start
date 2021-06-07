@@ -26,7 +26,7 @@ public class DisruptorTest {
         LongEventFactory factory = new LongEventFactory();
 
         // Specify the size of the ring buffer, must be power of 2.
-        int bufferSize = 1024;
+        int bufferSize = 4;
 
         // Construct the Disruptor
         Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, DaemonThreadFactory.INSTANCE);
@@ -43,11 +43,11 @@ public class DisruptorTest {
         LongEventProducer producer = new LongEventProducer(ringBuffer);
 
         ByteBuffer bb = ByteBuffer.allocate(8);
-        for (long l = 0; l < 100; l++) {
+        for (long l = 0; l < 10; l++) {
             bb.putLong(0, l);
             producer.onData(bb);
-            Thread.sleep(1000);
-        }
+         }
+        Thread.sleep(10000);
     }
 
     @Test

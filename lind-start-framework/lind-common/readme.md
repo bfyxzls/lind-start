@@ -1,4 +1,5 @@
 # 功能介绍
+* aspect 拦截器相关，timer拦截器,记录代码运行时间;repeat拦截器,主要实现代码失败后的重试功能 
 * encrypt 加密解密，hash,非对称，对称等
 * com.lind.common.event 观察者模式，事件发布与订阅的实现，完成了对订阅者的自动初始化
 * execption 异常管理，包含基类和control的异常拦截器

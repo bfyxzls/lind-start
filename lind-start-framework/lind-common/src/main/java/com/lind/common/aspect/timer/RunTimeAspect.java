@@ -1,23 +1,19 @@
-package com.lind.common.aspect.logger;
+package com.lind.common.aspect.timer;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.common.util.StopWatchUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.core.annotation.Order;
 
+/**
+ * 程序运行时间拦截器
+ */
 @Aspect
 @Slf4j
 @Order(1)
-@RequiredArgsConstructor
 public class RunTimeAspect {
-
-
-    private final ObjectMapper objectMapper;
-
     /**
      * 目前只做简单的时间打印
      *

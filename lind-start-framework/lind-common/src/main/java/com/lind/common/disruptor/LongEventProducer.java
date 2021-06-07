@@ -4,6 +4,9 @@ import com.lmax.disruptor.RingBuffer;
 
 import java.nio.ByteBuffer;
 
+/**
+ * 事件发布者
+ */
 public class LongEventProducer
 {
     private final RingBuffer<LongEvent> ringBuffer;
@@ -32,6 +35,7 @@ public class LongEventProducer
         }
         finally
         {
+            System.out.println("生产数据");
             ringBuffer.publish(sequence);
         }
     }

@@ -1,4 +1,4 @@
-package com.lind.common.aspect.logger;
+package com.lind.common.aspect.timer;
 
 
 import org.springframework.core.annotation.AliasFor;
@@ -13,14 +13,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RunTime {
-
-
-    /**
-     * 是否打印入参
-     * @return
-     */
-    boolean showParam() default false;
-
     /**
      * 打印日志的名称
      *

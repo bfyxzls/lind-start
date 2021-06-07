@@ -1,6 +1,6 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.aspect.logger.RunTime;
+import com.lind.common.aspect.timer.RunTime;
 import com.lind.start.test.dto.Info;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;

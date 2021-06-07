@@ -1,4 +1,4 @@
-package com.lind.common.aspect.logger;
+package com.lind.common.aspect.repeat;
 
 import org.springframework.context.annotation.Import;
 
@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Import(RunTimeAspect.class)
-public @interface EnableRunTime {
+@Import(TryDoAspect.class)
+public @interface EnableTryDo {
 }

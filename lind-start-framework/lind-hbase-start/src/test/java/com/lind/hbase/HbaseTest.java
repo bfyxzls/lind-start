@@ -34,6 +34,17 @@ public class HbaseTest {
     }
 
     @Test
+    public void insertDynamicFields() {
+        DataRecord dataRecord = new DataRecord();
+        dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
+        dataRecord.append("name", "zhanghangzheng");
+        dataRecord.append("age", "男");
+        dataRecord.append("marry", false);
+        dataRecord.append("school","shiyan-2-school-daxing");
+        hBaseService.save(TABLE_NAME, dataRecord);
+    }
+
+    @Test
     public void append() {
         DataRecord dataRecord = new DataRecord();
         dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
@@ -46,7 +57,7 @@ public class HbaseTest {
 
     @Test
     public void search() {
-        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618432");
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "414127982852968448");
         System.out.print(dataRecord.toString());
     }
 

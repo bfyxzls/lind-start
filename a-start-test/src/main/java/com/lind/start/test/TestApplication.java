@@ -1,6 +1,6 @@
 package com.lind.start.test;
 
-import com.lind.common.aspect.logger.EnableRunTime;
+import com.lind.common.aspect.timer.EnableRunTime;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;

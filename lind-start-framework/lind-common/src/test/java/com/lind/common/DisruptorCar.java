@@ -71,6 +71,9 @@ public class DisruptorCar {
         System.out.println("总耗时:" + (System.currentTimeMillis() - beginTime));
     }
 
+    /**
+     * 事件源对象.
+     */
     public class MyInParkingDataEvent {
 
         private String carLicense; // 车牌号
