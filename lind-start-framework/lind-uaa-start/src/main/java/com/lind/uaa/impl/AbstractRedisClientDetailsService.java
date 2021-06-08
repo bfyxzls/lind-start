@@ -1,8 +1,11 @@
 package com.lind.uaa.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.oauth2.common.exceptions.InvalidClientException;
 import org.springframework.security.oauth2.provider.ClientDetails;
@@ -21,18 +24,20 @@ public abstract class AbstractRedisClientDetailsService extends JdbcClientDetail
      * 缓存client的redis key，这里是hash结构存储
      */
     protected static final String CACHE_CLIENT_KEY = "client_details";
-
-    public AbstractRedisClientDetailsService(DataSource dataSource, StringRedisTemplate stringRedisTemplate) {
-        super(dataSource);
-        this.stringRedisTemplate=stringRedisTemplate;
-        loadAllClientToCache();
-    }
-
     /**
      * redis对象,子类也使用这个对象.
      */
-    protected StringRedisTemplate stringRedisTemplate;
+    protected RedisTemplate<String, String> stringRedisTemplate;
+    @Autowired
+    ObjectMapper objectMapper;
 
+    public AbstractRedisClientDetailsService(DataSource dataSource, StringRedisTemplate stringRedisTemplate) {
+        super(dataSource);
+        this.stringRedisTemplate = stringRedisTemplate;
+        loadAllClientToCache();
+    }
+
+    @SneakyThrows
     @Override
     public ClientDetails loadClientByClientId(String clientId) throws InvalidClientException {
         ClientDetails clientDetails = null;
@@ -42,7 +47,7 @@ public abstract class AbstractRedisClientDetailsService extends JdbcClientDetail
         if (StringUtils.isBlank(value)) {
             clientDetails = cacheAndGetClient(clientId);
         } else {
-            clientDetails = JSONObject.parseObject(value, BaseClientDetails.class);
+            clientDetails = objectMapper.readValue(value, BaseClientDetails.class);
         }
 
         return clientDetails;
@@ -53,11 +58,12 @@ public abstract class AbstractRedisClientDetailsService extends JdbcClientDetail
      *
      * @param clientId
      */
+    @SneakyThrows
     private ClientDetails cacheAndGetClient(String clientId) {
         // 从数据库读取
         ClientDetails clientDetails = super.loadClientByClientId(clientId);
         if (clientDetails != null) {// 写入redis缓存
-            stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(clientId, JSONObject.toJSONString(clientDetails));
+            stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(clientId, objectMapper.writeValueAsString(clientDetails));
             log.info("缓存clientId:{},{}", clientId, clientDetails);
         }
 

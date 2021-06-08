@@ -1,7 +1,6 @@
 package com.lind.uaa.config;
 
-import com.google.common.collect.ImmutableList;
-
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +14,7 @@ public final class PermitAllUrl {
     /**
      * 监控中心和swagger需要访问的url
      */
-    static final List<String> ENDPOINTS = ImmutableList.of("/actuator/**",
+    static final List<String> ENDPOINTS = Arrays.asList("/actuator/**",
             "/v2/api-docs/**",
             "/swagger-ui.html",
             "/swagger-resources/**",

@@ -1,6 +1,7 @@
 package com.lind.oauth.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableSet;
 import com.lind.uaa.impl.AbstractRedisClientDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.sql.DataSource;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -108,7 +113,11 @@ public class RedisClientDetailsService extends AbstractRedisClientDetailsService
         }
 
         list.parallelStream().forEach(client -> {
-            stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(client.getClientId(), JSONObject.toJSONString(client));
+            try {
+                stringRedisTemplate.boundHashOps(CACHE_CLIENT_KEY).put(client.getClientId(), new ObjectMapper().writeValueAsString(client));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

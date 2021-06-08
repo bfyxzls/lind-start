@@ -6,11 +6,11 @@ public interface UAAConstant {
      */
     String USER = "user::";
     /**
-     * 登陆类型.
-     */
-    String LONGINTYPE = "loginType::";
-    /**
-     * 操作类型权限
+     * 操作类型权限.
      */
     Integer PERMISSION_OPERATION = 1;
+    /**
+     * 登录账号.
+     */
+    String LOGIN_ACCOUNT = "username";
 }

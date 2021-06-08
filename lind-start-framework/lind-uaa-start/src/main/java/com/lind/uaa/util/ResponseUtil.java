@@ -1,6 +1,6 @@
 package com.lind.uaa.util;
 
-import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.servlet.ServletResponse;
@@ -21,13 +21,13 @@ public class ResponseUtil {
      * @param resultMap
      */
     public static void out(ServletResponse response, Map<String, Object> resultMap) {
-
+        ObjectMapper objectMapper = new ObjectMapper();
         PrintWriter out = null;
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json");
             out = response.getWriter();
-            out.println(JSONObject.toJSON(resultMap));
+            out.println(objectMapper.writeValueAsString(resultMap));
         } catch (Exception e) {
             log.error(e + "输出JSON出错");
         } finally {
