@@ -1,6 +1,6 @@
 server.port: 6061
 spring:
-   application.name: start-oauth
+   application.name: lind-start-oauth
    profiles.active: dev
    redis:
       host: localhost
@@ -12,3 +12,4 @@ spring:
             max-active: 32
             max-wait: 100
             min-idle: 4
+permitAll: /index,/test/**

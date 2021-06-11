@@ -1,5 +1,8 @@
 package com.lind.uaa.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,6 +13,7 @@ import java.util.Set;
  * 需要放开权限的url
  */
 public final class PermitAllUrl {
+    final static Logger logger = LoggerFactory.getLogger(PermitAllUrl.class);
 
     /**
      * 监控中心和swagger需要访问的url
@@ -37,8 +41,9 @@ public final class PermitAllUrl {
         Set<String> set = new HashSet<>();
         set.addAll(ENDPOINTS);
         Collections.addAll(set, urls);
-
-        return set.toArray(new String[set.size()]);
+        String[] result = set.toArray(new String[set.size()]);
+        logger.info("permitAllUrl:{}", set);
+        return result;
     }
 
 }

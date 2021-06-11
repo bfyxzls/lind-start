@@ -149,3 +149,12 @@ mvn site -Ddependency.locations.enabled=false
     </configuration>
 </plugin>
 ```
+# skywalking集成
+* 添加javaagent参数
+```
+-javaagent:agent\skywalking-agent.jar -Dskywalking.agent.service_name=gateway-provider -Dskywalking.collector.backend_service=192.168.60.137:30129
+# -Dskywalking.agent.service_name  你应用的名称
+# -Dskywalking.collector.backend_service skywalking后台服务的grpc地址
+```
+* 日志采集之后的内容
+![](./assets/readme-1623215825373.png)

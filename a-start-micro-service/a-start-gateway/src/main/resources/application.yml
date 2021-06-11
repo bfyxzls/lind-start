@@ -1,6 +1,6 @@
-server.port: 8080
+server.port: 8084
 spring:
-  application.name: gateway
+  application.name: lind-gateway
   profiles.active: dev
   cloud:
     gateway:
@@ -9,8 +9,8 @@ spring:
           enabled: true
           lower-case-service-id: true
       routes:
-        - id: start-oauth
-          uri: lb://start-oauth
+        - id: lind-start-oauth
+          uri: lb://lind-start-oauth
           predicates:
             - Path= /oauth/**
           filters:

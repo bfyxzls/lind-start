@@ -1,11 +1,8 @@
 spring:
-#   cloud:
-#      nacos:
-#         config:
-#            server-addr: 127.0.0.1:8848
-#            file-extension: yaml
-#         discovery:
-#            server-addr: 127.0.0.1:8848
+   cloud:
+      nacos:
+         discovery:
+            server-addr: 192.168.60.138:80
    main:
       allow-bean-definition-overriding: true
 

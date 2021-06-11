@@ -84,7 +84,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <!-- optional为true时子项目不会强制以来这个lombok，为false时（默认值）子项目会直接依赖父项目的lombok-->
+            <!-- <optional>true</optional>-->
+            <version>1.18.12</version>
         </dependency>
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
