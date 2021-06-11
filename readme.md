@@ -158,3 +158,34 @@ mvn site -Ddependency.locations.enabled=false
 ```
 * 日志采集之后的内容
 ![](./assets/readme-1623215825373.png)
+* 公司kafka,es,hbase
+```
+spring:
+  cloud:
+    #    服务发现配置
+    nacos:
+      discovery:
+        server-addr: 192.168.60.138:80
+        namespace: uniform-background-test
+  elasticsearch:
+    rest:
+      uris: 192.168.60.136:9200,192.168.60.137:9200,192.168.60.138:9200
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+#hbase配置
+winter:
+  hbase:
+    zookeeper:
+      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+    name-space: nezha
+
+  kafka:
+    consumer:
+      group-id: ${spring.application.name}-${spring.cloud.nacos.discovery.namespace}
+      offset:
+        rest: earliest #earliest
+      error-retry: 3
+    hosts: 192.168.10.132:9091，192.168.10.133:9092,192.168.10.134:9097
+
+```
