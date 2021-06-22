@@ -8,9 +8,11 @@ import com.lmax.disruptor.BlockingWaitStrategy;
 import com.lmax.disruptor.EventFactory;
 import com.lmax.disruptor.EventHandler;
 import com.lmax.disruptor.RingBuffer;
+import com.lmax.disruptor.YieldingWaitStrategy;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
 import com.lmax.disruptor.util.DaemonThreadFactory;
+import lombok.SneakyThrows;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
@@ -46,7 +48,7 @@ public class DisruptorTest {
         for (long l = 0; l < 10; l++) {
             bb.putLong(0, l);
             producer.onData(bb);
-         }
+        }
         Thread.sleep(10000);
     }
 
@@ -57,23 +59,24 @@ public class DisruptorTest {
         stopWatch.start();
         // 参数准备工作
         OrderEventFactory orderEventFactory = new OrderEventFactory();
-        int ringBufferSize = 8;//31ms
-        // int ringBufferSize = 4;//100064
-        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        // int ringBufferSize = 4;// 1146
+        int ringBufferSize = 4;//100064
+        int core=Runtime.getRuntime().availableProcessors();
+        ExecutorService executor = Executors.newFixedThreadPool(ringBufferSize);
 
         /**
          * 1 eventFactory: 消息(com.lind.common.event)工厂对象
          * 2 ringBufferSize: 容器的长度
          * 3 executor: 线程池(建议使用自定义线程池) RejectedExecutionHandler
          * 4 ProducerType: 单生产者 还是 多生产者
-         * 5 waitStrategy: 等待策略
+         * 5 waitStrategy: 等待策略,BlockingWaitStrategy是最低效的策略；YieldingWaitStrategy性能是最好的
          */
         //1. 实例化disruptor对象
         Disruptor<OrderEvent> disruptor = new Disruptor<OrderEvent>(orderEventFactory,
                 ringBufferSize,
                 executor,
                 ProducerType.SINGLE,
-                new BlockingWaitStrategy());
+                new YieldingWaitStrategy());
 
         //2. 添加消费者的监听 (构建disruptor 与 消费者的一个关联关系)
         disruptor.handleEventsWith(new OrderEventHandler());
@@ -90,6 +93,7 @@ public class DisruptorTest {
 
         for (long i = 0; i < 100; i++) {
             bb.putLong(0, i);
+            //数据生产速度快，消费慢
             producer.sendData(bb);
         }
 
@@ -139,9 +143,11 @@ public class DisruptorTest {
 
         // 处理Event的handler
         EventHandler<Element> handler = new EventHandler<Element>() {
+            @SneakyThrows
             @Override
             public void onEvent(Element element, long sequence, boolean endOfBatch) {
                 System.out.println("Element: " + element.get());
+                Thread.sleep(10);
             }
         };
 
@@ -149,10 +155,11 @@ public class DisruptorTest {
         BlockingWaitStrategy strategy = new BlockingWaitStrategy();
 
         // 指定RingBuffer的大小
-        int bufferSize = 16;
+        int bufferSize = 4;
 
         // 创建disruptor，采用单生产者模式
         Disruptor<Element> disruptor = new Disruptor(factory, bufferSize, threadFactory, ProducerType.SINGLE, strategy);
+
 
         // 设置EventHandler
         disruptor.handleEventsWith(handler);
@@ -173,8 +180,8 @@ public class DisruptorTest {
             } finally {
                 ringBuffer.publish(sequence);
             }
-            Thread.sleep(10);
         }
+
     }
 
     public class OrderEvent {
@@ -200,8 +207,8 @@ public class DisruptorTest {
     public class OrderEventHandler implements EventHandler<OrderEvent> {
 
         public void onEvent(OrderEvent event, long sequence, boolean endOfBatch) throws Exception {
-            Thread.sleep(1000);
             System.err.println("消费者: " + event.getValue());
+            Thread.sleep(10000);
         }
     }
 

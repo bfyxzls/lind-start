@@ -10,7 +10,7 @@ import java.util.Properties;
 
 public class Producer {
 
-    private final static String BOOTSTRAP_SERVER = "localhost:9092";
+    private final static String BOOTSTRAP_SERVER = "192.168.4.26:9092";
 
     public static void publishEvent(String topic, String value) {
         publishEvent(topic, null, value);

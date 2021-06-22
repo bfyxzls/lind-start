@@ -13,6 +13,8 @@ lind:
       registryKey: lind-lock
 
 spring:
+  application:
+    name: a-start-test
   # Redis
   redis:
     host: 127.0.0.1

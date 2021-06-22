@@ -1,6 +1,6 @@
 package com.lind.common.util;
 
-import org.springframework.beans.BeanUtils;
+import cn.hutool.core.bean.BeanUtil;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -9,6 +9,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 复制字段.
+ */
 public class CopyUtils {
     public static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
@@ -30,7 +33,9 @@ public class CopyUtils {
      * @param target
      */
     public static void copyProperties(Object src, Object target) {
-        BeanUtils.copyProperties(src, target, getNullPropertyNames(src));
+
+        BeanUtil.copyProperties(src, target, getNullPropertyNames(src));
+
     }
 
     /**
@@ -50,7 +55,7 @@ public class CopyUtils {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        BeanUtils.copyProperties(src, t, getNullPropertyNames(src));
+        BeanUtil.copyProperties(src, t, getNullPropertyNames(src));
         return t;
     }
 
@@ -59,20 +64,12 @@ public class CopyUtils {
      *
      * @param src
      */
-    public static <S, T> List<T> copyListProperties(List<S> src, Class<S> classS, Class<T> classT) {
+    public static <S, T> List<T> copyListProperties(List<S> src, Class<T> classT) {
         List<T> list = new ArrayList<>();
 
         for (S obj : src) {
-
-            try {
-                T t = classT.newInstance();
-                BeanUtils.copyProperties(obj, t);
-                list.add(t);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            T t = BeanUtil.copyProperties(obj, classT);
+            list.add(t);
         }
         return list;
     }

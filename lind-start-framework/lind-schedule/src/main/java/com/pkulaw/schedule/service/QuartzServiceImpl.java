@@ -198,7 +198,7 @@ public class QuartzServiceImpl implements QuartzService {
                 jobDto.setTriggerName(trigger.getKey().getName());
                 jobDto.setTriggerGroupName(trigger.getKey().getGroup());
                 jobDto.setDesc(jobDetail.getDescription());
-                jobDto.setTime(trigger.getJobDataMap().getString("time"));
+                jobDto.setTime(trigger.getJobDataMap().getString("startTime"));
 
                 Trigger.TriggerState triggerState = scheduler.getTriggerState(trigger.getKey());
                 jobDto.setStatus(triggerState.name());

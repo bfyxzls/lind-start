@@ -76,17 +76,6 @@
             <version>3.1</version>
         </dependency>
         <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-core</artifactId>
-            <version>5.4.0</version>
-        </dependency>
-        <!-- 服务注册 -->
-        <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service</artifactId>
-            <version>1.0-rc5</version>
-        </dependency>
-        <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <scope>test</scope>
@@ -100,7 +89,6 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -115,25 +103,25 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin><!-- 使用时先clean，再install-->
-                <groupId>net.roseboy</groupId>
-                <artifactId>classfinal-maven-plugin</artifactId>
-                <version>1.2.1</version>
-                <configuration>
-                    <password>#</password><!-- #表示启动时不需要密码，事实上对于代码混淆来说，这个密码没什么用，它只是一个启动密码 -->
-                    <packages>com.lind.common</packages><!-- 加密的包名，多个包用逗号分开-->
-                    <excludes>org.spring</excludes>
-                    <cfgfiles>spring.factories</cfgfiles>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>classFinal</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>&lt;!&ndash; 使用时先clean，再install&ndash;&gt;-->
+            <!--                <groupId>net.roseboy</groupId>-->
+            <!--                <artifactId>classfinal-maven-plugin</artifactId>-->
+            <!--                <version>1.2.1</version>-->
+            <!--                <configuration>-->
+            <!--                    <password>#</password>&lt;!&ndash; #表示启动时不需要密码，事实上对于代码混淆来说，这个密码没什么用，它只是一个启动密码 &ndash;&gt;-->
+            <!--                    <packages>com.lind.common</packages>&lt;!&ndash; 加密的包名，多个包用逗号分开&ndash;&gt;-->
+            <!--                    <excludes>org.spring</excludes>-->
+            <!--                    <cfgfiles>spring.factories</cfgfiles>-->
+            <!--                </configuration>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <phase>package</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>classFinal</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 </project>

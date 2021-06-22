@@ -14,12 +14,17 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class ThreadPoolUtilsTest {
-    static ExecutorService executorService = Executors.newFixedThreadPool(8);
+    static ExecutorService executorService = Executors.newFixedThreadPool(4);
     static KeyAffinityExecutor executor = KeyAffinityExecutor.newSerializingExecutor(8, 200, "MY-POOL");
 
     public static void executeByOldPool(List<Person> personList) {
         personList.stream().forEach(p -> executorService.execute(() -> {
             System.out.println(JSON.toJSONString(p));
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }));
     }
 
