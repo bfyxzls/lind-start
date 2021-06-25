@@ -1,11 +1,15 @@
 package com.lind.common.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CopyUtilsTest {
     @Test
@@ -28,7 +32,15 @@ public class CopyUtilsTest {
             Assert.assertEquals("10", o.getAge());
         });
 
+    }
 
+    @Test
+    public void MapConvertType() throws JsonProcessingException {
+        Map<String, Object> hashMap = new HashMap();
+        hashMap.put("id", 1);
+        hashMap.put("name", "lind");
+        String result = new ObjectMapper().writeValueAsString(hashMap);
+        System.out.println(result);
     }
 
     @Data

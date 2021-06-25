@@ -80,3 +80,36 @@ services:
 * 添加接口默认实现类
 * 添加附加接口类，一般理解为回调方法的接口，或者函数式接口
 * 使用者直接自定自己的接口，但需要声明`@MessageProvider`和`@MessageSend`注解，以便让代理可以找到你
+
+# 分区partition
+1. 每个partition有自己的offset
+2. 单个partition里的消息是有序的
+3. 多个partition对于同组的不同消费者来说，是并行的，非阻塞的
+![](./assets/readme-1624427613576.png)
+
+# 重复消费
+![](./assets/readme-1624504867337.png)
+1. 消费任务执行时间长
+2. max.poll.interval.ms设置太小，比任务执行时间还小
+3. 当出现了上面情况时，由于任务执行时间长，在任务没有被commit之前，消费者又进行了poll操作，导致了重复消费
+ > 一般情况下，kafka重复消费都是由于未正常提交offset，故修改配置，正常提交offset即可解决。上文中提到的主要配置如下所示：
+```
+/* 自动确认offset的时间间隔  */
+props.put("auto.commit.interval.ms", "1000");
+ 
+props.put("session.timeout.ms", "30000");
+ 
+//消息发送的最长等待时间.需大于session.timeout.ms这个时间
+props.put("request.timeout.ms", "40000");
+ 
+//一次从kafka中poll出来的数据条数
+//max.poll.records条数据需要在在session.timeout.ms这个时间内处理完
+props.put("max.poll.records","100");
+
+//两个poll的时间间隔
+props.put("max.poll.interval.ms",1000);
+//server发送到消费端的最小数据，若是不满足这个数值则会等待直到满足指定大小。默认为1表示立即接收。
+props.put("fetch.min.bytes", "1");
+//若是不满足fetch.min.bytes时，等待消费端请求的最长等待时间
+props.put("fetch.wait.max.ms", "1000");
+```
