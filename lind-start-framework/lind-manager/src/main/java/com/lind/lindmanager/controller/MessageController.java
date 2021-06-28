@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("user")
-public class UserController {
+@RequestMapping("message")
+public class MessageController {
     @GetMapping("list")
     public String hello(){
-        return "user/list";
+        return "message/list";
     }
 }
