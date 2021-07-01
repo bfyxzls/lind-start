@@ -1,6 +1,21 @@
 # 认证中心
 ## 引用
-```$xslt
+```
+ <!-- maven依赖版本统一，子工程不需要声明包版本 -->
+    <dependencyManagement>
+        <dependencies>
+ 
+            <dependency>
+                <groupId>org.keycloak.bom</groupId>
+                <artifactId>keycloak-adapter-bom</artifactId>
+                <version>11.0.3</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
       <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-uaa-keycloak-start</artifactId>
