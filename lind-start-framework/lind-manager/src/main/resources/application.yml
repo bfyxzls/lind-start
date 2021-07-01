@@ -7,7 +7,3 @@ spring:
     cache: false
     # 启用不严格检查
     mode: LEGACYHTML5
-  #  devtools
-  devtools:
-      restart:
-        enabled: true  #设置开启热部署
