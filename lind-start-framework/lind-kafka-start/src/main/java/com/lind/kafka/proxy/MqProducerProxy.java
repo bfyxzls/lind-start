@@ -23,12 +23,12 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @Data
-public class ServiceProxy<T> implements InvocationHandler {
+public class MqProducerProxy<T> implements InvocationHandler {
 
     private MessageSender messageSender;
     private BeanFactory applicationContext;
 
-    public ServiceProxy(BeanFactory applicationContext) {
+    public MqProducerProxy(BeanFactory applicationContext) {
         this.applicationContext = applicationContext;
         this.messageSender = applicationContext.getBean(MessageSender.class);
     }
@@ -57,6 +57,19 @@ public class ServiceProxy<T> implements InvocationHandler {
             messageSender.send(topic, (MessageEntity) arg, successHandler, failureHandler);
         }
         return null;
+    }
+
+    /**
+     * 首字母转小写
+     *
+     * @param s
+     * @return
+     */
+    public static String toLowerCaseFirstOne(String s) {
+        if (Character.isLowerCase(s.charAt(0)))
+            return s;
+        else
+            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 
     /**

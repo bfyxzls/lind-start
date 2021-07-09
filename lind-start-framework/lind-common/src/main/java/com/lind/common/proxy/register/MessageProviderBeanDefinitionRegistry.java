@@ -1,7 +1,7 @@
 package com.lind.common.proxy.register;
 
-import com.lind.common.proxy.anno.MessageProvider;
 import com.lind.common.proxy.anno.EnableMessage;
+import com.lind.common.proxy.anno.MessageProvider;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.MutablePropertyValues;
@@ -28,15 +28,18 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * 1.对MessageProvider注解的接口进行注册.
+ */
 @Slf4j
 @ConditionalOnClass(EnableMessage.class)
-public class MessageBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+public class MessageProviderBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
     private ResourceLoader resourceLoader;
     private MetadataReaderFactory metadataReaderFactory;
     private ResourcePatternResolver resourcePatternResolver;
 
     /**
-     * 根据包路径获取包及子包下的所有类
+     * 根据包路径获取包及子包下的标识有@MessageProvider注解的类型，它将被动态代理
      *
      * @param basePackage basePackage
      * @return Set<Class < ?>> Set<Class<?>>
@@ -68,6 +71,13 @@ public class MessageBeanDefinitionRegistry implements ImportBeanDefinitionRegist
         return set;
     }
 
+    /**
+     * 注册需要的BeanDefinition.
+     *
+     * @param importingClassMetadata
+     * @param registry
+     * @param importBeanNameGenerator
+     */
     @SneakyThrows
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
@@ -90,7 +100,7 @@ public class MessageBeanDefinitionRegistry implements ImportBeanDefinitionRegist
 
             MutablePropertyValues propertyValues = definition.getPropertyValues();
             propertyValues.add("interfaceType", beanClazz);
-            definition.setBeanClass(MessageProxyFactoryBean.class);
+            definition.setBeanClass(MessageProviderProxyFactoryBean.class);
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 

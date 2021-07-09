@@ -14,7 +14,7 @@ import java.lang.reflect.Proxy;
  * @author lind
  */
 @Data
-public class ServiceFactoryBean<T> implements FactoryBean<T> {
+public class MqProducerFactoryBean<T> implements FactoryBean<T> {
 
     private Class<T> interfaceType;
     private BeanFactory applicationContext;
@@ -22,7 +22,7 @@ public class ServiceFactoryBean<T> implements FactoryBean<T> {
     @Override
     public T getObject() throws Exception {
         //这里主要是创建接口对应的实例，便于注入到spring容器中
-        InvocationHandler handler = new ServiceProxy(applicationContext);
+        InvocationHandler handler = new MqProducerProxy(applicationContext);
         return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(),
                 new Class[]{interfaceType}, handler);
     }

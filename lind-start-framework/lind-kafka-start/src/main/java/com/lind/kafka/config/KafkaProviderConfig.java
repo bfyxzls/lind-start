@@ -44,18 +44,18 @@ public class KafkaProviderConfig {
     private KafkaProperties kafkaProperties;
 
     @Primary
-    @Bean("defaultFailureHandler")
+    @Bean
     public FailureHandler failureHandler() {
         return new DefaultFailureHandler();
     }
 
     @Primary
-    @Bean("defaultSuccessHandler")
+    @Bean
     public SuccessHandler successHandler(ObjectMapper objectMapper) {
         return new DefaultSuccessHandler(objectMapper);
     }
 
-    @Bean("messageSender")
+    @Bean
     @ConditionalOnMissingBean
     public MessageSender<? extends MessageEntity> messageSender(SuccessHandler successHandler, FailureHandler failureHandler, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         return new DefaultMessageSender(successHandler, failureHandler, kafkaTemplate, objectMapper);

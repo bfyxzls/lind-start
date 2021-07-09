@@ -1,6 +1,6 @@
 package com.lind.common.proxy.anno;
 
-import com.lind.common.proxy.handler.ConsoleMessageProviderHandler;
+import com.lind.common.proxy.handler.DefaultMessageProviderHandler;
 import com.lind.common.proxy.handler.DefaultSuccessSendHandler;
 import com.lind.common.proxy.handler.MessageProviderHandler;
 import com.lind.common.proxy.handler.SuccessSendHandler;
@@ -15,12 +15,6 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD})
 @Inherited
 public @interface MessageSend {
-    /**
-     * 消息类型
-     *
-     * @return
-     */
-    int type() default 1;
 
     /**
      * 消息成功后的事件
@@ -34,6 +28,6 @@ public @interface MessageSend {
      *
      * @return
      */
-    Class<? extends MessageProviderHandler> messageProviderHandler() default ConsoleMessageProviderHandler.class;
+    Class<? extends MessageProviderHandler> messageProviderHandler() default DefaultMessageProviderHandler.class;
 
 }

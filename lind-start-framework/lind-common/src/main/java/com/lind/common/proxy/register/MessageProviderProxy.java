@@ -11,15 +11,31 @@ import org.springframework.beans.factory.BeanFactory;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * 3.代理一个注解为MessageProvide的接口.
+ */
 @Slf4j
 @Data
-public class MessageProxy implements InvocationHandler {
+public class MessageProviderProxy implements InvocationHandler {
     private BeanFactory applicationContext;
     private MessageService messageService;
 
-    public MessageProxy(BeanFactory applicationContext) {
+    public MessageProviderProxy(BeanFactory applicationContext) {
         this.applicationContext = applicationContext;
         messageService = applicationContext.getBean(MessageService.class);
+    }
+
+    /**
+     * 首字母转小写
+     *
+     * @param s
+     * @return
+     */
+    public static String toLowerCaseFirstOne(String s) {
+        if (Character.isLowerCase(s.charAt(0)))
+            return s;
+        else
+            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
     }
 
     @Override
@@ -30,13 +46,17 @@ public class MessageProxy implements InvocationHandler {
         Object arg = args[0];
         if (method.isAnnotationPresent(MessageSend.class)) {
             MessageSend annotation = method.getAnnotation(MessageSend.class);
+
+            // 获取SuccessSendHandler的实例
             Class<? extends SuccessSendHandler> sccessHandlerType = annotation.successSendHandler();
             SuccessSendHandler successHandler = applicationContext.getBean(sccessHandlerType);
 
+            // 获取MessageProviderHandler的实例
             Class<? extends MessageProviderHandler> messageProviderHandlerType = annotation.messageProviderHandler();
-            MessageProviderHandler messageProviderHandler = applicationContext.getBean(messageProviderHandlerType.getSimpleName(), MessageProviderHandler.class);
+            // bean的名称默认使用小驼峰的简单类名
+            String beanName = messageProviderHandlerType.getSimpleName();
+            MessageProviderHandler messageProviderHandler = applicationContext.getBean(toLowerCaseFirstOne(beanName), MessageProviderHandler.class);
 
-            int types = annotation.type();
             messageService.send(arg, messageProviderHandler, successHandler);
         }
         return null;

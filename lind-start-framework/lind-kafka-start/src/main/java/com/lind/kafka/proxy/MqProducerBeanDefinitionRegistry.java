@@ -32,7 +32,7 @@ import java.util.Set;
  * 装载目录下的bean，为MessageProvider注释的.
  **/
 @ConditionalOnClass(EnableMqKafka.class)
-public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
+public class MqProducerBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
     private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
     private MetadataReaderFactory metadataReaderFactory;
@@ -118,7 +118,7 @@ public class ServiceBeanDefinitionRegistry implements ImportBeanDefinitionRegist
 
             MutablePropertyValues propertyValues = definition.getPropertyValues();
             propertyValues.add("interfaceType", beanClazz);
-            definition.setBeanClass(ServiceFactoryBean.class);
+            definition.setBeanClass(MqProducerFactoryBean.class);
             definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
             beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 

@@ -1,6 +1,5 @@
-package com.lind.common;
+package com.lind.common.proxy;
 
-import com.lind.common.proxy.PeopleMessageService;
 import com.lind.common.proxy.anno.EnableMessage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,14 +9,17 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableMessage(basePackages = "com.lind.common.proxy")
+@EnableMessage(basePackages = {"com.lind.common.proxy"})
 public class ProxyTest {
     @Autowired
-    PeopleMessageService smsMessageService;
+    PeopleMessageProvider peopleMessageProvider;
+    @Autowired
+    OrderMessageProvider orderMessageProvider;
 
     @Test
     public void test() {
-        smsMessageService.send("lind");
+        peopleMessageProvider.send("lind");
+        orderMessageProvider.send("lind");
     }
 
 
