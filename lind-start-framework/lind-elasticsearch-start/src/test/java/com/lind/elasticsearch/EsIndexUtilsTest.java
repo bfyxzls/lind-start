@@ -23,6 +23,11 @@ public class EsIndexUtilsTest {
     @Autowired
     ElasticsearchRestTemplate elasticsearchRestTemplate;
 
+    /**
+     * 建立索引
+     *
+     * @throws IOException
+     */
     @Test
     public void createIndex() throws IOException {
         EsIndexUtils.IndexDTO indexDTO = new EsIndexUtils.IndexDTO("lind-test",
@@ -31,6 +36,11 @@ public class EsIndexUtilsTest {
         Assert.assertTrue(EsIndexUtils.createIndex(elasticsearchRestTemplate.getClient(), indexDTO));
     }
 
+    /**
+     * 更新mapping
+     *
+     * @throws IOException
+     */
     @Test
     public void putMapping() throws IOException {
         createIndex();
@@ -56,4 +66,6 @@ public class EsIndexUtilsTest {
 
         EsIndexUtils.putMapping(elasticsearchRestTemplate.getClient(), "lind-test", list, true);
     }
+
+
 }

@@ -8,6 +8,7 @@
         <i-content :style="{margin: '20px', minHeight: '220px'}">
             <div class="search">
                 <Card @keydown.enter.native="handleSearch">
+                    <p  th:text="${hello}"></p>
                     <Row>
                         <Form ref="searchForm"  inline :label-width="70">
 

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 分页处理.
  */
-public class EsPageUtil {
+public class EsPageUtils {
 
     private static final int DEFAULT_PAGE_SIZE = 10;
 

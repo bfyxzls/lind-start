@@ -2,7 +2,6 @@ package com.lind.elasticsearch.util;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -44,26 +43,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 import static org.elasticsearch.index.query.QueryBuilders.matchAllQuery;
 
 @Slf4j
-public class EsIndexUtils {
+public class EsIndexUtils implements ConstUtils {
 
-    public static final String TIME_FORMATTER = "yyyy||yyyyMM||yyyy.MM||yyyy/MM||yyyy-MM||yyyyMMdd||yyyy.MM" +
-            ".dd||yyyy/MM/dd||yyyy-MM-dd||yyyy-MM-dd HH:mm:ss||yyyy.MM.dd HH:mm:ss||yyyy/MM/dd " +
-            "HH:mm:ss||yyyy-MM-dd HH:mm:ss.SSS||yyyy.MM.dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS";
-    /**
-     * 非nested类型能用的字段
-     */
-    public static final Set<FieldType> NON_INSIDE_FIELD_TYPE = Sets.newHashSet(
-            FieldType.Text, FieldType.Nested, FieldType.Object
-    );
-    public static final String UPDATE_USER = "updateUser";
-    public static final String UPDATE_TIME = "updateTime";
-    public static final String CREATE_USER = "createUser";
-    public static final String CREATE_TIME = "createTime";
+
     private static final String SHARDS_SETTING = "index.number_of_shards";
     private static final String REPLICAS_SETTING = "index.number_of_replicas";
     private static final String READ_ONLY_ALLOW_DELETE = "index.blocks.read_only_allow_delete";

@@ -1,5 +1,9 @@
 # 作用
 对es的增删改进行封装，提取了实体基类`EsBaseEntity`，提供了公用的字段，id统一赋值，`createUser,createTime,updateUser,updateTime`通过拦截器统一进行赋值；提出了`EsAuditorAware`接口，使用者可以实现这个接口来返回当前登录的用户信息。
+# 两个仓储对象
+* EsDataUtils,使用`RestHighLevelClient`进行json格式索引的构建
+* `ElasticsearchRestTemplate`直接对索引实体进行操作，实体继承`EsBaseEntity`
+
 # 依赖引用
 ```
 <dependency>
