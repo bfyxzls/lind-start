@@ -1,4 +1,4 @@
 # Auto Configure
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.redis.configure.LettuceRedisAutoConfigure,\
-  com.lind.redis.configure.RedisCacheConfiguration
+  com.lind.redis.configure.JsonRedisCacheConfiguration
