@@ -1,15 +1,18 @@
 package com.lind.redis.configure;
 
-import org.springframework.cache.CacheManager;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+
+import java.time.Duration;
 
 /**
  * 自定义序列化为json，避免使用二进制，每个类都需要实现Serializable接口.
@@ -17,18 +20,29 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 @EnableCaching
 public class JsonRedisCacheConfiguration {
-    @Bean
-    public CacheManager cacheManager(RedisConnectionFactory factory) {
-        GenericJackson2JsonRedisSerializer genericJackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        // 配置序列化
-        RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig();
-        RedisCacheConfiguration redisCacheConfiguration = config
-                // 键序列化方式 redis字符串序列化
-                .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(stringRedisSerializer))
-                // 值序列化方式 简单json序列化
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(genericJackson2JsonRedisSerializer));
-        return RedisCacheManager.builder(factory).cacheDefaults(redisCacheConfiguration).build();
 
+    /**
+     * 有效期30分钟的缓存.
+     *
+     * @return
+     */
+    @Bean
+    public RedisCacheConfiguration redisCacheConfiguration() {
+        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
+        ObjectMapper om = new ObjectMapper();
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+        om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+
+        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
+        redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
+                RedisSerializationContext
+                        .SerializationPair
+                        .fromSerializer(jackson2JsonRedisSerializer)
+        ).entryTtl(Duration.ofMinutes(30));
+
+        return redisCacheConfiguration;
     }
 }
