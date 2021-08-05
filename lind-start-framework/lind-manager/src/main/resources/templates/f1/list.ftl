@@ -1,6 +1,6 @@
 <#import "../template.ftl" as layout>
-<@layout.registrationLayout section>
-    <#if section = "header">
+<@layout.registrationLayout bodyClass="<span style='color:red'>修改模板里的变量</span>";section>
+    <#if section = "head">
         列表
     <#elseif section = "form">
         <table border="1">

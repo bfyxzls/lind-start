@@ -4,12 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("f1")
+@RequestMapping("free")
 public class F1Controller {
     @RequestMapping("list")
     public String selectUser(){
-
-        return "f1/userlist";
+        return "f1/list";
     }
-
 }
