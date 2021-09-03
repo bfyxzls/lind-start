@@ -21,7 +21,8 @@ spring:
     # 数据库索引 默认0
     database: 10
 
-
+  main:
+    allow-bean-definition-overriding: true
   elasticsearch:
     rest:
       uris: localhost:9200

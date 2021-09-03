@@ -65,7 +65,7 @@ public void messageReceive(String message) {
 * 一般代理一个基接口，然后由不同的泛型子接口去继承它，从而代理这些子接口，完成统一的处理
 # 代理的注册
 * 使用springboot提供的注解直接注册
-* 实现spring的ImportBeanDefinitionRegistrar,FactoryBean等接口完成注册
+* 实现spring的`ImportBeanDefinitionRegistrar`,`FactoryBean`等接口完成注册
 # 默认实现与附加行为
 * 添加接口默认实现类
 * 添加附加接口类，一般理解为回调方法的接口，或者函数式接口

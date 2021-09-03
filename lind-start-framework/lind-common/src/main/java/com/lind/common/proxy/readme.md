@@ -1,8 +1,8 @@
 # jdk动态代理
 * 只能代理接口，可以定义一类需要代理的接口，可以通过注解去标识他们，后台在代理时根据注解去添加代理类
-* proxy代理类里写核心逻辑
-* proxyFactoryBean用来构建proxy的工厂bean
-* CarBeanDefinitionRegistry用来注册bean
+* ProviderProxy代理类里写核心逻辑
+* ProviderProxyFactoryBean用来构建proxy的工厂bean
+* ProviderBeanDefinitionRegistry用来注册bean
 * 本例中定义了两个注解，用来代理了消息生产者和生产方法，分别是`@MessageProvider`和`@MessageSend`,其中@MessageProvider标识的接口将会被代理
 * 本例中代理类`MessageProxy`去代理了接口`PeopleMessageService`,并以它做为`MessageService`对象里，方法 `send`的参数
 

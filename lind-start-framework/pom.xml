@@ -29,5 +29,6 @@
         <module>lind-uaa-jwt-start</module>
         <module>lind-websocket-start</module>
         <module>lind-schedule</module>
+        <module>lind-proxy</module>
     </modules>
 </project>

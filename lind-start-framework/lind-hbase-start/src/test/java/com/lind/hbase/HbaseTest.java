@@ -40,7 +40,7 @@ public class HbaseTest {
         dataRecord.append("name", "zhanghangzheng");
         dataRecord.append("age", "男");
         dataRecord.append("marry", false);
-        dataRecord.append("school","shiyan-2-school-daxing");
+        dataRecord.append("school", "shiyan-2-school-daxing");
         hBaseService.save(TABLE_NAME, dataRecord);
     }
 
@@ -57,7 +57,7 @@ public class HbaseTest {
 
     @Test
     public void search() {
-        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "414127982852968448");
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "409438564758065152");
         System.out.print(dataRecord.toString());
     }
 
@@ -72,8 +72,10 @@ public class HbaseTest {
 
     @Test
     public void update() {
-        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "305849083174588416");
-        dataRecord.put("name", "李李");
+        DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "409438564758065152");
+        dataRecord.put("name", null);
         hBaseService.update(TABLE_NAME, dataRecord);
+        dataRecord = hBaseService.getByKey(TABLE_NAME, "409438564758065152");
+        System.out.print(dataRecord.toString());
     }
 }
