@@ -1,3 +1,4 @@
+Disruptor英国外汇交易公司LMAX开发的一个高性能队列
 # 事件数据源
 LongEvent
 # 事件数据源工厂 
