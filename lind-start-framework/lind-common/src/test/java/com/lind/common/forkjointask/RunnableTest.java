@@ -50,6 +50,7 @@ public class RunnableTest {
             System.out.println("thread id:" + Thread.currentThread().getId());
             this.url.forEach(o -> {
                 try {
+                    System.out.println(Thread.currentThread().getId() + ":" + o);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
