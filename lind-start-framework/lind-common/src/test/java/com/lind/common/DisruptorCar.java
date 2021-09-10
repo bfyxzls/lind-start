@@ -9,6 +9,7 @@ import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.EventHandlerGroup;
 import com.lmax.disruptor.dsl.ProducerType;
 import org.junit.Test;
+import org.springframework.util.StopWatch;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -25,13 +26,9 @@ public class DisruptorCar {
     private static final Integer NUM = 1; // 1,10,100,1000
 
     /**
-     * 测试入口 ，
-     * 一个生产者（汽车进入停车场）；
-     * 三个消费者（一个记录汽车信息，一个发送消息给系统，一个发送消息告知司机）
-     * 前两个消费者同步执行，都有结果了再执行第三个消费者
+     * 消息生产.
      */
-    @Test
-     public  void main() throws InterruptedException {
+    void disruptorPublish() {
         long beginTime = System.currentTimeMillis();
         int bufferSize = 2048; // 2的N次方
         try {
@@ -68,7 +65,24 @@ public class DisruptorCar {
             e.printStackTrace();
         }
 
-        System.out.println("总耗时:" + (System.currentTimeMillis() - beginTime));
+    }
+
+    /**
+     * 测试入口 ，
+     * 一个生产者（汽车进入停车场）；
+     * 三个消费者（一个记录汽车信息，一个发送消息给系统，一个发送消息告知司机）
+     * 前两个消费者同步执行，都有结果了再执行第三个消费者
+     */
+    @Test
+    public void main() throws InterruptedException {
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        for (int i = 0; i < 10; i++) {
+            disruptorPublish();
+        }
+        stopWatch.stop();
+        System.out.println("总耗时:" + stopWatch.getTotalTimeMillis());
     }
 
     /**

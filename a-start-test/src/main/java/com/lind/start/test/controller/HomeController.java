@@ -123,7 +123,7 @@ public class HomeController {
     @GetMapping("/shop")
     public ResponseEntity shop() {
         return ResponseEntity.ok(
-                new Shop("苹果", "hello world", new Date()
+                new Shop("苹果", "hello world", new Date(),null,0
                 )
         );
     }

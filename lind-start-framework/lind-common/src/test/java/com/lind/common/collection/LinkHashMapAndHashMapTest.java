@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.collection;
 
 import org.junit.Test;
 

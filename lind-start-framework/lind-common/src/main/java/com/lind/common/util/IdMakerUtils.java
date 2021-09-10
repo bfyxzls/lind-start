@@ -37,7 +37,7 @@ public class IdMakerUtils {
         idString.append(timeStr);
 
         // 1字节,2位Hex
-        //后面数字为2^n-1,可以保证结果在ff(0~255)范围内,当serviceId>255，值会定为255
+        // 后面数字为2^n-1,可以保证结果在ff(0~255)范围内,当serviceId>255，值会定小于255的值，就是说我们的serviceId的取值只有256个
         serviceId = serviceId & 0xFF;
         String serviceIdStr = String.format("%02x", serviceId);
         idString.append(serviceIdStr);

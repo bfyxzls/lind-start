@@ -3,6 +3,8 @@ package com.lind.hbase;
 import com.lind.common.util.SnowFlakeUtils;
 import com.lind.hbase.entity.DataRecord;
 import com.lind.hbase.service.HBaseService;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
+@Slf4j
 public class HbaseTest {
     static final String TABLE_NAME = "lind-test";
     @Autowired
@@ -31,6 +34,7 @@ public class HbaseTest {
         dataRecord.append("age", "男");
         dataRecord.append("marry", true);
         hBaseService.save(TABLE_NAME, dataRecord);
+        log.info("data:{}", dataRecord);
     }
 
     @Test
@@ -62,13 +66,17 @@ public class HbaseTest {
     }
 
     @Test
-    public void existRowKey() {
+    public void getByRowKey() {
         DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618432", "id");
-        System.out.print(dataRecord != null);
+        Assert.assertNotNull(dataRecord != null);
         dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618431", "id");
-        System.out.print(dataRecord != null);
+        Assert.assertNotNull(dataRecord != null);
     }
 
+    @Test
+    public void existByRowKey() {
+        Assert.assertTrue(hBaseService.existDataRecord(TABLE_NAME, "448645502448177152"));
+    }
 
     @Test
     public void update() {

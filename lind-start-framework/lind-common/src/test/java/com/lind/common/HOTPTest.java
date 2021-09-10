@@ -40,12 +40,19 @@ public class HOTPTest extends AbstractTest {
         );
     }
 
+    /**
+     * now time.
+     */
     @Test
     public void instantTest() {
         Instant now = Instant.now().plusMillis(TimeUnit.HOURS.toMillis(8));// beijing时间
         System.out.println("now:" + now);
     }
 
+    /**
+     * 生成动态密钥.
+     * @throws Exception
+     */
     @Test
     public void totpGenerator() throws Exception {
         final Instant now = Instant.now();
@@ -53,19 +60,28 @@ public class HOTPTest extends AbstractTest {
         System.out.format("Current password: %06d\n", passKey);
     }
 
+    /**
+     * 密钥的是一个随时间动态变化的值，在一定时间窗格时，生成的密钥是同一个，这就是TOTP算法.
+     *
+     * @throws Exception
+     */
     @Test
     public void totpDesGenerator() throws Exception {
 
         String plaintext = "hello";
 
-        // 加密
-        String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-        String result = DESCbcUtils.encrypt(passKey, plaintext);
+        // 动态同密钥
+        String dynamicPassKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
+        log.info("dynamicPassKey:{}",dynamicPassKey);
+        String result = DESCbcUtils.encrypt(dynamicPassKey, plaintext);
+
         log.info("encryptDES result={}", result);
         for (int i = 0; i < 30; i++) {
-            // 解密
-            passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-            log.info("{} decryptDES result={}", i, DESCbcUtils.decrypt(passKey, result));
+            // 动态同密钥
+            dynamicPassKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
+            log.info("dynamicPassKey:{}",dynamicPassKey);
+
+            log.info("{} decryptDES result={}", i, DESCbcUtils.decrypt(dynamicPassKey, result));
             TimeUnit.SECONDS.sleep(1);
         }
     }
