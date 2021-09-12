@@ -17,7 +17,7 @@ public class MinibaseTest {
         final MiniBase db = MStore.create(conf).open();
 
         // Put
-        db.put(Bytes.toBytes(1), Bytes.toBytes(1));
+        db.put(Bytes.toBytes(1), Bytes.toBytes(2));
 
         // Scan
         MiniBase.Iter<KeyValue> kv = db.scan();
