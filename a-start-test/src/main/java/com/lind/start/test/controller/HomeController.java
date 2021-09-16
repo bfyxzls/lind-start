@@ -8,7 +8,6 @@ import com.lind.start.test.dto.Product;
 import com.lind.start.test.dto.Shop;
 import com.lind.start.test.dto.UserDTO;
 import com.lind.start.test.handler.UserEvent;
-import com.lind.start.test.handler.UserEventType;
 import com.lind.start.test.handler.listener.EmailEventBusListener;
 import com.lind.start.test.handler.listener.SmsEventBusListener;
 import com.lind.verification.code.image.ImageCodeProcessor;
@@ -58,10 +57,12 @@ public class HomeController {
     ImageCodeProcessor imageCodeProcessor;
     @Autowired
     ImageStreamCodeProcessor imageStreamCodeProcessor;
+    @Autowired
+    EventBusService eventBusService;
 
     @GetMapping("/index")
     public String index() {
-        return "success index!";
+        return "index";
     }
 
     /**
@@ -91,16 +92,23 @@ public class HomeController {
 
         return ResponseEntity.ok(
                 new UserDTO("zzl", "dudu", false, 5d, BigDecimal.valueOf(100), null, null,
-                        Arrays.asList(new Info("hello", "hello world"))
+                        Arrays.asList(new Info("hello", "hello world", new Date()))
                 )
         );
+    }
+
+    @GetMapping("/pub-event")
+    public ResponseEntity event() {
+        eventBusService.publisher(new UserEvent("1", "zzl"));
+
+        return ResponseEntity.ok("发布成功");
     }
 
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
         return ResponseEntity.ok(
                 new UserDTO("zzl", "OK", false, 5d, BigDecimal.valueOf(100), null, null,
-                        Arrays.asList(new Info("hello", "hello world")))
+                        Arrays.asList(new Info("hello", "hello world", new Date())))
         );
     }
 
@@ -108,15 +116,15 @@ public class HomeController {
     @GetMapping("/no-test")
     public ResponseEntity noTest() {
         return ResponseEntity.ok(
-                new Info("hello", "hello world")
+                new Info("hello", "hello world", new Date())
         );
     }
 
     @GetMapping("/shop")
     public ResponseEntity shop() {
         return ResponseEntity.ok(
-                new Shop("苹果", "hello world",new Date()
-                        )
+                new Shop("苹果", "hello world", new Date(),null,0
+                )
         );
     }
 

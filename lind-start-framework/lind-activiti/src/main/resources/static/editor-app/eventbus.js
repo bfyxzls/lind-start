@@ -22,34 +22,34 @@ var KISBPM = KISBPM || {};
 KISBPM.eventBus = {
 
     /** Event fired when the editor is loaded and ready */
-    EVENT_TYPE_EDITOR_READY: 'event-type-editor-ready',
+    EVENT_TYPE_EDITOR_READY: 'com.lind.common.event-type-editor-ready',
 
     /** Event fired when a selection is made on the canvas. */
-    EVENT_TYPE_SELECTION_CHANGE: 'event-type-selection-change',
+    EVENT_TYPE_SELECTION_CHANGE: 'com.lind.common.event-type-selection-change',
 
     /** Event fired when a toolbar button has been clicked. */
-    EVENT_TYPE_TOOLBAR_BUTTON_CLICKED: 'event-type-toolbar-button-clicked',
+    EVENT_TYPE_TOOLBAR_BUTTON_CLICKED: 'com.lind.common.event-type-toolbar-button-clicked',
 
     /** Event fired when a stencil item is dropped on the canvas. */
-    EVENT_TYPE_ITEM_DROPPED: 'event-type-item-dropped',
+    EVENT_TYPE_ITEM_DROPPED: 'com.lind.common.event-type-item-dropped',
 
     /** Event fired when a property value is changed. */
-    EVENT_TYPE_PROPERTY_VALUE_CHANGED: 'event-type-property-value-changed',
+    EVENT_TYPE_PROPERTY_VALUE_CHANGED: 'com.lind.common.event-type-property-value-changed',
 
     /** Event fired on double click in canvas. */
-    EVENT_TYPE_DOUBLE_CLICK: 'event-type-double-click',
+    EVENT_TYPE_DOUBLE_CLICK: 'com.lind.common.event-type-double-click',
 
     /** Event fired on a mouse out */
-    EVENT_TYPE_MOUSE_OUT: 'event-type-mouse-out',
+    EVENT_TYPE_MOUSE_OUT: 'com.lind.common.event-type-mouse-out',
 
     /** Event fired on a mouse over */
-    EVENT_TYPE_MOUSE_OVER: 'event-type-mouse-over',
+    EVENT_TYPE_MOUSE_OVER: 'com.lind.common.event-type-mouse-over',
 
     /** Event fired when a model is saved. */
-    EVENT_TYPE_MODEL_SAVED: 'event-type-model-saved',
+    EVENT_TYPE_MODEL_SAVED: 'com.lind.common.event-type-model-saved',
     
     /** Event fired when the quick menu buttons should be hidden. */
-    EVENT_TYPE_HIDE_SHAPE_BUTTONS: 'event-type-hide-shape-buttons',
+    EVENT_TYPE_HIDE_SHAPE_BUTTONS: 'com.lind.common.event-type-hide-shape-buttons',
 
     /** A mapping for storing the listeners*/
     listeners: {},
@@ -58,7 +58,7 @@ KISBPM.eventBus = {
     editor: null,
 
     /**
-     * Add an event listener to the event bus, listening to the event with the provided type.
+     * Add an com.lind.common.event listener to the com.lind.common.event bus, listening to the com.lind.common.event with the provided type.
      * Type and callback are mandatory parameters.
      *
      * Provide scope parameter if it is important that the callback is executed
@@ -77,7 +77,7 @@ KISBPM.eventBus = {
     },
 
     /**
-     * Removes the provided event listener.
+     * Removes the provided com.lind.common.event listener.
      */
     removeListener: function (type, callback, scope) {
         if (typeof this.listeners[type] != "undefined") {
@@ -112,7 +112,7 @@ KISBPM.eventBus = {
     },
 
     /**
-     * Dispatch an event to all event listeners registered to that specific type.
+     * Dispatch an com.lind.common.event to all com.lind.common.event listeners registered to that specific type.
      */
     dispatch:function(type, event) {
         if(typeof this.listeners[type] != "undefined") {

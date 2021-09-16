@@ -234,7 +234,7 @@ angular.module('activitiModeler')
                     
                     if ($rootScope.selectedElementBeforeScrolling && stencil.id().indexOf('BPMNDiagram') !== -1)
                     {
-                    	// ignore canvas event because of empty selection when scrolling stops
+                    	// ignore canvas com.lind.common.event because of empty selection when scrolling stops
                     	return;
                     }
                     
@@ -247,7 +247,7 @@ angular.module('activitiModeler')
                     // Store previous selection
                     $scope.previousSelectedShape = $scope.selectedShape;
                     
-                    // Only do something if another element is selected (Oryx fires this event multiple times)
+                    // Only do something if another element is selected (Oryx fires this com.lind.common.event multiple times)
                     if ($scope.selectedShape !== undefined && $scope.selectedShape.getId() === selectedShape.getId()) {
                         if ($rootScope.forceSelectionRefresh) {
                             // Switch the flag again, this run will force refresh
@@ -642,8 +642,8 @@ angular.module('activitiModeler')
                 // Switch the property back to read mode, now the update is done
                 property.mode = 'read';
 
-                // Fire event to all who is interested
-                // Fire event to all who want to know about this
+                // Fire com.lind.common.event to all who is interested
+                // Fire com.lind.common.event to all who want to know about this
                 var event = {
                     type: KISBPM.eventBus.EVENT_TYPE_PROPERTY_VALUE_CHANGED,
                     property: property,
@@ -849,7 +849,7 @@ angular.module('activitiModeler')
                     if (containedStencil.idWithoutNs() === 'BoundaryErrorEvent' || containedStencil.idWithoutNs() === 'BoundaryTimerEvent' ||
                         containedStencil.idWithoutNs() === 'BoundarySignalEvent' || containedStencil.idWithoutNs() === 'BoundaryMessageEvent' ||
                         containedStencil.idWithoutNs() === 'BoundaryCancelEvent' || containedStencil.idWithoutNs() === 'BoundaryCompensationEvent') {
-                        // Modify position, otherwise boundary event will get position related to left corner of the canvas instead of the container
+                        // Modify position, otherwise boundary com.lind.common.event will get position related to left corner of the canvas instead of the container
                         pos = $scope.editor.eventCoordinates( event );
                         canAttach = true;
                     }
@@ -917,7 +917,7 @@ angular.module('activitiModeler')
                     var command = new commandClass(option, $scope.dragCurrentParent, canAttach, pos, $scope.editor);
                     $scope.editor.executeCommands([command]);
 
-                    // Fire event to all who want to know about this
+                    // Fire com.lind.common.event to all who want to know about this
                     var dropEvent = {
                         type: KISBPM.eventBus.EVENT_TYPE_ITEM_DROPPED,
                         droppedItem: item,
@@ -1028,7 +1028,7 @@ angular.module('activitiModeler')
                     
                     if (item.type === "node") {
                         
-                        // check if the draggable is a boundary event and the parent an Activity
+                        // check if the draggable is a boundary com.lind.common.event and the parent an Activity
                         var _canContain = false;
                         var parentStencilId = parentCandidate.getStencil().id();
 

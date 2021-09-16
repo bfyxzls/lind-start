@@ -21,14 +21,13 @@ public class EventTest {
         eventBusService.addEventListener(new LogoutListener());
         eventBusService.addEventListener((EventBusListener<OrderEvent>) event -> System.out.println("email do order"));//目前不支持lambda事件
         eventBusService.publisher(new OrderEvent());
+
     }
+
+
 
     class OrderEvent extends AbstractEvent {
     }
-
-    class UserEvent extends AbstractEvent {
-    }
-
 
     // Concrete Listener for Login - could be anonymous
     class LoginListener implements EventBusListener<OrderEvent> {
@@ -43,5 +42,6 @@ public class EventTest {
             System.out.println("Logout");
         }
     }
+
 
 }

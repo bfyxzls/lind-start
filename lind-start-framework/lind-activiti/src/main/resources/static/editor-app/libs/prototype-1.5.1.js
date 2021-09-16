@@ -2982,7 +2982,7 @@ Object.extend(Event, {
   },
 
   // find the first node with the given tagName, starting from the
-  // node the event was triggered on; traverses the DOM upwards
+  // node the com.lind.common.event was triggered on; traverses the DOM upwards
   findElement: function(event, tagName) {
     var element = Event.element(event);
     while (element.parentNode && (!element.tagName ||

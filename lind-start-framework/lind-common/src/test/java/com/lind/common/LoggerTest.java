@@ -1,16 +1,15 @@
 package com.lind.common;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+@Slf4j
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class LoggerTest extends AbstractTest {
-    protected final Log log = LogFactory.getLog(this.getClass());
 
     @Test
     public void filter() {

@@ -1,24 +1,24 @@
 package com.lind.common;
 
-import com.lind.common.encrypt.AESNetUtils;
 import com.lind.common.encrypt.HashUtils;
-import com.lind.common.zip.*;
+import com.lind.common.zip.LZW;
+import com.lind.common.zip.LZWUtils;
+import com.lind.common.zip.RLEUtils;
+import com.lind.common.zip.ZLibUtils;
+import com.lind.common.zip.ZipUtils;
 import lombok.SneakyThrows;
 import org.junit.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ZipTest {
-    @SneakyThrows
-    @Test
-    public void aes_base16_lz() {
-        String str = "12345678_f_20200612_D_100_V6";
-        String key = "225E8C70688FD19C5C01A212302322ED";
-        String aes = AESNetUtils.encrypt(str, key);
-        String result = LZString.compress(aes);
-        System.out.println("code=" + result);
-        System.out.println("rle=" + LZString.decompress(result));
 
+    @Test
+    public void zipUtils() throws Exception {
+        // 压缩文件
+        ZipUtils.compress("d:\\20210513会议纪要.docx");
+        // 压缩目录
+        ZipUtils.compress("d:\\zip");
     }
 
     @SneakyThrows

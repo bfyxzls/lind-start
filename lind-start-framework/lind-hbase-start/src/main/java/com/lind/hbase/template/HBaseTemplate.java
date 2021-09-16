@@ -5,6 +5,7 @@ import com.lind.hbase.api.MutatorCallback;
 import com.lind.hbase.api.RowMapper;
 import com.lind.hbase.api.TableCallback;
 import com.lind.hbase.exception.HbaseSystemException;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
@@ -71,6 +72,17 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
+    public boolean exist(TableName tableName, String familyName, String rowKey) throws IOException {
+        Assert.notNull(familyName, "列族不能为空");
+        Assert.notNull(rowKey, "rowKey不能为空");
+        Table table = getConnection().getTable(tableName);
+        Get get = new Get(Bytes.toBytes(rowKey));
+        get.addFamily(Bytes.toBytes(familyName));
+        return table.exists(get);
+    }
+
+
+    @Override
     public <T> T get(TableName tableName, String rowKey, final RowMapper<T> mapper) {
         return this.get(tableName, rowKey, null, null, mapper);
     }
@@ -78,6 +90,29 @@ public class HBaseTemplate implements HBaseOperations {
     @Override
     public <T> T get(TableName tableName, String rowKey, String familyName, final RowMapper<T> mapper) {
         return this.get(tableName, rowKey, familyName, null, mapper);
+    }
+
+    @Override
+    public <T> T get(TableName tableName, String rowKey, String familyName, RowMapper<T> mapper,
+                     String... columnName) {
+        return this.execute(tableName, new TableCallback<T>() {
+            @Override
+            public T doInTable(Table table) throws Throwable {
+                Get get = new Get(Bytes.toBytes(rowKey));
+                if (StringUtils.isNotBlank(familyName)) {
+                    byte[] family = Bytes.toBytes(familyName);
+                    if (ObjectUtils.isNotEmpty(columnName)) {
+                        for (String s : columnName) {
+                            get.addColumn(family, Bytes.toBytes(s));
+                        }
+                    } else {
+                        get.addFamily(family);
+                    }
+                }
+                Result result = table.get(get);
+                return mapper.mapRow(result, 0);
+            }
+        });
     }
 
     @Override
@@ -103,15 +138,21 @@ public class HBaseTemplate implements HBaseOperations {
 
     @Override
     public void execute(TableName tableName, MutatorCallback action) {
+        this.execute(tableName, action, 3 * 1024 * 1024l);
+    }
+
+    @Override
+    public void execute(TableName tableName, MutatorCallback action, Long writeBufferSize) {
         Assert.notNull(action, "Callback object must not be null");
         Assert.notNull(tableName, "No table specified");
+        Assert.notNull(writeBufferSize, "WriteBufferSize must not be null");
 
         StopWatch sw = new StopWatch();
         sw.start();
         BufferedMutator mutator = null;
         try {
             BufferedMutatorParams mutatorParams = new BufferedMutatorParams(tableName);
-            mutator = this.getConnection().getBufferedMutator(mutatorParams.writeBufferSize(3 * 1024 * 1024));
+            mutator = this.getConnection().getBufferedMutator(mutatorParams.writeBufferSize(writeBufferSize));
             action.doInMutator(mutator);
         } catch (Throwable throwable) {
             sw.stop();
@@ -143,13 +184,27 @@ public class HBaseTemplate implements HBaseOperations {
     }
 
     @Override
-    public void saveOrUpdates(TableName tableName, final List<Mutation> mutations) {
-        this.execute(tableName, new MutatorCallback() {
-            @Override
-            public void doInMutator(BufferedMutator mutator) throws Throwable {
-                mutator.mutate(mutations);
-            }
-        });
+    public void saveOrUpdates(TableName tableName, List<Mutation> mutations) {
+        this.saveOrUpdates(tableName, mutations, null);
+    }
+
+    @Override
+    public void saveOrUpdates(TableName tableName, final List<Mutation> mutations, Long writeBufferSize) {
+        if (writeBufferSize != null) {
+            this.execute(tableName, new MutatorCallback() {
+                @Override
+                public void doInMutator(BufferedMutator mutator) throws Throwable {
+                    mutator.mutate(mutations);
+                }
+            }, writeBufferSize);
+        } else {
+            this.execute(tableName, new MutatorCallback() {
+                @Override
+                public void doInMutator(BufferedMutator mutator) throws Throwable {
+                    mutator.mutate(mutations);
+                }
+            });
+        }
     }
 
     public Connection getConnection() {

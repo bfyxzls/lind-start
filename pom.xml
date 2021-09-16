@@ -10,15 +10,12 @@
 
     <modules>
         <module>a-start-test</module>
-        <module>a-start-micro-service/a-start-gateway</module>
-        <module>a-start-micro-service/a-start-oauth</module>
         <module>lind-start-framework</module>
-        <module>a-start-hot-deployment/a-start-hot-dependency</module>
-        <module>a-start-hot-deployment/a-start-hot-deploy</module>
-        <module>a-start-hot-deployment/a-start-hot-interface</module>
-        <module>a-start-activiti</module>
         <module>lind-start-framework/lind-spi</module>
-     </modules>
+        <module>lind-start-framework/lind-office-convert</module>
+        <module>lind-start-framework/lind-feign-start</module>
+
+    </modules>
     <properties>
         <skipTests>true</skipTests>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -56,7 +53,7 @@
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
-        <commons-lang3-version>3.7</commons-lang3-version>
+        <commons-lang3-version>3.10</commons-lang3-version>
         <!-- 在官方的文档里面，规定了2.2.6的jedis版本就是3.1.0,3.1.0会有连接池问题 -->
         <jedis-version>2.9.0</jedis-version>
         <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
@@ -80,7 +77,9 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <!-- optional为true时子项目不会强制以来这个lombok，为false时（默认值）子项目会直接依赖父项目的lombok-->
+            <!-- <optional>true</optional>-->
+            <version>1.18.12</version>
         </dependency>
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
@@ -240,7 +239,7 @@
 
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <artifactId>elasticsearch-com.lind.common.rest-high-level-client</artifactId>
                 <version>6.5.4</version>
             </dependency>
             <dependency>

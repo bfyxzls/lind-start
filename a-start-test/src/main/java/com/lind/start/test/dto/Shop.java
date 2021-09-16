@@ -13,4 +13,6 @@ public class Shop {
     private String title;
     private String msg;
     private Date birthday;
+    private String type;
+    private double price;
 }

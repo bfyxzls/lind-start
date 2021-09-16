@@ -6,16 +6,6 @@
 java -javaagent:springloaded-1.2.5.RELEASE.jar -noverify -Dspringloaded="watchJars=a-start-hot-dependency-1.0.0.jar"   -jar a-start-hot-deploy-1.0.0.jar
 jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0.0.jar #更新
 ```
-# 项目进行了spotbugs检测的项目
-1. lind-common
-2. lind-elasticsearch-start
-3. lind-hbase-start
-4. lind-hbase2-start
-5. lind-limit-start
-6. lind-lock-start
-7. lind-redis-start
-8. lind-mybatis-start
-9. lind-swagger-start
 
 # 自定义start的方法
 1. 建立新的工程，主要用来实现某个功能，如redis,mongodb的封装，方便调用
@@ -23,14 +13,24 @@ jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0
 3. 添加AutoConfigure类，主要定义这个工具的规则
 4. 添加META-INF文件夹spring.factories文件，用来指定自动装配的AutoConfigure类
 
-# start项目
+# start项目目录
 以lind开头，以start结尾的项目，是其它项目的基础包
 1. lind-common 公用工具包
-2. lind-elasticsearch-start 封装了es的操作
-3. lind-hbase-start 封装了hbase的操作
-4. lind-mybatis-start 封装了mybatis plus的操作
-5. lind-redis-start 封装了redis读写操作
-6. lind-uaa-start 用户收取服务
+1. lind-elasticsearch-start 封装了es的操作
+1. lind-hbase-start 封装了hbase的操作
+1. lind-mybatis-start 封装了mybatis plus的操作
+1. lind-redis-start 封装了redis读写操作
+1. lind-uaa-start 用户授权组件
+1. lind-uaa-jwt-start 基于JWT的授权组件
+1. lind-uaa-keycloak-start 基于keycloak的授权组件
+1. lind-limit-start 限流组件
+1. lind-lock-start  分布锁组件
+1. lind-swagger-start swagger的api接口文档组件
+1. lind-feign-start 接口调用组件
+1. lind-activiti 工作流组件
+1. lind-schedule 任务调组件
+1. lind-verification-code-start 验证码组件
+1. lind-spi java原生的插件组件
 
 # spring.factories
   springboot-start项目里，通过spring.factories进行自动注册，里面可以设置自动配置，自动监听，应用初始化，配置文件类型，环境变量等信息，
@@ -54,15 +54,15 @@ jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-tomcat</artifactId>
     </dependency>
-```docker-compose -f example/standalone-mysql.yaml up
+docker-compose -f example/standalone-mysql.yaml up
+```
 
 # 项目报告
 mvn site
 > 注意：上面的命令速度非常慢，因为它要检测每个包是否在仓库里，可以添加`-Ddependency.locations.enabled=false`来关闭这个校验,这个主要针对spotsbug,checkstyle,PMD,test等进行文档报告的打针，运行时间比较长，单独执行某些任务也是可以的，
 如下面只执行checkstyle,spotbugs,pmd: mvn compile -D maven.test.skip=true clean compile spotbugs:spotbugs  checkstyle:checkstyle 
 
-mvn site -Ddependency.locations.enabled=false
-
+* mvn site -Ddependency.locations.enabled=false
 ```
 <!-- 代码检查 -->
 <plugin>
@@ -148,4 +148,44 @@ mvn site -Ddependency.locations.enabled=false
         <testFailureIgnore>true</testFailureIgnore>
     </configuration>
 </plugin>
+```
+# skywalking集成
+* 添加javaagent参数
+```
+-javaagent:agent\skywalking-agent.jar -Dskywalking.agent.service_name=gateway-provider -Dskywalking.collector.backend_service=192.168.60.137:30129
+# -Dskywalking.agent.service_name  你应用的名称
+# -Dskywalking.collector.backend_service skywalking后台服务的grpc地址
+```
+* 日志采集之后的内容
+![](./assets/readme-1623215825373.png)
+* 公司kafka,es,hbase
+```
+spring:
+  cloud:
+    #    服务发现配置
+    nacos:
+      discovery:
+        server-addr: 192.168.60.138:80
+        namespace: uniform-background-test
+  elasticsearch:
+    rest:
+      uris: 192.168.60.136:9200,192.168.60.137:9200,192.168.60.138:9200
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+#hbase配置
+winter:
+  hbase:
+    zookeeper:
+      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+    name-space: nezha
+
+  kafka:
+    consumer:
+      group-id: ${spring.application.name}-${spring.cloud.nacos.discovery.namespace}
+      offset:
+        rest: earliest #earliest
+      error-retry: 3
+    hosts: 192.168.10.132:9091，192.168.10.133:9092,192.168.10.134:9097
+
 ```

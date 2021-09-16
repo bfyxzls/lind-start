@@ -1,13 +1,44 @@
+# oauth2登录
+* POST /oauth/token?grant_type=password&username=liuer&password=123&scope=all&client_id=union_platform&client_secret=123
+响应
+```
+{
+    "access_token": "eb534a13-16f0-4071-9324-afe5161c593a",
+    "token_type": "bearer",
+    "refresh_token": "fa8762b2-5a36-4f22-9f8b-e05ceaf8e55c",
+    "expires_in": 43199,
+    "scope": "all"
+}
+```
+# oauth2刷新token
+修改权限之后，前端需要调用刷新token接口，来获取新的access_token，这样才能拿到新的权限
+* POST /oauth/token?grant_type=refresh_token&refresh_token=5491eed7-9d5f-4c94-bfe6-30b612eab1bf&client_id=system&client_secret=system
+响应
+```
+{
+    "access_token": "aca9eb2a-fb7f-4e9a-971b-42af8d0365d7",
+    "token_type": "bearer",
+    "refresh_token": "5491eed7-9d5f-4c94-bfe6-30b612eab1bf",
+    "expires_in": 28799,
+    "scope": "app"
+}
+```
+> 注意：配置方法`public void configure(AuthorizationServerEndpointsConfigurer endpoints)`需要指定`UserDetailsService`的实现
+```
+@Override
+public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    //...
+    //设置userDetailsService刷新token时候会用到
+    endpoints.userDetailsService(userDetailsService);
+    //...
+}
+```
 # 引用依赖包
 ```$xslt
  <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -81,7 +112,6 @@
 username:admin
 password:123456
 loginType:userLogin
-saveLogin:true
 grant_type:password
 scope:app
 client_id:system

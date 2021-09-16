@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 9091
 lind:
   ratelimit:
     enable: false
@@ -13,13 +13,16 @@ lind:
       registryKey: lind-lock
 
 spring:
+  application:
+    name: a-start-test
   # Redis
   redis:
     host: 127.0.0.1
     # 数据库索引 默认0
     database: 10
 
-
+  main:
+    allow-bean-definition-overriding: true
   elasticsearch:
     rest:
       uris: localhost:9200
@@ -47,3 +50,22 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+
+  freemarker:
+    suffix: .ftl                                 # 设置模板后缀名
+    content-type: text/html                      # 设置文档类型
+    charset: UTF-8                               # 设置页面编码格式
+    cache: false                                 # 设置页面缓存
+    template-loader-path: classpath:/templates   # 设置ftl文件路径
+  mvc:
+    static-path-pattern: /static         # 设置静态文件路径，js,css等
+
+# hbase配置
+hbase:
+  zookeeper:
+    quorum: 192.168.10.37,192.168.10.38,192.168.10.39
+  name-space: nezha
+zookeeper:
+  znode:
+    parent: /hbase

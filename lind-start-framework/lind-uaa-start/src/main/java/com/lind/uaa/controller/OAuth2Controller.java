@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
+
+import static com.lind.uaa.util.UAAConstant.LOGIN_ACCOUNT;
 
 @RestController
 @Slf4j
@@ -40,17 +41,15 @@ public class OAuth2Controller {
     private RedisUtil redisService;
 
 
-    @PostMapping("/oauth/token")
+    @PostMapping("/oauth/login")
     public ResponseEntity<OAuth2AccessToken> postAccessToken(Principal principal, @RequestParam Map<String, String> parameters) {
         try {
-            redisTemplate.opsForValue().set(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), parameters.get("loginType"));
-            redisTemplate.expire(UAAConstant.LONGINTYPE + Thread.currentThread().getName(), 3000, TimeUnit.SECONDS);
             ResponseEntity<OAuth2AccessToken> responseEntity = tokenEndpoint.postAccessToken(principal, parameters);
             if (!ObjectUtils.isEmpty(responseEntity)) {
                 if (responseEntity.getStatusCodeValue() == 200) {
                     ResourceUser user = (ResourceUser) redisService.get(UAAConstant.USER + responseEntity.getBody().getValue());
                     if (ObjectUtils.isEmpty(user)) {
-                        ResourceUser user1 = (ResourceUser) redisService.get(UAAConstant.USER + parameters.get("username"));
+                        ResourceUser user1 = (ResourceUser) redisService.get(UAAConstant.USER + parameters.get(LOGIN_ACCOUNT));
                         if (!ObjectUtils.isEmpty(user1))
                             redisService.set(UAAConstant.USER + responseEntity.getBody().getValue(), user1, 86400L);
                     }

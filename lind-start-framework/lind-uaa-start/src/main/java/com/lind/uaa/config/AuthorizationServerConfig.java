@@ -89,6 +89,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         endpoints.tokenStore(tokenStore());
         // 授权码模式下，code存储
         endpoints.authorizationCodeServices(redisAuthorizationCodeServices);
+        //设置userDetailsService刷新token时候会用到
+        endpoints.userDetailsService(userDetailsService);
+
         endpoints.tokenEnhancer((accessToken, authentication) -> {
             addLoginUserInfo(accessToken, authentication);
             return accessToken;

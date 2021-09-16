@@ -1,5 +1,6 @@
 package com.lind.uaa.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
@@ -23,11 +24,13 @@ import javax.servlet.http.HttpServletRequest;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
+    @Value("${permitAll}")
+    private String[] permitAll;
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.requestMatcher(new OAuth2RequestedMatcher()).authorizeRequests()
-                .antMatchers(PermitAllUrl.permitAllUrl()).permitAll() // 放开权限的url
+                .antMatchers(PermitAllUrl.permitAllUrl(permitAll)).permitAll() // 放开权限的url
                 .anyRequest().authenticated();
     }
 

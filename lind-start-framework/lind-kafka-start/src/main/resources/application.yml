@@ -1,8 +1,0 @@
-spring:
-  kafka:
-    bootstrap-servers: 192.168.119.131:9092
-    listener:
-      missing-topics-fatal: false
-    consumer:
-      group-id: test-consumer
-      auto-offset-reset: earliest #生产环境配置latest，只获取最新消息

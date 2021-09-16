@@ -5,7 +5,3 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.event.DefaultEventBusBusService,\
   com.lind.common.util.SpringContextUtils,\
   com.lind.common.util.VerifyCodeUtils
-
-# Application Listeners
-org.springframework.context.ApplicationListener=\
-  com.lind.common.listener.MessageDbListener

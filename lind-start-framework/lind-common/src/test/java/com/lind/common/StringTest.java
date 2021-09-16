@@ -1,5 +1,6 @@
 package com.lind.common;
 
+import cn.hutool.core.date.DateTime;
 import com.lind.common.encrypt.HashUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -9,9 +10,15 @@ import org.junit.Test;
 public class StringTest {
 
     @Test
-    public void split(){
-        String msg="admin|中国";
-        log.info(StringUtils.split(msg,"|")[1]);
+    public void split() {
+        String msg = "admin|中国";
+        log.info(StringUtils.split(msg, "|")[1]);
+    }
+
+    @Test
+    public void dateToString() {
+        String fileName = "./DataCollectionErrorFileEventHandler_" + DateTime.now().toString("yyyyMMdd") + ".log";
+        System.out.println(fileName);
     }
 
     @Test
@@ -55,7 +62,7 @@ public class StringTest {
 
 
     @Test
-    public void md5Test(){
+    public void md5Test() {
         log.info(HashUtils.md5("1970324841128405bdyh"));
     }
 }

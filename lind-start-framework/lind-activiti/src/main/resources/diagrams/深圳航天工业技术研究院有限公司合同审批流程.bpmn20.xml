@@ -9,8 +9,8 @@
     <exclusiveGateway id="isOneLevel" name="是否一级合同"/>
     <userTask id="htkg_countersign_leader" name="分管领导会签">
       <extensionElements>
-        <activiti:taskListener event="complete" class="com.bdyh.activiti.serviceimpl.business.MangerSignResult"/>
-        <activiti:taskListener event="create" class="com.bdyh.activiti.serviceimpl.business.MangerStartSignResult"/>
+        <activiti:taskListener com.lind.common.event="complete" class="com.bdyh.activiti.serviceimpl.business.MangerSignResult"/>
+        <activiti:taskListener com.lind.common.event="create" class="com.bdyh.activiti.serviceimpl.business.MangerStartSignResult"/>
       </extensionElements>
       <multiInstanceLoopCharacteristics isSequential="false" activiti:collection="${countersignLeaders}" activiti:elementVariable="countersignLeader">
         <completionCondition>${complete/allTask==1}</completionCondition>

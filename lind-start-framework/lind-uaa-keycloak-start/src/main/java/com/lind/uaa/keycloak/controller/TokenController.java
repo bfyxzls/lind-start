@@ -7,13 +7,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,7 +35,15 @@ public class TokenController {
     UaaProperties uaaProperties;
 
 
-    private void writeToken(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
+    /**
+     * 直接在响应体上输出token信息.
+     *
+     * @param response
+     * @param map
+     * @param headers
+     * @throws IOException
+     */
+    private void writeTokenResponse(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         //获取OutputStream输出流
@@ -49,6 +60,14 @@ public class TokenController {
         outputStream.write(dataByteArr);
     }
 
+    /**
+     * 重定向并附加token信息.
+     *
+     * @param response
+     * @param map
+     * @param headers
+     * @throws IOException
+     */
     private void writeTokenRedirect(HttpServletResponse response, MultiValueMap<String, String> map, HttpHeaders headers) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -58,7 +77,9 @@ public class TokenController {
                 getTokenUri(),
                 request,
                 Map.class).getBody();
-        response.sendRedirect(uaaProperties.getRedirectUri() + "?token=" + maps.get("access_token"));
+        response.sendRedirect(uaaProperties.getRedirectUri()
+                + "?access_token=" + maps.get("access_token")
+                + "&refresh_token=" + maps.get("refresh_token"));
     }
 
     /**
@@ -108,13 +129,14 @@ public class TokenController {
             map.add("client_id", keycloakSpringBootProperties.getResource());
             map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
             map.add("redirect_uri", uaaProperties.getCallbackUri());
-            writeToken(response, map, headers);
+            writeTokenResponse(response, map, headers);
         }
 
     }
 
+
     @ApiOperation("授权码认证")
-    @GetMapping(path = "/authorizationCodeRedirect")
+    @GetMapping(path = "/authorizationCodeToken")
     public void authorizationCodeRedirect(@RequestParam(required = false) String code, HttpServletResponse response) throws IOException {
         if (StringUtils.isBlank(code)) {
             // step1
@@ -131,7 +153,6 @@ public class TokenController {
             map.add("redirect_uri", uaaProperties.getCallbackUri());
             writeTokenRedirect(response, map, headers);
         }
-
     }
 
     /**
@@ -155,7 +176,7 @@ public class TokenController {
         }
         map.add("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        writeToken(response, map, headers);
+        writeTokenResponse(response, map, headers);
     }
 
     /**
@@ -179,6 +200,6 @@ public class TokenController {
         map.add("username", username);
         map.add("password", password);
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
-        writeToken(response, map, headers);
+        writeTokenResponse(response, map, headers);
     }
 }

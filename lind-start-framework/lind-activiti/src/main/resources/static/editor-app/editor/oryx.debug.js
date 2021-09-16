@@ -127,7 +127,7 @@ var Kickstart = {
 	}
 }
 
-// register kickstart as the new onload event listener on current window.
+// register kickstart as the new onload com.lind.common.event listener on current window.
 // previous listener(s) are triggered to launch with kickstart.
 Event.observe(window, 'load', Kickstart.load);/*
  * Copyright 2005-2014 Alfresco Software, Ltd. All rights reserved.
@@ -1322,9 +1322,9 @@ ResourceManager = {
 	addListener: function(listener, mask) {
 
 		if(!(listener instanceof Function))
-			throw 'Resource event listener is not a function!';
+			throw 'Resource com.lind.common.event listener is not a function!';
 		if(!(mask))
-			throw 'Invalid mask for resource event listener registration.';
+			throw 'Invalid mask for resource com.lind.common.event listener registration.';
 
 		// construct controller and token.
 		var controller = {listener: listener, mask: mask};
@@ -1353,7 +1353,7 @@ ResourceManager = {
 		// get all listeners. for each listener, ...
 		ResourceManager.__listeners.values().each(function(controller) {
 			
-			// .. if listener subscribed to this type of event ...
+			// .. if listener subscribed to this type of com.lind.common.event ...
 			if(event.action & controller.mask)
 				return controller.listener(event);
 		});
@@ -1688,7 +1688,7 @@ ResourceManager = {
 		// dispatch to all listeners ...
 		ResourceManager.__dispatchEvent(
 
-			// ... an event describing the change that happened here.
+			// ... an com.lind.common.event describing the change that happened here.
 			new ResourceManager.__Event(action, id)
 		);
 	},
@@ -3504,7 +3504,7 @@ ORYX.Core.SVG.SVGMarker = Clazz.extend({
 	 * Writes the changed values into the SVG marker.
 	 */
 	update: function() {
-		//TODO mache marker resizebar!!! aber erst wenn der rest der connectingshape funzt!
+		//TODO mache marker resizebar!!! aber erst wenn der com.lind.common.rest der connectingshape funzt!
 
 //		//update marker attributes
 //		if(this.refX != this.oldRefX) {
@@ -4834,7 +4834,7 @@ ORYX.Core.SVG.Label = Clazz.extend({
 		// Finished
 		delete this._isUpdating;
 		
-		// Raise change event
+		// Raise change com.lind.common.event
 		(this.changeCallbacks||[]).each(function(fn){
 			fn.apply(fn);
 		})
@@ -9566,7 +9566,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 				this.properties[key] = value;
 				this.propertiesChanged[key] = true;
 
-				// Raise an event, to show that the property has changed
+				// Raise an com.lind.common.event, to show that the property has changed
 				// required for plugins like processLink.js
 				//window.setTimeout( function(){
 
@@ -9758,7 +9758,7 @@ ORYX.Core.AbstractShape = ORYX.Core.UIObject.extend(
 			this.propertiesChanged[key] = true;
 			this._changed();
 			
-			// Raise an event, to show that the property has changed
+			// Raise an com.lind.common.event, to show that the property has changed
 			//window.setTimeout( function(){
 
 			if (!this._isInSetProperty) {
@@ -10412,7 +10412,7 @@ ORYX.Core.Canvas = ORYX.Core.AbstractShape.extend({
          target: {resourceId: 'aShape'}
        });
      * @param {Object} shapeObjects 
-     * @param {Function} [eventHandler] An event handler passed to each newly created shape (as eventHandlerCallback)
+     * @param {Function} [eventHandler] An com.lind.common.event handler passed to each newly created shape (as eventHandlerCallback)
      * @return {Array} A collection of ORYX.Core.Shape
      * @methodOf ORYX.Core.Canvas.prototype
      */
@@ -10865,7 +10865,7 @@ if(!ORYX) {var ORYX = {};}
 */
 ORYX.Editor = {
     /** @lends ORYX.Editor.prototype */
-	// Defines the global dom event listener 
+	// Defines the global dom com.lind.common.event listener
 	DOMEventListeners: new Hash(),
 
 	// Defines the selection
@@ -11318,7 +11318,7 @@ ORYX.Editor = {
 			this.commandStackExecuted.push(command);
 		}
 		
-		// Raise event for executing commands
+		// Raise com.lind.common.event for executing commands
 		this.handleEvents({
 			type		: ORYX.CONFIG.EVENT_EXECUTE_COMMANDS,
 			commands	: this.commandStackExecuted
@@ -11725,12 +11725,12 @@ ORYX.Editor = {
 	},
 	
 	/**
-	 * It creates an new event or adds the callback, if already existing,
+	 * It creates an new com.lind.common.event or adds the callback, if already existing,
 	 * for the key combination that the plugin passes in keyCodes attribute
 	 * of the offer method.
 	 * 
-	 * The new key down event fits the schema:
-	 * 		key.event[.metactrl][.alt][.shift].'thekeyCode'
+	 * The new key down com.lind.common.event fits the schema:
+	 * 		key.com.lind.common.event[.metactrl][.alt][.shift].'thekeyCode'
 	 */
 	registerPluginsOnKeyEvents: function() {
 		this.pluginsData.each(function(pluginData) {
@@ -11738,7 +11738,7 @@ ORYX.Editor = {
 			if(pluginData.keyCodes) {
 				
 				pluginData.keyCodes.each(function(keyComb) {
-					var eventName = "key.event";
+					var eventName = "key.com.lind.common.event";
 					
 					/* Include key action */
 					eventName += '.' + keyComb.keyAction;
@@ -11768,7 +11768,7 @@ ORYX.Editor = {
 						eventName += '.' + keyComb.keyCode;
 					}
 					
-					/* Register the event */
+					/* Register the com.lind.common.event */
 					ORYX.Log.debug("Register Plugin on Key Event: %0", eventName);
 					if (pluginData.toggle === true && pluginData.buttonInstance) {
 						this.registerOnEvent(eventName, function(){
@@ -12023,7 +12023,7 @@ ORYX.Editor = {
 	/* Event-Handler Methods */
 	
 	/**
-	* Helper method to execute an event immediately. The event is not
+	* Helper method to execute an com.lind.common.event immediately. The com.lind.common.event is not
 	* scheduled in the _eventsQueue. Needed to handle Layout-Callbacks.
 	*/
 	_executeEventImmediately: function(eventObj) {
@@ -12050,7 +12050,7 @@ ORYX.Editor = {
 	 */
 	handleEvents: function(event, uiObj) {
 		
-		ORYX.Log.trace("Dispatching event type %0 on %1", event.type, uiObj);
+		ORYX.Log.trace("Dispatching com.lind.common.event type %0 on %1", event.type, uiObj);
 
 		switch(event.type) {
 			case ORYX.CONFIG.EVENT_MOUSEDOWN:
@@ -12099,16 +12099,16 @@ ORYX.Editor = {
 		if(!this._keyupEnabled) {
 			return;
 		}
-		/* assure we have the current event. */
+		/* assure we have the current com.lind.common.event. */
         if (!event) 
             event = window.event;
         
-		// Checks if the event comes from some input field
+		// Checks if the com.lind.common.event comes from some input field
 		if (!this.isValidEvent(event)){
 			return;
 		}
 		
-		/* Create key up event type */
+		/* Create key up com.lind.common.event type */
 		var keyUpEvent = this.createKeyCombEvent(event,	ORYX.CONFIG.KEY_ACTION_UP);
 		
 		ORYX.Log.debug("Key Event to handle: %0", keyUpEvent);
@@ -12118,38 +12118,38 @@ ORYX.Editor = {
 	},
 	
 	/**
-	 * Catches all key down events and forward the appropriated event to 
+	 * Catches all key down events and forward the appropriated com.lind.common.event to
 	 * dispatching concerning to the pressed keys.
 	 * 
 	 * @param {Event} 
-	 * 		The key down event to handle
+	 * 		The key down com.lind.common.event to handle
 	 */
 	catchKeyDownEvents: function(event) {
 		if(!this._keydownEnabled) {
 			return;
 		}
-		/* Assure we have the current event. */
+		/* Assure we have the current com.lind.common.event. */
         if (!event) 
             event = window.event;
         
 		/* Fixed in FF3 */
-		// This is a mac-specific fix. The mozilla event object has no knowledge
+		// This is a mac-specific fix. The mozilla com.lind.common.event object has no knowledge
 		// of meta key modifier on osx, however, it is needed for certain
-		// shortcuts. This fix adds the metaKey field to the event object, so
+		// shortcuts. This fix adds the metaKey field to the com.lind.common.event object, so
 		// that all listeners that registered per Oryx plugin facade profit from
 		// this. The original bug is filed in
 		// https://bugzilla.mozilla.org/show_bug.cgi?id=418334
 		//if (this.__currentKey == ORYX.CONFIG.KEY_CODE_META) {
-		//	event.appleMetaKey = true;
+		//	com.lind.common.event.appleMetaKey = true;
 		//}
 		//this.__currentKey = pressedKey;
 		
-		// Checks if the event comes from some input field
+		// Checks if the com.lind.common.event comes from some input field
 		if (!this.isValidEvent(event)){
 			return;
 		}
 		
-		/* Create key up event type */
+		/* Create key up com.lind.common.event type */
 		var keyDownEvent = this.createKeyCombEvent(event, ORYX.CONFIG.KEY_ACTION_DOWN);
 		
 		ORYX.Log.debug("Key Event to handle: %0", keyDownEvent);
@@ -12159,10 +12159,10 @@ ORYX.Editor = {
 	},
 	
 	/**
-	 * Creates the event type name concerning to the pressed keys.
+	 * Creates the com.lind.common.event type name concerning to the pressed keys.
 	 * 
 	 * @param {Event} keyDownEvent
-	 * 		The source keyDownEvent to build up the event name
+	 * 		The source keyDownEvent to build up the com.lind.common.event name
 	 */
 	createKeyCombEvent: function(keyEvent, keyAction) {
 
@@ -12171,7 +12171,7 @@ ORYX.Editor = {
 		//this.__currentKey = pressedKey;
 		
 		/* Event name */
-		var eventName = "key.event";
+		var eventName = "key.com.lind.common.event";
 		
 		/* Key action */
 		if(keyAction) {
@@ -12193,7 +12193,7 @@ ORYX.Editor = {
 			eventName += "." + ORYX.CONFIG.META_KEY_SHIFT;
 		}
 		
-		/* Return the composed event name */
+		/* Return the composed com.lind.common.event name */
 		return  eventName + "." + pressedKey;
 	},
 
@@ -12283,7 +12283,7 @@ ORYX.Editor = {
 		} else if(!currentIsSelectable && currentIsMovable && !(elementController instanceof ORYX.Core.Controls.Docker)) {
 			
 			// TODO: If there is any moveable elements, do this in a plugin
-			//ORYX.Core.UIEnableDrag(event, elementController);
+			//ORYX.Core.UIEnableDrag(com.lind.common.event, elementController);
 
 			ORYX.Log.trace("Rule #7 applied for mouse down on %0", element.id);
 		
@@ -12300,8 +12300,8 @@ ORYX.Editor = {
 		}
 		
 		
-		// prevent event from bubbling, return.
-		//Event.stop(event);
+		// prevent com.lind.common.event from bubbling, return.
+		//Event.stop(com.lind.common.event);
 		return;
 	},
 
@@ -12316,10 +12316,10 @@ ORYX.Editor = {
 		// find the shape that is responsible for this elemement's id.
 		var elementController = uiObj;
 
-		//get event position
+		//get com.lind.common.event position
 		var evPos = this.eventCoordinates(event);
 
-		//Event.stop(event);
+		//Event.stop(com.lind.common.event);
 	},
 
 	_handleMouseHover: function(event, uiObj) {
@@ -12331,9 +12331,9 @@ ORYX.Editor = {
 	},
 
 	/**
-	 * Calculates the event coordinates to SVG document coordinates.
+	 * Calculates the com.lind.common.event coordinates to SVG document coordinates.
 	 * @param {Event} event
-	 * @return {SVGPoint} The event coordinates in the SVG document
+	 * @return {SVGPoint} The com.lind.common.event coordinates in the SVG document
 	 */
 	eventCoordinates: function(event) {
 
@@ -12662,7 +12662,7 @@ new function(){
 		if(this.movedCallback)
 			this.movedCallback(event);
 		
-		//Event.stop(event);
+		//Event.stop(com.lind.common.event);
 	
 	};
 	
@@ -16885,13 +16885,13 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 	},
         
     /**
-       Overwrite to handle load event. TODO: Document params!!!
+       Overwrite to handle load com.lind.common.event. TODO: Document params!!!
        @methodOf ORYX.Plugins.AbstractPlugin.prototype
     */
 	onLoaded: function(){},
 	
     /**
-       Overwrite to handle selection changed event. TODO: Document params!!!
+       Overwrite to handle selection changed com.lind.common.event. TODO: Document params!!!
        @methodOf ORYX.Plugins.AbstractPlugin.prototype
     */
 	onSelectionChanged: function(){},
@@ -17175,14 +17175,14 @@ ORYX.Plugins.AbstractPlugin = Clazz.extend({
 	},
 	
 	/**
-	 * Raises an event so that registered layouters does
+	 * Raises an com.lind.common.event so that registered layouters does
 	 * have the posiblility to layout the given shapes 
 	 * For further reading, have a look into the AbstractLayouter
 	 * class
 	 * @param {Object} shapes
 	 */
 	doLayout: function(shapes){
-		// Raises a do layout event
+		// Raises a do layout com.lind.common.event
 		if (this.facade.raiseEvent)
 		{
 			this.facade.raiseEvent({
@@ -17455,7 +17455,7 @@ ORYX.Plugins.AbstractLayouter = ORYX.Plugins.AbstractPlugin.extend({
 	
 	/**
 	 * Callback to start the layouting
-	 * @param {Object} event Layout event
+	 * @param {Object} event Layout com.lind.common.event
 	 * @param {Object} shapes Given shapes
      * @memberOf ORYX.Plugins.AbstractLayouter.prototype
 	 */
@@ -17584,7 +17584,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 	},
 	
 	/**
-	 * Handles the mouse down event and starts the copy-move-paste action, if
+	 * Handles the mouse down com.lind.common.event and starts the copy-move-paste action, if
 	 * control or meta key is pressed.
 	 */
 	handleMouseDown: function(event) {
@@ -17592,7 +17592,7 @@ ORYX.Plugins.Edit = Clazz.extend({
 			this._controlPressed = false;
 			this.editCopy();
 //			console.log("copiedEle: %0",this.clipboard.shapesAsJson)
-//			console.log("mousevent: %o",event)
+//			console.log("mousevent: %o",com.lind.common.event)
 			this.editPaste();
 			event.forceExecution = true;
 			this.facade.raiseEvent(event, this.clipboard.shapesAsJson);
@@ -17603,29 +17603,29 @@ ORYX.Plugins.Edit = Clazz.extend({
     /**
      * The key handler for this plugin. Every action from the set of cut, copy,
      * paste and delete should be accessible trough simple keyboard shortcuts.
-     * This method checks whether any event triggers one of those actions.
+     * This method checks whether any com.lind.common.event triggers one of those actions.
      *
-     * @param {Object} event The keyboard event that should be analysed for
+     * @param {Object} com.lind.common.event The keyboard com.lind.common.event that should be analysed for
      *     triggering of this plugin.
      */
-//    keyHandler: function(event){
-//        //TODO document what event.which is.
+//    keyHandler: function(com.lind.common.event){
+//        //TODO document what com.lind.common.event.which is.
 //        
 //        ORYX.Log.debug("edit.js handles a keyEvent.");
 //        
-//        // assure we have the current event.
-//        if (!event) 
-//            event = window.event;
+//        // assure we have the current com.lind.common.event.
+//        if (!com.lind.common.event)
+//            com.lind.common.event = window.com.lind.common.event;
 //        
 //        
 //        // get the currently pressed key and state of control key.
-//        var pressedKey = event.which || event.keyCode;
-//        var ctrlPressed = event.ctrlKey;
+//        var pressedKey = com.lind.common.event.which || com.lind.common.event.keyCode;
+//        var ctrlPressed = com.lind.common.event.ctrlKey;
 //        
 //        // if the object is to be deleted, do so, and return immediately.
 //        if ((pressedKey == ORYX.CONFIG.KEY_CODE_DELETE) ||
 //        ((pressedKey == ORYX.CONFIG.KEY_CODE_BACKSPACE) &&
-//        (event.metaKey || event.appleMetaKey))) {
+//        (com.lind.common.event.metaKey || com.lind.common.event.appleMetaKey))) {
 //        
 //            ORYX.Log.debug("edit.js deletes the shape.");
 //            this.editDelete();
@@ -18478,7 +18478,7 @@ ORYX.Plugins.CanvasResizeButton = Clazz.extend({
              ['i', {'class' : iconClassShrink}]
 		]);
 		// Defines a callback which gives back
-		// a boolean if the current mouse event 
+		// a boolean if the current mouse com.lind.common.event
 		// is over the particular button area
 		var offSetWidth = 60;
 		var isOverOffset = function(event) {
@@ -18553,9 +18553,9 @@ ORYX.Plugins.CanvasResizeButton = Clazz.extend({
 		buttonGrow.addEventListener(		ORYX.CONFIG.EVENT_MOUSEOVER, 	function(event){showButtons();}, true );
 		buttonShrink.addEventListener(		ORYX.CONFIG.EVENT_MOUSEOVER, 	function(event){showButtons();}, true );
 		// If the mouse is out, hide the button
-		//scrollNode.addEventListener(		ORYX.CONFIG.EVENT_MOUSEOUT, 	function(event){button.hide()}, true )
+		//scrollNode.addEventListener(		ORYX.CONFIG.EVENT_MOUSEOUT, 	function(com.lind.common.event){button.hide()}, true )
 		parentNode.parentNode.addEventListener(	ORYX.CONFIG.EVENT_MOUSEOUT, 	function(event){hideButtons()} , true );
-		//svgRootNode.addEventListener(	ORYX.CONFIG.EVENT_MOUSEOUT, 	function(event){ inCanvas = false } , true );
+		//svgRootNode.addEventListener(	ORYX.CONFIG.EVENT_MOUSEOUT, 	function(com.lind.common.event){ inCanvas = false } , true );
         
 		// Hide the button initialy
 		hideButtons();
@@ -18606,7 +18606,7 @@ ORYX.Plugins.RenameShapes = Clazz.extend({
     },
 	
 	/**
-	 * This method handles the "F2" key down event. The selected shape are looked
+	 * This method handles the "F2" key down com.lind.common.event. The selected shape are looked
 	 * up and the editing of title/name of it gets started.
 	 */
 	renamePerF2 : function() {
@@ -19469,7 +19469,7 @@ ORYX.Plugins.Save = Clazz.extend({
 		
 		this.changeDifference = 0;
 		
-		// Register on event for executing commands --> store all commands in a stack		 
+		// Register on com.lind.common.event for executing commands --> store all commands in a stack
 		// --> Execute
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_UNDO_EXECUTE, function(){ this.changeDifference++; this.updateTitle(); }.bind(this) );
 		this.facade.registerOnEvent(ORYX.CONFIG.EVENT_EXECUTE_COMMANDS, function(){ this.changeDifference++; this.updateTitle(); }.bind(this) );
@@ -19909,7 +19909,7 @@ ORYX.Plugins.DragDropResize = ORYX.Plugins.AbstractPlugin.extend({
 		}	
 
 		// Stop the Event
-		//Event.stop(event);
+		//Event.stop(com.lind.common.event);
 		return;
 	},
 	
@@ -21125,7 +21125,7 @@ ORYX.Plugins.DragDocker = Clazz.extend({
 	},
 	/**
 	 * DockerDrag Handler
-	 * delegates the uiEvent of the drag event to the mouseDown function
+	 * delegates the uiEvent of the drag com.lind.common.event to the mouseDown function
 	 */
 	handleDockerDrag: function(event, uiObj) {
 		this.handleMouseDown(event.uiEvent, uiObj);
@@ -22773,23 +22773,23 @@ ORYX.Plugins.KeysMove = ORYX.Plugins.AbstractPlugin.extend({
 //    /**
 //     * The key handler for this plugin. Every action from the set of cut, copy,
 //     * paste and delete should be accessible trough simple keyboard shortcuts.
-//     * This method checks whether any event triggers one of those actions.
+//     * This method checks whether any com.lind.common.event triggers one of those actions.
 //     *
-//     * @param {Object} event The keyboard event that should be analysed for
+//     * @param {Object} com.lind.common.event The keyboard com.lind.common.event that should be analysed for
 //     *     triggering of this plugin.
 //     */
-//    keyHandler: function(event){
-//        //TODO document what event.which is.
+//    keyHandler: function(com.lind.common.event){
+//        //TODO document what com.lind.common.event.which is.
 //        
 //        ORYX.Log.debug("keysMove.js handles a keyEvent.");
 //        
-//        // assure we have the current event.
-//        if (!event) 
-//            event = window.event;
+//        // assure we have the current com.lind.common.event.
+//        if (!com.lind.common.event)
+//            com.lind.common.event = window.com.lind.common.event;
 //        
 //        // get the currently pressed key and state of control key.
-//        var pressedKey = event.which || event.keyCode;
-//        var ctrlPressed = event.ctrlKey;
+//        var pressedKey = com.lind.common.event.which || com.lind.common.event.keyCode;
+//        var ctrlPressed = com.lind.common.event.ctrlKey;
 //
 //		// if the key is one of the arrow keys, forward to move and return.
 //		if ([ORYX.CONFIG.KEY_CODE_LEFT, ORYX.CONFIG.KEY_CODE_RIGHT,
@@ -23468,7 +23468,7 @@ new function(){
 		hashedPositions: {},
 		
 		/**
-         * Handler for layouting event 'layout.bpmn2_0.pool'
+         * Handler for layouting com.lind.common.event 'layout.bpmn2_0.pool'
          * @param {Object} event
          */
         handleLayoutPool: function(event){

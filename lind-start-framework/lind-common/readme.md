@@ -1,15 +1,40 @@
+# 功能介绍
+> 主要对一些工具进行整理，收集；同时也是对一些技术点的测试，会在对应的test项目进行编码
+## 技术调研
+* jdk动态代理
+* ApplicationEvent事件机制
+* disruptor高性能队列
+* spring aspect拦截器
+* jackson格式拦截器
+* 大任务拆分的并行接口Callable
+* 大任务拆分的窃取线程池ForkJoinPool
+
+## 技术封装
+* aspect 拦截器相关，timer拦截器,记录代码运行时间;repeat拦截器,主要实现代码失败后的重试功能 
+* encrypt 加密解密，hash,非对称，对称等
+* com.lind.common.event 观察者模式，事件发布与订阅的实现，完成了对订阅者的自动初始化
+* execption 异常管理，包含基类和control的异常拦截器
+* jackson.convert 对springboot在http响应时，对jackson序列化的重写
+* locale 国际化组件
+* opt 通过时间（TOTP）或者数量（HOTP）进行校验，一般用在二步验证上面
+* rest restful接口的返回值封装
+* typetools 类型处理工具
+* util 工具类
+* zip 压缩工具
+
 # 事件处理
 主要实现业务相关代码的解耦，使用了发布订阅的机制，订阅方需要实现ObjectEventListener接口，
 事件相关对象需要实现ObjectEvent类型，使用方法使用ObjectEventService注入的实例即可完成事件
 处理程序的注册，事件的发布也在这个对象里。
-## event.AbstractEvent
+## com.lind.common.event.AbstractEvent
 抽象事件源，你的事件实体对象需要实现它
 ## EventBusListener
 事件处理程序接口，你自定义的处理程序需要实现它，它里面的实体就是继承AbstractEvent的实体
 ## EventBusService
 事件总线接口，定义了添加事件，触发事件的方法
 ## DefaultEventBusBusService
-默认的事件总线实现，采用内存hash表来存储事件
+默认的事件总线实现，采用内存hash表来存储事件,init()方法添加了@PostConstruct注解，完成了事件的自动注册
+
 # 加密
 ## util.RSAUtils
 用于非对称加密，生成公钥和私钥，可以实例前端到后端请求的敏感字符加密，把公钥给前端，然后对数据加密，在后端通过私钥进行解密，当然，

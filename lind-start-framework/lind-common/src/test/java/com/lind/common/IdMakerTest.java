@@ -30,7 +30,7 @@ public class IdMakerTest {
     public void mongodbId() throws InterruptedException {
 
         for (int i = 0; i < 10; i++) {
-            log.info("id={}", IdMakerUtils.generateId(i));
+            log.info("id={}", IdMakerUtils.generateId(0));
         }
 
     }

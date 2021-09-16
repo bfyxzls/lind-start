@@ -1,6 +1,15 @@
 # spring-security中核心概念（非oauth2)
 ## jwt payload
 jwt payload中包括的内容太多，对网络传输是需要考虑的，比如我们是否在JWT里直接包括权限信息，还是只包括角色信息，然后再通过角色信息去查询它的权限。
+
+## 依赖引用
+```
+<dependency>
+    <groupId>com.pkulaw</groupId>
+    <artifactId>pkulaw-uaa-jwt-start</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 ## 登录
 ```$xslt
 /login post

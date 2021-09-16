@@ -38,7 +38,7 @@ public class RedisKeyUtil {
 	/**
 	 * Gets reset pwd token key.
 	 *
-	 * @param resetPwdKey the rest pwd key
+	 * @param resetPwdKey the com.lind.common.rest pwd key
 	 *
 	 * @return the reset pwd token key
 	 */

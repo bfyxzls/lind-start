@@ -33,8 +33,11 @@
 
     </dependencyManagement>
     <properties>
+        <!-- 这三个版本有着强依赖关系-->
         <spring-boot-version>2.0.4.RELEASE</spring-boot-version>
         <spring-cloud-version>Finchley.RELEASE</spring-cloud-version>
+        <spring-cloud-starter-alibaba-version>2.0.2.RELEASE</spring-cloud-starter-alibaba-version>
+
         <spring-boot-starter-security-version>2.0.0.RELEASE</spring-boot-starter-security-version>
         <spring-security-oauth2-version>2.3.3.RELEASE</spring-security-oauth2-version>
         <spring-cloud-starter-oauth2-version>2.0.0.RELEASE</spring-cloud-starter-oauth2-version>
@@ -45,10 +48,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
+
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,7 +65,7 @@
             <artifactId>spring-cloud-starter-oauth2</artifactId>
             <version>${spring-cloud-starter-oauth2-version}</version>
         </dependency>
-        <!-- redis -->
+        <!-- redis lettuce-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
@@ -93,12 +93,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>

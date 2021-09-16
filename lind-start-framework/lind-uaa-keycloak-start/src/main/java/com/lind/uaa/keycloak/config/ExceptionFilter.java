@@ -1,7 +1,7 @@
 package com.lind.uaa.keycloak.config;
 
 import com.lind.common.exception.AbstractRestExceptionHandler;
-import com.lind.common.util.CommonResult;
+import com.lind.common.rest.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

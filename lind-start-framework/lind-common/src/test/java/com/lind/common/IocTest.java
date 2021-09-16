@@ -1,5 +1,6 @@
 package com.lind.common;
 
+import lombok.RequiredArgsConstructor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +16,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 public class IocTest {
     @Autowired
+    ARepository aRepository;
+    // 属性注入
+    @Autowired
     People people;
 
     @Test
     public void setTest() {
         System.out.println(keyCloak.context);
+        aRepository.printa();
     }
 }
 
@@ -35,8 +40,23 @@ class People {
         keyCloak.setLindContext(context);
     }
 
+    public void print() {
+        System.out.println("print People");
+    }
+
     public void init() {
 
+    }
+}
+
+@Component
+@RequiredArgsConstructor
+class ARepository {
+    // 通过@RequiredArgsConstructor完成构造方法注入
+    private final People people;
+
+    public void printa() {
+        people.print();
     }
 }
 

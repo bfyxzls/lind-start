@@ -6,8 +6,8 @@ import com.lind.kafka.handler.DefaultFailureHandler;
 import com.lind.kafka.handler.DefaultSuccessHandler;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
-import com.lind.kafka.sender.DefaultMessageSenderImpl;
-import com.lind.kafka.sender.MessageSender;
+import com.lind.kafka.producer.DefaultMessageSender;
+import com.lind.kafka.producer.MessageSender;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -32,40 +32,38 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Description TODO
- * @date 2020/6/10 16:08
- **/
-
+ * 自动装配管理.
+ */
 @Configuration
 @ConditionalOnProperty(prefix = "spring.kafka", value = "enabled", matchIfMissing = true, havingValue = "true")
 @EnableConfigurationProperties(KafkaProperties.class)
 @RequiredArgsConstructor
 public class KafkaProviderConfig {
 
-    static String host = "192.168.119.131:9092";
     @Autowired
     private KafkaProperties kafkaProperties;
 
     @Primary
-    @Bean("defaultFailureHandler")
+    @Bean
     public FailureHandler failureHandler() {
         return new DefaultFailureHandler();
     }
 
     @Primary
-    @Bean("defaultSuccessHandler")
+    @Bean
     public SuccessHandler successHandler(ObjectMapper objectMapper) {
         return new DefaultSuccessHandler(objectMapper);
     }
 
-    @Bean("messageSender")
+    @Bean
     @ConditionalOnMissingBean
     public MessageSender<? extends MessageEntity> messageSender(SuccessHandler successHandler, FailureHandler failureHandler, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
-        return new DefaultMessageSenderImpl(successHandler, failureHandler, kafkaTemplate, objectMapper);
+        return new DefaultMessageSender(successHandler, failureHandler, kafkaTemplate, objectMapper);
     }
 
     /**
      * 生产者自定义配置.
+     *
      * @return
      */
     @Bean
@@ -99,6 +97,7 @@ public class KafkaProviderConfig {
 
     /**
      * 消费者自定义配置.
+     *
      * @return
      */
     @Bean

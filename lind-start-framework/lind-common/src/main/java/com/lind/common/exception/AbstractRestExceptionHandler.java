@@ -1,6 +1,6 @@
 package com.lind.common.exception;
 
-import com.lind.common.util.CommonResult;
+import com.lind.common.rest.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;

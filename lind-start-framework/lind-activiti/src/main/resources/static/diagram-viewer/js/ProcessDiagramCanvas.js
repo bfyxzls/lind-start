@@ -565,7 +565,7 @@ ProcessDiagramCanvas.prototype = {
 			fillColor = NONE_END_EVENT_COLOR;
 		} else 
 			
-		// event circles
+		// com.lind.common.event circles
 		width -= this.strokeWidth / 2;
 		height -= this.strokeWidth / 2;
 		
@@ -694,7 +694,7 @@ ProcessDiagramCanvas.prototype = {
 		if (typeof(CATCHING_EVENT_COLOR) != "undefined")
 			this.setPaint(CATCHING_EVENT_COLOR);
 			
-		// event circles
+		// com.lind.common.event circles
 		width -= this.strokeWidth / 2;
 		height -= this.strokeWidth / 2;
 		

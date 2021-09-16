@@ -80,7 +80,7 @@ var jQuery = function( selector, context ) {
 	// The deferred used on DOM ready
 	readyList,
 
-	// The ready event handler
+	// The ready com.lind.common.event handler
 	DOMContentLoaded,
 
 	// Save a reference to some core methods
@@ -140,7 +140,7 @@ jQuery.fn = jQuery.prototype = {
 					doc = ( context ? context.ownerDocument || context : document );
 
 					// If a single string is passed in and it's a single tag
-					// just do a createElement and skip the rest
+					// just do a createElement and skip the com.lind.common.rest
 					ret = rsingleTag.exec( selector );
 
 					if ( ret ) {
@@ -402,10 +402,10 @@ jQuery.extend({
 	isReady: false,
 
 	// A counter to track how many items to wait for before
-	// the ready event fires. See #6781
+	// the ready com.lind.common.event fires. See #6781
 	readyWait: 1,
 
-	// Hold (or release) the ready event
+	// Hold (or release) the ready com.lind.common.event
 	holdReady: function( hold ) {
 		if ( hold ) {
 			jQuery.readyWait++;
@@ -416,7 +416,7 @@ jQuery.extend({
 
 	// Handle when the DOM is ready
 	ready: function( wait ) {
-		// Either a released hold or an DOMready/load event and not yet ready
+		// Either a released hold or an DOMready/load com.lind.common.event and not yet ready
 		if ( (wait === true && !--jQuery.readyWait) || (wait !== true && !jQuery.isReady) ) {
 			// Make sure body exists, at least, in case IE gets a little overzealous (ticket #5443).
 			if ( !document.body ) {
@@ -426,7 +426,7 @@ jQuery.extend({
 			// Remember that the DOM is ready
 			jQuery.isReady = true;
 
-			// If a normal DOM Ready event fired, decrement, and wait if need be
+			// If a normal DOM Ready com.lind.common.event fired, decrement, and wait if need be
 			if ( wait !== true && --jQuery.readyWait > 0 ) {
 				return;
 			}
@@ -449,21 +449,21 @@ jQuery.extend({
 		readyList = jQuery.Callbacks( "once memory" );
 
 		// Catch cases where $(document).ready() is called after the
-		// browser event has already occurred.
+		// browser com.lind.common.event has already occurred.
 		if ( document.readyState === "complete" ) {
 			// Handle it asynchronously to allow scripts the opportunity to delay ready
 			return setTimeout( jQuery.ready, 1 );
 		}
 
-		// Mozilla, Opera and webkit nightlies currently support this event
+		// Mozilla, Opera and webkit nightlies currently support this com.lind.common.event
 		if ( document.addEventListener ) {
-			// Use the handy event callback
+			// Use the handy com.lind.common.event callback
 			document.addEventListener( "DOMContentLoaded", DOMContentLoaded, false );
 
 			// A fallback to window.onload, that will always work
 			window.addEventListener( "load", jQuery.ready, false );
 
-		// If IE event model is used
+		// If IE com.lind.common.event model is used
 		} else if ( document.attachEvent ) {
 			// ensure firing before onload,
 			// maybe late but safe also for iframes
@@ -977,7 +977,7 @@ function createFlags( flags ) {
  *	flags:	an optional list of space-separated flags that will change how
  *			the callback list behaves
  *
- * By default a callback list will act like an event callback list and can be
+ * By default a callback list will act like an com.lind.common.event callback list and can be
  * "fired" multiple times.
  *
  * Possible flags:
@@ -1442,7 +1442,7 @@ jQuery.support = (function() {
 	if ( !div.addEventListener && div.attachEvent && div.fireEvent ) {
 		div.attachEvent( "onclick", function() {
 			// Cloning a node shouldn't copy over any
-			// bound event handlers (IE does this)
+			// bound com.lind.common.event handlers (IE does this)
 			support.noCloneEvent = false;
 		});
 		div.cloneNode( true ).fireEvent( "onclick" );
@@ -1489,7 +1489,7 @@ jQuery.support = (function() {
 
 	// Technique from Juriy Zaytsev
 	// http://perfectionkills.com/detecting-event-support-without-browser-sniffing/
-	// We only care about the case where non-standard event systems
+	// We only care about the case where non-standard com.lind.common.event systems
 	// are used, namely in IE. Short-circuiting here helps us to
 	// avoid an eval call (in setAttribute) which can cause CSP
 	// to go haywire. See: https://developer.mozilla.org/en/Security/CSP
@@ -2861,7 +2861,7 @@ jQuery.event = {
 			handler.guid = jQuery.guid++;
 		}
 
-		// Init the element's event structure and main handler, if this is the first
+		// Init the element's com.lind.common.event structure and main handler, if this is the first
 		events = elemData.events;
 		if ( !events ) {
 			elemData.events = events = {};
@@ -2869,8 +2869,8 @@ jQuery.event = {
 		eventHandle = elemData.handle;
 		if ( !eventHandle ) {
 			elemData.handle = eventHandle = function( e ) {
-				// Discard the second event of a jQuery.event.trigger() and
-				// when an event is called after a page has unloaded
+				// Discard the second com.lind.common.event of a jQuery.com.lind.common.event.trigger() and
+				// when an com.lind.common.event is called after a page has unloaded
 				return typeof jQuery !== "undefined" && (!e || jQuery.event.triggered !== e.type) ?
 					jQuery.event.dispatch.apply( eventHandle.elem, arguments ) :
 					undefined;
@@ -2888,16 +2888,16 @@ jQuery.event = {
 			type = tns[1];
 			namespaces = ( tns[2] || "" ).split( "." ).sort();
 
-			// If event changes its type, use the special event handlers for the changed type
+			// If com.lind.common.event changes its type, use the special com.lind.common.event handlers for the changed type
 			special = jQuery.event.special[ type ] || {};
 
-			// If selector defined, determine special event api type, otherwise given type
+			// If selector defined, determine special com.lind.common.event api type, otherwise given type
 			type = ( selector ? special.delegateType : special.bindType ) || type;
 
 			// Update special based on newly reset type
 			special = jQuery.event.special[ type ] || {};
 
-			// handleObj is passed to all event handlers
+			// handleObj is passed to all com.lind.common.event handlers
 			handleObj = jQuery.extend({
 				type: type,
 				origType: tns[1],
@@ -2909,7 +2909,7 @@ jQuery.event = {
 				namespace: namespaces.join(".")
 			}, handleObjIn );
 
-			// Init the event handler queue if we're the first
+			// Init the com.lind.common.event handler queue if we're the first
 			handlers = events[ type ];
 			if ( !handlers ) {
 				handlers = events[ type ] = [];
@@ -2917,7 +2917,7 @@ jQuery.event = {
 
 				// Only use addEventListener/attachEvent if the special events handler returns false
 				if ( !special.setup || special.setup.call( elem, data, namespaces, eventHandle ) === false ) {
-					// Bind the global event handler to the element
+					// Bind the global com.lind.common.event handler to the element
 					if ( elem.addEventListener ) {
 						elem.addEventListener( type, eventHandle, false );
 
@@ -2942,7 +2942,7 @@ jQuery.event = {
 				handlers.push( handleObj );
 			}
 
-			// Keep track of which events have ever been used, for event optimization
+			// Keep track of which events have ever been used, for com.lind.common.event optimization
 			jQuery.event.global[ type ] = true;
 		}
 
@@ -2952,7 +2952,7 @@ jQuery.event = {
 
 	global: {},
 
-	// Detach an event or set of events from an element
+	// Detach an com.lind.common.event or set of events from an element
 	remove: function( elem, types, handler, selector, mappedTypes ) {
 
 		var elemData = jQuery.hasData( elem ) && jQuery._data( elem ),
@@ -3003,8 +3003,8 @@ jQuery.event = {
 				}
 			}
 
-			// Remove generic event handler if we removed something and no more handlers exist
-			// (avoids potential for endless recursion during removal of special event handlers)
+			// Remove generic com.lind.common.event handler if we removed something and no more handlers exist
+			// (avoids potential for endless recursion during removal of special com.lind.common.event handlers)
 			if ( eventType.length === 0 && origCount !== eventType.length ) {
 				if ( !special.teardown || special.teardown.call( elem, namespaces ) === false ) {
 					jQuery.removeEvent( elem, type, elemData.handle );
@@ -3041,7 +3041,7 @@ jQuery.event = {
 			return;
 		}
 
-		// Event object or event type
+		// Event object or com.lind.common.event type
 		var type = event.type || event,
 			namespaces = [],
 			cache, exclusive, i, cur, old, ontype, special, handle, eventPath, bubbleType;
@@ -3052,30 +3052,30 @@ jQuery.event = {
 		}
 
 		if ( type.indexOf( "!" ) >= 0 ) {
-			// Exclusive events trigger only for the exact event (no namespaces)
+			// Exclusive events trigger only for the exact com.lind.common.event (no namespaces)
 			type = type.slice(0, -1);
 			exclusive = true;
 		}
 
 		if ( type.indexOf( "." ) >= 0 ) {
-			// Namespaced trigger; create a regexp to match event type in handle()
+			// Namespaced trigger; create a regexp to match com.lind.common.event type in handle()
 			namespaces = type.split(".");
 			type = namespaces.shift();
 			namespaces.sort();
 		}
 
 		if ( (!elem || jQuery.event.customEvent[ type ]) && !jQuery.event.global[ type ] ) {
-			// No jQuery handlers for this event type, and it can't have inline handlers
+			// No jQuery handlers for this com.lind.common.event type, and it can't have inline handlers
 			return;
 		}
 
-		// Caller can pass in an Event, Object, or just an event type string
+		// Caller can pass in an Event, Object, or just an com.lind.common.event type string
 		event = typeof event === "object" ?
 			// jQuery.Event object
 			event[ jQuery.expando ] ? event :
 			// Object literal
 			new jQuery.Event( type, event ) :
-			// Just the event type (string)
+			// Just the com.lind.common.event type (string)
 			new jQuery.Event( type );
 
 		event.type = type;
@@ -3098,13 +3098,13 @@ jQuery.event = {
 			return;
 		}
 
-		// Clean up the event in case it is being reused
+		// Clean up the com.lind.common.event in case it is being reused
 		event.result = undefined;
 		if ( !event.target ) {
 			event.target = elem;
 		}
 
-		// Clone any incoming data and prepend the event, creating the handler arg list
+		// Clone any incoming data and prepend the com.lind.common.event, creating the handler arg list
 		data = data != null ? jQuery.makeArray( data ) : [];
 		data.unshift( event );
 
@@ -3114,7 +3114,7 @@ jQuery.event = {
 			return;
 		}
 
-		// Determine event propagation path in advance, per W3C events spec (#9951)
+		// Determine com.lind.common.event propagation path in advance, per W3C events spec (#9951)
 		// Bubble up to document, then to window; watch for a global ownerDocument var (#9724)
 		eventPath = [[ elem, special.bindType || type ]];
 		if ( !onlyHandlers && !special.noBubble && !jQuery.isWindow( elem ) ) {
@@ -3133,7 +3133,7 @@ jQuery.event = {
 			}
 		}
 
-		// Fire handlers on the event path
+		// Fire handlers on the com.lind.common.event path
 		for ( i = 0; i < eventPath.length && !event.isPropagationStopped(); i++ ) {
 
 			cur = eventPath[i][0];
@@ -3157,20 +3157,20 @@ jQuery.event = {
 			if ( (!special._default || special._default.apply( elem.ownerDocument, data ) === false) &&
 				!(type === "click" && jQuery.nodeName( elem, "a" )) && jQuery.acceptData( elem ) ) {
 
-				// Call a native DOM method on the target with the same name name as the event.
+				// Call a native DOM method on the target with the same name name as the com.lind.common.event.
 				// Can't use an .isFunction() check here because IE6/7 fails that svt.
 				// Don't do default actions on window, that's where global variables be (#6170)
 				// IE<9 dies on focus/blur to hidden element (#1486)
 				if ( ontype && elem[ type ] && ((type !== "focus" && type !== "blur") || event.target.offsetWidth !== 0) && !jQuery.isWindow( elem ) ) {
 
-					// Don't re-trigger an onFOO event when we call its FOO() method
+					// Don't re-trigger an onFOO com.lind.common.event when we call its FOO() method
 					old = elem[ ontype ];
 
 					if ( old ) {
 						elem[ ontype ] = null;
 					}
 
-					// Prevent re-triggering of the same event, since we already bubbled it above
+					// Prevent re-triggering of the same com.lind.common.event, since we already bubbled it above
 					jQuery.event.triggered = type;
 					elem[ type ]();
 					jQuery.event.triggered = undefined;
@@ -3187,7 +3187,7 @@ jQuery.event = {
 
 	dispatch: function( event ) {
 
-		// Make a writable jQuery.Event from the native event object
+		// Make a writable jQuery.Event from the native com.lind.common.event object
 		event = jQuery.event.fix( event || window.event );
 
 		var handlers = ( (jQuery._data( this, "events" ) || {} )[ event.type ] || []),
@@ -3197,7 +3197,7 @@ jQuery.event = {
 			handlerQueue = [],
 			i, j, cur, jqcur, ret, selMatch, matched, matches, handleObj, sel, related;
 
-		// Use the fix-ed jQuery.Event rather than the (read-only) native event
+		// Use the fix-ed jQuery.Event rather than the (read-only) native com.lind.common.event
 		args[0] = event;
 		event.delegateTarget = this;
 
@@ -3245,8 +3245,8 @@ jQuery.event = {
 			for ( j = 0; j < matched.matches.length && !event.isImmediatePropagationStopped(); j++ ) {
 				handleObj = matched.matches[ j ];
 
-				// Triggered event must either 1) be non-exclusive and have no namespace, or
-				// 2) have namespace(s) a subset or equal to those in the bound event (both can have no namespace).
+				// Triggered com.lind.common.event must either 1) be non-exclusive and have no namespace, or
+				// 2) have namespace(s) a subset or equal to those in the bound com.lind.common.event (both can have no namespace).
 				if ( run_all || (!event.namespace && !handleObj.namespace) || event.namespace_re && event.namespace_re.test( handleObj.namespace ) ) {
 
 					event.data = handleObj.data;
@@ -3269,7 +3269,7 @@ jQuery.event = {
 		return event.result;
 	},
 
-	// Includes some event props shared by KeyEvent and MouseEvent
+	// Includes some com.lind.common.event props shared by KeyEvent and MouseEvent
 	// *** attrChange attrName relatedNode srcElement  are not normalized, non-W3C, deprecated, will be removed in 1.8 ***
 	props: "attrChange attrName relatedNode srcElement altKey bubbles cancelable ctrlKey currentTarget eventPhase metaKey relatedTarget shiftKey target timeStamp view which".split(" "),
 
@@ -3325,7 +3325,7 @@ jQuery.event = {
 			return event;
 		}
 
-		// Create a writable copy of the event object and normalize some properties
+		// Create a writable copy of the com.lind.common.event object and normalize some properties
 		var i, prop,
 			originalEvent = event,
 			fixHook = jQuery.event.fixHooks[ event.type ] || {},
@@ -3358,7 +3358,7 @@ jQuery.event = {
 
 	special: {
 		ready: {
-			// Make sure the ready event is setup
+			// Make sure the ready com.lind.common.event is setup
 			setup: jQuery.bindReady
 		},
 
@@ -3391,9 +3391,9 @@ jQuery.event = {
 	},
 
 	simulate: function( type, elem, event, bubble ) {
-		// Piggyback on a donor event to simulate a different one.
+		// Piggyback on a donor com.lind.common.event to simulate a different one.
 		// Fake originalEvent to avoid donor's stopPropagation, but if the
-		// simulated event prevents default then we do the same on the donor.
+		// simulated com.lind.common.event prevents default then we do the same on the donor.
 		var e = jQuery.extend(
 			new jQuery.Event(),
 			event,
@@ -3414,7 +3414,7 @@ jQuery.event = {
 };
 
 // Some plugins are using, but it's undocumented/deprecated and will be removed.
-// The 1.7 special event interface should provide all the hooks needed now.
+// The 1.7 special com.lind.common.event interface should provide all the hooks needed now.
 jQuery.event.handle = jQuery.event.dispatch;
 
 jQuery.removeEvent = document.removeEventListener ?
@@ -3450,12 +3450,12 @@ jQuery.Event = function( src, props ) {
 		this.type = src;
 	}
 
-	// Put explicitly provided properties onto the event object
+	// Put explicitly provided properties onto the com.lind.common.event object
 	if ( props ) {
 		jQuery.extend( this, props );
 	}
 
-	// Create a timestamp if incoming event doesn't have one
+	// Create a timestamp if incoming com.lind.common.event doesn't have one
 	this.timeStamp = src && src.timeStamp || jQuery.now();
 
 	// Mark it as fixed
@@ -3480,11 +3480,11 @@ jQuery.Event.prototype = {
 			return;
 		}
 
-		// if preventDefault exists run it on the original event
+		// if preventDefault exists run it on the original com.lind.common.event
 		if ( e.preventDefault ) {
 			e.preventDefault();
 
-		// otherwise set the returnValue property of the original event to false (IE)
+		// otherwise set the returnValue property of the original com.lind.common.event to false (IE)
 		} else {
 			e.returnValue = false;
 		}
@@ -3496,11 +3496,11 @@ jQuery.Event.prototype = {
 		if ( !e ) {
 			return;
 		}
-		// if stopPropagation exists run it on the original event
+		// if stopPropagation exists run it on the original com.lind.common.event
 		if ( e.stopPropagation ) {
 			e.stopPropagation();
 		}
-		// otherwise set the cancelBubble property of the original event to true (IE)
+		// otherwise set the cancelBubble property of the original com.lind.common.event to true (IE)
 		e.cancelBubble = true;
 	},
 	stopImmediatePropagation: function() {
@@ -3512,7 +3512,7 @@ jQuery.Event.prototype = {
 	isImmediatePropagationStopped: returnFalse
 };
 
-// Create mouseenter/leave events using mouseover/out and event-time checks
+// Create mouseenter/leave events using mouseover/out and com.lind.common.event-time checks
 jQuery.each({
 	mouseenter: "mouseover",
 	mouseleave: "mouseout"
@@ -3557,7 +3557,7 @@ if ( !jQuery.support.submitBubbles ) {
 					form = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.form : undefined;
 				if ( form && !form._submit_attached ) {
 					jQuery.event.add( form, "submit._submit", function( event ) {
-						// If form was submitted by the user, bubble the event up the tree
+						// If form was submitted by the user, bubble the com.lind.common.event up the tree
 						if ( this.parentNode && !event.isTrigger ) {
 							jQuery.event.simulate( "submit", this.parentNode, event, true );
 						}
@@ -3565,7 +3565,7 @@ if ( !jQuery.support.submitBubbles ) {
 					form._submit_attached = true;
 				}
 			});
-			// return undefined since we don't need an event listener
+			// return undefined since we don't need an com.lind.common.event listener
 		},
 
 		teardown: function() {
@@ -3606,7 +3606,7 @@ if ( !jQuery.support.changeBubbles ) {
 				}
 				return false;
 			}
-			// Delegated event; lazy-add a change handler on descendant inputs
+			// Delegated com.lind.common.event; lazy-add a change handler on descendant inputs
 			jQuery.event.add( this, "beforeactivate._change", function( e ) {
 				var elem = e.target;
 
@@ -3707,7 +3707,7 @@ jQuery.fn.extend({
 		if ( one === 1 ) {
 			origFn = fn;
 			fn = function( event ) {
-				// Can use an empty set, since event contains the info
+				// Can use an empty set, since com.lind.common.event contains the info
 				jQuery().off( event );
 				return origFn.apply( this, arguments );
 			};
@@ -3723,7 +3723,7 @@ jQuery.fn.extend({
 	},
 	off: function( types, selector, fn ) {
 		if ( types && types.preventDefault && types.handleObj ) {
-			// ( event )  dispatched jQuery.Event
+			// ( com.lind.common.event )  dispatched jQuery.Event
 			var handleObj = types.handleObj;
 			jQuery( types.delegateTarget ).off(
 				handleObj.namespace? handleObj.type + "." + handleObj.namespace : handleObj.type,
@@ -3822,7 +3822,7 @@ jQuery.each( ("blur focus focusin focusout load resize scroll unload click dblcl
 	"mousedown mouseup mousemove mouseover mouseout mouseenter mouseleave " +
 	"change select submit keydown keypress keyup error contextmenu").split(" "), function( i, name ) {
 
-	// Handle event binding
+	// Handle com.lind.common.event binding
 	jQuery.fn[ name ] = function( data, fn ) {
 		if ( fn == null ) {
 			fn = data;
@@ -6397,7 +6397,7 @@ jQuery.extend({
 						if ( special[ type ] ) {
 							jQuery.event.remove( elem, type );
 
-						// This is a shortcut to avoid jQuery.event.remove's overhead
+						// This is a shortcut to avoid jQuery.com.lind.common.event.remove's overhead
 						} else {
 							jQuery.removeEvent( elem, type, data.handle );
 						}
@@ -7564,7 +7564,7 @@ jQuery.extend({
 			done( -1, "No Transport" );
 		} else {
 			jqXHR.readyState = 1;
-			// Send global event
+			// Send global com.lind.common.event
 			if ( fireGlobals ) {
 				globalEventContext.trigger( "ajaxSend", [ jqXHR, s ] );
 			}
@@ -8750,7 +8750,7 @@ jQuery.fx.prototype = {
 				}
 
 				// Execute the complete function
-				// in the event that the complete function throws an exception
+				// in the com.lind.common.event that the complete function throws an exception
 				// we must ensure it won't be called twice. #5684
 
 				complete = options.complete;

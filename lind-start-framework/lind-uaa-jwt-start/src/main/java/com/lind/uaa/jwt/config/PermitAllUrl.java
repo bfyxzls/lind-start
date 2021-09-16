@@ -40,7 +40,9 @@ public final class PermitAllUrl {
             "/task/**",
             "/execution/**",
             "/editor/**",
-            "/logo,png");
+            "/logo,png",
+            "/test",
+            "/test-verify");
 
     /**
      * 需要放开权限的url

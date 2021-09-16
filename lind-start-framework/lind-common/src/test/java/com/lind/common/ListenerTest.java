@@ -1,6 +1,5 @@
 package com.lind.common;
 
-import com.lind.common.listener.MessageDataEvent;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,4 @@ public class ListenerTest {
     @Autowired
     ApplicationEventPublisher applicationEventPublisher;
 
-    @Test
-    public void publishEvent() {
-       applicationEventPublisher.publishEvent(new MessageDataEvent("hello world!"));
-    }
 }

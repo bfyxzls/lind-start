@@ -11,7 +11,7 @@ public class HBaseProperties {
     /**
      * 命名空间，默认为空，务必设置好
      */
-    private String nameSpace = "";
+    private String nameSpace = "default";
 
     /**
      * 是否启用HBase starter

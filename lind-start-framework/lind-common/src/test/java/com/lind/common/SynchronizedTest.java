@@ -6,11 +6,43 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SynchronizedTest {
+    //考虑一般缓存行大小是64字节，一个 long 类型占8字节
+    static long[][] arr;
     private static int count = 0;
     /**
-     * 线程安全的integer
+     * 线程安全的integer（CAS方式，由CPU控制)
      */
     private static AtomicInteger atomicInteger = new AtomicInteger(0);
+
+    /**
+     * 缓存行的测试，对连续内存的操作.
+     */
+    @Test
+    public void cacheLine() {
+        arr = new long[1024 * 1024][];
+        for (int i = 0; i < 1024 * 1024; i++) {
+            arr[i] = new long[8];
+            for (int j = 0; j < 8; j++) {
+                arr[i][j] = 0L;
+            }
+        }
+        long sum = 0L;
+        long marked = System.currentTimeMillis();
+        for (int i = 0; i < 1024 * 1024; i += 1) {
+            for (int j = 0; j < 8; j++) {
+                sum = arr[i][j];
+            }
+        }
+        System.out.println("Loop times:" + (System.currentTimeMillis() - marked) + "ms");
+
+        marked = System.currentTimeMillis();
+        for (int i = 0; i < 8; i += 1) {
+            for (int j = 0; j < 1024 * 1024; j++) {
+                sum = arr[j][i];
+            }
+        }
+        System.out.println("Loop times:" + (System.currentTimeMillis() - marked) + "ms");
+    }
 
     @Test
     public void syncTest() throws InterruptedException {
@@ -36,7 +68,6 @@ public class SynchronizedTest {
         System.out.println("atomicInteger result: " + atomicInteger.getAndIncrement());
     }
 
-
     /**
      * 未加锁
      */
@@ -55,7 +86,7 @@ public class SynchronizedTest {
     }
 
     /**
-     * 加锁
+     * 加锁(LOCK方式）
      */
     class MyThread implements Runnable {
         @Override
@@ -68,5 +99,4 @@ public class SynchronizedTest {
 
         }
     }
-
 }

@@ -1,10 +1,13 @@
 package com.lind.common.event;
 
 import com.lind.common.typetools.TypeResolver;
+import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 
+import javax.annotation.PostConstruct;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -26,28 +29,63 @@ public class DefaultEventBusBusService implements EventBusService {
     private static ConcurrentHashMap<String, List<EventBusListener>> handlers = new ConcurrentHashMap<>();
 
     /**
+     * 注入EventBusListener的订阅者.
+     */
+    @Autowired(required = false)
+    List<EventBusListener> eventBusListeners;
+
+    /**
+     * @PostConstruct在bean初始化之后自动执行.
+     */
+    @PostConstruct
+    @SneakyThrows
+    public void init() {
+        if (eventBusListeners != null) {
+            eventBusListeners.forEach(o -> {
+                System.out.println("装配EventBusListener实例：" + o);
+                addEventListener(o);
+            });
+        }
+    }
+
+
+    /**
      * 获取EventBusListener接口的泛型类型.
      *
-     * @param userEventListener
+     * @param eventBusListener
      * @return
      */
-    String getEventEntityName(EventBusListener userEventListener) {
-        List<Type> a = Arrays.asList(userEventListener.getClass().getGenericInterfaces());
-        Type mainType = a.stream().filter(o -> o.equals(EventBusListener.class)
-                || ((ParameterizedTypeImpl)o).getRawType().equals(EventBusListener.class))
-                .findFirst()
-                .orElse(null);
+    String getEventEntityName(EventBusListener eventBusListener) {
+        List<Type> a = Arrays.asList(eventBusListener.getClass().getGenericInterfaces());
+
+        //直接实现的EventBusListener接口
+        Type mainType = getEventBusListenerGenericType(a);
+
+        //继承接口
         if (mainType == null) {
-            throw new IllegalArgumentException("listener must implement EventBusListener.");
+            a = Arrays.asList(((Class) a.get(0)).getGenericInterfaces());
+            mainType = getEventBusListenerGenericType(a);
+        }
+        if (mainType == null) {
+            throw new IllegalArgumentException("listener must implement EventBusListener:" + eventBusListener.toString());
         }
         Type temp;
         if (mainType instanceof ParameterizedType) {
             temp = ((ParameterizedType) mainType).getActualTypeArguments()[0];
         } else {
-            temp = TypeResolver.resolveRawArgument(EventBusListener.class, userEventListener.getClass());
+            temp = TypeResolver.resolveRawArgument(EventBusListener.class, eventBusListener.getClass());
         }
         return temp.getTypeName();
 
+    }
+
+    private Type getEventBusListenerGenericType(List<Type> a) {
+        return a.stream().filter(
+                o -> o.equals(EventBusListener.class)
+                        ||
+                        o instanceof ParameterizedTypeImpl
+                                && ((ParameterizedTypeImpl) o).getRawType().equals(EventBusListener.class)
+        ).findFirst().orElse(null);
     }
 
     /**
@@ -75,9 +113,8 @@ public class DefaultEventBusBusService implements EventBusService {
     public void publisher(AbstractEvent abstractEvent) {
         List<EventBusListener> eventBusListeners = handlers.get(abstractEvent.getClass().getName());
         if (!CollectionUtils.isEmpty(eventBusListeners)) {
-            System.out.println("event:" + abstractEvent);
+            System.out.println("com.lind.common.event:" + abstractEvent.getName());
             for (EventBusListener handler : eventBusListeners) {
-                System.out.println("handler:" + handler);
                 handler.onEvent(abstractEvent);
             }
         }

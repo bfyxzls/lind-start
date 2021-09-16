@@ -1,12 +1,10 @@
 package com.pkulaw.schedule.config;
 
-import com.pkulaw.schedule.QuartzController;
 import com.pkulaw.schedule.service.QuartzService;
 import com.pkulaw.schedule.service.QuartzServiceImpl;
 import org.quartz.Scheduler;
 import org.quartz.ee.servlet.QuartzInitializerListener;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -80,9 +78,4 @@ public class QuartzConfig {
         return new QuartzServiceImpl(scheduler);
     }
 
-    @Bean
-    @ConditionalOnBean(QuartzService.class)
-    public QuartzController quartzController() {
-        return new QuartzController();
-    }
 }

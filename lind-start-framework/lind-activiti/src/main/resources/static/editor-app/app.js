@@ -93,9 +93,9 @@ activitiModeler
 	  
 	  
             /**
-             * Initialize the event bus: couple all Oryx events with a dispatch of the
-             * event of the event bus. This way, it gets much easier to attach custom logic
-             * to any event.
+             * Initialize the com.lind.common.event bus: couple all Oryx events with a dispatch of the
+             * com.lind.common.event of the com.lind.common.event bus. This way, it gets much easier to attach custom logic
+             * to any com.lind.common.event.
              */
 
             /* Helper method to fetch model from server (always needed) */
@@ -324,7 +324,7 @@ activitiModeler
 	                    });
 	                };
 	                
-	                // Always needed, cause the DOM element on which the scroll event listeners are attached are changed for every new model
+	                // Always needed, cause the DOM element on which the scroll com.lind.common.event listeners are attached are changed for every new model
 	                initScrollHandling();
 	                
 	                $rootScope.editorInitialized = true;
@@ -332,9 +332,9 @@ activitiModeler
             });
 
             /**
-             * Initialize the event bus: couple all Oryx events with a dispatch of the
-             * event of the event bus. This way, it gets much easier to attach custom logic
-             * to any event.
+             * Initialize the com.lind.common.event bus: couple all Oryx events with a dispatch of the
+             * com.lind.common.event of the com.lind.common.event bus. This way, it gets much easier to attach custom logic
+             * to any com.lind.common.event.
              */
 
             $rootScope.editorFactory.promise.then(function() {
@@ -364,7 +364,7 @@ activitiModeler
                 });
 
                 // The Oryx canvas is ready (we know since we're in this promise callback) and the
-                // event bus is ready. The editor is now ready for use
+                // com.lind.common.event bus is ready. The editor is now ready for use
                 KISBPM.eventBus.dispatch(KISBPM.eventBus.EVENT_TYPE_EDITOR_READY, {type : KISBPM.eventBus.EVENT_TYPE_EDITOR_READY});
 
             });

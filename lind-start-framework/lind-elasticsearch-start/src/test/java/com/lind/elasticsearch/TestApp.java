@@ -1,7 +1,7 @@
 package com.lind.elasticsearch;
 
 import com.lind.elasticsearch.entity.Reply;
-import com.lind.elasticsearch.util.EsPageUtil;
+import com.lind.elasticsearch.util.EsPageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -92,7 +92,7 @@ public class TestApp {
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder.must(QueryBuilders.matchQuery("memo", "中国共享网站"));
-        Pageable pageable = EsPageUtil.getPageable(0, 10);
+        Pageable pageable = EsPageUtils.getPageable(0, 10);
         SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(null) //返回所有字段
                 .withPageable(pageable)
@@ -118,7 +118,7 @@ public class TestApp {
         //  termQuery如果希望对内容也进行精确检索，需要加keyword关键字
         // must表示与，should表示或
         boolQueryBuilder.must(QueryBuilders.termQuery("memo.keyword", "中国"));
-        Pageable pageable = EsPageUtil.getPageable(0, 10);
+        Pageable pageable = EsPageUtils.getPageable(0, 10);
         String[] fieldNames = new String[]{"name", "age", "memo"};
         SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(new FetchSourceFilter(fieldNames, null))
@@ -233,7 +233,7 @@ public class TestApp {
         NativeSearchQueryBuilder queryBuilder = new NativeSearchQueryBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder.must(QueryBuilders.matchQuery("desc", "hello"));//matchQuery先分词再检索,termQuery精确检索
-        Pageable pageable = EsPageUtil.getPageable(0, 10);
+        Pageable pageable = EsPageUtils.getPageable(0, 10);
 
         // 高亮检索
         String preTag = "<font color='#dd4b39'>";

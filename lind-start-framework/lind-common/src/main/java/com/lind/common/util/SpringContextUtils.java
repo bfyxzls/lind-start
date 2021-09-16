@@ -1,23 +1,38 @@
 package com.lind.common.util;
 
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
  * 直接获取bean.
  */
 @Component("springContextUtils")
-public class SpringContextUtils implements ApplicationContextAware {
+public class SpringContextUtils implements ApplicationContextAware, DisposableBean {
+
+    private static ApplicationContext applicationContext = null;
 
     /**
-     * 上下文对象实例.
+     * 取得存储在静态变量中的ApplicationContext.
      */
-    private static ApplicationContext applicationContext;
+    public static ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    /**
+     * 实现ApplicationContextAware接口, 注入Context到静态变量中.
+     */
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        SpringContextUtils.applicationContext = applicationContext;
+    }
 
     /**
      * 通过name获取 Bean.
@@ -39,6 +54,22 @@ public class SpringContextUtils implements ApplicationContextAware {
     public static <T> T getBean(Class<T> clazz) {
         return applicationContext.getBean(clazz);
 
+    }
+
+    /**
+     * 通过class获取Bean.
+     *
+     * @param clazz .
+     * @param <T>   .
+     * @return .
+     */
+    public static <T> List<T> getAllBeans(Class<T> clazz) {
+        String[] names = applicationContext.getBeanNamesForType(clazz);
+        List<T> list = new ArrayList<>();
+        for (String name : names) {
+            list.add((T) applicationContext.getBean(name));
+        }
+        return list;
     }
 
     /**
@@ -74,13 +105,20 @@ public class SpringContextUtils implements ApplicationContextAware {
     }
 
     /**
-     * 设置上下文.
+     * 发布事件.
      *
-     * @param applicationContext
+     * @param event
      */
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public static void publishEvent(ApplicationEvent event) {
+        if (applicationContext == null) {
+            return;
+        }
+        applicationContext.publishEvent(event);
     }
 
+
+    @Override
+    public void destroy() throws Exception {
+        applicationContext = null;
+    }
 }

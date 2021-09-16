@@ -12,6 +12,6 @@ public class CurrentUserAwareImpl implements CurrentUserAware {
 
     @Override
     public String getCurrentUserId() {
-        return null;
+        return "1";
     }
 }

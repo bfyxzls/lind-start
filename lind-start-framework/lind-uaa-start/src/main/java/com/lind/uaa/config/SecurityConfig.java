@@ -1,6 +1,7 @@
 package com.lind.uaa.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,12 +21,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Value("${permitAll}")
+    private String[] permitAll;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
-
 
     /**
      * 认证管理
@@ -39,7 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
     /**
      * http安全配置
      *
@@ -49,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(PermitAllUrl.permitAllUrl()).permitAll() // 放开权限的url
+                .antMatchers(PermitAllUrl.permitAllUrl(permitAll)).permitAll() // 放开权限的url
                 .anyRequest().authenticated().and()
                 .httpBasic().and().csrf().disable();
     }

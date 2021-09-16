@@ -1,4 +1,17 @@
+# 作用
 主要是对mybatis的封装，方便业务开发人员调用
+
+# 依赖引用
+```
+<dependency>
+    <groupId>com.pkulaw</groupId>
+    <artifactId>pkulaw-mybatis-start</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+# 配置
+使用mybatis-plus-boot-starter的标准配置即可
+
 # 实体类
 统一继承base.BaseEntity，已经实现了审记功能，帮我们自己在添加和更新时填充的建立人，更新人，建立时间和更新时间等字段。
 

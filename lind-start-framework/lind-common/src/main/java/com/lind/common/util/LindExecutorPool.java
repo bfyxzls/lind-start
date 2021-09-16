@@ -1,18 +1,17 @@
 package com.lind.common.util;
 
-import com.github.phantomthief.concurrent.AdaptiveExecutor;
+import com.github.phantomthief.pool.Pool;
+import com.github.phantomthief.pool.impl.ConcurrencyAwarePool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
 
@@ -23,6 +22,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
 @Component
 @ConditionalOnMissingBean(LindExecutorPool.class)
 public class LindExecutorPool {
+
     /**
      * 阻塞队列长度.
      */
@@ -35,6 +35,21 @@ public class LindExecutorPool {
      * 最大线程数.
      */
     private int maxSize = 20;
+
+
+    /**
+     * 线程池中的消息有序性实现.
+     * https://github.com/PhantomThief/simple-pool
+     * https://zhuanlan.zhihu.com/p/138055401
+     *
+     * @return
+     */
+    public Pool<Object> simplePool() {
+        Pool<Object> pool = ConcurrencyAwarePool.builder()
+                .simpleThresholdStrategy(1, 0.7)
+                .build(String::new);
+        return pool;
+    }
 
     /**
      * 默认线程池任务执行.
@@ -51,24 +66,6 @@ public class LindExecutorPool {
                 threadFactory,
                 myIgnorePolicy);
         executor.execute(runnable);
-    }
-
-    /**
-     * adaptive多线程执行.
-     * 自适应的Executor框架封装
-     * 全局最大线程数设置，防止线程泄露
-     * 单次任务线程数分配策略定制
-     * 更友好的批量提交任务API
-     * 只支持Java8
-     */
-    public void adaptiveExecutor(Collection<Integer> collections, Consumer<Integer> func) {
-        AdaptiveExecutor executor = AdaptiveExecutor.newBuilder()
-                .withGlobalMaxThread(10) // 全局最大线程数10
-                .adaptiveThread(5, 8) // 每5个任务使用一个线程，每次提交任务最多使用8个线程
-                .maxThreadAsPossible(6) // 每次提交任务最多使用6个线程，尽可能多的使用多线程（这个和上面策略二选一）
-                .build();
-        executor.invokeAll(collections, collection -> collections.toString());//输入一个值 ，处理后返回它
-        executor.run(collections, func);
     }
 
     /**
@@ -101,5 +98,4 @@ public class LindExecutorPool {
             return t;
         }
     }
-
 }

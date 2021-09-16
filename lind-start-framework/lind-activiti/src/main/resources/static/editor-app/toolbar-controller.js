@@ -102,7 +102,7 @@ angular.module('activitiModeler')
             // Catch all command that are executed and store them on the respective stacks
             $scope.editor.registerOnEvent(ORYX.CONFIG.EVENT_EXECUTE_COMMANDS, function( evt ){
 
-                // If the event has commands
+                // If the com.lind.common.event has commands
                 if( !evt.commands ){ return; }
 
                 $scope.undoStack.push( evt.commands );
