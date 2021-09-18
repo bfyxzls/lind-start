@@ -171,6 +171,11 @@ public class DiskStore implements Closeable {
             this.setDaemon(true);
         }
 
+        /**
+         * perform执行    compact契约
+         * @param filesToCompact
+         * @throws IOException
+         */
         private void performCompact(List<DiskFile> filesToCompact) throws IOException {
             String fileName = diskStore.getNextDiskFileName();
             String fileTempName = fileName + FILE_NAME_TMP_SUFFIX;
