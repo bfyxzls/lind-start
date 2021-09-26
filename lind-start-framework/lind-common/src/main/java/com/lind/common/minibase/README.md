@@ -4,7 +4,7 @@
 * MemStore 客户端不断地写入数据，当MemStore的内存超过一定阈值时，MemStore会flush成一个磁盘文件
     * MutableMemstore 由一个ConcurrentSkipListMap组成，`kvMap`可读和写
     * MutableMemstore 由一个ConcurrentSkipListMap组成，`snapshot`只能读
-    * 这里设计两个小的MemStore，是为了防止在f lush的时候，MiniBase无法接收新的写入。假设只有一个MutableMemstore，那么一旦进入flush过程，MutableMemstore就无法写入，而此时新的写入就无法进行。
+    * 这里设计两个小的MemStore，是为了防止在flush的时候，MiniBase无法接收新的写入。假设只有一个MutableMemstore，那么一旦进入flush过程，MutableMemstore就无法写入，而此时新的写入就无法进行。
 * DiskStore 由多个DiskFile组成，每一个DiskFile就是一个磁盘文件
     * DiskFile 必须支持高效的写入和读取
          * 由于MemStore的写入是顺序写入，如果flush速度太慢，则可能会阻塞后续的写入，影响写入吞吐，因此flush操作最好也设计成顺序写。
