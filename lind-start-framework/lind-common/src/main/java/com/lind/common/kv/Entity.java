@@ -1,9 +1,12 @@
 package com.lind.common.kv;
 
 import com.lind.common.minibase.Bytes;
+import com.lind.common.minibase.KeyValue;
+import lombok.Getter;
 
 import java.io.IOException;
 
+@Getter
 public class Entity implements Comparable<Entity> {
   // key长度
   public static final int RAW_KEY_LEN_SIZE = 4;
@@ -78,6 +81,35 @@ public class Entity implements Comparable<Entity> {
     // Encode value
     System.arraycopy(value, 0, bytes, pos, value.length);
     return bytes;
+  }
+  public static Entity parseFrom(byte[] bytes, int offset) throws IOException {
+    if (bytes == null) {
+      throw new IOException("buffer is null");
+    }
+    if (offset + RAW_KEY_LEN_SIZE + VAL_LEN_SIZE >= bytes.length) {
+      throw new IOException("Invalid offset or len. offset: " + offset + ", len: " + bytes.length);
+    }
+    // Decode raw key length
+    int pos = offset;
+    int rawKeyLen = Bytes.toInt(Bytes.slice(bytes, pos, RAW_KEY_LEN_SIZE));
+    pos += RAW_KEY_LEN_SIZE;
+
+    // Decode value length
+    int valLen = Bytes.toInt(Bytes.slice(bytes, pos, VAL_LEN_SIZE));
+    pos += VAL_LEN_SIZE;
+
+    // Decode key
+    int keyLen = rawKeyLen  - SEQ_ID_SIZE;
+    byte[] key = Bytes.slice(bytes, pos, keyLen);
+    pos += keyLen;
+
+    // Decode sequenceId
+    long sequenceId = Bytes.toLong(Bytes.slice(bytes, pos, SEQ_ID_SIZE));
+    pos += SEQ_ID_SIZE;
+
+    // Decode value.
+    byte[] val = Bytes.slice(bytes, pos, valLen);
+    return create(key, val, sequenceId);
   }
 
 }

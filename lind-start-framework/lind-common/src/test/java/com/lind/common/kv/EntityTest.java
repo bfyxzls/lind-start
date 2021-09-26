@@ -13,5 +13,7 @@ public class EntityTest {
     Assert.isTrue(32 == entity.getSerializeSize()); //4+4+3+8+13=32
     byte[] result = entity.toBytes();//前4位3+8=11，再4位zhangzhanling长度为13，再3位存储key的值,再8位是增时不量的值，最后13位是value的值
     Assert.notNull(result);
+    Entity entity2=Entity.parseFrom(result,0);
+    Assert.isTrue(Bytes.toHex(entity2.getKey()).equals("zzl"));
   }
 }
