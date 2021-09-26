@@ -1,11 +1,15 @@
 package com.lind.common.forkjointask;
 
+import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
+import org.junit.Test;
 
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.Future;
 import java.util.concurrent.RecursiveTask;
+import java.util.stream.Collectors;
 
 public class ForkJoinTaskTest {
 
@@ -27,6 +31,37 @@ public class ForkJoinTaskTest {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void pkulaw() {
+        List<Integer> maps = Lists.newArrayList();
+        int count = 100;
+        for (int i = 0; i < count; i++) {
+            maps.add(i);
+        }
+        List<Integer> successList = Lists.newArrayList();
+        ForkJoinPool forkJoinPool = new ForkJoinPool(10);
+        try {
+            forkJoinPool.submit(() -> maps.parallelStream()
+                    .forEach(map -> {
+                        try {
+                            if (successList.contains(map)) {
+                                System.out.println("重复了：" + map);
+                            }
+                            successList.add(map);
+                        } catch (Exception e) {
+
+                        }
+                    })).join();
+        } catch (Exception e) {
+
+        }
+        if (count != successList.size()) {
+            System.out.println(successList.size());
+        maps.stream().filter(t-> !successList.contains(t)).collect(Collectors.toList()).forEach(System.out::println);
+
         }
     }
 

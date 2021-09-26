@@ -28,6 +28,7 @@ public class Student implements Comparable<Student> {
 
     /**
      * 1表示大于，-1表示小于，0表示等于;-1的在前面，1的在后面，很好理解
+     * 即score大的在前而，age小的在前面
      *
      * @param o
      * @return

@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class LSMTest {
     /**
-     * 计算一个随机的高度值，p是一个（1，1）之间的常数，一般取1/4或者1/2
+     * 计算一个随机的高度值，p是一个（0，1）之间的常数，一般取1/4或者1/2
      *
      * @param p
      * @return

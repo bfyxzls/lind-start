@@ -86,4 +86,26 @@ public class RegexUtils {
         }
         return "";
     }
+
+    /**
+     * 是否包含大写字母.
+     *
+     * @return
+     */
+    public static boolean isContainUpper(String str) {
+        String regex = ".*[A-Z]+.*";
+        Matcher m = Pattern.compile(regex).matcher(str);
+        return m.matches();
+    }
+
+    /**
+     * 是否包含小写字母.
+     *
+     * @return
+     */
+    public static boolean isContainLower(String str) {
+        String regex = ".*[a-z]+.*";
+        Matcher m = Pattern.compile(regex).matcher(str);
+        return m.matches();
+    }
 }

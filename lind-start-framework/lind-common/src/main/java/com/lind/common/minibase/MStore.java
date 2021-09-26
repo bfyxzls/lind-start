@@ -12,6 +12,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicLong;
 
+/**
+ * miniBase默认的实现.
+ * 最外层diskStore和memStore.
+ */
 public class MStore implements MiniBase {
 
   private ExecutorService pool;
@@ -21,6 +25,18 @@ public class MStore implements MiniBase {
   private AtomicLong sequenceId;
 
   private Config conf;
+
+  private MStore(Config conf) {
+    this.conf = conf;
+  }
+
+  public static MStore create(Config conf) {
+    return new MStore(conf);
+  }
+
+  public static MStore create() {
+    return create(Config.getDefault());
+  }
 
   public MiniBase open() throws IOException {
     assert conf != null;
@@ -40,18 +56,6 @@ public class MStore implements MiniBase {
     this.compactor = new DefaultCompactor(diskStore);
     this.compactor.start();
     return this;
-  }
-
-  private MStore(Config conf) {
-    this.conf = conf;
-  }
-
-  public static MStore create(Config conf) {
-    return new MStore(conf);
-  }
-
-  public static MStore create() {
-    return create(Config.getDefault());
   }
 
   @Override
@@ -95,6 +99,23 @@ public class MStore implements MiniBase {
       stopKV = KeyValue.createDelete(stop, Long.MAX_VALUE);
     }
     return new ScanIter(stopKV, it);
+  }
+
+  @Override
+  public void close() throws IOException {
+    memStore.close();
+    diskStore.close();
+    compactor.interrupt();
+  }
+
+  interface SeekIter<KeyValue> extends Iter<KeyValue> {
+
+    /**
+     * Seek to the smallest key value which is greater than or equals to the given key value.
+     *
+     * @param kv
+     */
+    void seekTo(KeyValue kv) throws IOException;
   }
 
   static class ScanIter implements Iter<KeyValue> {
@@ -144,7 +165,7 @@ public class MStore implements MiniBase {
             return;
           } else if (ret > 0) {
             String msg = "KV mis-encoded, curKV < lastKV, curKV:" + Bytes.toHex(curKV.getKey()) +
-                         ", lastKV:" + Bytes.toHex(lastKV.getKey());
+                ", lastKV:" + Bytes.toHex(lastKV.getKey());
             throw new IOException(msg);
           }
           // Same key with lastKV, should continue to fetch the next key value.
@@ -167,22 +188,5 @@ public class MStore implements MiniBase {
       pendingKV = null;
       return lastKV;
     }
-  }
-
-  @Override
-  public void close() throws IOException {
-    memStore.close();
-    diskStore.close();
-    compactor.interrupt();
-  }
-
-  interface SeekIter<KeyValue> extends Iter<KeyValue> {
-
-    /**
-     * Seek to the smallest key value which is greater than or equals to the given key value.
-     *
-     * @param kv
-     */
-    void seekTo(KeyValue kv) throws IOException;
   }
 }

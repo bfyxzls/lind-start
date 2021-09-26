@@ -1,5 +1,8 @@
 package com.lind.common.minibase;
 
+import com.lind.common.minibase.DiskStore.MultiIter;
+import com.lind.common.minibase.MStore.SeekIter;
+import com.lind.common.minibase.MiniBase.Flusher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,9 +33,9 @@ public class MemStore implements Closeable {
   private ExecutorService pool;
 
   private Config conf;
-  private MiniBase.Flusher flusher;
+  private Flusher flusher;
 
-  public MemStore(Config conf, MiniBase.Flusher flusher, ExecutorService pool) {
+  public MemStore(Config conf, Flusher flusher, ExecutorService pool) {
     this.conf = conf;
     this.flusher = flusher;
     this.pool = pool;
@@ -121,11 +124,11 @@ public class MemStore implements Closeable {
     }
   }
 
-  public MStore.SeekIter<KeyValue> createIterator() throws IOException {
+  public SeekIter<KeyValue> createIterator() throws IOException {
     return new MemStoreIter(kvMap, snapshot);
   }
 
-  public static class IteratorWrapper implements MStore.SeekIter<KeyValue> {
+  public static class IteratorWrapper implements SeekIter<KeyValue> {
 
     private SortedMap<KeyValue, KeyValue> sortedMap;
     private Iterator<KeyValue> it;
@@ -151,9 +154,9 @@ public class MemStore implements Closeable {
     }
   }
 
-  private class MemStoreIter implements MStore.SeekIter<KeyValue> {
+  private class MemStoreIter implements SeekIter<KeyValue> {
 
-    private DiskStore.MultiIter it;
+    private MultiIter it;
 
     public MemStoreIter(NavigableMap<KeyValue, KeyValue> kvSet,
                         NavigableMap<KeyValue, KeyValue> snapshot) throws IOException {
@@ -164,7 +167,7 @@ public class MemStore implements Closeable {
       if (snapshot != null && snapshot.size() > 0) {
         inputs.add(new IteratorWrapper(snapshot));
       }
-      it = new DiskStore.MultiIter(inputs.toArray(new IteratorWrapper[0]));
+      it = new MultiIter(inputs.toArray(new IteratorWrapper[0]));
     }
 
     @Override

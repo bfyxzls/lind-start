@@ -2,6 +2,7 @@ package com.lind.common;
 
 import com.lind.common.util.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Assert;
 import org.junit.Test;
 
 @Slf4j
@@ -74,5 +75,10 @@ public class RegexUtilsTest {
         log.info(RegexUtils.abbreviate("hello world!", 10));
         log.info(RegexUtils.abbreviate("镇人民共和国", 10));
 
+    }
+
+    @Test
+    public void containUpper(){
+        Assert.assertTrue(RegexUtils.isContainUpper("abcDefg"));
     }
 }

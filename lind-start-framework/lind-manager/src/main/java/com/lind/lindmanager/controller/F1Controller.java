@@ -1,19 +1,25 @@
 package com.lind.lindmanager.controller;
 
-import com.lind.lindmanager.util.FreeMarkerUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("free")
 public class F1Controller {
-    @Autowired
-    FreeMarkerUtil freeMarkerUtil;
 
     @RequestMapping("list")
     public String selectUser() {
         return "f1/list";
+    }
+
+    @PostMapping(value = "add")
+    public ResponseEntity selectUser(@RequestParam Map<String, Object> map) {
+        return ResponseEntity.ok(map);
     }
 
 }

@@ -1,84 +1,87 @@
 package com.lind.common;
 
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpResponse;
+import cn.hutool.http.HttpUtil;
+import com.lind.common.util.HttpUtils;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 @Slf4j
 public class HttpUtilsTest {
 
-    public static String get(String url) {
-        String result = "";
-        try {
-            CloseableHttpClient httpclient = HttpClients.createDefault();
-            HttpGet httpget = new HttpGet(url);
-            CloseableHttpResponse response = httpclient.execute(httpget);
-            try {
-                if (response != null && response.getStatusLine().getStatusCode()
-                        == HttpStatus.SC_OK) {
-                    System.out.println(response.getStatusLine());
-                    HttpEntity entity = response.getEntity();
-                    System.out.println(entity.getContentEncoding());
-                    result = readResponse(entity, "UTF-8");
-                }
-            } finally {
-                httpclient.close();
-                response.close();
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-        return result;
-    }
+  static final String gbk_url = "http://47.94.105.138:11814/?cmd=query&name=spider.wenshuwang&returnnum=1&filter={\"sourceurl\":\"ecaf5a00dac44f0aac43ad76018a115a\"}";
 
-    public static String readResponse(HttpEntity entity, String charset) {
-        StringBuffer res = new StringBuffer();
-        BufferedReader reader = null;
-        try {
-            if (entity == null) {
-                return null;
-            } else {
-                reader = new BufferedReader(new InputStreamReader(entity.getContent(), charset));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    line = line + "\n";
-                    res.append(line);
-                }
-            }
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (Exception e) {
-                e.toString();
-            }
-        }
-        return res.toString();
-    }
 
-    /**
-     * 中文乱码的原因：
-     * 1. 操作系统编码
-     * 2. Jboss编码
-     * 3. jvm编码
-     * 4. 请求与响应编码不同导致
-     */
-    @Test
-    public void testChinese() {
-        log.info(get("https://a1.cnblogs.com/group/T2"));
-    }
+  /**
+   * 中文乱码的原因：
+   * 1. 操作系统编码
+   * 2. Jboss编码
+   * 3. jvm编码
+   * 4. 请求与响应编码不同导致
+   */
+  @SneakyThrows
+  @Test
+  public void testChinese() {
+    log.info(HttpUtils.get("http://47.94.105.138:11814/?cmd=query&name=spider.wenshuwang&returnnum=1&filter={\"sourceurl\":\"ecaf5a00dac44f0aac43ad76018a115a\"}"));
+  }
 
+  /**
+   * 正文是gbk解析后出现乱码问题，通过byte数据转utf-8是OK的
+   */
+  @SneakyThrows
+  @Test
+  public void gbk() {
+    HttpResponse response = HttpRequest.post(gbk_url)
+        .header("connection", "keep-alive")
+        .execute();
+
+    response.charset("utf-8");
+    log.info(new String(response.bodyBytes(), StandardCharsets.UTF_8));
+  }
+
+  /**
+   * 解决正文是gbk，解析后出现乱码问题
+   */
+  @Test
+  public void gbk_slove() {
+    HttpResponse httpResponse = HttpUtil.createPost("http://47.94.105.138:11814/?cmd=query&name=spider.wenshuwang&returnnum=1&filter={\"sourceurl\":\"ecaf5a00dac44f0aac43ad76018a115a\"}")
+        .header("Content-Type", "application/json;charset:utf-8")
+        .execute()
+        .charset("UTF-8");
+    System.out.println(httpResponse.body());
+  }
+
+  /**
+   * 正文是utf-8的，没有乱码.
+   */
+  @Test
+  public void utf8() {
+    HttpResponse httpResponse = HttpUtil.createPost("http://47.94.105.138:11814/?cmd=query&name=spider.wenshuwang&returnnum=1&filter={\"sourceurl\":\"e51e74bd6c6d484eb430ada200fa619a\"}")
+        //这个请求头.header是自己项目需要加的，可以省略
+        .header("connection", "keep-alive")
+        .execute()
+        .charset("utf-8");
+    System.out.println(httpResponse.body());
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void urlEncodeError() {
+    String url = "https://www.pkulaw.com/chl/ded30be7a11fdecbbdfb.html?keyword=股权转让所得 个人所得税管理办法";
+    URI.create(url);
+
+  }
+
+  @SneakyThrows
+  @Test()
+  public void urlEncode() {
+    String url = "https://www.pkulaw.com/chl/ded30be7a11fdecbbdfb.html?keyword=股权转让所得 个人所得税管理办法";
+    url = url.replaceAll("\\ ", "%20");
+    URI.create(url);
+
+  }
 }
