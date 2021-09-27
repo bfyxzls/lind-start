@@ -169,7 +169,7 @@
                             }
 
                         ],
-                        data: [[${list}]] // 后端的集合
+                        data: ${list} // 后端的集合
                     }
                 },
                 methods: {
