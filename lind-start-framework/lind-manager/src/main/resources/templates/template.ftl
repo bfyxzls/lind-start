@@ -13,6 +13,29 @@
                 color: red;
             }
         </Style>
+
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta http-equiv="Cache-Control" content="no-siteapp"/>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <meta name="renderer" content="webkit|ie-comp|ie-stand">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+        <meta http-equiv="Cache-Control" content="no-siteapp"/>
+        <!-- import stylesheet -->
+        <link rel="stylesheet" href="https://cdn.staticfile.org/iview/3.1.5/styles/iview.css">
+        <!-- import Vue.js -->
+        <script src="https://cdn.staticfile.org/vue/2.5.22/vue.min.js"></script>
+        <!-- import iView -->
+        <script src="https://cdn.staticfile.org/iview/3.1.5/iview.min.js"></script>
     </head>
     <body>
     <p>

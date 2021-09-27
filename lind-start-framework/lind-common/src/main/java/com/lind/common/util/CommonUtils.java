@@ -1,4 +1,4 @@
-package com.lind.common.rest;
+package com.lind.common.util;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
