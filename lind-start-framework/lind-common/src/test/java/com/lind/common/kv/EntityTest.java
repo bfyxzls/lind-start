@@ -25,14 +25,18 @@ public class EntityTest {
   @SneakyThrows
   @Test
   public void store() {
-    ExecutorService pool = Executors.newFixedThreadPool(1);
+    ExecutorService pool = Executors.newFixedThreadPool(2);
     Store store = new Store(pool);
     Entity entity = Entity.create(Bytes.toBytes("zzl"), Bytes.toBytes("zhangzhanling"), 1);
-    store.add(entity);
+    store.addTry(entity);
     entity = Entity.create(Bytes.toBytes("bobo"), Bytes.toBytes("zhangzhanling"), 2);
-    store.add(entity);
+    store.addTry(entity);
     entity = Entity.create(Bytes.toBytes("zhang"), Bytes.toBytes("zhangzhanling"), 3);
-    store.add(entity);
+    store.addTry(entity);
+    entity = Entity.create(Bytes.toBytes("zhang2"), Bytes.toBytes("zhangzhanling"), 3);
+    store.addTry(entity);
+    entity = Entity.create(Bytes.toBytes("zhang3"), Bytes.toBytes("zhangzhanling"), 3);
+    store.addTry(entity);
   }
 
   @SneakyThrows
