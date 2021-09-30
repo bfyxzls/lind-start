@@ -260,7 +260,7 @@ public class DiskStore implements Closeable {
     public MultiIter(SeekIter<KeyValue> iters[]) throws IOException {
       assert iters != null;
       this.iters = iters; // Used for seekTo
-      this.queue = new PriorityQueue<>(((o1, o2) -> o1.kv.compareTo(o2.kv)));
+      this.queue = new PriorityQueue<>(((o1, o2) -> o2.kv.compareTo(o1.kv)));
       for (int i = 0; i < iters.length; i++) {
         if (iters[i] != null && iters[i].hasNext()) {
           queue.add(new IterNode(iters[i].next(), iters[i]));

@@ -27,6 +27,7 @@ public class EntityTest {
   public void store() {
     ExecutorService pool = Executors.newFixedThreadPool(2);
     Store store = new Store(pool);
+    // add
     Entity entity = Entity.create(Bytes.toBytes("zzl"), Bytes.toBytes("zhangzhanling"), 1);
     store.addTry(entity);
     entity = Entity.create(Bytes.toBytes("bobo"), Bytes.toBytes("zhangzhanling"), 2);
@@ -37,6 +38,16 @@ public class EntityTest {
     store.addTry(entity);
     entity = Entity.create(Bytes.toBytes("zhang3"), Bytes.toBytes("zhangzhanling"), 3);
     store.addTry(entity);
+    // seek
+    Store.SeekIter iteratorWrapper = store.createIterator();
+    iteratorWrapper.seekTo(Entity.create(Bytes.toBytes("zhang2"), Bytes.toBytes("zhangzhanling"), 3));
+    while (iteratorWrapper.hasNext()) {
+      Entity find = (Entity) iteratorWrapper.next();
+      System.out.println(Bytes.toHex(find.getKey()));
+    }
+    /**
+     * 返回大于等于zhang2的，通过ascii码进行排序，会返回 zhang2,zhang3,zzl三条数据
+     */
   }
 
   @SneakyThrows
