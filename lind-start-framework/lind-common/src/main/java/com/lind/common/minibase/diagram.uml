@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.lind.common.minibase.DiskFile</OriginalElement>
+  <nodes>
+    <node x="606.0" y="729.0">com.lind.common.minibase.Bytes</node>
+    <node x="349.50000000000006" y="632.0">com.lind.common.minibase.DiskStore.MultiIter.IterNode</node>
+    <node x="1575.25" y="530.0">com.lind.common.minibase.DiskFile.BlockIndexWriter</node>
+    <node x="477.00000000000006" y="530.0">com.lind.common.minibase.MemStore.MemStoreIter</node>
+    <node x="656.25" y="530.0">com.lind.common.minibase.MemStore.IteratorWrapper</node>
+    <node x="166.0" y="530.0">com.lind.common.minibase.DiskStore.DefaultCompactor</node>
+    <node x="1430.25" y="530.0">com.lind.common.minibase.DiskFile.BlockWriter</node>
+    <node x="701.5" y="0.0">java.lang.AutoCloseable</node>
+    <node x="104.0" y="729.0">com.lind.common.minibase.KeyValue</node>
+    <node x="733.815277777778" y="408.0">com.lind.common.minibase.MemStore</node>
+    <node x="620.315277777778" y="306.0">com.lind.common.minibase.MStore</node>
+    <node x="138.6833333333334" y="306.0">com.lind.common.minibase.MiniBase.Flusher</node>
+    <node x="157.5" y="408.0">com.lind.common.minibase.DiskStore</node>
+    <node x="471.0" y="729.0">com.lind.common.minibase.Config</node>
+    <node x="0.0" y="831.0">com.lind.common.minibase.KeyValue.KeyValueComparator</node>
+    <node x="400.50000000000006" y="204.0">com.lind.common.minibase.MiniBase</node>
+    <node x="609.815277777778" y="408.0">com.lind.common.minibase.MStore.ScanIter</node>
+    <node x="1009.25" y="530.0">com.lind.common.minibase.MemStore.FlusherTask</node>
+    <node x="1299.25" y="530.0">com.lind.common.minibase.DiskFile.BlockMeta</node>
+    <node x="829.25" y="530.0">com.lind.common.minibase.DiskFile.InternalIterator</node>
+    <node x="485.8152777777779" y="408.0">com.lind.common.minibase.MStore.SeekIter</node>
+    <node x="194.0" y="831.0">com.lind.common.minibase.KeyValue.Op</node>
+    <node x="301.0" y="729.0">com.lind.common.minibase.BloomFilter</node>
+    <node x="0.0" y="530.0">com.lind.common.minibase.DiskStore.DefaultFlusher</node>
+    <node x="1351.6627314814814" y="408.0">com.lind.common.minibase.DiskFile</node>
+    <node x="346.00000000000006" y="530.0">com.lind.common.minibase.DiskStore.MultiIter</node>
+    <node x="715.5" y="102.0">java.io.Closeable</node>
+    <node x="1755.25" y="530.0">com.lind.common.minibase.DiskFile.DiskFileWriter</node>
+    <node x="1154.25" y="530.0">com.lind.common.minibase.DiskFile.BlockReader</node>
+    <node x="492.8152777777779" y="306.0">com.lind.common.minibase.MiniBase.Iter</node>
+    <node x="311.4333333333334" y="306.0">com.lind.common.minibase.MiniBase.Compactor</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.lind.common.minibase.MStore" target="com.lind.common.minibase.MiniBase">
+      <point x="0.0" y="-26.0" />
+      <point x="665.315277777778" y="276.0" />
+      <point x="491.50000000000006" y="276.0" />
+      <point x="39.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.InternalIterator" target="com.lind.common.minibase.MStore.SeekIter">
+      <point x="-40.0" y="-26.0" />
+      <point x="869.25" y="490.0" />
+      <point x="576.815277777778" y="490.0" />
+      <point x="39.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.DefaultCompactor" target="com.lind.common.minibase.MiniBase.Compactor">
+      <point x="40.0" y="-26.0" />
+      <point x="286.0" y="510.0" />
+      <point x="366.9333333333334" y="510.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.MultiIter" target="com.lind.common.minibase.MStore.SeekIter">
+      <point x="27.75" y="-26.0" />
+      <point x="429.25000000000006" y="510.0" />
+      <point x="498.8152777777779" y="510.0" />
+      <point x="-39.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore.IteratorWrapper" target="com.lind.common.minibase.MemStore">
+      <point x="38.25" y="-26.0" />
+      <point x="771.0" y="510.0" />
+      <point x="785.815277777778" y="510.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.DefaultFlusher" target="com.lind.common.minibase.MiniBase.Flusher">
+      <point x="-36.5" y="-26.0" />
+      <point x="36.5" y="388.0" />
+      <point x="187.1833333333334" y="388.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MiniBase.Compactor" target="com.lind.common.minibase.MiniBase">
+      <point x="0.0" y="-26.0" />
+      <point x="366.9333333333334" y="286.0" />
+      <point x="439.50000000000006" y="286.0" />
+      <point x="-13.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.KeyValue.Op" target="com.lind.common.minibase.KeyValue">
+      <point x="0.0" y="-26.0" />
+      <point x="225.0" y="806.0" />
+      <point x="182.0" y="806.0" />
+      <point x="26.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.DefaultFlusher" target="com.lind.common.minibase.DiskStore">
+      <point x="36.5" y="-26.0" />
+      <point x="109.5" y="510.0" />
+      <point x="176.0" y="510.0" />
+      <point x="-37.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.DiskFileWriter" target="java.io.Closeable">
+      <point x="36.5" y="-26.0" />
+      <point x="1864.75" y="174.0" />
+      <point x="815.4000000000001" y="174.0" />
+      <point x="44.39999999999998" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MStore.ScanIter" target="com.lind.common.minibase.MiniBase.Iter">
+      <point x="-25.999999999999943" y="-26.0" />
+      <point x="635.815277777778" y="378.0" />
+      <point x="549.815277777778" y="378.0" />
+      <point x="19.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.DiskFileWriter" target="com.lind.common.minibase.DiskFile">
+      <point x="-36.5" y="-26.0" />
+      <point x="1791.75" y="490.0" />
+      <point x="1446.9960648148146" y="490.0" />
+      <point x="43.33333333333326" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MStore.SeekIter" target="com.lind.common.minibase.MStore">
+      <point x="26.0" y="-26.0" />
+      <point x="563.815277777778" y="388.0" />
+      <point x="642.815277777778" y="388.0" />
+      <point x="-22.5" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MiniBase.Flusher" target="com.lind.common.minibase.MiniBase">
+      <point x="0.0" y="-26.0" />
+      <point x="187.1833333333334" y="276.0" />
+      <point x="413.50000000000006" y="276.0" />
+      <point x="-39.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore" target="java.io.Closeable">
+      <point x="0.0" y="-26.0" />
+      <point x="785.815277777778" y="184.0" />
+      <point x="771.0" y="184.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore.MemStoreIter" target="com.lind.common.minibase.MStore.SeekIter">
+      <point x="-33.0" y="-26.0" />
+      <point x="510.00000000000006" y="510.0" />
+      <point x="524.815277777778" y="510.0" />
+      <point x="-13.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MiniBase.Iter" target="com.lind.common.minibase.MiniBase">
+      <point x="5.6843418860808015E-14" y="-26.0" />
+      <point x="530.815277777778" y="286.0" />
+      <point x="465.50000000000006" y="286.0" />
+      <point x="13.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore.FlusherTask" target="com.lind.common.minibase.MemStore">
+      <point x="0.0" y="-26.0" />
+      <point x="1071.75" y="480.0" />
+      <point x="820.4819444444446" y="480.0" />
+      <point x="34.66666666666663" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MStore.SeekIter" target="com.lind.common.minibase.MiniBase.Iter">
+      <point x="-26.0" y="-26.0" />
+      <point x="-19.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.MultiIter" target="com.lind.common.minibase.DiskStore">
+      <point x="-27.75" y="-26.0" />
+      <point x="373.75000000000006" y="500.0" />
+      <point x="250.0" y="500.0" />
+      <point x="37.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.DefaultCompactor" target="com.lind.common.minibase.DiskStore">
+      <point x="-40.0" y="-26.0" />
+      <point x="206.0" y="510.0" />
+      <point x="213.0" y="510.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.InternalIterator" target="com.lind.common.minibase.DiskFile">
+      <point x="40.0" y="-26.0" />
+      <point x="949.25" y="490.0" />
+      <point x="1360.3293981481481" y="490.0" />
+      <point x="-43.33333333333326" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MiniBase" target="java.io.Closeable">
+      <point x="0.0" y="-26.0" />
+      <point x="452.50000000000006" y="184.0" />
+      <point x="748.8" y="184.0" />
+      <point x="-22.200000000000045" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.KeyValue.KeyValueComparator" target="com.lind.common.minibase.KeyValue">
+      <point x="0.0" y="-26.0" />
+      <point x="87.0" y="806.0" />
+      <point x="130.0" y="806.0" />
+      <point x="-26.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.BlockMeta" target="com.lind.common.minibase.DiskFile">
+      <point x="0.0" y="-26.0" />
+      <point x="1354.75" y="510.0" />
+      <point x="1394.9960648148146" y="510.0" />
+      <point x="-8.666666666666742" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.BlockReader" target="com.lind.common.minibase.DiskFile">
+      <point x="0.0" y="-26.0" />
+      <point x="1216.75" y="500.0" />
+      <point x="1377.6627314814814" y="500.0" />
+      <point x="-26.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore.IteratorWrapper" target="com.lind.common.minibase.MStore.SeekIter">
+      <point x="-38.25" y="-26.0" />
+      <point x="694.5" y="500.0" />
+      <point x="550.815277777778" y="500.0" />
+      <point x="13.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore" target="java.io.Closeable">
+      <point x="0.0" y="-26.0" />
+      <point x="213.0" y="378.0" />
+      <point x="99.68634259259261" y="378.0" />
+      <point x="99.68634259259261" y="174.0" />
+      <point x="726.6000000000001" y="174.0" />
+      <point x="-44.39999999999998" y="26.0" />
+    </edge>
+    <edge source="java.io.Closeable" target="java.lang.AutoCloseable">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile" target="java.io.Closeable">
+      <point x="0.0" y="-26.0" />
+      <point x="1403.6627314814814" y="184.0" />
+      <point x="793.2" y="184.0" />
+      <point x="22.200000000000045" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MemStore.MemStoreIter" target="com.lind.common.minibase.MemStore">
+      <point x="33.0" y="-26.0" />
+      <point x="576.0" y="510.0" />
+      <point x="751.1486111111113" y="510.0" />
+      <point x="-34.66666666666663" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.BlockWriter" target="com.lind.common.minibase.DiskFile">
+      <point x="0.0" y="-26.0" />
+      <point x="1492.75" y="510.0" />
+      <point x="1412.3293981481481" y="510.0" />
+      <point x="8.666666666666742" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskStore.MultiIter.IterNode" target="com.lind.common.minibase.DiskStore.MultiIter">
+      <point x="0.0" y="-26.0" />
+      <point x="0.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.DiskFile.BlockIndexWriter" target="com.lind.common.minibase.DiskFile">
+      <point x="0.0" y="-26.0" />
+      <point x="1655.25" y="500.0" />
+      <point x="1429.6627314814814" y="500.0" />
+      <point x="26.0" y="26.0" />
+    </edge>
+    <edge source="com.lind.common.minibase.MStore.ScanIter" target="com.lind.common.minibase.MStore">
+      <point x="26.000000000000057" y="-26.0" />
+      <point x="22.5" y="26.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.716500553709856" x="951.0" y="441.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -27,11 +27,14 @@ public class BloomFilterTest {
     for (int i = 0; i < size; i++) {
       bloomFilter.put(i);
     }
+
+    // 一定不存在
     for (int i = 0; i < size; i++) {
       if (!bloomFilter.mightContain(i)) {
         System.out.println("有坏人逃脱了");
       }
     }
+    // 可能存在
     List<Integer> list = new ArrayList<>(1000);
     for (int i = size + 1000; i < size + 2000; i++) {
       if (bloomFilter.mightContain(i)) {
