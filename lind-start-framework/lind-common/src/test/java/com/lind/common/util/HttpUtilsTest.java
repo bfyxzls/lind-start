@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.util;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;

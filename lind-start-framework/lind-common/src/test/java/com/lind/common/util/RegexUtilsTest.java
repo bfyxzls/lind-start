@@ -1,10 +1,12 @@
-package com.lind.common;
+package com.lind.common.util;
 
 import com.lind.common.util.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -91,6 +93,31 @@ public class RegexUtilsTest {
   public void fileName() {
     Matcher matcher = DATA_FILE_RE.matcher("data.123");
     Assert.assertTrue(matcher.matches());
-    Assert.assertTrue( DATA_FILE_RE.matcher("data.42").matches());
+    Assert.assertTrue(DATA_FILE_RE.matcher("data.42").matches());
+  }
+
+  @Test
+  public void max() {
+    System.out.println(Math.max(1, 2));
+    System.out.println(Math.max(2, 22));
+    Long.parseLong("0001");
+  }
+  @Test
+  public void group() {
+    Matcher matcher = DATA_FILE_RE.matcher("data.001");
+    matcher.matches();
+    matcher.group(1);
+  }
+  @Test
+  public void matcherGroup() {
+    List<String> ids = Arrays.asList("data.1", "data.3", "data.2", "data.2");
+    long maxFileId = -1L;
+    for (String id : ids) {
+      Matcher matcher = DATA_FILE_RE.matcher(id);
+      matcher.matches();
+      maxFileId = Math.max(Long.parseLong(matcher.group(1)), maxFileId); //group（0）就是指的整个串，group（1） 指的是第一个括号里的东西，group（2）指的第二个括号里的东西
+      System.out.println("maxFileId=" + maxFileId);
+    }
+
   }
 }

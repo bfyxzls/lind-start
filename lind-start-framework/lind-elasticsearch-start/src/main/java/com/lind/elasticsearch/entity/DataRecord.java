@@ -16,7 +16,7 @@ import java.util.Set;
 import static java.lang.String.format;
 
 /**
- * 动态数据实体,列存储,动态扩展字段.
+ * 与HBASE配合使用的实体，动态数据实体,列存储,动态扩展字段.
  */
 @ToString(includeFieldNames = true)
 public class DataRecord implements Map<String, Object>, Serializable {

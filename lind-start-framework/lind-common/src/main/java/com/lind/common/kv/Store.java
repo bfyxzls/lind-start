@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 而磁盘如果希望快速被检索，我们可以借助LSM树，使用顺序写，提升写的性能
  */
 public class Store {
-  static final Long limitSize = 1000L;
+  static final Long limitSize = 10000L;
   // 块存储大小
   private final AtomicLong dataSize = new AtomicLong();
   // 正在持久化
@@ -42,17 +42,13 @@ public class Store {
 
   @SneakyThrows
   public void addTry(Entity kv) {
-    try {
-      add(kv);
-    } catch (IOException ex) {
+    int i = 3;
+    while (i-- > 0) {
       try {
-        Thread.sleep(10);
-        logger.info("try 1...");
         add(kv);
-      } catch (IOException exx) {
-        Thread.sleep(100);
-        logger.info("try 2...");
-        add(kv);
+      } catch (IOException ex) {
+        Thread.sleep(10 * i);
+        logger.info("try..." + i);
       }
     }
   }
@@ -126,6 +122,11 @@ public class Store {
       return it.next();
     }
 
+    /**
+     * tailMap与Entity的自定义比较器有关，在Entity里，如果key值相等，就比较feq的值，feq值返回大于等于它的元素。
+     * @param kv
+     * @throws IOException
+     */
     @Override
     public void seekTo(Entity kv) throws IOException {
       it = sortedMap.tailMap(kv).values().iterator();

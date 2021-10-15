@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.thread;
 
 import cn.hutool.core.map.MapUtil;
 import lombok.SneakyThrows;

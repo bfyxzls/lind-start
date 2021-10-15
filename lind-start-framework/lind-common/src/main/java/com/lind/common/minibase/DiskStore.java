@@ -44,7 +44,7 @@ public class DiskStore implements Closeable {
   }
 
   public synchronized long getMaxDiskId() {
-    // TODO can we save the maxFileId ? and next time, need not to traverse the disk file.
+    // TODO can we save the maxFileId ? and next time, need not to traverse(穿过） the disk file.
     File[] files = listDiskFiles();
     long maxFileId = -1L;
     for (File f : files) {

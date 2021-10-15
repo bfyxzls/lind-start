@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.thread;
 
 import lombok.SneakyThrows;
 import org.junit.Test;

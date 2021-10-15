@@ -29,42 +29,11 @@ public class TestMiniBase {
   public void tearDown() {
   }
 
-  private static class WriterThread extends Thread {
-
-    private long start, end;
-    private MiniBase db;
-
-    public WriterThread(MiniBase db, long start, long end) {
-      this.db = db;
-      this.start = start;
-      this.end = end;
-    }
-
-    public void run() {
-      for (long i = start; i < end; i++) {
-        int retries = 0;
-        while (retries < 50) {
-          try {
-            db.put(Bytes.toBytes(i), Bytes.toBytes(i));
-            break;
-          } catch (IOException e) {
-            // Memstore maybe full, so let's retry.
-            retries++;
-            try {
-              Thread.sleep(100 * retries);
-            } catch (InterruptedException e1) {
-            }
-          }
-        }
-      }
-    }
-  }
-
   @Test
   public void testPut() throws IOException, InterruptedException {
     // Set maxMemstoreSize to 64B, which make the memstore flush frequently.
     Config conf = new Config().setDataDir(dataDir).setMaxMemstoreSize(1).setFlushMaxRetries(1)
-            .setMaxDiskFiles(10);
+        .setMaxDiskFiles(10);
     final MiniBase db = MStore.create(conf).open();
 
     final long totalKVSize = 100L;
@@ -129,32 +98,6 @@ public class TestMiniBase {
     Assert.assertNull(db.get(B));
   }
 
-  static class MockSeekIter implements SeekIter<KeyValue> {
-
-    private int curIdx = 0;
-    private List<KeyValue> list;
-
-    public MockSeekIter(List<KeyValue> list) {
-      this.list = list;
-    }
-
-    @Override
-    public void seekTo(KeyValue kv) throws IOException {
-      throw new IOException("Not implemented");
-    }
-
-    @Override
-    public boolean hasNext() throws IOException {
-      return curIdx < list.size();
-    }
-
-    @Override
-    public KeyValue next() throws IOException {
-      return list.get(curIdx++);
-    }
-  }
-
-
   @Test
   public void testScanIter() throws Exception {
     List<KeyValue> list = new ArrayList<>();
@@ -190,5 +133,62 @@ public class TestMiniBase {
     Assert.assertTrue(scan.hasNext());
     Assert.assertEquals(scan.next(), KeyValue.createPut(B, B, 100));
     Assert.assertFalse(scan.hasNext());
+  }
+
+  private static class WriterThread extends Thread {
+
+    private long start, end;
+    private MiniBase db;
+
+    public WriterThread(MiniBase db, long start, long end) {
+      this.db = db;
+      this.start = start;
+      this.end = end;
+    }
+
+    public void run() {
+      for (long i = start; i < end; i++) {
+        int retries = 0;
+        while (retries < 50) {
+          try {
+            db.put(Bytes.toBytes(i), Bytes.toBytes(i));
+            break;
+          } catch (IOException e) {
+            // Memstore maybe full, so let's retry.
+            retries++;
+            try {
+              System.out.println("minibase put retries:" + retries);
+              Thread.sleep(100 * retries);
+            } catch (InterruptedException e1) {
+            }
+          }
+        }
+      }
+    }
+  }
+
+  static class MockSeekIter implements SeekIter<KeyValue> {
+
+    private int curIdx = 0;
+    private List<KeyValue> list;
+
+    public MockSeekIter(List<KeyValue> list) {
+      this.list = list;
+    }
+
+    @Override
+    public void seekTo(KeyValue kv) throws IOException {
+      throw new IOException("Not implemented");
+    }
+
+    @Override
+    public boolean hasNext() throws IOException {
+      return curIdx < list.size();
+    }
+
+    @Override
+    public KeyValue next() throws IOException {
+      return list.get(curIdx++);
+    }
   }
 }

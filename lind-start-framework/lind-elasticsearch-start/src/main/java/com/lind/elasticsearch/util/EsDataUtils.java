@@ -34,7 +34,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * ES数据操作，主要用于操作json数据.
+ * ES数据保存操作，主要用于操作DateRecord动态数据，使用json接口.
  */
 public class EsDataUtils {
 

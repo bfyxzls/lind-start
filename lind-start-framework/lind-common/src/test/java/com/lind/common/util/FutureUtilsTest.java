@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.util;
 
 import com.lind.common.util.FutureUtils;
 import org.junit.Test;

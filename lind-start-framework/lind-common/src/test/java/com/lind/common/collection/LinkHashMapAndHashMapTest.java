@@ -10,6 +10,7 @@ import java.util.Set;
 
 /**
  * 主要体现了有序性，hashmap是无序性，即写和读的顺序不能保持一致.
+ * LinkHashMap保持迭代的顺序等于插入时的顺序
  */
 public class LinkHashMapAndHashMapTest {
     @Test

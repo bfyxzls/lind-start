@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.util;
 
 import com.lind.common.encrypt.HashUtils;
 import com.lind.common.zip.LZW;

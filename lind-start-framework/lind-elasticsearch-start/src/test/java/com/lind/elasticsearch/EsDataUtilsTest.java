@@ -11,7 +11,6 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
-import java.util.UUID;
 
 @SpringBootTest()
 @RunWith(SpringRunner.class) //让测试在Spring容器环境下执行
@@ -27,9 +26,9 @@ public class EsDataUtilsTest {
     @Test
     public void putJsonData() throws IOException {
         DataRecord dataRecord = new DataRecord();
-        dataRecord.setId(UUID.randomUUID().toString());
-        dataRecord.put("name", "zhangsan12345");
-        dataRecord.setId("7782782b-e153-4a44-adff-5d408e7035db");
+        dataRecord.put("name", "lr");
+        dataRecord.put("sex", "1");
+       // dataRecord.setId("7782782b-e153-4a44-adff-5d408e7035de");
         String s = EsDataUtils.saveOrUpdate(elasticsearchRestTemplate.getClient(), "lind-test", dataRecord);
         System.out.println("s=" + s);
     }

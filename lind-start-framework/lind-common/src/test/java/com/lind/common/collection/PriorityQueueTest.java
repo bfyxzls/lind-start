@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import org.junit.Test;
 
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -14,52 +15,64 @@ import java.util.Queue;
  * PriorityQueue是非线程安全的，所以Java提供了PriorityBlockingQueue（实现BlockingQueue接口）用于Java多线程环境
  */
 public class PriorityQueueTest {
-    @SneakyThrows
-    @Test
-    public void test() {
-        Queue<Customer> priorityQueue = new PriorityQueue<>();
-        priorityQueue.add(new Customer(1, "zhansan"));
-        priorityQueue.add(new Customer(2, "lisi"));
-        priorityQueue.add(new Customer(4, "wangwu"));
-        int i=0;
-        while (true) {
+  @SneakyThrows
+  @Test
+  public void test() {
+    Queue<Customer> priorityQueue = new PriorityQueue<>();
+    priorityQueue.add(new Customer(1, "zhansan"));
+    priorityQueue.add(new Customer(2, "lisi"));
+    priorityQueue.add(new Customer(4, "wangwu"));
+    while (!priorityQueue.isEmpty()) {
+      Customer cust = priorityQueue.poll();
+      System.out.println("Processing Customer =" + cust.toString());
+    }
+  }
 
-            Customer cust = priorityQueue.poll();
-            if (cust == null) break;
-            System.out.println("Processing Customer =" + cust.toString());
-            Thread.sleep(1000);
-            if(i==0) {
-                priorityQueue.add(new Customer(3, "back-door"));
-                priorityQueue.add(new Customer(5, "final"));
-            }
-            i++;
-        }
+  @Test
+  public void simpleType() {
+    PriorityQueue<Integer> queue = new PriorityQueue<>();
+    queue.add(1);
+    queue.add(3);
+    queue.add(2);
+    while (!queue.isEmpty()) {
+      System.out.println(queue.poll());
+    }
+  }
 
+  @Test
+  public void simpleTypeDesc() {
+    PriorityQueue<Integer> queue = new PriorityQueue<>(Comparator.reverseOrder());
+    queue.add(1);
+    queue.add(3);
+    queue.add(2);
+    while (!queue.isEmpty()) {
+      System.out.println(queue.poll());
+    }
+  }
+
+  @Data
+  static class Customer implements Comparable<Customer> {
+    private int id;
+    private String name;
+
+    public Customer(int i, String n) {
+      this.id = i;
+      this.name = n;
     }
 
-    @Data
-    static class Customer implements Comparable<Customer> {
-        private int id;
-        private String name;
-
-        public Customer(int i, String n) {
-            this.id = i;
-            this.name = n;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public int compareTo(Customer o) {
-            if (this.id < o.id) return -1;
-            else if (this.id == o.id) return 0;
-            else return 1;
-        }
+    public int getId() {
+      return id;
     }
+
+    public String getName() {
+      return name;
+    }
+
+    @Override
+    public int compareTo(Customer o) {
+      if (this.id < o.id) return -1;
+      else if (this.id == o.id) return 0;
+      else return 1;
+    }
+  }
 }

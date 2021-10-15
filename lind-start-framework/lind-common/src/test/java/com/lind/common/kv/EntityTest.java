@@ -28,19 +28,19 @@ public class EntityTest {
     ExecutorService pool = Executors.newFixedThreadPool(2);
     Store store = new Store(pool);
     // add
-    Entity entity = Entity.create(Bytes.toBytes("zzl"), Bytes.toBytes("zhangzhanling"), 1);
+    Entity entity = Entity.create(Bytes.toBytes("a"), Bytes.toBytes("zhangzhanling"), 1);
     store.addTry(entity);
-    entity = Entity.create(Bytes.toBytes("bobo"), Bytes.toBytes("zhangzhanling"), 2);
+    entity = Entity.create(Bytes.toBytes("b"), Bytes.toBytes("zhangzhanling"), 2);
     store.addTry(entity);
-    entity = Entity.create(Bytes.toBytes("zhang"), Bytes.toBytes("zhangzhanling"), 3);
+    entity = Entity.create(Bytes.toBytes("c"), Bytes.toBytes("zhangzhanling"), 3);
     store.addTry(entity);
-    entity = Entity.create(Bytes.toBytes("zhang2"), Bytes.toBytes("zhangzhanling"), 3);
+    entity = Entity.create(Bytes.toBytes("d"), Bytes.toBytes("zhangzhanling"), 3);
     store.addTry(entity);
-    entity = Entity.create(Bytes.toBytes("zhang3"), Bytes.toBytes("zhangzhanling"), 3);
+    entity = Entity.create(Bytes.toBytes("e"), Bytes.toBytes("zhangzhanling"), 3);
     store.addTry(entity);
     // seek
     Store.SeekIter iteratorWrapper = store.createIterator();
-    iteratorWrapper.seekTo(Entity.create(Bytes.toBytes("zhang2"), Bytes.toBytes("zhangzhanling"), 3));
+    iteratorWrapper.seekTo(Entity.create(Bytes.toBytes("c"), Bytes.toBytes("zhangzhanling"), 3));
     while (iteratorWrapper.hasNext()) {
       Entity find = (Entity) iteratorWrapper.next();
       System.out.println(Bytes.toHex(find.getKey()));

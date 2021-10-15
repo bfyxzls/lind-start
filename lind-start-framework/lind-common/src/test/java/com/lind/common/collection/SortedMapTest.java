@@ -1,5 +1,7 @@
 package com.lind.common.collection;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -10,8 +12,8 @@ import java.util.TreeMap;
 /**
  * 集合可排序
  */
-public class SortedTest {
-  @org.junit.Test
+public class SortedMapTest {
+  @Test
   public void sortAndIterator() {
     HashMap<String, String> map = new HashMap<>();
     map.put("3", "33");
@@ -44,7 +46,7 @@ public class SortedTest {
      */
   }
 
-  @org.junit.Test
+  @Test
   public void get() {
     SortedMap<String, String> map = null;
     map = new TreeMap<String, String>();   //通过子类实例化接口对象
@@ -86,5 +88,32 @@ public class SortedTest {
      */
   }
 
+  @Test
+  public void tailMap() {
+    SortedMap<String, String> list = new TreeMap<>(); //基于红黑树的实现，在单线程性能不错.
+    list.put("a", "1");
+    list.put("b", "2");
+    list.put("c", "3");
+    list.put("d", "4");
+    SortedMap<String, String> tail = list.tailMap("c");//返回大于等于c的
+    Iterator<String> iterator = tail.values().iterator();
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+    }
+  }
+
+  @Test
+  public void headMap() {
+    SortedMap<String, String> list = new TreeMap<>(); //基于红黑树的实现，在单线程性能不错.
+    list.put("a", "1");
+    list.put("b", "2");
+    list.put("c", "3");
+    list.put("d", "4");
+    SortedMap<String, String> tail = list.headMap("c");//返回小于c的
+    Iterator<String> iterator = tail.values().iterator();
+    while (iterator.hasNext()) {
+      System.out.println(iterator.next());
+    }
+  }
 
 }

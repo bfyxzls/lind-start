@@ -1,6 +1,5 @@
-package com.lind.common;
+package com.lind.common.util;
 
-import com.lind.common.util.FileUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;

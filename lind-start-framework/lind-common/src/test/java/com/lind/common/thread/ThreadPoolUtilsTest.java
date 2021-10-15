@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.thread;
 
 import com.alibaba.fastjson.JSON;
 import com.github.phantomthief.pool.KeyAffinityExecutor;
