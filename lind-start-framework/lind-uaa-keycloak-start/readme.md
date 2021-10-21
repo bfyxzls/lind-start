@@ -3,6 +3,11 @@
   * pom.xml添加引用
   * 相关配置
   * 实现相关接口
+* 几种认证接口
+  * 配置信息说明
+  * 授取码混合认证
+  * 微信unionId认证
+  
 * scope授权思路
   * 之前的尝试MappingJackson2HttpMessageConverter
   * JsonSerializer的实现
@@ -32,9 +37,9 @@
 ```$xslt
 uaa:
   permitAll: /users # 开放的地址
-  callbackUri: http://localhost:9090/token/authorizationCodeLogin # 回调地址
+  redirectUri: http://192.168.3.181:9090/about # 回调地址，为空不表直接在页面上输出token
 keycloak:
-  auth-server-url: http://192.168.119.130:8080/auth # kc服务器地址
+  auth-server-url: http://devcas.pkulaw.com:18081/auth # kc服务器地址
   realm: demo # 域名称
   resource: demoproduct # 客户端（接入方）名称
   public-client: true # 如果设置为true，则适配器不会将客户端的凭据发送到Keycloak。 这是可选的。 默认值为false。
@@ -113,6 +118,50 @@ public class PermissionServiceImpl implements PermissionService {
 }
 
 ```
+
+# 几种认证接口
+## 配置信息说明
+* 配置组件`UaaProperties`，对应配置文件中的字段`uaa`
+* 业务端的回调地址`redirectUri`，在拿到token之后会重定向到这个页面，url上带着token,redirectUri为空时，直接将token响应到页面上
+* 不需要认证就可以访问的接口，使用`permitAll`来配置，即白名单列表
+> 例子，下面配置实现了当登录成功之后重定向到`http://192.168.3.181:9090/about`页面，对/about接口开放访问
+```
+uaa
+ permitAll: /about
+ redirectUri: http://192.168.3.181:9090/about
+```
+
+## 授取码混合认证
+* 用户在kc登录表单成功之后，会有一个客户端回调，在这个回调时，我们可以获取code和token信息
+* 通过`KeycloackAuthenticationProcessingFilterPostProcessor`组件实现了自定义回调接口，以下是两个固定的回调接口，都完成了对code和token的获取功能
+    * 带有重定向功能的接口`/token/authorizationCodeRedirect`
+    * 认证成功后，直接将token信息输出的接口`token/authorizationCodeResponse` 
+* 通过`KeycloakSessionStateInterceptor`组件，实现了对同一浏览器登录的用户状态的同步，它会与kc服务端进行通讯 
+
+## 多端登录的共享状态接口
+* https://devcas.pkulaw.com:18081/auth/realms/fabao/sms/kc-sessions?client={clientName}&redirect_uri=http://192.168.3.181:9090/token/authorizationCodeRedirect&refer_uri=http://192.168.3.181:9090/about
+上面接口将实现同一浏览器，多个客户端应用的共享登录，下面介绍一下相关参数
+* client:客户端名称
+* redirect_uri: kc回调客户端的统一地址，是一个固定的地址
+* refer_uri: 业务回调地址，是一个动态的地址，可以理解为在redirect_uri里处理完成之后，再跳到这个地址
+
+## 微信unionId认证
+* 通过微信的unionId做为参数，调用接口`token/applet`，来完成认证
+* 认证成功后，回调接口使用`token/authorizationCodeResponse`，直接将token输出到浏览器
+* 需要在kc管理平台为`WechatApplet`客户端指定unionId的认证流程，如图
+![](./assets/readme-1628156484906.png)
+* 在应用程序的配置文件中，也需要配置对接的WechatApplet作为你的客户端
+```
+keycloak:
+  auth-server-url: http://192.168.4.26:8080/auth
+  realm: fabao
+  resource: WechatApplet
+  credentials: #这个键请注意远程授权需要使用这个，而不能使用client-key-password
+      secret: ec0fd1c6-68b0-4c39-a9fa-c3be25c8ef01
+```
+* 调用/token/applet?unionId=oPBM51E0XEdxUOSvH3Y17ollctS0,结果如图
+![](./assets/readme-1628157443138.png)
+
 # scope授权思路
 通过实现JsonSerializer抽象类的serialize方法来进行指定类型的序列化，在序列化中对持有ScopeSet注解的字段进行解析，当没有对象的scope时，
 对字段不进行渲染，从而保护了字段资源。

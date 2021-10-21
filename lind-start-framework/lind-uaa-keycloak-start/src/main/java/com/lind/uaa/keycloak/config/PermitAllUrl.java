@@ -3,6 +3,7 @@ package com.lind.uaa.keycloak.config;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -12,6 +13,7 @@ import java.util.Set;
 /**
  * 需要放开权限的url
  */
+@Component
 public final class PermitAllUrl {
 
     static final Logger logger = LoggerFactory.getLogger(PermitAllUrl.class);
@@ -19,16 +21,17 @@ public final class PermitAllUrl {
     /**
      * 监控中心和swagger需要访问的url
      */
-    static final List<String> ENDPOINTS = ImmutableList.of("/actuator/**",
+    static final List<String> ENDPOINTS = ImmutableList.of("/sso/**",
+            "/actuator/**",
             "/v2/api-docs/**",
             "/doc.html",
             "/swagger-ui.html",
             "/swagger-resources/**",
             "/webjars/**",
-            "/webjars/**",
             "/oauth/token",
             "/oauth/test",
-            "/token/**");
+            "/token/**",
+            "/favicon.ico");
 
     /**
      * 需要放开权限的url

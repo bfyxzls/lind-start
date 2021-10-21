@@ -2,14 +2,13 @@ package com.lind.uaa.keycloak.config;
 
 import com.lind.uaa.keycloak.scope.ScopeSetInterceptor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,14 +29,19 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
 
     @Autowired(required = false)
     ScopeSetInterceptor scopeSetInterceptor;
+    @Autowired(required = false)
+    KeycloakSessionStateInterceptor keycloakSessionStateInterceptor;
     @Autowired
     UaaProperties uaaProperties;
+    @Autowired
+    private KeycloakSpringBootProperties keycloakSpringBootProperties;
+
     /**
      * Registers the MyKeycloakAuthenticationProvider with the authentication manager.
      */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        MyKeycloakAuthenticationProvider authenticationProvider = new MyKeycloakAuthenticationProvider();
+        MyKeycloakAuthenticationProvider authenticationProvider = new MyKeycloakAuthenticationProvider(keycloakSpringBootProperties);
         authenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
         auth.authenticationProvider(authenticationProvider);
     }
@@ -73,6 +77,13 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
     public void addInterceptors(InterceptorRegistry registry) {
         if (scopeSetInterceptor != null) {
             registry.addInterceptor(scopeSetInterceptor).addPathPatterns("/**");
+        }
+
+        // 这些接口需要同步登录状态，而不需要在未登录时去登录页
+        String[] urls = uaaProperties.getPermitAll();
+
+        if (keycloakSessionStateInterceptor != null) {
+            registry.addInterceptor(keycloakSessionStateInterceptor).addPathPatterns(urls);
         }
     }
 

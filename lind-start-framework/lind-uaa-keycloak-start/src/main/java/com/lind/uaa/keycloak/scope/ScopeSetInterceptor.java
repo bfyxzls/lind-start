@@ -31,7 +31,7 @@ public class ScopeSetInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws AccessDeniedException {
-        // scope授权范围
+         // scope授权范围
         if (handler instanceof HandlerMethod) {
             if (((HandlerMethod) handler).getMethodAnnotation(ScopeSet.class) != null) {
                 log.info("ScopeSet HandlerInterceptor:[{}].[{}]",

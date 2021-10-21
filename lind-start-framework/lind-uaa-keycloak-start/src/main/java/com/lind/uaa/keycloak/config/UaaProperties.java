@@ -9,11 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("uaa")
 public class UaaProperties {
     /**
-     * kc回调客户端的地址，主要用来进行token的获取与加工.
-     */
-    private String callbackUri;
-    /**
-     * 客户端获取token后，重定向的地址.
+     * 业务平台重定向回调地址，为空表示直接在页面上输出token.
      */
     private String redirectUri;
     /**

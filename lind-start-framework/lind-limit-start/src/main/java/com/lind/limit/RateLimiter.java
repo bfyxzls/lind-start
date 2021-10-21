@@ -14,7 +14,17 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RateLimiter {
 
-    int limit() default 5;
+  /**
+   * 并发5次.
+   *
+   * @return
+   */
+  int limit() default 5;
 
-    int timeout() default 1000;
+  /**
+   * 1000毫秒.
+   *
+   * @return
+   */
+  int timeout() default 1000;
 }

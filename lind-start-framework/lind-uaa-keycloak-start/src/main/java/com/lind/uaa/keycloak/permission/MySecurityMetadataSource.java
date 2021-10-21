@@ -9,7 +9,6 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.PathMatcher;
@@ -27,7 +26,6 @@ import java.util.Map;
  * @author Exrickx
  */
 @Slf4j
-@Component
 @ConditionalOnClass(PermissionService.class)
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 

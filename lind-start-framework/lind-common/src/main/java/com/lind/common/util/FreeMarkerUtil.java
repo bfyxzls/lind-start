@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -41,6 +42,14 @@ public class FreeMarkerUtil {
 
   static String root = "templates/";
 
+  /**
+   * 模板渲染
+   *
+   * @param data         数据字典
+   * @param templateName 模块名
+   * @param theme        皮肤名
+   * @return
+   */
   @SneakyThrows
   public String processTemplate(Object data, String templateName, String theme) {
     if (data instanceof Map) {
@@ -80,9 +89,11 @@ public class FreeMarkerUtil {
 
     @Override
     protected URL getURL(String name) {
-      String path = root + theme + "/" + name;
-      System.out.println(path);
-      URL file = Thread.currentThread().getContextClassLoader().getResource(path);
+      String path = Paths.get(root, name).toString();
+      if (theme != null) {
+        path = Paths.get(root, theme, name).toString();
+      }
+      URL file = this.getClass().getClassLoader().getResource(path);
       return file;
     }
 

@@ -1,6 +1,5 @@
 package com.lind.common.util;
 
-import com.lind.common.util.RegexUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
@@ -102,12 +101,14 @@ public class RegexUtilsTest {
     System.out.println(Math.max(2, 22));
     Long.parseLong("0001");
   }
+
   @Test
   public void group() {
     Matcher matcher = DATA_FILE_RE.matcher("data.001");
     matcher.matches();
     matcher.group(1);
   }
+
   @Test
   public void matcherGroup() {
     List<String> ids = Arrays.asList("data.1", "data.3", "data.2", "data.2");
@@ -118,6 +119,14 @@ public class RegexUtilsTest {
       maxFileId = Math.max(Long.parseLong(matcher.group(1)), maxFileId); //group（0）就是指的整个串，group（1） 指的是第一个括号里的东西，group（2）指的第二个括号里的东西
       System.out.println("maxFileId=" + maxFileId);
     }
+
+  }
+
+  @Test
+  public void hyperLinkDecode() {
+    String linkMsg = "<a href=\"www.baidu.com?a=1&amp;b=2\">ok</a>sdafasfasdafs<a href=\"www.baidu.com?a=1&amp;word=3\">ok2</a>";
+    String linkMsgSimple = RegexUtils.fixURLs(linkMsg);
+    System.out.println(linkMsgSimple);
 
   }
 }

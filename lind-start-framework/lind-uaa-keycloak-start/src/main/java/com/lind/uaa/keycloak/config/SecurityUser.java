@@ -2,11 +2,15 @@ package com.lind.uaa.keycloak.config;
 
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.keycloak.representations.AccessToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Objects;
 
+/**
+ * 当前用户和token上下文.
+ */
 public class SecurityUser {
 
     /**
@@ -20,9 +24,23 @@ public class SecurityUser {
         return (String) principal;
     }
 
+    /**
+     * 获取当前用户Id
+     *
+     * @return
+     */
+    public static String getCurrentUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
+                .getKeycloakSecurityContext()
+                .getToken()
+                .getSubject();
+    }
+
 
     /**
      * Principal.
+     *
      * @return
      */
     public static Object getCurrentPrincipal() {
@@ -34,10 +52,11 @@ public class SecurityUser {
     }
 
     /**
-     * token.
+     * 获取当前token，包含了用户信息.
+     *
      * @return
      */
-    public static Object getCurrentToken() {
+    public static AccessToken getCurrentToken() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
                 .getKeycloakSecurityContext()
