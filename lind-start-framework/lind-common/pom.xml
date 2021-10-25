@@ -13,7 +13,33 @@
         <!-- jdk版本 1.8有一些新的语法 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <version.infinispan>13.0.0.CR1</version.infinispan>
+        <version.spring.boot>2.3.0.RELEASE</version.spring.boot>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${version.spring.boot}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-spring-boot-starter</artifactId>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -116,6 +142,25 @@
             <artifactId>aesh</artifactId>
             <version>2.4</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- Embedded caches -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
+            <version>${version.infinispan}</version>
+
+        </dependency>
+
+        <!-- Remote caches
+         # List Infinispan servers by IP address or hostname at port 11222.
+           infinispan.client.hotrod.server_list=127.0.0.1:6667
+         -->
+        <dependency>
+            <groupId>org.infinispan</groupId>
+            <artifactId>infinispan-spring-boot-starter-remote</artifactId>
+            <version>${version.infinispan}</version>
+
         </dependency>
     </dependencies>
     <build>
