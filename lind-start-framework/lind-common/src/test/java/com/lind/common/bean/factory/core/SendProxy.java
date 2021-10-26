@@ -17,6 +17,14 @@ public class SendProxy implements InvocationHandler {
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
     System.out.println("SendProxy...");
+    if(method.getName().equals("insert")){
+      System.out.println("insert...");
+
+    }
+    if(method.getName().equals("delete")){
+      System.out.println("delete...");
+
+    }
     return null;
   }
 }

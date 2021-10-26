@@ -17,6 +17,6 @@ public class TestBean {
 
   @Test
   public void proxyTest() {
-    sendService.hello();
+    sendService.insert(new User());
   }
 }
