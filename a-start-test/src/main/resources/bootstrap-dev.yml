@@ -13,14 +13,19 @@ lind:
       registryKey: lind-lock
 
 spring:
-  application:
-    name: a-start-test
   # Redis
   redis:
     host: 127.0.0.1
     # 数据库索引 默认0
     database: 10
-
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.60.138:80
+        namespace: zzl
+      config:
+        server-addr: 192.168.60.138:80
+        namespace: zzl
   main:
     allow-bean-definition-overriding: true
   elasticsearch:

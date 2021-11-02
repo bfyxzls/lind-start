@@ -143,25 +143,26 @@
             <version>2.4</version>
             <scope>compile</scope>
         </dependency>
+        <!-- Remote caches
 
-        <!-- Embedded caches -->
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter-embedded</artifactId>
             <version>${version.infinispan}</version>
-
+            <scope>test</scope>
         </dependency>
 
-        <!-- Remote caches
+
          # List Infinispan servers by IP address or hostname at port 11222.
            infinispan.client.hotrod.server_list=127.0.0.1:6667
-         -->
+
         <dependency>
             <groupId>org.infinispan</groupId>
             <artifactId>infinispan-spring-boot-starter-remote</artifactId>
             <version>${version.infinispan}</version>
-
+            <scope>test</scope>
         </dependency>
+         -->
     </dependencies>
     <build>
         <plugins>
