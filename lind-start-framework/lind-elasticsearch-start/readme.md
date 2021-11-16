@@ -35,3 +35,16 @@ public class UserAuditorAware implements EsAuditorAware<String> {
     }
 }
 ```
+# es使用注意点
+1. text类型里的keyword属性，对于它的`ignore_abore`的升序应该做好限制，避免长文本的索引
+1. 对于text分词检索的高亮功能，可以使用`"term_vector": "with_positions_offsets"`来实现
+1. es中存储的数据分为两种，原始文档和索引文档（倒排索引），这两个内容都可以分别配置的
+1. es中默认的设置_source是enable的配置决定了字段是否被存储，它默认是`true`的，即存储整个文档
+1. 当_source.enable配置为false后，你还希望存储某些字段，可以使用`mappings.type._source.includes:[]`来实现
+1. 对于一些只需要查询、不需要返回的字段，可以通过`mappings.type._source.excludes:[]`来进行排除
+1. 如果希望某个字段不索引，即不存储进倒排索引里，可以在字段中添加属性`"index":false`即可；而如果希望不存储字段内容，可以添加`"store":false`
+1. 对于es索引的mapping，为了安全，我们杜绝动态生成字段，需要配置这个属性`mappings.type.dynamic:"strict"`，如果字段没有mapping将直接报错
+1. 对于上面的`"strict"`，也可以让它不报错，新字段不写入，可以把值设成"false"即可，`mappings.type.dynamic:"false"`，这个值支持随时更新的
+1. 一个高度灵活的日期型字段，可以通过format来配置它`"format": "yyyy||yyyyMM||yyyy.MM||yyyy/MM||yyyy-MM||yyyyMMdd||yyyy.MM.dd||yyyy/MM/dd||yyyy-MM-dd||yyyy-MM-dd HH:mm:ss||yyyy.MM.dd HH:mm:ss||yyyy/MM/dd HH:mm:ss||yyyy-MM-dd HH:mm:ss.SSS||yyyy.MM.dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS"`
+1. es分片的数据需要和数据大小进行匹配，每个片官方推荐是30G，例如你的数据大小是300G，那你应该分10个片、3000G应该分100个片
+1. es的分页查询，对于大页码应该杜绝，因为它会对所有分片进行查询，最后再进行合并，所以对于查询第1000页的10条数据，如果是5个分片，它会把5*1000*10的数据进行skip limit的计算
