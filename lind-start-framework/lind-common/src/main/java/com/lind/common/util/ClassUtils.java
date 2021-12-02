@@ -12,7 +12,7 @@ import java.util.Set;
 
 public class ClassUtils {
   /**
-   * 根据包路径获取包及子包下的标识有@MessageProvider注解的类型，它将被动态代理
+   * 根据包路径获取包及子包下的具有某个注解的类型，它将被动态代理
    *
    * @param basePackage basePackage
    * @return Set<Class < ?>> Set<Class<?>>
