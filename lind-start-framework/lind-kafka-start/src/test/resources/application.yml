@@ -7,7 +7,6 @@ spring:
     listener:
       missing-topics-fatal: false
     consumer:
-
       group-id: default
       enable-auto-commit: false
       auto-offset-reset: latest #earliest #生产环境配置latest，只获取最新消息

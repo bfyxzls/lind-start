@@ -3,7 +3,6 @@ package com.lind.common.util;
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
-import com.lind.common.util.HttpUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -16,6 +15,24 @@ public class HttpUtilsTest {
 
   static final String gbk_url = "http://47.94.105.138:11814/?cmd=query&name=spider.wenshuwang&returnnum=1&filter={\"sourceurl\":\"ecaf5a00dac44f0aac43ad76018a115a\"}";
 
+
+  /**
+   * 每10毫秒请求地址
+   */
+  @Test
+  public void loopGet() {
+    while (true) {
+      String url = "https://devcas.pkulaw.com:18081/auth/realms/master";
+      int status = HttpUtil.createGet(url).execute().getStatus();
+      if (status >= 500)
+        log.warn("warn:" + status);
+      try {
+        Thread.sleep(50);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 
   /**
    * 中文乱码的原因：

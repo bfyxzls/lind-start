@@ -1,155 +1,164 @@
 package com.lind.kafka.config;
 
+import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("spring.kafka")
 public class KafkaProperties {
-    public String getAcks() {
-        return acks;
-    }
+  /**
+   * kafka生产者ack机制
+   */
+  private String acks = "1";
+  /**
+   * kafka并发数量
+   */
+  private String concurrency = "12";
+  private String bootstrapServers;
+  private String groupID;
+  private int retries = 3;
+  private int bufferMemory = 1024 * 1024 * 32;
+  private int lingerMS = 5;
+  private boolean enableAutoCommit = true;
+  private int batchSize = 1024 * 16;
+  /**
+   * Key序列化
+   */
+  private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
+  /**
+   * Value序列化
+   */
+  private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
+  /**
+   * Key反序列化
+   */
+  private String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
+  /**
+   * Value反序列化
+   */
+  private String valueDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
+  /**
+   * 消费者配置
+   */
+  private Consumer consumer = new Consumer();
 
-    public void setAcks(String acks) {
-        this.acks = acks;
-    }
+  public String getAcks() {
+    return acks;
+  }
 
-    public String getConcurrency() {
-        return concurrency;
-    }
+  public void setAcks(String acks) {
+    this.acks = acks;
+  }
 
-    public void setConcurrency(String concurrency) {
-        this.concurrency = concurrency;
-    }
+  public String getConcurrency() {
+    return concurrency;
+  }
 
-    public String getBootstrapServers() {
-        return bootstrapServers;
-    }
+  public void setConcurrency(String concurrency) {
+    this.concurrency = concurrency;
+  }
 
-    public void setBootstrapServers(String bootstrapServers) {
-        this.bootstrapServers = bootstrapServers;
-    }
+  public String getBootstrapServers() {
+    return bootstrapServers;
+  }
 
-    public String getGroupID() {
-        return groupID;
-    }
+  public void setBootstrapServers(String bootstrapServers) {
+    this.bootstrapServers = bootstrapServers;
+  }
 
-    public void setGroupID(String groupID) {
-        this.groupID = groupID;
-    }
+  public Consumer getConsumer() {
+    return consumer;
+  }
 
-    public int getRetries() {
-        return retries;
-    }
+  public void setConsumer(Consumer consumer) {
+    this.consumer = consumer;
+  }
 
-    public void setRetries(int retries) {
-        this.retries = retries;
-    }
+  public int getRetries() {
+    return retries;
+  }
 
-    public int getBufferMemory() {
-        return bufferMemory;
-    }
+  public void setRetries(int retries) {
+    this.retries = retries;
+  }
 
-    public void setBufferMemory(int bufferMemory) {
-        this.bufferMemory = bufferMemory;
-    }
+  public int getBufferMemory() {
+    return bufferMemory;
+  }
 
-    public int getLingerMS() {
-        return lingerMS;
-    }
+  public void setBufferMemory(int bufferMemory) {
+    this.bufferMemory = bufferMemory;
+  }
 
-    public void setLingerMS(int lingerMS) {
-        this.lingerMS = lingerMS;
-    }
+  public int getLingerMS() {
+    return lingerMS;
+  }
 
-    public boolean getEnableAutoCommit() {
-        return enableAutoCommit;
-    }
+  public void setLingerMS(int lingerMS) {
+    this.lingerMS = lingerMS;
+  }
 
-    public void setEnableAutoCommit(boolean enableAutoCommit) {
-        this.enableAutoCommit = enableAutoCommit;
-    }
+  public boolean getEnableAutoCommit() {
+    return enableAutoCommit;
+  }
 
-    public int getBatchSize() {
-        return batchSize;
-    }
+  public void setEnableAutoCommit(boolean enableAutoCommit) {
+    this.enableAutoCommit = enableAutoCommit;
+  }
 
-    public void setBatchSize(int batchSize) {
-        this.batchSize = batchSize;
-    }
+  public int getBatchSize() {
+    return batchSize;
+  }
 
-    public String getKeySerializer() {
-        return keySerializer;
-    }
+  public void setBatchSize(int batchSize) {
+    this.batchSize = batchSize;
+  }
 
-    public void setKeySerializer(String keySerializer) {
-        this.keySerializer = keySerializer;
-    }
+  public String getKeySerializer() {
+    return keySerializer;
+  }
 
-    public String getValueSerializer() {
-        return valueSerializer;
-    }
+  public void setKeySerializer(String keySerializer) {
+    this.keySerializer = keySerializer;
+  }
 
-    public void setValueSerializer(String valueSerializer) {
-        this.valueSerializer = valueSerializer;
-    }
+  public String getValueSerializer() {
+    return valueSerializer;
+  }
 
-    public String getKeyDeserializer() {
-        return keyDeserializer;
-    }
+  public void setValueSerializer(String valueSerializer) {
+    this.valueSerializer = valueSerializer;
+  }
 
-    public void setKeyDeserializer(String keyDeserializer) {
-        this.keyDeserializer = keyDeserializer;
-    }
+  public String getKeyDeserializer() {
+    return keyDeserializer;
+  }
 
-    public String getValueDeserializer() {
-        return valueDeserializer;
-    }
+  public void setKeyDeserializer(String keyDeserializer) {
+    this.keyDeserializer = keyDeserializer;
+  }
 
-    public void setValueDeserializer(String valueDeserializer) {
-        this.valueDeserializer = valueDeserializer;
-    }
+  public String getValueDeserializer() {
+    return valueDeserializer;
+  }
+
+  public void setValueDeserializer(String valueDeserializer) {
+    this.valueDeserializer = valueDeserializer;
+  }
+
+  @Data
+  public class Consumer {
+    /**
+     * 消费者的组id，默认是default
+     */
+    private String groupId = "default";
 
     /**
-     * kafka生产者ack机制
+     * 发生消费错误时重试次数，超过这个次数后会提交offset，需自行处理
      */
-    private String acks = "1";
+    private int errorRetry = 3;
 
-    /**
-     * kafka并发数量
-     */
-    private String concurrency = "12";
+    private String autoOffsetReset = "latest";
 
-    private String bootstrapServers;
-
-    private String groupID;
-
-    private int retries = 3;
-
-    private int bufferMemory = 1024 * 1024 * 32;
-
-    private int lingerMS = 5;
-
-    private boolean enableAutoCommit = true;
-
-    private int batchSize = 1024 * 16;
-
-    /**
-     * Key序列化
-     */
-    private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
-
-    /**
-     * Value序列化
-     */
-    private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
-
-    /**
-     * Key反序列化
-     */
-    private String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
-
-    /**
-     * Value反序列化
-     */
-    private String valueDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
+  }
 
 }
