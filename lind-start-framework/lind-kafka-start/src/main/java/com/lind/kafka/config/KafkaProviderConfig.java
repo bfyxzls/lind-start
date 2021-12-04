@@ -86,7 +86,9 @@ public class KafkaProviderConfig {
     public DefaultKafkaConsumerFactory<String, String> kafkaConsumerFactory() {
         Map<String, Object> paraMap = new HashMap<>();
         paraMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getBootstrapServers());
-        paraMap.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getGroupID());
+        paraMap.put(ConsumerConfig.GROUP_ID_CONFIG, kafkaProperties.getConsumer().getGroupId());
+        paraMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, kafkaProperties.getConsumer().getAutoOffsetReset());
+
         paraMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getKeyDeserializer());
         paraMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getValueDeserializer());
         paraMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, kafkaProperties.getEnableAutoCommit());
