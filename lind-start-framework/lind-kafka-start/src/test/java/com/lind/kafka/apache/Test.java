@@ -17,9 +17,9 @@ public class Test {
     @org.junit.Test
     public void publish() {
         // 没有配置key，消息都分发到多个partition
-        Producer.publishEvent("KC_USER_DELETE", "hello1");
-        Producer.publishEvent("topic001", "hello2");
-        Producer.publishEvent("topic001", "hello3");
+        Producer.publishEvent("lind_demo", "hello1");
+        Producer.publishEvent("lind_demo", "hello2");
+        Producer.publishEvent("lind_demo", "hello3");
     }
 
     @org.junit.Test

@@ -24,7 +24,7 @@ public class HttpUtilsTest {
     while (true) {
       String url = "https://devcas.pkulaw.com:18081/auth/realms/master";
       int status = HttpUtil.createGet(url).execute().getStatus();
-      if (status >= 500)
+      if (status >= 400)
         log.warn("warn:" + status);
       try {
         Thread.sleep(50);

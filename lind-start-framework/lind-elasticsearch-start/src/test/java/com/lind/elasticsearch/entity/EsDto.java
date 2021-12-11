@@ -1,6 +1,5 @@
-package com.lind.elasticsearch;
+package com.lind.elasticsearch.entity;
 
-import com.lind.elasticsearch.entity.EsBaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +18,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "esdto", shards = 1, replicas = 0)
+@Document(indexName = "ds_dto_#{@environment.getProperty('spring.profiles.active')}")
 @Setting(settingPath = "mapping/es-setting.json")//@Setting里的配置会覆盖@Document里的配置
 public class EsDto extends EsBaseEntity implements Serializable {
 
@@ -42,7 +41,7 @@ public class EsDto extends EsBaseEntity implements Serializable {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    static class Address {
+    public static class Address {
         @Field(type = FieldType.Keyword)
         private String province;
         @Field(type = FieldType.Keyword)

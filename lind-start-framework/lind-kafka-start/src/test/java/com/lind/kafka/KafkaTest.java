@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ import java.util.Date;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @EnableMqKafka
-//@ActiveProfiles("dev")
+@ActiveProfiles("dev")
 public class KafkaTest {
     @Autowired
     MessageSender messageSender;
@@ -29,7 +30,7 @@ public class KafkaTest {
         UserDTO userDTO = new UserDTO();
         userDTO.setTitle("世界你好" + new Date());
         testMessageEntity.setData(userDTO);
-        messageSender.send("demo", testMessageEntity);
+        messageSender.send("lind-demo", testMessageEntity);
         Thread.sleep(10000);
     }
 

@@ -1,3 +1,66 @@
+# 客户端版本问题
+es依赖包我们通常指两个org.elasticsearch:elasticsearch和org.elasticsearch.client:elasticsearch-rest-high-level-client，这两个包的版本需要对应上，你的索引初始化才能生效，否则你在实体上添加的@Setting,@Mapping是不会生效的。
+```
+<dependency>
+      <groupId>org.elasticsearch.client</groupId>
+      <artifactId>elasticsearch-rest-high-level-client</artifactId>
+      <version>6.5.4</version>
+  </dependency>
+  <!--  elasticsearch对应兼容版本为6.8.7-->
+  <dependency>
+      <groupId>org.elasticsearch</groupId>
+      <artifactId>elasticsearch</artifactId>
+      <version>6.8.7</version>
+  </dependency>
+```
+* 实体定义
+```
+@Document(indexName = "kc_event_logger")
+@Setting(settingPath = "mapping/es-setting.json")
+@Data
+public class EventRecord implements Serializable {
+ public static final String dateTimeFormat =
+      "yyyy||yyyyMM||yyyy.MM||yyyy/MM||yyyy-MM||yyyyMMdd||yyyy.MM.dd||yyyy/MM/dd||yyyy-MM-dd||yyyy-MM-dd HH:mm:ss||" +
+          "yyyy.MM.dd HH:mm:ss||yyyy/MM/dd HH:mm:ss||yyyy-MM-dd HH:mm:ss.SSS||yyyy.MM.dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS";
+  @Id
+  @JsonIgnore
+  private final String id = UUID.randomUUID().toString();
+  @Field(type = FieldType.Keyword)
+  private String realmId;
+  @Field(type = FieldType.Keyword)
+  private String type;
+  /**
+   * 时间
+   */
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  @Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
+  private Date createTime;
+}
+```
+* 生成的索引是正常的，keycloak与text是明确指明的
+```
+{
+    "mappings":{
+        "eventrecord":{
+            "properties":{
+                "clientId":{
+                    "type":"keyword"
+                },
+                "realmId":{
+                    "type":"keyword"
+                },
+                "createTime":{
+                    "format":"yyyy||yyyyMM||yyyy.MM||yyyy/MM||yyyy-MM||yyyyMMdd||yyyy.MM.dd||yyyy/MM/dd||yyyy-MM-dd||yyyy-MM-dd HH:mm:ss||yyyy.MM.dd HH:mm:ss||yyyy/MM/dd HH:mm:ss||yyyy-MM-dd HH:mm:ss.SSS||yyyy.MM.dd HH:mm:ss.SSS||yyyy/MM/dd HH:mm:ss.SSS",
+                    "type":"date"
+                },
+                "ipAddress":{
+                    "type":"keyword"
+                }    
+            }
+        }
+    }
+}
+```
 # 作用
 对es的增删改进行封装，提取了实体基类`EsBaseEntity`，提供了公用的字段，id统一赋值，`createUser,createTime,updateUser,updateTime`通过拦截器统一进行赋值；提出了`EsAuditorAware`接口，使用者可以实现这个接口来返回当前登录的用户信息。
 # 两个仓储对象
