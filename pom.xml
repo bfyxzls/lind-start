@@ -12,6 +12,7 @@
         <module>a-start-test</module>
         <module>lind-start-framework</module>
         <module>lind-start-framework/lind-nacos-start</module>
+        <module>log4j-bug-rmi</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

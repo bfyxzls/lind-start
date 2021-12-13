@@ -1,6 +1,7 @@
 package com.lind.start.test;
 
 import com.lind.common.jackson.convert.EnableJacksonFormatting;
+import lombok.SneakyThrows;
 import org.aesh.command.Command;
 import org.aesh.command.CommandDefinition;
 import org.aesh.command.CommandException;
@@ -17,6 +18,7 @@ import java.io.IOException;
 //@EnableRunTime
 @EnableJacksonFormatting
 public class TestApplication {
+  @SneakyThrows
   public static void main(String[] args) throws CommandRegistryException, IOException {
     SpringApplication.run(TestApplication.class, args);
     // 命令行输入
@@ -34,7 +36,9 @@ public class TestApplication {
 //    console.setPrompt("[lind@aesh]$ ");
 //    console.start();
 
+
   }
+
 
   /**
    * 命令行工具
