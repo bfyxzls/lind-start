@@ -86,9 +86,9 @@ public class HttpUtilsTest {
     System.out.println(httpResponse.body());
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test()
   public void urlEncodeError() {
-    String url = "https://www.pkulaw.com/chl/ded30be7a11fdecbbdfb.html?keyword=股权转让所得 个人所得税管理办法";
+    String url = "https://www.pkulaw.com/law/adv?FilterItems.IssueDate=%7BStart:2021.11.01,End:2021.11.30%7D&FilterItems.EffectivenessDic=XR12&kc=1";
     URI.create(url);
 
   }

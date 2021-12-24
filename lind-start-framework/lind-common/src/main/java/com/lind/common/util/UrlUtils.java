@@ -5,6 +5,7 @@ import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,5 +45,31 @@ public class UrlUtils {
       return false;
     }
     return pathMatcher.match(patternPath, requestPath);
+  }
+
+  /**
+   * 格式化url.
+   *
+   * @param url
+   * @return
+   */
+  public static URI formatUrl(String url) {
+    return URI.create(removeUrlSpaceParams(url));
+  }
+
+  /**
+   * 去掉非法字符
+   *
+   * @param needValid
+   * @return
+   */
+  public static String removeUrlSpaceParams(String needValid) {
+    needValid = needValid.replaceAll(" ", "%20");
+    needValid = needValid.replaceAll("<", "%3C");
+    needValid = needValid.replaceAll(">", "%3E");
+    needValid = needValid.replaceAll("\\{", "%7B");
+    needValid = needValid.replaceAll("}", "%7D");
+    needValid = needValid.replaceAll("\"", "%20");
+    return needValid;
   }
 }

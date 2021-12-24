@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 集合操作
@@ -26,6 +27,10 @@ import java.util.stream.Collectors;
 public class CollectionTest {
   public static final String USER = "user";
   List<Student> students = new ArrayList<Student>();
+
+  public static void peekFun(Map<String, String> map) {
+    map.put("NAME", map.get("name").toUpperCase());
+  }
 
   @Test
   public void test1() {
@@ -137,6 +142,22 @@ public class CollectionTest {
     }
   }
 
+  @Test
+  public void peekAndMap1() {
+    Stream.of("one", "two", "three", "four").peek(u -> u.toUpperCase())
+        .forEach(System.out::println);
+  }
+
+  @Test
+  public void peekAndMap2() {
+    List<Map<String, String>> list = new ArrayList<>();
+    Map<String, String> map=new HashMap<>();
+    map.put("name", "zzl");
+    list.add(map);
+    list.stream().peek(CollectionTest::peekFun)
+        .forEach(System.out::println);
+  }
+
   @Data
   @ToString
   @AllArgsConstructor
@@ -146,13 +167,11 @@ public class CollectionTest {
     private String groupAccountName;
   }
 
-
   @NoArgsConstructor
   @AllArgsConstructor
   @Getter
   class Column {
     private String name;
   }
-
 
 }
