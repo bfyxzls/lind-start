@@ -203,13 +203,13 @@
 					var login = JSON.parse(localStorage.getItem("login"));
 					if (login) {
 						if(login = 0) {
-							window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
+							window.location.href = /*[[@{/login.shtml}]]*/ 'common/login.ftl';
 							return false;
 						} else {
 							return false;
 						}
 					} else {
-						window.location.href = /*[[@{/login.shtml}]]*/ './login.html';
+						window.location.href = /*[[@{/login.shtml}]]*/ 'common/login.ftl';
 						return false;
 					}
 				});

@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("free")
+@RequestMapping("f1")
 public class F1Controller {
 
   @RequestMapping("list")
