@@ -1,6 +1,7 @@
 package com.lind.lindmanager.controller;
 
 import com.lind.common.util.FreeMarkerUtil;
+import com.lind.lindmanager.util.FreeMakerUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,8 +34,18 @@ public class F1Controller {
     response.getWriter().write(html);
   }
 
+  @RequestMapping("error1")
+  public ResponseEntity error() {
+    return ResponseEntity.ok(FreeMakerUtils.outHtml("error/error.ftl", "v1", null));
+  }
+
+  @RequestMapping(value = "add")
+  public String add() {
+    return "f1/create";
+  }
+
   @PostMapping(value = "add")
-  public ResponseEntity selectUser(@RequestParam Map<String, Object> map) {
+  public ResponseEntity add(@RequestParam Map<String, Object> map) {
     return ResponseEntity.ok(map);
   }
 

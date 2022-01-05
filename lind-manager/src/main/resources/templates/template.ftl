@@ -38,11 +38,12 @@
         <script src="https://cdn.staticfile.org/iview/3.1.5/iview.min.js"></script>
     </head>
     <body>
-    <p>
-        ${bodyClass}
-    </p>
-    <h1 class="${mainCss}">FreeMaker模板页面</h1>
-    <#nested "form">
+
+        <p>
+            ${bodyClass}
+        </p>
+        <h1 class="${mainCss}">FreeMaker模板页面</h1>
+        <#nested "form">
     </body>
     </html>
 </#macro>
