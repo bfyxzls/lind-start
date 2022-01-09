@@ -1,26 +1,106 @@
-<!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="/common/common :: head('登录')"></head>
-<body class="login-bg">
-    
-    <div class="login">
-        <div class="message">登录</div>
-        <div id="darkbannerwrap"></div>
-        
-        <form method="post" class="layui-form"  action="/login" method="post" >
-            <input name="username" type="text" lay-verType="tips" lay-verify="required" class="layui-input" placeholder="用户名" />
-            <hr class="hr15">
-            <input name="password" type="password" lay-verType="tips" lay-verify="required" class="layui-input" placeholder="密码" />
-            <hr class="hr15">
-            <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit" />
-            <hr class="hr20" >
-            <div>
-                ${message}
-            </div>
-        </form>
-    </div>
 
-    <div th:include="/common/common :: commonJS" th:remove="tag"></div>
-
-</body>
-</html>
+<#import "../template_login.ftl" as layout>
+<@layout.registrationLayout bodyClass="<span style='color:red'>修改模板里的变量</span>";section>
+<#if section = "head">
+登录
+<#elseif section = "form">
+<div id="login" class="flex" style="padding: 10% 10%;">
+    <!-- 实例化对象里面可以开始使用iview标签了（注意更改） -->
+    <Card style="width:350px">
+        <h1 style="color: #2d8cf0;">Login</h1>
+        <br>
+        <!-- 下面的:model和:rules要修改的话记得修改vue中的data() -->
+        <i-form ref="form" :model="form" :rules="ruleInline" inline method="POST">
+            <form-item prop="user">
+                <poptip trigger="focus" placement="right">
+                    <i-input type="text" clearable v-model="form.user" placeholder="Username" size="large">
+                        <icon type="ios-person-outline" slot="prepend"></icon>
+                    </i-input>
+                    <div slot="content">请输入用户名</div>
+                </poptip>
+            </form-item>
+            <br>
+            <form-item prop="password">
+                <poptip trigger="focus" placement="right">
+                    <i-input type="password" password v-model="form.password" placeholder="Password" size="large">
+                        <icon type="ios-lock-outline" slot="prepend"></icon>
+                    </i-input>
+                    <div slot="content">请输入密码</div>
+                </poptip>
+            </form-item>
+            <br>
+            <form-item>
+                <i-button type="primary" size="large" @click="handleSubmit('form')">login</i-button>
+                &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <i-button type="primary" size="large" @click="handleReset('form')">Reset</i-button>
+            </form-item>
+        </i-form>
+        <a href="/register" style="font-size: 12px;left: 10%;">没有账号？前去注册</a>
+    </card>
+</div>
+<script>
+    new Vue({
+        el: '#login',
+        data() {
+            return {
+                form: {
+                    user: '',
+                    password: ''
+                },
+                // 下面是验证方法
+                ruleInline: {
+                    user: [{
+                        required: true,
+                        message: 'Please fill in the user name',
+                        trigger: 'blur'
+                    }],
+                    password: [{
+                        required: true,
+                        message: 'Please fill in the password.',
+                        trigger: 'blur'
+                    }, {
+                        type: 'string',
+                        min: 6,
+                        message: 'The password length cannot be less than 6 bits',
+                        trigger: 'blur'
+                    }],
+                }
+            }
+        },
+        methods: {
+            handleSubmit(name) {
+                // 表单验证并弹窗提示
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        this.submit(); //执行提交函数
+                        this.$Message.success('Success!');
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                })
+            },
+            handleReset(name) {
+                // 复位表单
+                this.$refs[name].resetFields();
+            },
+            submit() {
+                // 这里使用axios将数据传到后台
+                axios.post('/login', {
+                    'data': this.$data.form,
+                })
+                    .then(res => {
+                        // 这里的后台返回的是js字符串，用一下方式执行
+                        // 当然你也可以换其他方法
+                        // 将js字符串代码放入new Function()
+                        var js = new Function(res.data);
+                        // 调用触发
+                        js();
+                    }).catch(function(error) {
+                    console.log(error);
+                });
+            }
+        }
+    })
+</script>
+</#if>
+</@layout.registrationLayout>

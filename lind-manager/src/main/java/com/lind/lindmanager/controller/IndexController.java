@@ -19,7 +19,7 @@ public class IndexController {
      * @author Wang926454
      * @date 2019/1/24 19:27
      */
-    @RequestMapping("{url}.shtml")
+    @RequestMapping("{url}")
     public String page(@PathVariable("url") String url) {
         return url;
     }
@@ -32,7 +32,7 @@ public class IndexController {
      * @author Wang926454
      * @date 2019/1/24 19:27
      */
-    @RequestMapping("{module}/{url}.shtml")
+    @RequestMapping("{module}/{url}")
     public String page(@PathVariable("module") String module, @PathVariable("url") String url) {
         return module + "/" + url;
     }
@@ -45,7 +45,7 @@ public class IndexController {
      * @author Wang926454
      * @date 2019/1/25 19:35
      */
-    @RequestMapping("{module}/{module2}/{url}.shtml")
+    @RequestMapping("{module}/{module2}/{url}")
     public String page(@PathVariable("module") String module, @PathVariable("module2") String module2,
                        @PathVariable("url") String url) {
         return module + "/" + module2 + "/" + url;
