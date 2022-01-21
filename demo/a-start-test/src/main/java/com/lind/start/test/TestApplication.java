@@ -1,6 +1,5 @@
 package com.lind.start.test;
 
-import com.lind.common.jackson.convert.EnableJacksonFormatting;
 import lombok.SneakyThrows;
 import org.aesh.command.Command;
 import org.aesh.command.CommandDefinition;
@@ -15,8 +14,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
 @SpringBootApplication
-//@EnableRunTime
-@EnableJacksonFormatting
 public class TestApplication {
   @SneakyThrows
   public static void main(String[] args) throws CommandRegistryException, IOException {

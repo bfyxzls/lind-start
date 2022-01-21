@@ -7,17 +7,19 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
 <dependency>
     <groupId>com.pkulaw</groupId>
     <artifactId>pkulaw-uaa-jwt-start</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 ## 登录
 ```$xslt
-/login post
+POST JSON /login
 {
     "username":"Jack",
     "password":"123456"
 }
 ```
+![](./assets/readme-1642742553808.png)
+
 ## 使用
 1. 认证和授权的服务引用lind-uaa-jwt-start之后，需要实现ResourcePermissionService和UserDetailsService接口
 2. 其它业务服务直接引用lind-uaa-jwt-start之后，通过SecurityUtil来获取当前登陆的用户信息

@@ -41,7 +41,7 @@ public final class PermitAllUrl {
             "/execution/**",
             "/editor/**",
             "/logo,png",
-            "/test",
+            "/refresh",
             "/test-verify");
 
     /**

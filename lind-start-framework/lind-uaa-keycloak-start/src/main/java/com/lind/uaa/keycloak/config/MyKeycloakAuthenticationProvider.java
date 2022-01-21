@@ -11,6 +11,8 @@ import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.keycloak.adapters.springsecurity.account.KeycloakRole;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -31,17 +33,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.lind.uaa.keycloak.config.Constant.VERIFY_SESSION;
-
 /**
  * 重写token与认证的适配.
- * 本方法只做token有效性校验，没有做合法性校验(即是否由私钥颁发的token)
  * 20210716添加token在线校验功能
  */
 @RequiredArgsConstructor
 public class MyKeycloakAuthenticationProvider implements AuthenticationProvider {
+  private final static Logger logger = LoggerFactory.getLogger(MyKeycloakAuthenticationProvider.class);
   private final KeycloakSpringBootProperties keycloakSpringBootProperties;
   private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
+  private String verify = "/realms/fabao/protocol/openid-connect/token/introspect";
   private HttpServletRequest request;
   private HttpServletResponse response;
   private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -60,7 +61,8 @@ public class MyKeycloakAuthenticationProvider implements AuthenticationProvider 
     params.put("client_id", keycloakSpringBootProperties.getResource());
     params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
     params.put("token", tokenString);
-    String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl() + VERIFY_SESSION, params);
+    String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl() + verify, params);
+    logger.info("token.verify:" + verifyResult);
     JSONObject jsonObj = JSON.parseObject(verifyResult);
     System.out.println("access_token:" + tokenString);
     // 验证在线token，如果已退出，直接401，由业务方自己跳转

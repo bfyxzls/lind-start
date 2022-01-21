@@ -40,7 +40,6 @@ public class KeycloakSessionStateInterceptor implements HandlerInterceptor {
     if (handler instanceof HandlerMethod) {
 
       // 从kc跳回来后，不走这个逻辑，避免反复跳
-      log.info("kc={}", request.getParameter("kc"));
       if (request.getParameter("kc") == null) {
         String isLogin = "";
         if (request.getCookies() != null) {
@@ -52,8 +51,6 @@ public class KeycloakSessionStateInterceptor implements HandlerInterceptor {
             }
           }
         }
-        log.info("islogin:{}", isLogin);
-
         // 重定向到kc写入登录状态
         String url = keycloakSpringBootProperties.getAuthServerUrl() + "/realms/fabao/sms/kc-sessions?"
             + COOKIE_IS_LOGIN + "=" + isLogin

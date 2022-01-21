@@ -12,6 +12,11 @@
   * 之前的尝试MappingJackson2HttpMessageConverter
   * JsonSerializer的实现
 
+# 前后分离项目
+```
+keycloak.bearer-only: true #如果没有权限直接401，前后分离项目使用它，当后端返回401时，前端自己去KC认证，这个值为false时，属于前后一体模块，将会进行跳转KC登录
+```
+
 
 # 对接KC统一认证中心-Springboot版
 ## pom.xml添加引用
@@ -21,27 +26,29 @@
           <dependency>
             <groupId>org.keycloak.bom</groupId>
             <artifactId>keycloak-adapter-bom</artifactId>
-            <version>11.0.3</version>
+            <version>14.0.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
     </dependencies>
 </dependencyManagement>
 <dependency>
-        <groupId>com.pkulaw</groupId>
-        <artifactId>pkulaw-uaa-keycloak-start</artifactId>
-        <version>1.0.0</version>
+    <groupId>com.pkulaw</groupId>
+    <artifactId>pkulaw-uaa-keycloak-start</artifactId>
+    <version>1.0.0</version>
 </dependency>
 ```
 ## 相关配置
 ```$xslt
 uaa:
-  permitAll: /users # 开放的地址
-  redirectUri: http://192.168.3.181:9090/about # 回调地址，为空不表直接在页面上输出token
+  permitAll: /users # 开放的地址，它们将会被动调用`kc-session`这个接口完成用户状态同步
+  redirectUri: http://192.168.3.181:9090/about # 回调地址，token会追加在这个地址上，为空表示直接在页面上输出token
 keycloak:
   auth-server-url: http://devcas.pkulaw.com:18081/auth # kc服务器地址
   realm: demo # 域名称
   resource: demoproduct # 客户端（接入方）名称
+  client-key-password: ec0fd1c6-68b0-4c39-a9fa-c3be25c8ef01 # 客户端密钥，非远程授权时，可以只使用这个
+  credentials.secret: ec0fd1c6-68b0-4c39-a9fa-c3be25c8ef01 # 客户端密钥，远程授权时（policy-enforcer-config.enforcement-mode: ENFORCING），需要使用它
   public-client: true # 如果设置为true，则适配器不会将客户端的凭据发送到Keycloak。 这是可选的。 默认值为false。
   principal-attribute: preferred_username
   use-resource-role-mappings: false # 如果设置为true，则适配器将在令牌内部查找用户的应用程序级角色映射。 如果为false，它将查看用户角色映射的领域级别。 这是可选的。 默认值为false。
@@ -138,6 +145,8 @@ uaa
     * 认证成功后，直接将token信息输出的接口`token/authorizationCodeResponse` 
 * 通过`KeycloakSessionStateInterceptor`组件，实现了对同一浏览器登录的用户状态的同步，它会与kc服务端进行通讯 
 
+## bearer-only配置
+bearer-only: true表示当没有权限时，会直接返回401，而不会跳到KC去，这一般用到前后分离的项目中
 ## 多端登录的共享状态接口
 * https://devcas.pkulaw.com:18081/auth/realms/fabao/sms/kc-sessions?client={clientName}&redirect_uri=http://192.168.3.181:9090/token/authorizationCodeRedirect&refer_uri=http://192.168.3.181:9090/about
 上面接口将实现同一浏览器，多个客户端应用的共享登录，下面介绍一下相关参数

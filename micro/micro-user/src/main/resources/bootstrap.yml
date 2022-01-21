@@ -1,0 +1,13 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: micro-user
+  profiles.active: dev
+#动态刷新配置 ---需要忽略权限拦截
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
+

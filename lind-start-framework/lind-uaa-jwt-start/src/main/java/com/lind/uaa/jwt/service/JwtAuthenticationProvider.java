@@ -24,41 +24,44 @@ import java.util.Calendar;
  */
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    JwtConfig jwtConfig;
-    private JwtUserService userService;
+  @Autowired
+  JwtConfig jwtConfig;
+  private JwtUserService userService;
 
-    public JwtAuthenticationProvider(JwtUserService userService) {
-        this.userService = userService;
-    }
+  public JwtAuthenticationProvider(JwtUserService userService) {
+    this.userService = userService;
+  }
 
-    @SneakyThrows
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();
-        if (jwt.getExpiresAt().before(Calendar.getInstance().getTime()))
-            throw new NonceExpiredException("Token expires");
-        String username = jwt.getSubject();
-        UserDetails user = new ObjectMapper().readValue(jwt.getClaim("user").asString(), ResourceUser.class);
-        if (user == null)
-            throw new NonceExpiredException("Token expires");
-        try {
-            // 验证jwt token的合法性.
-            Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
-            JWTVerifier verifier = JWT.require(algorithm)
-                    .withSubject(username)
-                    .build();
-            verifier.verify(jwt.getToken());
-        } catch (Exception e) {
-            throw new BadCredentialsException("JWT token verify fail", e);
-        }
-        JwtAuthenticationToken token = new JwtAuthenticationToken(user, jwt, user.getAuthorities());
-        return token;
+  @SneakyThrows
+  @Override
+  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();
+    if (jwt.getExpiresAt().before(Calendar.getInstance().getTime()))
+      throw new NonceExpiredException("Token expires");
+    String username = jwt.getSubject();
+    if (jwt.getClaim("user").asString() == null) {
+      throw new NonceExpiredException("Token illegality");
     }
+    UserDetails user = new ObjectMapper().readValue(jwt.getClaim("user").asString(), ResourceUser.class);
+    if (user == null)
+      throw new NonceExpiredException("Token illegality");
+    try {
+      // 验证jwt token的合法性.
+      Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
+      JWTVerifier verifier = JWT.require(algorithm)
+          .withSubject(username)
+          .build();
+      verifier.verify(jwt.getToken());
+    } catch (Exception e) {
+      throw new BadCredentialsException("JWT token verify fail", e);
+    }
+    JwtAuthenticationToken token = new JwtAuthenticationToken(user, jwt, user.getAuthorities());
+    return token;
+  }
 
-    @Override
-    public boolean supports(Class<?> authentication) {
-        return authentication.isAssignableFrom(JwtAuthenticationToken.class);
-    }
+  @Override
+  public boolean supports(Class<?> authentication) {
+    return authentication.isAssignableFrom(JwtAuthenticationToken.class);
+  }
 
 }

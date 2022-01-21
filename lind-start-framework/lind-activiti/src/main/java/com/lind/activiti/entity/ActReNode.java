@@ -1,7 +1,6 @@
 package com.lind.activiti.entity;
 
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.swagger.annotations.ApiModel;
 
 import javax.persistence.Entity;
@@ -12,7 +11,6 @@ import java.util.Date;
 /**
  * 节点配置表.
  */
-@SuppressFBWarnings({"EI_EXPOSE_REP2"})
 @Table(name = "act_re_node")
 @Entity
 @ApiModel("节点配置")

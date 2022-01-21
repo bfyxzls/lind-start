@@ -25,7 +25,8 @@ public final class PermitAllUrl {
             "/webjars/**",
             "/webjars/**",
             "/oauth/token",
-            "/oauth/test");
+            "/oauth/test",
+            "/refresh");
 
     /**
      * 需要放开权限的url

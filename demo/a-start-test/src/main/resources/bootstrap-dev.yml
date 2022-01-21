@@ -13,6 +13,11 @@ lind:
       registryKey: lind-lock
 
 spring:
+  activiti:
+    check-process-definitions: false
+    font:
+      activityFontName: 宋体
+      labelFontName: 宋体
   # Redis
   redis:
     host: 127.0.0.1
@@ -47,7 +52,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://192.168.4.26:3306/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
 
