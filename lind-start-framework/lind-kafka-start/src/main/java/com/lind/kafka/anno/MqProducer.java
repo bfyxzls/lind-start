@@ -23,6 +23,4 @@ public @interface  MqProducer {
 
     @AliasFor("name")
     String value() default "";
-
-
 }

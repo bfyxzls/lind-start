@@ -6,6 +6,9 @@ import com.lind.kafka.entity.MessageEntity;
 
 @MqProducer
 public interface MessageDataSend {
-    @MqSend(topic = "ok_bobo")
-    void sendDataMessage(MessageEntity<UserDTO> messageEntity);
+  @MqSend(topic = "ok_bobo")
+  void sendDataMessage(MessageEntity<UserDTO> messageEntity);
+
+  @MqSend(topic = "ok_bobo_key")
+  void sendDataMessage(MessageEntity<UserDTO> messageEntity, String key);
 }

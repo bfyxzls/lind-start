@@ -24,6 +24,11 @@ public @interface MqSend {
     String topic();
 
     /**
+     * 主题的key
+     * @return
+     */
+    String key() default "";
+    /**
      * 消息发送成功处理函数
      *
      * @return

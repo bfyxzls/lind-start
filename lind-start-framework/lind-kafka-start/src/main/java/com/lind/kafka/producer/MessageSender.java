@@ -10,13 +10,19 @@ import com.lind.kafka.handler.SuccessHandler;
  **/
 public interface MessageSender<T extends MessageEntity> {
 
-    void send(String topic, T message) throws JsonProcessingException;
+  void send(String topic, T message) throws JsonProcessingException;
 
-    void send(String topic, T message, SuccessHandler successHandler) throws JsonProcessingException;
+  void send(String topic, T message, SuccessHandler successHandler) throws JsonProcessingException;
 
-    void send(String topic, T message, FailureHandler failureHandler) throws JsonProcessingException;
+  void send(String topic, T message, FailureHandler failureHandler) throws JsonProcessingException;
 
-    void send(String topic, T message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException;
+  void send(String topic, T message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException;
 
+  void send(String topic, String key, T message) throws JsonProcessingException;
 
+  void send(String topic, String key, T message, SuccessHandler successHandler) throws JsonProcessingException;
+
+  void send(String topic, String key, T message, FailureHandler failureHandler) throws JsonProcessingException;
+
+  void send(String topic, String key, T message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException;
 }
