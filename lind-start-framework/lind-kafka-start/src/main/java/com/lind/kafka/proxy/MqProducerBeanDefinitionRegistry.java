@@ -29,7 +29,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * 装载目录下的bean，为MessageProvider注释的.
+ * 装载目录下的bean，为MessageProvider注册动态代理.
+ * 注册FactoryBean.
  **/
 @ConditionalOnClass(EnableMqKafka.class)
 public class MqProducerBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {

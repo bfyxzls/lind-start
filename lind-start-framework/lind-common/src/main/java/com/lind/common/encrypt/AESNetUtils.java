@@ -9,7 +9,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * 适合于.net和java共同的AES加密
+ * 适合于.net和java共同的AES加密,24个字符
  */
 public class AESNetUtils {
     static final Logger log = LoggerFactory.getLogger(AESNetUtils.class);

@@ -19,4 +19,13 @@ public class AESNetUtilsTest {
         String code = AESNetUtils.encrypt("123456", "keyphrasekeyphra");
         System.out.println("base64:" + code);
     }
+
+    @Test
+    public void aes32() throws Exception {
+        String key="bf64d5aa94224916b34b081027e552f9";
+        String pass="e62afb133fbc1a16179119237e62ec1e";
+        String iv="5485693214587452";
+        String code = AESNet32Utils.decryptData(pass,key,iv);
+        System.out.println("base64:" + code);
+    }
 }
