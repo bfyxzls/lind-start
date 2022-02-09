@@ -12,21 +12,11 @@ import java.lang.reflect.Proxy;
  */
 @Slf4j
 public class FactoryBeanLearn implements FactoryBean {
+
+
   @Override
   public Object getObject() throws Exception {
-    //这个Bean是我们自己new的，这里我们就可以控制Bean的创建过程了
-    InvocationHandler handler = new InvocationHandler() {
-      @Override
-      public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        log.info("dynamic");
-        return method.invoke(args);
-
-      }
-    };
-    return Proxy.newProxyInstance(new FactoryBeanServiceImpl().getClass().getClassLoader(),
-        new Class[]{FactoryBeanService.class}, handler);
-
-
+    return new FactoryBeanServiceImpl();
   }
 
   @Override

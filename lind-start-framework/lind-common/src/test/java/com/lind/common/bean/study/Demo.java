@@ -1,19 +1,17 @@
 package com.lind.common.bean.study;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class Demo {
-  @Autowired
-  FactoryBeanService factoryBeanService;
+    @Autowired
+    FactoryBeanService factoryBeanService;
 
-  @Test
-  public void test() {
-    factoryBeanService.testFactoryBean();
-  }
+    @Test
+    public void test() {
+        ApplicationContext context = new AnnotationConfigApplicationContext(FactoryBeanLearnConfig.class);
+        context.getBean(FactoryBeanService.class).testFactoryBean();
+    }
 }
