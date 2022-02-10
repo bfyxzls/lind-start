@@ -24,12 +24,12 @@ import java.lang.reflect.Method;
  */
 @Slf4j
 @Data
-public class MqProducerProxy<T> implements InvocationHandler {
+public class MqProducerInvocationHandler<T> implements InvocationHandler {
 
   private MessageSender messageSender;
   private BeanFactory applicationContext;
 
-  public MqProducerProxy(BeanFactory applicationContext) {
+  public MqProducerInvocationHandler(BeanFactory applicationContext) {
     this.applicationContext = applicationContext;
     this.messageSender = applicationContext.getBean(MessageSender.class);
   }
