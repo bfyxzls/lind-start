@@ -11,14 +11,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 @EnableTryDo
 public class AspectTest {
-    @Autowired
-    com.lind.common.TestDemo aspectTest;
+  @Autowired
+  com.lind.common.TestDemo aspectTest;
 
-    @Test
-    public void tryDo() {
-        aspectTest.print();
-    }
-
+  @Test
+  public void tryDo() throws InterruptedException {
+    aspectTest.print();
+    Thread.sleep(20 * 1000);
+  }
 
 
 }

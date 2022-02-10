@@ -64,6 +64,15 @@ while (iterator.hasNext()) {
 }
 ```
 ##### ConcurrentSkipListMap 
+多线程下使用，支持更高的并发，ConcurrentSkipListMap 的存取时间是log（N），和线程数几乎无关，内部是SkipList（跳表）结构实现。
+
+##### 跳跃表（SkipList）
+![](./assets/readme-1644463722362.png)
+
+1. 多条链构成，是关键字升序排列的数据结构；
+2. 包含多个级别，一个head引用指向最高的级别，最低（底部）的级别，包含所有的key；
+3. 每一个级别都是其更低级别的子集，并且是有序的；
+4. 如果关键字 key在 级别level=i中出现，则，level<=i的链表中都会包含该关键字key；
 ```
 ConcurrentSkipListMap<String, String> concurrentSkipListMap = new ConcurrentSkipListMap<>();
 String a1 = concurrentSkipListMap.put("zzl", "zhangzhanling");
