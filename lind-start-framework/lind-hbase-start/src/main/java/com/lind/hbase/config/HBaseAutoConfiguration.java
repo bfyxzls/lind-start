@@ -54,7 +54,7 @@ public class HBaseAutoConfiguration {
                 conf.set("hbase.client.pause", String.valueOf(properties.getClient().getPause()));
             }
             if (Objects.nonNull(properties.getClient().getRetries().getNumbers())) {
-                //失败重试次数,默认31次
+                //失败重试次数,默认3次
                 conf.set("hbase.client.retries.number",
                         String.valueOf(properties.getClient().getRetries().getNumbers()));
             }

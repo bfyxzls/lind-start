@@ -1,4 +1,6 @@
+server.port: 8081
 spring:
+  application.name: micro-order
   cloud:
     nacos:
       discovery:
@@ -8,9 +10,3 @@ spring:
         server-addr: 192.168.60.138:80
         file-extension: yaml
         namespace: zzl
-        shared-configs[0]:
-          data-id: actuator.yaml
-          refresh: true
-        shared-configs[1]:
-          data-id: const.yaml
-          refresh: true

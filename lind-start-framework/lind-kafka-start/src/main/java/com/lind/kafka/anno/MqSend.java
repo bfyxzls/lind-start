@@ -24,7 +24,7 @@ public @interface MqSend {
     String topic();
 
     /**
-     * 主题的key
+     * 主题的key，相同的key会发到相同的partition
      * @return
      */
     String key() default "";

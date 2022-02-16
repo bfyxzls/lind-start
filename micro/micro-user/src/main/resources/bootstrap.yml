@@ -4,10 +4,42 @@ spring:
   application:
     name: micro-user
   profiles.active: dev
-#动态刷新配置 ---需要忽略权限拦截
-management:
-  endpoints:
-    web:
-      exposure:
-        include: refresh
-
+##动态刷新配置 ---需要忽略权限拦截
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include:
+#          - "*"  # 开放所有端点health，info，metrics，通过actuator/+端点名就可以获取相应的信息。默认打开health和info
+#  endpoint:
+#    health:
+#      show-details: always  #未开启actuator/health时，我们获取到的信息是{"status":"UP"}，status的值还有可能是 DOWN。开启后打印详细信息
+#
+## To disable Hystrix in Feign
+#hystrix的超时时间
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000 #用接口能够触发Hystrix服务降级处理的超时时间
+#ribbon的超时时间
+ribbon:
+  ReadTimeout: 3000
+  ConnectTimeout: 3000
+  MaxAutoRetries: 3 #最大自动重试次数，前3次会重试，之后开始走fallback
+  MaxAutoRetriesNextServer: 3 # 换实例重试次数
+  MaxTotalHttpConnections: 2000 # 最大http连接数，越大越好，但到到达一个临界点之后，就不会提高响应速度了
+  MaxConnectionsPerHost: 1000 # 每个host连接数
+  hystrix:
+    enabled: true
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    enabled: true
+    max-connections: 2000 # 默认值
+    max-connections-per-route: 50 # 默认值
