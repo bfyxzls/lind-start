@@ -1,18 +1,6 @@
 # 项目介绍 
 主要是由框架级工具进行封装，springboot的start包的使用，完成对工具包的自动注入。
 
-# springloaded热部署
-```$xslt
-java -javaagent:springloaded-1.2.5.RELEASE.jar -noverify -Dspringloaded="watchJars=a-start-hot-dependency-1.0.0.jar"   -jar a-start-hot-deploy-1.0.0.jar
-jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0.0.jar #更新
-```
-
-# 自定义start的方法
-1. 建立新的工程，主要用来实现某个功能，如redis,mongodb的封装，方便调用
-2. 添加配置类，有一些配置信息，可以在application.yml里去配置
-3. 添加AutoConfigure类，主要定义这个工具的规则
-4. 添加META-INF文件夹spring.factories文件，用来指定自动装配的AutoConfigure类
-
 # lind-start-framework项目介绍（springboot）
 以lind开头，以start结尾的项目，是其它项目的基础包
 1. lind-activiti 工作流组件
@@ -34,6 +22,18 @@ jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0
 1. lind-uaa-keycloak-start 基于keycloak的授权组件
 1. lind-uaa-start 用户授权组件
 1. lind-verification-code-start 验证码组件
+
+# springloaded热部署
+```$xslt
+java -javaagent:springloaded-1.2.5.RELEASE.jar -noverify -Dspringloaded="watchJars=a-start-hot-dependency-1.0.0.jar"   -jar a-start-hot-deploy-1.0.0.jar
+jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0.0.jar #更新
+```
+
+# 自定义start的方法
+1. 建立新的工程，主要用来实现某个功能，如redis,mongodb的封装，方便调用
+2. 添加配置类，有一些配置信息，可以在application.yml里去配置
+3. 添加AutoConfigure类，主要定义这个工具的规则
+4. 添加META-INF文件夹spring.factories文件，用来指定自动装配的AutoConfigure类
 
 # spring.factories
   springboot-start项目里，通过spring.factories进行自动注册，里面可以设置自动配置，自动监听，应用初始化，配置文件类型，环境变量等信息，
