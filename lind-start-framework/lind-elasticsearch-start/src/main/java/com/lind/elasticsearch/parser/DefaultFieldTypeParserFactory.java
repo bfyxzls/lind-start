@@ -7,11 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * @author 赵阳
- * @Description TODO
- * @date 2020/7/28 14:15
- **/
 @Slf4j
 public class DefaultFieldTypeParserFactory implements FieldTypeParserFactory {
 
