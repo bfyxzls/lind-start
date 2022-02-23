@@ -8,8 +8,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
+import org.springframework.util.SerializationUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 public class DateTimeTest {
   public static final String DATE_FORMAT_STR = "yyyy.MM.dd";
@@ -24,6 +30,51 @@ public class DateTimeTest {
       ex1.getStackTrace();
       return null;
     }
+  }
+
+  /**
+   * 函数功能描述:UTC时间转本地时间格式
+   *
+   * @param utcTime         UTC时间
+   * @param utcTimePatten   UTC时间格式
+   * @param localTimePatten 本地时间格式
+   * @return 本地时间格式的时间
+   * eg:utc2Local("2017-06-14T09:37:50.788+08:00", "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", "yyyy-MM-dd HH:mm:ss.SSS")
+   */
+  public static String utc2Local(String utcTime, String utcTimePatten, String localTimePatten) {
+    SimpleDateFormat utcFormater = new SimpleDateFormat(utcTimePatten);
+    utcFormater.setTimeZone(TimeZone.getTimeZone("UTC"));//时区定义并进行时间获取
+    Date gpsUTCDate = null;
+    try {
+      gpsUTCDate = utcFormater.parse(utcTime);
+    } catch (ParseException e) {
+      e.printStackTrace();
+      return utcTime;
+    }
+    SimpleDateFormat localFormater = new SimpleDateFormat(localTimePatten);
+    localFormater.setTimeZone(TimeZone.getDefault());
+    String localTime = localFormater.format(gpsUTCDate.getTime());
+    return localTime;
+  }
+
+  @Test
+  public void dateStringFormat() {
+    String utcTime = "2018-05-23T16:05:52.123+00:00";
+    String utcTimePatten = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    String localTimePatten = "yyyy-MM-dd HH:mm:ss.SSS";
+    System.out.println(utcTime);
+    System.out.println(utc2Local(utcTime,utcTimePatten, localTimePatten));
+  }
+
+  @Test
+  public void convertTest() {
+    Map<String, byte[]> dataRecord = new HashMap<>();
+    dataRecord.put("time", SerializationUtils.serialize("2022.11.01"));
+    byte[] result = SerializationUtils.serialize(dataRecord);
+    Map<String, byte[]> mapResult = (Map<String, byte[]>) SerializationUtils.deserialize(result);
+    Object date = SerializationUtils.deserialize(mapResult.get("time"));
+    System.out.println(date);
+
   }
 
   @Test
@@ -47,7 +98,7 @@ public class DateTimeTest {
   @Test
   public void dateTest() {
     System.out.println(
-    formatDate("1998-09-01"));
+        formatDate("1998-09-01"));
   }
 
 

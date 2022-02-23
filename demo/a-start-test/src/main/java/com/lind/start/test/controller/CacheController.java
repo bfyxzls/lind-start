@@ -37,6 +37,7 @@ public class CacheController {
   @Autowired
   RedisTemplate redisTemplate;
 
+
   @GetMapping("multi")
   public Info multi() {
     redisTemplate.opsForValue().set("hello", new Info("zzl", "lind", new Date()));

@@ -167,7 +167,8 @@ public class HBaseServiceImpl implements HBaseService {
                     byte[] qualifierArray = CellUtil.cloneQualifier(current);
                     byte[] valueArray = CellUtil.cloneValue(current);
                     if (ObjectUtils.isNotEmpty(valueArray)) {
-                        dataRecord.append(Bytes.toString(qualifierArray), SerializationUtils.deserialize(valueArray));
+                        Object obj= SerializationUtils.deserialize(valueArray);
+                        dataRecord.append(Bytes.toString(qualifierArray),obj);
                     }
                 }
                 dataRecord.setId(rowKey);
