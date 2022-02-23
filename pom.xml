@@ -11,13 +11,9 @@
     <modules>
         <module>demo/a-start-test</module>
         <module>lind-start-framework</module>
-        <module>lind-start-framework/lind-nacos-start</module>
         <module>demo/log4j-bug-rmi</module>
         <module>demo/java-agent-demo</module>
         <module>demo/a-start-activiti</module>
-        <module>micro/micro-product</module>
-        <module>micro/micro-user</module>
-        <module>micro/micro-order</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>

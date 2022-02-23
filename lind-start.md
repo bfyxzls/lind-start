@@ -1,5 +1,5 @@
 # 项目介绍 
-主要是由框架级目录和网关，授权，用例服务组成，用来介绍框架公用组件的定义和使用，start包的使用，nacos配置中心和注册中心的使用等。
+主要是由框架级工具进行封装，springboot的start包的使用，完成对工具包的自动注入。
 
 # springloaded热部署
 ```$xslt
@@ -13,24 +13,27 @@ jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0
 3. 添加AutoConfigure类，主要定义这个工具的规则
 4. 添加META-INF文件夹spring.factories文件，用来指定自动装配的AutoConfigure类
 
-# start项目目录
+# lind-start-framework项目介绍（springboot）
 以lind开头，以start结尾的项目，是其它项目的基础包
+1. lind-activiti 工作流组件
 1. lind-common 公用工具包
-1. lind-elasticsearch-start 封装了es的操作
-1. lind-hbase-start 封装了hbase的操作
-1. lind-mybatis-start 封装了mybatis plus的操作
-1. lind-redis-start 封装了redis读写操作
-1. lind-uaa-start 用户授权组件
-1. lind-uaa-jwt-start 基于JWT的授权组件
-1. lind-uaa-keycloak-start 基于keycloak的授权组件
+1. lind-elasticsearch-start 封装了es的操作，工厂模块完成对类型的动态转换
+1. lind-feign-start 接口调用组件
+1. lind-hbase-start 封装了hbase的操作，封装了常用字段，AOP完成赋值
+1. lind-kafka-start 封装了kafka工具，动态代理实现生产者
 1. lind-limit-start 限流组件
 1. lind-lock-start  分布锁组件
-1. lind-swagger-start swagger的api接口文档组件
-1. lind-feign-start 接口调用组件
-1. lind-activiti 工作流组件
+1. lind-mybatis-start 封装了mybatis plus的操作
+1. lind-redis-start 封装了redis读写操作
+1. lind-nacos-start 统一了nacos的版本，添加了配置热更新demo
+1. lind-office-convert 封装了对excel,word的操作
+1. lind-redis-start 对redis的封装，序列化的统一
 1. lind-schedule 任务调组件
-1. lind-verification-code-start 验证码组件
 1. lind-spi java原生的插件组件
+1. lind-uaa-jwt-start 基于JWT的授权组件
+1. lind-uaa-keycloak-start 基于keycloak的授权组件
+1. lind-uaa-start 用户授权组件
+1. lind-verification-code-start 验证码组件
 
 # spring.factories
   springboot-start项目里，通过spring.factories进行自动注册，里面可以设置自动配置，自动监听，应用初始化，配置文件类型，环境变量等信息，

@@ -11,7 +11,6 @@
     <description>basic framework for all project.</description>
     <modules>
         <module>lind-redis-start</module>
-        <module>lind-swagger-start</module>
         <module>lind-hbase-start</module>
         <module>lind-common</module>
         <module>lind-elasticsearch-start</module>
@@ -24,9 +23,7 @@
         <module>lind-uaa-keycloak-start</module>
         <module>lind-kafka-start</module>
         <module>lind-uaa-jwt-start</module>
-        <module>lind-websocket-start</module>
         <module>lind-schedule</module>
-        <module>lind-proxy</module>
         <module>lind-spi</module>
         <module>lind-office-convert</module>
         <module>lind-feign-start</module>
