@@ -20,8 +20,9 @@ public class OrderApplication {
   }
 
   @GetMapping("order")
-  public ResponseEntity product() {
+  public ResponseEntity product() throws InterruptedException {
     System.out.println("hello order");
+    Thread.sleep(3000);
     return ResponseEntity.ok("hello order");
   }
 }

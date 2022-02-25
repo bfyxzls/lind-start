@@ -23,11 +23,17 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 自定义Feign的隔离策略.
+ * 自定义Feign的隔离策略[将主线程的header信息带上].
  * 在转发Feign的请求头的时候，如果开启了Hystrix，Hystrix的默认隔离策略是Thread(线程隔离策略)，
  * 因此转发拦截器内是无法获取到请求的请求头信息的，可以修改默认隔离策略为信号量模式：hystrix.command.default.execution.isolation.authstrategy=SEMAPHORE，
  * 这样的话转发线程和请求线程实际上是一个线程，这并不是最好的解决方法，信号量模式也不是官方最为推荐的隔离策略；另一个解决方法就是自定义Hystrix的隔离策略，
  * 思路是将现有的并发策略作为新并发策略的成员变量,在新并发策略中，返回现有并发策略的线程池、Queue；将策略加到Spring容器即可；
+ * ----------------------------------------------------------------------------------------------
+ * 问题描述：
+ * 微服务A通过feign调用微服务B
+ * 使用了Hystrix并开启了线程隔离模式（默认模式），所以A调用B的请求会单独起一个子线程的方式去调用
+ * 现在需要将微服务A中ThreadLocal里的数据，放入feign请求B时的http header中（这里的http请求会在子线程中）
+ * ----------------------------------------------------------------------------------------------
  */
 @Component
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
