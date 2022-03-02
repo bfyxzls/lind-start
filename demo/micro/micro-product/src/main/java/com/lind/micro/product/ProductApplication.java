@@ -8,6 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+
 
 @SpringBootApplication()
 @EnableDiscoveryClient
@@ -20,8 +23,12 @@ public class ProductApplication {
   }
 
   @GetMapping("product")
-  public ResponseEntity product() throws InterruptedException {
-    Thread.sleep(5000);
+  public ResponseEntity product(HttpServletRequest request) throws InterruptedException {
+    Enumeration<String> headers=request.getHeaderNames();
+    while (headers.hasMoreElements()) {
+      String key = headers.nextElement();
+      System.out.println(key + ":" + request.getHeader(key));
+    }
     System.out.println("hello product");
     return ResponseEntity.ok("hello product");
   }

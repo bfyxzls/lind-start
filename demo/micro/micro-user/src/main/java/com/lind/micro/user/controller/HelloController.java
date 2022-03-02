@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+
 @RefreshScope//配置自动更新
 @RestController
 @EnableCircuitBreaker
@@ -23,8 +26,13 @@ public class HelloController {
   OrderClient orderClient;
 
   @GetMapping("hello")
-  public ResponseEntity hello() {
-    storeClient.getStores();
+  public ResponseEntity hello(HttpServletRequest request) {
+    Enumeration<String> headers=request.getHeaderNames();
+    while (headers.hasMoreElements()) {
+      String key = headers.nextElement();
+      System.out.println(key + ":" + request.getHeader(key));
+    }
+    storeClient.getStores();//线程池隔离，有自己的超时时间
     orderClient.getStores();
     return ResponseEntity.ok("hello," + author);
   }
