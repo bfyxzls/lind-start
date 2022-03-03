@@ -27,4 +27,9 @@ public class RSATest {
         boolean result = RSAUtils.verify(data, RSAUtils.getPublicKey(publicKey), sign);
         System.out.print("验签结果:" + result);
     }
+
+    @Test
+    public void testWindows(){
+     //   FileURL.
+    }
 }

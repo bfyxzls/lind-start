@@ -1,5 +1,6 @@
 package bug;
 
+import com.aliyun.openservices.log.exception.LogException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Server {
   private static final Logger logger = LogManager.getLogger();
 
-  public static void main(String[] args) {
-
+  public static void main(String[] args) throws LogException {
+    SLSDemo.sendLog();
     String name = "${java:runtime}";
 
     // RMI（Remote Method Invocation） 即Java远程方法调用，一种用于实现远程过程调用的应用程序编程接口
