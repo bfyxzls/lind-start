@@ -6,7 +6,8 @@ import com.lind.common.pattern.chain.HandlerParameters;
 public class ReadService extends ChainHandler {
     @Override
     public void execute(HandlerParameters parameters) {
-        System.out.println("读取");
+        if (parameters.getCommandType().contains("read"))
+            System.out.println("读取");
     }
 
 }

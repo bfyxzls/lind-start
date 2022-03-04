@@ -12,8 +12,8 @@ import org.junit.Test;
 public class ChainTest {
     @Test
     public void chainFlow1() {
-        WorkFlow workFlow = new WorkFlow1();
-        workFlow.ProcessRequest(new HandlerParameters("doing", "test"));
+        WorkFlow workFlow = new WorkFlow1(); //WorkFlow1表示一个完整的流程，管理员可以提前配置到数据库里
+        workFlow.ProcessRequest(new HandlerParameters("read,edit", "test"));//commandType:read,edit表示当前用户拥有的角色，根据角色来判断执行哪些链条
     }
     @Test
     public void chainFlow2() {

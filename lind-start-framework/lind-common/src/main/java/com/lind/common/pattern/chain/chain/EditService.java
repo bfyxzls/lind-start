@@ -6,6 +6,7 @@ import com.lind.common.pattern.chain.HandlerParameters;
 public class EditService extends ChainHandler {
     @Override
     public void execute(HandlerParameters parameters) {
-        System.out.println("编辑");
+        if (parameters.getCommandType().contains("edit"))
+            System.out.println("编辑");
     }
 }
