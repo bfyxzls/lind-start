@@ -27,6 +27,7 @@ public class ResourceUtilsTest {
 
   @Test
   public void readResourcesFile() throws IOException {
+    // 文件需要在main/resources目录下，而test/resources不可以
     File file = ResourceUtils.getFile("classpath:rsa_pcks8_pem.private");
     InputStream inputStream = new FileInputStream(file);
     InputStreamReader isr = new InputStreamReader(inputStream);
