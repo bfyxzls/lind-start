@@ -31,11 +31,11 @@ public class RSAUtils {
    */
   public static final String SIGN_ALGORITHMS = "MD5WithRSA";
   /**
-   * RSA最大加密明文大小.
+   * RSA最大加密的块.
    */
   private static final int MAX_ENCRYPT_BLOCK = 501;
   /**
-   * RSA最大解密密文大小.
+   * RSA最大解密的块，这个与加密块要对应，比加密块大11.
    */
   private static final int MAX_DECRYPT_BLOCK = 512;
   /**
