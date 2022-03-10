@@ -2,7 +2,7 @@ package com.lind.kafka.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.RecordMetadata;
@@ -21,7 +21,7 @@ public class DefaultSuccessHandler implements SuccessHandler {
     public void onSuccess(SendResult<String, String> result) {
         String topic = result.getProducerRecord().topic();
         try {
-            MessageEntity value = objectMapper.readValue(result.getProducerRecord().value(), MessageEntity.class);
+            MessageEntityAware value = objectMapper.readValue(result.getProducerRecord().value(), MessageEntityAware.class);
 
             RecordMetadata recordMetadata = result.getRecordMetadata();
             int partition = recordMetadata.partition();

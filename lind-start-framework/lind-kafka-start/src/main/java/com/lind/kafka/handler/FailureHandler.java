@@ -1,6 +1,6 @@
 package com.lind.kafka.handler;
 
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 
 /**
  * 发送消息失败回调
@@ -18,5 +18,5 @@ public interface FailureHandler {
      * @param messageEntity
      * @param ex
      */
-    void onFailure(String topic, MessageEntity messageEntity, Throwable ex);
+    void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex);
 }

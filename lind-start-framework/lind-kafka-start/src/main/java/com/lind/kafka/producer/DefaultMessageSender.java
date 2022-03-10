@@ -2,7 +2,7 @@ package com.lind.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
  * 默认消息发送者.
  **/
 @RequiredArgsConstructor
-public class DefaultMessageSender implements MessageSender<MessageEntity> {
+public class DefaultMessageSender implements MessageSender<MessageEntityAware> {
 
   private final SuccessHandler successHandler;
 
@@ -27,43 +27,43 @@ public class DefaultMessageSender implements MessageSender<MessageEntity> {
   private final ObjectMapper objectMapper;
 
   @Override
-  public void send(String topic, MessageEntity message) throws JsonProcessingException {
+  public void send(String topic, MessageEntityAware message) throws JsonProcessingException {
     sendMessage(topic, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, MessageEntity message, SuccessHandler successHandler) throws JsonProcessingException {
+  public void send(String topic, MessageEntityAware message, SuccessHandler successHandler) throws JsonProcessingException {
     sendMessage(topic, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, MessageEntity message, FailureHandler failureHandler) throws JsonProcessingException {
+  public void send(String topic, MessageEntityAware message, FailureHandler failureHandler) throws JsonProcessingException {
     sendMessage(topic, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, MessageEntity message, SuccessHandler successHandler,
+  public void send(String topic, MessageEntityAware message, SuccessHandler successHandler,
                    FailureHandler failureHandler) throws JsonProcessingException {
     sendMessage(topic, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, String key, MessageEntity message) throws JsonProcessingException {
+  public void send(String topic, String key, MessageEntityAware message) throws JsonProcessingException {
     sendMessage(topic, key, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, String key, MessageEntity message, SuccessHandler successHandler) throws JsonProcessingException {
+  public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler) throws JsonProcessingException {
     sendMessage(topic, key, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, String key, MessageEntity message, FailureHandler failureHandler) throws JsonProcessingException {
+  public void send(String topic, String key, MessageEntityAware message, FailureHandler failureHandler) throws JsonProcessingException {
     sendMessage(topic, key, message, successHandler, failureHandler);
   }
 
   @Override
-  public void send(String topic, String key, MessageEntity message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException {
+  public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException {
     sendMessage(topic, key, message, successHandler, failureHandler);
   }
 
@@ -77,7 +77,7 @@ public class DefaultMessageSender implements MessageSender<MessageEntity> {
    * @throws JsonProcessingException
    */
   private void sendMessage(String topic,
-                           MessageEntity message,
+                           MessageEntityAware message,
                            SuccessHandler successHandler,
                            FailureHandler failureHandler) throws JsonProcessingException {
     sendMessage(topic, null, message, successHandler, failureHandler);
@@ -93,7 +93,7 @@ public class DefaultMessageSender implements MessageSender<MessageEntity> {
    */
   private void sendMessage(String topic,
                            String key,
-                           MessageEntity message,
+                           MessageEntityAware message,
                            SuccessHandler successHandler,
                            FailureHandler failureHandler) throws JsonProcessingException {
     String s = objectMapper.writeValueAsString(message);

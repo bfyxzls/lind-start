@@ -4,7 +4,7 @@
 * 添加当前用户接口`CurrentUserAware`，由使用者去实现它
 * 去掉了kafka-receiver包，感觉封装意义不大
 * 使用时先添加注解`@EnableMqKafka`
-
+* 添加了标识接口MessageEntityAware，避免了topic消息体的格式僵化，MessageEntity做为默认的消息体，自己可以添加新的MessageEntityAware实现
 # 依赖引用
 ```
 <dependency>

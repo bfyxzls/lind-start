@@ -36,11 +36,10 @@ public class KafkaTest {
 
   @Test
   public void annoSender() {
-    MessageEntity testMessageEntity = new MessageEntity();
+
     UserDTO userDTO = new UserDTO();
     userDTO.setTitle("世界你好" + new Date());
-    testMessageEntity.setData(userDTO);
-    messageDataSend.sendDataMessage( testMessageEntity,"bo");
+    messageDataSend.sendDataMessage(userDTO, "bo");
   }
 
   @SneakyThrows

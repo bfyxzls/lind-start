@@ -1,14 +1,14 @@
 package com.lind.kafka.producer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
 
 /**
  * 发送者.
  **/
-public interface MessageSender<T extends MessageEntity> {
+public interface MessageSender<T extends MessageEntityAware> {
 
   /**
    * 发布消息.

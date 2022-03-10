@@ -2,6 +2,7 @@ package com.lind.kafka.proxy;
 
 import com.lind.kafka.anno.MqSend;
 import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
 import com.lind.kafka.producer.MessageSender;
@@ -52,7 +53,8 @@ public class MqProducerInvocationHandler<T> implements InvocationHandler {
     Object message = null;
     String key = null;
     for (Object arg : args) {
-      if (MessageEntity.class.isAssignableFrom(arg.getClass())) {
+      // 这块是否应该把MessageEntity改成标识接口，默认没有任何元素
+      if (MessageEntityAware.class.isAssignableFrom(arg.getClass())) {
         message = arg;
       } else if (String.class.isAssignableFrom(arg.getClass())) {
         key = (String) arg;
@@ -75,7 +77,7 @@ public class MqProducerInvocationHandler<T> implements InvocationHandler {
       SuccessHandler successHandler = applicationContext.getBean(sccessHandlerType);
       Class<? extends FailureHandler> failureHandlerType = annotation.failureHandler();
       FailureHandler failureHandler = applicationContext.getBean(failureHandlerType);
-      messageSender.send(topic, key, (MessageEntity) message, successHandler, failureHandler);
+      messageSender.send(topic, key, (MessageEntityAware) message, successHandler, failureHandler);
     }
     return null;
   }

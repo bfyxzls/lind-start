@@ -1,7 +1,7 @@
 package com.lind.kafka.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import com.lind.kafka.handler.DefaultFailureHandler;
 import com.lind.kafka.handler.DefaultSuccessHandler;
 import com.lind.kafka.handler.FailureHandler;
@@ -57,7 +57,7 @@ public class KafkaProviderConfig {
 
     @Bean
     @ConditionalOnMissingBean
-    public MessageSender<? extends MessageEntity> messageSender(SuccessHandler successHandler, FailureHandler failureHandler, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
+    public MessageSender<? extends MessageEntityAware> messageSender(SuccessHandler successHandler, FailureHandler failureHandler, KafkaTemplate<String, String> kafkaTemplate, ObjectMapper objectMapper) {
         return new DefaultMessageSender(successHandler, failureHandler, kafkaTemplate, objectMapper);
     }
 

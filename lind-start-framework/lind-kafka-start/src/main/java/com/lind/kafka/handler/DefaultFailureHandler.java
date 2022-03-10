@@ -1,6 +1,6 @@
 package com.lind.kafka.handler;
 
-import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.entity.MessageEntityAware;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -11,7 +11,7 @@ public class DefaultFailureHandler implements FailureHandler {
 
 
     @Override
-    public void onFailure(String topic, MessageEntity messageEntity, Throwable ex) {
+    public void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex) {
         log.error("fail to send topic={}, data={}", topic, messageEntity, ex);
     }
 }
