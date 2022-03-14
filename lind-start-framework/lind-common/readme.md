@@ -86,3 +86,7 @@ lind:
 使用虚拟节点解决数据倾斜问题，这时我们发现有大量数据集中在节点A上，而节点B只有少量数据。为了解决数据倾斜问题，一致性Hash算法引入了虚拟节点机制，即对每一个服务器节点计算多个哈希，每个计算结果位置都放置一个此服务节点，称为虚拟节点。
 具体操作可以为服务器IP或主机名后加入编号来实现，实现如图
 ![](./assets/readme-1638363202800.png)
+
+## @ConditionalOnBean和ConditionalMissingOnBean的用法
+1. @ConditionalOnMissingBean当没有其它MissingBean的bean时，就使用DefaultMissingBean这个bean.
+2. @ConditionalOnBean我觉得它是一个依赖，即FishFood的注入，它依赖于是否有Fishing这个bean，如果有Fishing，就可以注册FishFood.

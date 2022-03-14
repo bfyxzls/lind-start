@@ -7,6 +7,7 @@ import com.lind.uaa.jwt.handler.JwtRefreshSuccessHandler;
 import com.lind.uaa.jwt.handler.TokenClearLogoutHandler;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
 import com.lind.uaa.jwt.service.JwtUserService;
+import com.lind.uaa.jwt.service.impl.DefaultUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -33,108 +34,118 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    UserDetailsService userDetailsService;
-    @Autowired
-    JwtUserService jwtUserService;
-    @Autowired
-    JwtConfig jwtConfig;
+  @Autowired
+  UserDetailsService userDetailsService;
+  @Autowired
+  JwtUserService jwtUserService;
+  @Autowired
+  JwtConfig jwtConfig;
 
-    protected void configure(HttpSecurity http) throws Exception {
-        String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
-        http.authorizeRequests()
-                .antMatchers(urls).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .csrf().disable()
-                .formLogin().disable()
-                .sessionManagement().disable()
-                .cors()
-                .and()
-                .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
-                new Header("Access-control-Allow-Origin", "*"),
-                new Header("Access-Control-Expose-Headers", "Authorization"))))
-                .and()
-                .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
-                .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jsonLoginSuccessHandler())
-                .and()
-                .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
-                .and()
-                .logout()
+  protected void configure(HttpSecurity http) throws Exception {
+    String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
+    http.authorizeRequests()
+        .antMatchers(urls).permitAll()
+        .anyRequest().authenticated()
+        .and()
+        .csrf().disable()
+        .formLogin().disable()
+        .sessionManagement().disable()
+        .cors()
+        .and()
+        .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
+        new Header("Access-control-Allow-Origin", "*"),
+        new Header("Access-Control-Expose-Headers", "Authorization"))))
+        .and()
+        .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
+        .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jsonLoginSuccessHandler())
+        .and()
+        .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
+        .and()
+        .logout()
 //		        .logoutUrl("/logout")   //默认就是"/logout"
-                .addLogoutHandler(tokenClearLogoutHandler())
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-                .and()
-                .sessionManagement().disable();
-    }
+        .addLogoutHandler(tokenClearLogoutHandler())
+        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+        .and()
+        .sessionManagement().disable();
+  }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(daoAuthenticationProvider())
-                .authenticationProvider(jwtAuthenticationProvider());
-    }
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.authenticationProvider(daoAuthenticationProvider())
+        .authenticationProvider(jwtAuthenticationProvider());
+  }
 
-    @Bean
-    @ConditionalOnMissingBean(PasswordEncoder.class)
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
+  @Bean
+  @ConditionalOnMissingBean(PasswordEncoder.class)
+  public PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
 
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 
-    @Bean("jwtAuthenticationProvider")
-    protected AuthenticationProvider jwtAuthenticationProvider() {
-        return new JwtAuthenticationProvider(jwtUserService);
-    }
+  @Bean("jwtAuthenticationProvider")
+  protected AuthenticationProvider jwtAuthenticationProvider() {
+    return new JwtAuthenticationProvider(jwtUserService);
+  }
 
-    @Bean("daoAuthenticationProvider")
-    protected AuthenticationProvider daoAuthenticationProvider() throws Exception {
-        //这里会默认使用BCryptPasswordEncoder比对加密后的密码，注意要跟createUser时保持一致
-        DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-        daoProvider.setUserDetailsService(userDetailsService());
-        daoProvider.setPasswordEncoder(passwordEncoder());
-        return daoProvider;
-    }
+  @Bean("daoAuthenticationProvider")
+  protected AuthenticationProvider daoAuthenticationProvider() throws Exception {
+    //这里会默认使用BCryptPasswordEncoder比对加密后的密码，注意要跟createUser时保持一致
+    DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+    daoProvider.setUserDetailsService(userDetailsService());
+    daoProvider.setPasswordEncoder(passwordEncoder());
+    return daoProvider;
+  }
 
-    @Override
-    protected UserDetailsService userDetailsService() {
-        return userDetailsService;
-    }
+  @Override
+  protected UserDetailsService userDetailsService() {
+    return userDetailsService;
+  }
 
+  /**
+   * 没有自定义的实现时，就使用这个默认的.
+   *
+   * @return
+   */
+  @Bean
+  @ConditionalOnMissingBean(UserDetailsService.class)
+  public UserDetailsService defaultUserDetailsService() {
+    return new DefaultUserDetailsService();
+  }
 
-    @Bean
-    protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
-        return new JsonLoginSuccessHandler(jwtUserService);
-    }
+  @Bean
+  protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
+    return new JsonLoginSuccessHandler(jwtUserService);
+  }
 
-    @Bean
-    protected JwtRefreshSuccessHandler jwtRefreshSuccessHandler() {
-        return new JwtRefreshSuccessHandler(jwtUserService);
-    }
+  @Bean
+  protected JwtRefreshSuccessHandler jwtRefreshSuccessHandler() {
+    return new JwtRefreshSuccessHandler(jwtUserService);
+  }
 
-    @Bean
-    protected TokenClearLogoutHandler tokenClearLogoutHandler() {
-        return new TokenClearLogoutHandler(jwtUserService);
-    }
+  @Bean
+  protected TokenClearLogoutHandler tokenClearLogoutHandler() {
+    return new TokenClearLogoutHandler(jwtUserService);
+  }
 
-    /**
-     * 跨域支持.
-     *
-     * @return
-     */
-    @Bean
-    protected CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "OPTION"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.addExposedHeader("Authorization");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+  /**
+   * 跨域支持.
+   *
+   * @return
+   */
+  @Bean
+  protected CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(Arrays.asList("*"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "OPTION"));
+    configuration.setAllowedHeaders(Arrays.asList("*"));
+    configuration.addExposedHeader("Authorization");
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
+  }
 
 }

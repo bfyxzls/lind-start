@@ -24,6 +24,8 @@ import java.security.spec.X509EncodedKeySpec;
 
 /**
  * RSA非对称加密算法.
+ * 公钥加密，私钥解密；多人拥有公钥，可以加密，一个拥有私钥，完成解密;
+ * 密钥加签，公钥验签；多人拥有公钥，可以签名，一个拥有私钥，完成验证签名。
  */
 public class RSAUtils {
   /**

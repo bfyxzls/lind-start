@@ -1,5 +1,8 @@
 package com.lind.common.bean.conditional;
 
+import com.lind.common.bean.conditional.missingbean.MissingBean;
+import com.lind.common.bean.conditional.onbean.FishFood;
+import com.lind.common.test.Eat;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,22 +12,32 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class ConditionalOnClassTest {
-  @Autowired
-  FishConfig.Fish fish;
 
   @Autowired
-  FishConfig.Fish2 fish2;
+  MissingBean missingBean;
+  @Autowired
+  FishFood fishFood;
+  @Autowired
+  Eat eat;
 
   /**
-   * 依赖一个类
+   * @ConditionalOnMissingBean.
+   */
+  @Test
+  public void onMissingBean() {
+    missingBean.hello();
+  }
+
+  /**
+   * @ConditionalOnBean.
    */
   @Test
   public void dependOnClass() {
-    fish.hello();
+    fishFood.hello();
   }
 
   @Test
-  public void dependOnBean() {
-    fish2.hello();
+  public void eatTest() {
+    eat.drink();
   }
 }

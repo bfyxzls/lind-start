@@ -6,7 +6,6 @@ import com.lind.lock.exception.RedisUserManualLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.validation.constraints.NotNull;
@@ -23,7 +22,6 @@ import static org.springframework.util.Assert.notNull;
  */
 @Slf4j
 @RequiredArgsConstructor
-@ConditionalOnBean(RedisLockTemplate.class)
 public class RedisUserManualLockTemplate {
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisLockProperty redisLockProperty;
