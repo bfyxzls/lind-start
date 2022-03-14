@@ -27,6 +27,7 @@
         <module>lind-spi</module>
         <module>lind-office-convert</module>
         <module>lind-feign-start</module>
+        <module>lind-logger-start</module>
     </modules>
 
     <properties>
