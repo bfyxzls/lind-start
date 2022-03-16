@@ -17,6 +17,7 @@ public class ThreadPoolUtilsTest {
   static ExecutorService executorService = Executors.newFixedThreadPool(4);
   static KeyAffinityExecutor executor = KeyAffinityExecutor.newSerializingExecutor(8, 200, "MY-POOL");
 
+
   public static void executeByOldPool(List<Person> personList) {
     personList.stream().forEach(p -> executorService.execute(() -> {
       System.out.println(JSON.toJSONString(p));
@@ -82,6 +83,7 @@ public class ThreadPoolUtilsTest {
     Thread.sleep(1000);
   }
 
+
   @Data
   @AllArgsConstructor
   @NoArgsConstructor
@@ -90,5 +92,4 @@ public class ThreadPoolUtilsTest {
     private Integer id;
     private String data;
   }
-
 }
