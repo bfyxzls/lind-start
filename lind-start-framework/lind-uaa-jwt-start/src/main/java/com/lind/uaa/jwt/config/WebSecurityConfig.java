@@ -7,7 +7,6 @@ import com.lind.uaa.jwt.handler.JwtRefreshSuccessHandler;
 import com.lind.uaa.jwt.handler.TokenClearLogoutHandler;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
 import com.lind.uaa.jwt.service.JwtUserService;
-import com.lind.uaa.jwt.service.impl.DefaultUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -62,7 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
         .and()
         .logout()
-//		        .logoutUrl("/logout")   //默认就是"/logout"
+        .logoutUrl("/logout")   //默认就是"/logout"
         .addLogoutHandler(tokenClearLogoutHandler())
         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
         .and()
@@ -105,17 +104,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     return userDetailsService;
   }
 
-  /**
-   * 没有自定义的实现时，就使用这个默认的.
-   *
-   * @return
-   */
-  @Bean
-  @ConditionalOnMissingBean(UserDetailsService.class)
-  public UserDetailsService defaultUserDetailsService() {
-    return new DefaultUserDetailsService();
-  }
-
   @Bean
   protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
     return new JsonLoginSuccessHandler(jwtUserService);
@@ -130,6 +118,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected TokenClearLogoutHandler tokenClearLogoutHandler() {
     return new TokenClearLogoutHandler(jwtUserService);
   }
+
 
   /**
    * 跨域支持.

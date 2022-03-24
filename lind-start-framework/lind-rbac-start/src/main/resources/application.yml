@@ -1,0 +1,18 @@
+server.port: 8080
+spring:
+  application:
+    name: rbac
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.4.26:3306/rbac?useUnicode=true&characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  typeAliasesPackage: com.lind.rbac.entity
+  configuration:
+    mapUnderscoreToCamelCase: true
+
+jwt:
+  expiresAt: 30
+  permitAll: /doc/**,/user/**,/menu/**,/role/**

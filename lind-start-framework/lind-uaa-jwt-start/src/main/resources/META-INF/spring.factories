@@ -5,6 +5,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
    com.lind.uaa.jwt.permission.MySecurityMetadataSource,\
    com.lind.uaa.jwt.service.JwtUserService,\
    com.lind.uaa.jwt.config.JwtConfig,\
-   com.lind.uaa.jwt.service.impl.DefaultUserDetailsService,\
-   com.lind.uaa.jwt.service.impl.RedisResourcePermissionService,\
-   com.lind.uaa.jwt.config.SecurityUtil
+   com.lind.uaa.jwt.config.SecurityUtil,\
+   com.lind.uaa.jwt.config.UaaJwtConfig

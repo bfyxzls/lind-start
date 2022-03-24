@@ -9,17 +9,13 @@ import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * 从Redis中读取权限,这个是为非授权服务提供的默认实现.
  */
-@Service
 @Slf4j
-@ConditionalOnMissingBean(ResourcePermissionService.class)
 public class RedisResourcePermissionService implements ResourcePermissionService {
     @Autowired
     RedisService redisService;

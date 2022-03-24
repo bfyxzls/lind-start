@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.three.entity;
 
+import com.lind.common.util.SnowFlakeUtils;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Permission implements ResourcePermission {
-    private String id;
+    private String id= SnowFlakeUtils.getFlowIdInstance().toString();
     /**
      * 菜单-按钮-名称.
      */

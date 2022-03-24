@@ -32,7 +32,7 @@
     <dependency>
         <groupId>com.lind</groupId>
         <artifactId>lind-redis-start</artifactId>
-        <version>1.0.0</version>
+        <version>${project.parent.version}</version>
     </dependency>
     <dependency>
         <groupId>org.springframework.boot</groupId>
@@ -41,7 +41,7 @@
     <dependency>
         <groupId>com.lind</groupId>
         <artifactId>lind-common</artifactId>
-        <version>1.0.0</version>
+        <version>${project.parent.version}</version>
     </dependency>
     <dependency>
         <groupId>org.projectlombok</groupId>
