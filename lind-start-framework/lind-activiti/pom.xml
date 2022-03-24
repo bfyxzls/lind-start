@@ -90,7 +90,7 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-swagger-start</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.three.entity;
 
+import com.lind.common.util.SnowFlakeUtils;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import com.lind.uaa.jwt.entity.ResourceUser;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class User implements ResourceUser {
 
-    private String id;
+    private String id= SnowFlakeUtils.getFlowIdInstance().toString();
     private String username;
     private String password;
     private String email;

@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-common</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version><!-- 使用根项目的版本，与根项目始终保持同一版本号 -->
             <scope>compile</scope>
         </dependency>
         <dependency>

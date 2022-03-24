@@ -2,6 +2,31 @@
 ## jwt payload
 jwt payload中包括的内容太多，对网络传输是需要考虑的，比如我们是否在JWT里直接包括权限信息，还是只包括角色信息，然后再通过角色信息去查询它的权限。
 
+## 使用
+### 登录
+* url: http://localhost:8080/login
+* method: POST
+* Content-Type: application/json
+* 请求体
+```
+{
+    "username":"admin",
+    "password":"123456"
+}
+```
+* 响应码：200
+```
+{
+    "expiresAt": 1648100324000,
+    "subject": "admin",
+    "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTY0ODEwMDMyNCwidXNlciI6IntcImlkXCI6XCIxXCIsXCJ1c2VybmFtZVwiOlwiYWRtaW5cIixcImVtYWlsXCI6XCJhZG1pbkBzaW5hLmNvbVwiLFwiYXV0aG9yaXRpZXNcIjpbe1wiaWRcIjpcIjFcIixcIm5hbWVcIjpcIueuoeeQhuWRmFwiLFwiYnV0dG9uR3JhbnRcIjowfV19IiwiaWF0IjoxNjQ4MDk4NTI0fQ.fgfPXLNRYE0kfrq__LmhM_UBy82ChHixjZ-Ve31QVVU"
+}
+```
+### 登出
+* url: http://localhost:8080/logout
+* method: POST
+* header: bearer ****token****
+* 响应： 200
 ## 依赖引用
 ```
 <dependency>

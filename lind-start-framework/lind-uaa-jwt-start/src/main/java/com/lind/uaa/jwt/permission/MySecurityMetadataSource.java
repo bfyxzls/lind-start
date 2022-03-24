@@ -35,7 +35,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
 
     @Autowired
     RedisService redisService;
-    @Autowired(required = false)
+    @Autowired
     private ResourcePermissionService resourcePermissionService;
     private Map<String, Collection<ConfigAttribute>> map = null;
 

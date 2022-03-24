@@ -1,5 +1,10 @@
 # 项目介绍 
-主要是由框架级工具进行封装，springboot的start包的使用，完成对工具包的自动注入。
+主要是由框架级工具进行封装，springboot的start包的使用，完成对工具包的自动注入，所有start包的版本都继承lind-framework的版本
+
+# 升级
+* 命令行执行 mvn versions:set -DnewVersion=1.0.1 //更新整个项目版本
+* 提交 mvn versions:commit //提交，删除多余的pom.xml.versionsBackup
+* deploy根项目
 
 # lind-start-framework项目介绍（springboot）
 以lind开头，以start结尾的项目，是其它项目的基础包

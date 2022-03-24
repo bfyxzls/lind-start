@@ -15,6 +15,7 @@ public class ResourceRoleSerializer extends JsonSerializer<ResourceRole> {
             jsonGenerator.writeStartObject();
             jsonGenerator.writeStringField("id", resourceRole.getId());
             jsonGenerator.writeStringField("name", resourceRole.getName());
+            jsonGenerator.writeNumberField("buttonGrant", resourceRole.getButtonGrant());
             jsonGenerator.writeEndObject();
         }
     }

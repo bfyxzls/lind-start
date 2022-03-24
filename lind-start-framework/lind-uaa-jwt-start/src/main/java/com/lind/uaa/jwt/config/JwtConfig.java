@@ -8,25 +8,33 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties("jwt")
 public class JwtConfig {
-    /**
-     * jwt算法密钥.
-     */
-    private String secret;
-    /**
-     * jwt超时时间(分).
-     */
-    private Long expiresAt;
-    /**
-     * URL白名单.
-     */
-    private String[] permitAll;
+  /**
+   * jwt算法密钥.
+   */
+  private String secret;
+  /**
+   * jwt超时时间(分).
+   */
+  private Long expiresAt;
 
-    /**
-     * init.
-     */
-    public JwtConfig() {
-        this.secret = "abc123";
-        this.expiresAt = 60L;
-        this.permitAll = new String[]{};
-    }
+  /**
+   * 自动刷新token超时时间(分).
+   */
+  private Long refreshTokenExpiresAt;
+
+  /**
+   * URL白名单.
+   */
+  private String[] permitAll;
+
+  /**
+   * init.
+   */
+  public JwtConfig() {
+    this.secret = "abc123";
+    this.expiresAt = 60L;
+    this.refreshTokenExpiresAt=50L;
+    this.permitAll = new String[]{};
+  }
+
 }

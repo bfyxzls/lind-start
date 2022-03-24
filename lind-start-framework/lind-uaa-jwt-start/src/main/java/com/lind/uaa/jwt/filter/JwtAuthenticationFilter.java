@@ -2,8 +2,10 @@ package com.lind.uaa.jwt.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -28,140 +30,146 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.lind.uaa.jwt.config.Constants.USER;
+
 /**
- * 从请求中提取token进行校验.
+ * 从请求中提取Header-Authorization中的jwtToken进行校验.
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final RequestMatcher requiresAuthenticationRequestMatcher;
-    private List<RequestMatcher> permissiveRequestMatchers;
-    private AuthenticationManager authenticationManager;
+  private final RequestMatcher requiresAuthenticationRequestMatcher;
+  @Autowired
+  RedisService redisService;
+  private List<RequestMatcher> permissiveRequestMatchers;
+  private AuthenticationManager authenticationManager;
+  private AuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+  private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
 
+  public JwtAuthenticationFilter() {
+    // 拦截header中带Authorization的请求
+    this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Authorization");
+  }
 
-    private AuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-    private AuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
+  @Override
+  public void afterPropertiesSet() {
+    Assert.notNull(authenticationManager, "authenticationManager must be specified");
+    Assert.notNull(successHandler, "AuthenticationSuccessHandler must be specified");
+    Assert.notNull(failureHandler, "AuthenticationFailureHandler must be specified");
+  }
 
-    public JwtAuthenticationFilter() {
-        // 拦截header中带Authorization的请求
-        this.requiresAuthenticationRequestMatcher = new RequestHeaderRequestMatcher("Authorization");
+  protected String getJwtToken(HttpServletRequest request) {
+    String authInfo = request.getHeader("Authorization");
+    authInfo = StringUtils.removeStart(authInfo, "bearer ");
+    return StringUtils.removeStart(authInfo, "Bearer ");
+  }
+
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
+    // header没带token的,直接放行.
+    if (!requiresAuthentication(request, response)) {
+      filterChain.doFilter(request, response);
+      return;
     }
-
-    @Override
-    public void afterPropertiesSet() {
-        Assert.notNull(authenticationManager, "authenticationManager must be specified");
-        Assert.notNull(successHandler, "AuthenticationSuccessHandler must be specified");
-        Assert.notNull(failureHandler, "AuthenticationFailureHandler must be specified");
-    }
-
-    protected String getJwtToken(HttpServletRequest request) {
-        String authInfo = request.getHeader("Authorization");
-        authInfo = StringUtils.removeStart(authInfo, "bearer ");
-        return StringUtils.removeStart(authInfo, "Bearer ");
-    }
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        // header没带token的,直接放行.
-        if (!requiresAuthentication(request, response)) {
-            filterChain.doFilter(request, response);
-            return;
+    Authentication authResult = null;
+    AuthenticationException failed = null;
+    try {
+      String token = getJwtToken(request);
+      if (StringUtils.isNotBlank(token)) {
+        JwtAuthenticationToken authToken = new JwtAuthenticationToken(JWT.decode(token));
+        // jwt自身有效期和签名校验
+        authResult = this.getAuthenticationManager().authenticate(authToken);
+        // redis实时校验，如果用户手动单击登录，也将失败
+        if (!redisService.hasKey(USER + authResult.getName())) {
+          failed = new InsufficientAuthenticationException("user alrealy exit");
         }
-        Authentication authResult = null;
-        AuthenticationException failed = null;
-        try {
-            String token = getJwtToken(request);
-            if (StringUtils.isNotBlank(token)) {
-                JwtAuthenticationToken authToken = new JwtAuthenticationToken(JWT.decode(token));
-                //JwtAuthenticationProvider.authenticate
-                authResult = this.getAuthenticationManager().authenticate(authToken);
-            } else {
-                failed = new InsufficientAuthenticationException("JWT is Empty");
-            }
-        } catch (JWTDecodeException e) {
-            logger.error("JWT format error", e);
-            failed = new InsufficientAuthenticationException("JWT format error", failed);
-        } catch (InternalAuthenticationServiceException e) {
-            logger.error(
-                    "An internal error occurred while trying to authenticate the user.",
-                    failed);
-            failed = e;
-        } catch (AuthenticationException e) {
-            // Authentication failed
-            failed = e;
-        }
-        if (authResult != null) {
-            successfulAuthentication(request, response, filterChain, authResult);
-        } else if (!permissiveRequest(request)) {
-            unsuccessfulAuthentication(request, response, failed);
-            return;
-        }
-
-        filterChain.doFilter(request, response);
+      } else {
+        failed = new InsufficientAuthenticationException("JWT is Empty");
+      }
+    } catch (JWTDecodeException e) {
+      logger.error("JWT format error", e);
+      failed = new InsufficientAuthenticationException("JWT format error", failed);
+    } catch (InternalAuthenticationServiceException e) {
+      logger.error(
+          "An internal error occurred while trying to authenticate the user.",
+          failed);
+      failed = e;
+    } catch (AuthenticationException e) {
+      // Authentication failed
+      failed = e;
+    }
+    if (authResult != null && failed == null) {
+      successfulAuthentication(request, response, filterChain, authResult);
+    } else if (!permissiveRequest(request)) {
+      unsuccessfulAuthentication(request, response, failed);
+      return;
     }
 
-    protected void unsuccessfulAuthentication(HttpServletRequest request,
-                                              HttpServletResponse response, AuthenticationException failed)
-            throws IOException, ServletException {
-        SecurityContextHolder.clearContext();
-        failureHandler.onAuthenticationFailure(request, response, failed);
-    }
+    filterChain.doFilter(request, response);
+  }
 
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response, FilterChain chain, Authentication authResult)
-            throws IOException, ServletException {
-        SecurityContextHolder.getContext().setAuthentication(authResult);
-        successHandler.onAuthenticationSuccess(request, response, authResult);
-    }
+  protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response, AuthenticationException failed)
+      throws IOException, ServletException {
+    SecurityContextHolder.clearContext();
+    failureHandler.onAuthenticationFailure(request, response, failed);
+  }
 
-    protected AuthenticationManager getAuthenticationManager() {
-        return authenticationManager;
-    }
+  protected void successfulAuthentication(HttpServletRequest request,
+                                          HttpServletResponse response, FilterChain chain, Authentication authResult)
+      throws IOException, ServletException {
+    SecurityContextHolder.getContext().setAuthentication(authResult);
+    successHandler.onAuthenticationSuccess(request, response, authResult);
+  }
 
-    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
-    }
+  protected AuthenticationManager getAuthenticationManager() {
+    return authenticationManager;
+  }
 
-    protected boolean requiresAuthentication(HttpServletRequest request,
-                                             HttpServletResponse response) {
-        return requiresAuthenticationRequestMatcher.matches(request);
-    }
+  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    this.authenticationManager = authenticationManager;
+  }
 
-    protected boolean permissiveRequest(HttpServletRequest request) {
-        if (permissiveRequestMatchers == null)
-            return false;
-        for (RequestMatcher permissiveMatcher : permissiveRequestMatchers) {
-            if (permissiveMatcher.matches(request))
-                return true;
-        }
-        return false;
-    }
+  protected boolean requiresAuthentication(HttpServletRequest request,
+                                           HttpServletResponse response) {
+    return requiresAuthenticationRequestMatcher.matches(request);
+  }
 
-    public void setPermissiveUrl(String... urls) {
-        if (permissiveRequestMatchers == null)
-            permissiveRequestMatchers = new ArrayList<>();
-        for (String url : urls)
-            permissiveRequestMatchers.add(new AntPathRequestMatcher(url));
+  protected boolean permissiveRequest(HttpServletRequest request) {
+    if (permissiveRequestMatchers == null)
+      return false;
+    for (RequestMatcher permissiveMatcher : permissiveRequestMatchers) {
+      if (permissiveMatcher.matches(request))
+        return true;
     }
+    return false;
+  }
 
-    public void setAuthenticationSuccessHandler(
-            AuthenticationSuccessHandler successHandler) {
-        Assert.notNull(successHandler, "successHandler cannot be null");
-        this.successHandler = successHandler;
-    }
+  public void setPermissiveUrl(String... urls) {
+    if (permissiveRequestMatchers == null)
+      permissiveRequestMatchers = new ArrayList<>();
+    for (String url : urls)
+      permissiveRequestMatchers.add(new AntPathRequestMatcher(url));
+  }
 
-    public void setAuthenticationFailureHandler(
-            AuthenticationFailureHandler failureHandler) {
-        Assert.notNull(failureHandler, "failureHandler cannot be null");
-        this.failureHandler = failureHandler;
-    }
+  public void setAuthenticationSuccessHandler(
+      AuthenticationSuccessHandler successHandler) {
+    Assert.notNull(successHandler, "successHandler cannot be null");
+    this.successHandler = successHandler;
+  }
 
-    protected AuthenticationSuccessHandler getSuccessHandler() {
-        return successHandler;
-    }
+  public void setAuthenticationFailureHandler(
+      AuthenticationFailureHandler failureHandler) {
+    Assert.notNull(failureHandler, "failureHandler cannot be null");
+    this.failureHandler = failureHandler;
+  }
 
-    protected AuthenticationFailureHandler getFailureHandler() {
-        return failureHandler;
-    }
+  protected AuthenticationSuccessHandler getSuccessHandler() {
+    return successHandler;
+  }
+
+  protected AuthenticationFailureHandler getFailureHandler() {
+    return failureHandler;
+  }
 
 }

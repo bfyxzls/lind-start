@@ -3,14 +3,12 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <artifactId>lind-start-framework</artifactId>
+        <groupId>com.lind</groupId>
+        <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.lind</groupId>
     <artifactId>lind-uaa-jwt-start</artifactId>
-    <version>1.0.1</version>
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -43,66 +41,29 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.47</version>
         </dependency>
+
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-redis-start</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-common</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-swagger-start</artifactId>
-            <version>1.0.0</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
+            <artifactId>lind-common</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
-    <repositories>
-        <repository>
-            <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
-            <layout>default</layout>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
 
-        <repository>
-            <id>spring-milestone</id>
-            <name>Spring Milestone</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>spring-snapshot</id>
-            <name>Spring Snapshot</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <distributionManagement>
-        <repository>
-            <id>releases</id>
-            <name>Nexus Release Repository</name>
-            <url>http://192.168.0.203:8081/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>Nexus Snapshot Repository</name>
-            <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <build>
         <plugins>
@@ -128,17 +89,15 @@
                                 </filter>
                             </filters>
                             <artifactSet>
-                                <excludes>
-                                    <exclude>com.google.guava:*</exclude>
-                                </excludes>
+
                                 <!-- 捆绑包含,目标项目不需要再手动引用这个包了 -->
                                 <includes>
                                     <include>com.baomidou:*</include>
                                 </includes>
                                 <!-- 排除调所有的properties配置文件-->
-<!--                                 <excludes>-->
-<!--                                     <exclude>com.lind.uaa.jwt.three:*</exclude>-->
-<!--                                 </excludes>-->
+                                <!--                                 <excludes>-->
+                                <!--                                     <exclude>com.lind.uaa.jwt.three:*</exclude>-->
+                                <!--                                 </excludes>-->
                             </artifactSet>
                             <createSourcesJar>true</createSourcesJar>
                             <promoteTransitiveDependencies>true</promoteTransitiveDependencies>
