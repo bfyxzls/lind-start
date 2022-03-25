@@ -12,5 +12,17 @@ import java.lang.annotation.Target;
 @Inherited
 @Documented
 public @interface LogRecord {
+  /**
+   * 消息，支持spEL表达式.
+   *
+   * @return
+   */
   String detail() default "";
+
+  /**
+   * 需要记录的更新对象ID.
+   *
+   * @return
+   */
+  String objectId() default "";
 }
