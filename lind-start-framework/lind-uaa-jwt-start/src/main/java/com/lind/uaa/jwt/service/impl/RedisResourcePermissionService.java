@@ -14,6 +14,8 @@ import java.util.List;
 
 /**
  * 从Redis中读取权限,这个是为非授权服务提供的默认实现.
+ * 理解：在微服务设计中，你会有授权服务，业务服务等，而授权服务或者用户服务，它会有对用户库的访问权限，而其它服务不需要的，
+ * 直接从redis中获取即可，它不需要实现ResourcePermissionService的实现。
  */
 @Slf4j
 public class RedisResourcePermissionService implements ResourcePermissionService {

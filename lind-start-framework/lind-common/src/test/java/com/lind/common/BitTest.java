@@ -1,4 +1,4 @@
-package com.lind.common.aesh.command;
+package com.lind.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -19,6 +19,7 @@ public class BitTest {
   private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
 
   // 运行状态[高3位]
+  // 简单来说，比如从100开始为状态，则第二个状态为100*2=200，而100到200之前有100个单元（0~99），每个状态之间都是100个空位，来存储（0~99）个数。
   private static int runStateOf(int c) {
     return c & ~CAPACITY;
   }
