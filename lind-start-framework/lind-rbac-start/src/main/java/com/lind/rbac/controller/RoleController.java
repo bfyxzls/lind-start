@@ -88,6 +88,7 @@ public class RoleController {
     if (role != null) {
       role.setName(roleDTO.getName());
       role.addGrant(roleDTO.getButtonGrantList());
+      roleDao.updateById(role);
     }
     return ResponseEntity.ok().build();
   }

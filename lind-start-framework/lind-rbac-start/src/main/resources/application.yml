@@ -15,4 +15,4 @@ mybatis:
 
 jwt:
   expiresAt: 30
-  permitAll: /doc/**,/user/**,/menu/**,/role/**
+  permitAll: /doc/**,/user/**,/permission/**,/role/**
