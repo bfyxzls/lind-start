@@ -3,6 +3,7 @@ package com.lind.rbac.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lind.common.rest.CommonResult;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
 import com.lind.rbac.dto.RoleDTO;
@@ -13,7 +14,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +40,7 @@ public class RoleController {
   ResourcePermissionService resourcePermissionService;
   @ApiOperation("列表")
   @GetMapping
-  public ResponseEntity<IPage<RoleDTO>> index(
+  public CommonResult<IPage<RoleDTO>> index(
       @ApiParam("页码") @RequestParam(required = false) Integer pageNumber,
       @ApiParam("显示条数") @RequestParam(required = false) Integer pageSize) {
     pageNumber = (pageNumber == null) ? 1 : pageNumber;
@@ -68,35 +68,35 @@ public class RoleController {
     roleDTOIPage.setPages(roleList.getPages());
     roleDTOIPage.setSize(roleList.getSize());
     roleDTOIPage.setTotal(roleList.getTotal());
-    return ResponseEntity.ok(roleDTOIPage);
+    return CommonResult.ok(roleDTOIPage);
   }
 
   @ApiOperation("新增")
   @PostMapping
-  public ResponseEntity add(@RequestBody RoleDTO roleDTO) {
+  public CommonResult add(@RequestBody RoleDTO roleDTO) {
     Role role = new Role();
     role.setName(roleDTO.getName());
     role.addGrant(roleDTO.getButtonGrantList());
     roleDao.insert(role);
-    return ResponseEntity.ok().build();
+    return CommonResult.ok();
   }
 
   @ApiOperation("更新")
   @PutMapping("/{id}")
-  public ResponseEntity update(@ApiParam("角色ID") @PathVariable String id, @RequestBody RoleDTO roleDTO) {
+  public CommonResult update(@ApiParam("角色ID") @PathVariable String id, @RequestBody RoleDTO roleDTO) {
     Role role = roleDao.selectById(id);
     if (role != null) {
       role.setName(roleDTO.getName());
       role.addGrant(roleDTO.getButtonGrantList());
       roleDao.updateById(role);
     }
-    return ResponseEntity.ok().build();
+    return CommonResult.ok();
   }
 
   @ApiOperation("更新角色的权限")
   @PutMapping("/{id}/permission")
   @Transactional
-  public ResponseEntity updatePermission(@ApiParam("角色ID") @PathVariable String id, @RequestBody List<String> permissions) {
+  public CommonResult updatePermission(@ApiParam("角色ID") @PathVariable String id, @RequestBody List<String> permissions) {
     Role role = roleDao.selectById(id);
     if (role != null) {
       rolePermissionDao.delete(new QueryWrapper<RolePermission>().lambda().eq(RolePermission::getRoleId, id));
@@ -109,15 +109,15 @@ public class RoleController {
       });
 
     }
-    return ResponseEntity.ok().build();
+    return CommonResult.ok();
   }
 
   @ApiOperation("删除")
   @DeleteMapping("/{id}")
-  public ResponseEntity del(@ApiParam("角色ID") @PathVariable String id) {
+  public CommonResult del(@ApiParam("角色ID") @PathVariable String id) {
     QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
     roleQueryWrapper.eq("id", id);
     roleDao.delete(roleQueryWrapper);
-    return ResponseEntity.ok().build();
+    return CommonResult.ok();
   }
 }

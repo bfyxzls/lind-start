@@ -1,4 +1,7 @@
 # spring-security中核心概念（非oauth2)
+* AuthenticationEntryPoint 用来解决匿名用户访问无权限资源时的异常
+* AccessDeineHandler 用来解决认证过的用户访问无权限资源时的异常
+
 ## jwt payload
 jwt payload中包括的内容太多，对网络传输是需要考虑的，比如我们是否在JWT里直接包括权限信息，还是只包括角色信息，然后再通过角色信息去查询它的权限。
 

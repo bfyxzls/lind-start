@@ -1,12 +1,10 @@
 package com.lind.mybatis.util;
 
-
-import com.lind.mybatis.dto.PageDTO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
+import com.lind.common.dto.PageDTO;
 import java.util.ArrayList;
 import java.util.List;
 

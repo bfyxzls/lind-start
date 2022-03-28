@@ -39,12 +39,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   JwtUserService jwtUserService;
   @Autowired
   JwtConfig jwtConfig;
-
   protected void configure(HttpSecurity http) throws Exception {
     String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
     http.authorizeRequests()
         .antMatchers(urls).permitAll()
-        .anyRequest().authenticated()
         .and()
         .csrf().disable()
         .formLogin().disable()
@@ -66,6 +64,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
         .and()
         .sessionManagement().disable();
+
+    // 401和403自定义
+    http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+        .accessDeniedHandler(new CustomAccessDeineHandler());
   }
 
   @Override

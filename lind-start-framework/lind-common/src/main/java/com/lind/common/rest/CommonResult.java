@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.lind.common.exception.HttpCodeEnum;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.http.HttpStatus;
 
+import javax.annotation.Nullable;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -115,6 +117,26 @@ public class CommonResult<T> implements Serializable {
         return result;
     }
 
+    /**
+     * 权限不足，返回码403
+     *
+     * @param message
+     * @param <T>
+     * @return
+     */
+    public static <T> CommonResult<T> forbiddenFailure(@Nullable String message) {
+        return failure(HttpStatus.FORBIDDEN.value(), message);
+    }
+
+    /**
+     * 未认证，返回码401
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> CommonResult<T> unauthorizedFailure(@Nullable String message) {
+        return failure(HttpStatus.UNAUTHORIZED.value(), message);
+    }
 
     /**
      * 返回数据是否成功.

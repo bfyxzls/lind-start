@@ -1,7 +1,7 @@
 package com.lind.mybatis;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.lind.mybatis.dto.PageDTO;
+import com.lind.common.dto.PageDTO;
 import com.lind.mybatis.entity.TUser;
 import com.lind.mybatis.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
