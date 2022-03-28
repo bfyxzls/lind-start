@@ -39,7 +39,7 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
 </dependency>
 ```
 ## 登录
-```$xslt
+```
 POST JSON /login
 {
     "username":"Jack",
@@ -47,7 +47,11 @@ POST JSON /login
 }
 ```
 ![](./assets/readme-1642742553808.png)
-
+## 登出
+```
+POST /logout
+Header Bearer token
+```
 ## 使用
 1. 认证和授权的服务引用lind-uaa-jwt-start之后，需要实现ResourcePermissionService和UserDetailsService接口
 2. 其它业务服务直接引用lind-uaa-jwt-start之后，通过SecurityUtil来获取当前登陆的用户信息
@@ -81,7 +85,7 @@ username和password提交给AuthenticationManager。
 ### Provider
 前面的流程图中讲到了，封装后的token最终是交给provider来处理的。对于登录的provider，spring security已经提供了一个默认实现DaoAuthenticationProvider
 我们可以直接使用，这个类继承了AbstractUserDetailsAuthenticationProvider我们来看下关键部分的源代码是怎么做的。
-```$xslt
+```
 public abstract class AbstractUserDetailsAuthenticationProvider implements
         AuthenticationProvider, InitializingBean, MessageSourceAware {
 ...

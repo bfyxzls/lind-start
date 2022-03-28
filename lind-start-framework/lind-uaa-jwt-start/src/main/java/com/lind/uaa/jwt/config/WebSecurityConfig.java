@@ -2,9 +2,7 @@ package com.lind.uaa.jwt.config;
 
 
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
-import com.lind.uaa.jwt.handler.JsonLoginSuccessHandler;
-import com.lind.uaa.jwt.handler.JwtRefreshSuccessHandler;
-import com.lind.uaa.jwt.handler.TokenClearLogoutHandler;
+import com.lind.uaa.jwt.handler.*;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.lind.uaa.jwt.config;
+package com.lind.uaa.jwt.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.lind.common.rest.CommonResult;
