@@ -12,6 +12,12 @@ public class JwtConfig {
    * jwt算法密钥.
    */
   private String secret;
+
+  /**
+   * 每分钟容许登录失败的次数.
+   */
+  private Integer failLimit;
+
   /**
    * jwt超时时间(分).
    */
@@ -33,7 +39,8 @@ public class JwtConfig {
   public JwtConfig() {
     this.secret = "abc123";
     this.expiresAt = 60L;
-    this.refreshTokenExpiresAt=50L;
+    this.refreshTokenExpiresAt = 50L;
+    this.failLimit = 5;
     this.permitAll = new String[]{};
   }
 

@@ -60,7 +60,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
     response.getWriter().write(JSON.toJSONString(tokenResult));
 
     //用户登录后的在线token
-    redisService.set(Constants.USER + authentication.getName(), 1, jwtConfig.getExpiresAt() * 60);
+    redisService.set(Constants.ONLINE_USER + jwt.getToken(), 1, jwtConfig.getExpiresAt() * 60);
 
     ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token, ResourceUser.class);
     //角色权限缓存

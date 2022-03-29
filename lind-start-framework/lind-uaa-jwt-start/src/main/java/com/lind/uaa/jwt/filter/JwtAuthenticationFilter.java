@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.lind.uaa.jwt.config.Constants.USER;
+import static com.lind.uaa.jwt.config.Constants.ONLINE_USER;
 
 /**
  * 从请求中提取Header-Authorization中的jwtToken进行校验.
@@ -76,13 +76,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       String token = getJwtToken(request);
       if (StringUtils.isNotBlank(token)) {
+        // redis实时校验，如果用户手动单击登录，也将失败
+        if (!redisService.hasKey(ONLINE_USER + token)) {
+          failed = new InsufficientAuthenticationException("user alrealy exit");
+        }
         JwtAuthenticationToken authToken = new JwtAuthenticationToken(JWT.decode(token));
         // jwt自身有效期和签名校验
         authResult = this.getAuthenticationManager().authenticate(authToken);
-        // redis实时校验，如果用户手动单击登录，也将失败
-        if (!redisService.hasKey(USER + authResult.getName())) {
-          failed = new InsufficientAuthenticationException("user alrealy exit");
-        }
+
       } else {
         failed = new InsufficientAuthenticationException("JWT is Empty");
       }

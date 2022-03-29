@@ -1,7 +1,9 @@
 package com.lind.uaa.jwt.handler;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
+import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.event.LogoutSuccessEvent;
 import com.lind.uaa.jwt.service.JwtUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +45,8 @@ public class TokenClearLogoutHandler implements LogoutHandler {
         UserDetails user = (UserDetails) authentication.getPrincipal();
         if (user != null && user.getUsername() != null) {
             //清除jwt token的策略.
-            redisService.del(Constants.USER + authentication.getName());
+            DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();
+            redisService.del(Constants.ONLINE_USER + jwt.getToken());
 
             applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user));
         }

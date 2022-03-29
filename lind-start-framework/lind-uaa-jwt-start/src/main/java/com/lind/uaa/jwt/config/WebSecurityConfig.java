@@ -1,8 +1,13 @@
 package com.lind.uaa.jwt.config;
 
 
+import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
-import com.lind.uaa.jwt.handler.*;
+import com.lind.uaa.jwt.handler.CustomAccessDeineHandler;
+import com.lind.uaa.jwt.handler.CustomAuthenticationEntryPoint;
+import com.lind.uaa.jwt.handler.JsonLoginSuccessHandler;
+import com.lind.uaa.jwt.handler.JwtRefreshSuccessHandler;
+import com.lind.uaa.jwt.handler.TokenClearLogoutHandler;
 import com.lind.uaa.jwt.service.JwtAuthenticationProvider;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +42,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   JwtUserService jwtUserService;
   @Autowired
   JwtConfig jwtConfig;
+  @Autowired
+  RedisService redisService;
+
   protected void configure(HttpSecurity http) throws Exception {
     String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
     http.authorizeRequests()
@@ -52,9 +60,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         new Header("Access-Control-Expose-Headers", "Authorization"))))
         .and()
         .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
-        .apply(new JsonLoginConfigurer<>()).loginSuccessHandler(jsonLoginSuccessHandler())
+        .apply(new JsonLoginConfigurer<>(redisService, jwtConfig)).loginSuccessHandler(jsonLoginSuccessHandler())
         .and()
-        .apply(new JwtLoginConfigurer<>()).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
+        .apply(new JwtLoginConfigurer<>(redisService, jwtConfig)).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
         .and()
         .logout()
         .logoutUrl("/logout")   //默认就是"/logout"

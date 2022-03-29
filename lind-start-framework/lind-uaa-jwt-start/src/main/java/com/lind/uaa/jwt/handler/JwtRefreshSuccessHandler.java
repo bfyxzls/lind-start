@@ -40,7 +40,7 @@ public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler {
     boolean shouldRefresh = shouldTokenRefresh(jwt.getIssuedAt());
     if (shouldRefresh) {
       // 在线token续期
-      redisService.expire(Constants.USER + authentication.getName(), jwtConfig.getExpiresAt() * 60);
+      redisService.expire(Constants.ONLINE_USER + jwt.getToken(), jwtConfig.getExpiresAt() * 60);
       String newToken = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
       response.setHeader("Authorization", newToken);
     }
