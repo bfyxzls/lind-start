@@ -69,3 +69,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.mybatis.config.MybatisPlusConfig
 
 ```
+# 实体枚举类型，数据表整型
+* 实体value字段添加@EnumValue
+* mybatis-plus配置中添加`mybatis-plus.default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler`
+> 注意，在mybatis-plus3.3.0里，我使用重写BaseTypeHandler并没有实现类型自动转换功能

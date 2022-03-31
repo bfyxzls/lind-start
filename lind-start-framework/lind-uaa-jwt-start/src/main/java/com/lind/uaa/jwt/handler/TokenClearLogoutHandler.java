@@ -1,6 +1,7 @@
 package com.lind.uaa.jwt.handler;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.lind.common.util.IpInfoUtil;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
@@ -26,6 +27,8 @@ public class TokenClearLogoutHandler implements LogoutHandler {
     ApplicationEventPublisher applicationEventPublisher;
     @Autowired
     RedisService redisService;
+    @Autowired
+    IpInfoUtil ipInfoUtil;
     private JwtUserService jwtUserService;
 
     public TokenClearLogoutHandler(JwtUserService jwtUserService) {
@@ -34,10 +37,10 @@ public class TokenClearLogoutHandler implements LogoutHandler {
 
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        clearToken(authentication);
+        clearToken(authentication, request);
     }
 
-    protected void clearToken(Authentication authentication) {
+    protected void clearToken(Authentication authentication, HttpServletRequest request) {
         log.info("logout tokenClearLogoutHandler");
 
         if (authentication == null)
@@ -48,7 +51,7 @@ public class TokenClearLogoutHandler implements LogoutHandler {
             DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();
             redisService.del(Constants.ONLINE_USER + jwt.getToken());
 
-            applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user));
+            applicationEventPublisher.publishEvent(new LogoutSuccessEvent(user, ipInfoUtil.getIpAddr(request)));
         }
     }
 

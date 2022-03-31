@@ -1,18 +1,16 @@
 package com.lind.uaa.jwt.event;
 
-import org.springframework.context.ApplicationEvent;
+import com.lind.uaa.jwt.entity.TokenResult;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * 登录成功的事件.
  */
-public class LoginSuccessEvent extends ApplicationEvent {
-    /**
-     * Create a new ApplicationEvent.
-     *
-     * @param source the object on which the com.lind.common.event initially occurred (never {@code null})
-     */
-    public LoginSuccessEvent(Object source) {
-        super(source);
-    }
+@Data
+@AllArgsConstructor
+public class LoginSuccessEvent {
+    private TokenResult tokenResult;
+    private String ipAddress;
 }
 
