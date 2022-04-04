@@ -11,9 +11,12 @@ import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.RolePermission;
 import com.lind.rbac.entity.UserRole;
+import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.SecurityUtil;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,10 +38,18 @@ public class PermissionServiceImpl implements ResourcePermissionService {
     SecurityUtil securityUtil;
     @Autowired
     RoleDao roleDao;
+    @Autowired
+    RedisService redisService;
 
+    @SneakyThrows
     @Override
     public Set<? extends ResourcePermission> getUserAll() {
         //TODO:需要实现树逻辑，用户角色过滤
+        String key = Constants.USER_PERMISSION + securityUtil.getCurrUser().getId();
+        if (redisService.hasKey(key)) {
+            Set<? extends ResourcePermission> resourcePermissions = (Set<ResourcePermission>) redisService.get(key);
+            return resourcePermissions;
+        }
         Integer roleBtnSum = 0;
         List<String> roleIdList = new ArrayList<>();
         List<UserRole> userRoles = userRoleDao.selectList(new QueryWrapper<UserRole>().lambda()
@@ -76,6 +87,7 @@ public class PermissionServiceImpl implements ResourcePermissionService {
                     .type(permission.getType())
                     .build());
         }
+        redisService.set(key, result);
         return result;
     }
 

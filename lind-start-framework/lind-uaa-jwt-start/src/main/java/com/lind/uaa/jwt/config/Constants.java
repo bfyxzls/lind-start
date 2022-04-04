@@ -5,5 +5,7 @@ public interface Constants {
   String PERMISSION_ALL = "permission-all";
   String ROLE_PERMISSION = "role-permission:";
   String LOGIN_FAIL_LIMIT = "login-fail-limit:";
+  String USER_PERMISSION = "user-permission:";
+
 
 }
