@@ -19,10 +19,19 @@ import java.util.List;
 @NoArgsConstructor
 @JsonDeserialize(as = User.class)
 public class User implements ResourceUser {
+    /**
+     * 接口中的几个字段
+     */
     private String id;
     private String username;
     private String password;
     private String email;
+
+    /*
+     * 自定义的几个字段phone,realName
+     */
+    private String phone;
+    private String realName;
     /**
      * 用户的角色列表
      */
