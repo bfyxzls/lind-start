@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserDetailsService {
       List<UserRole> userRoleList = userRoleDao.selectList(
           new QueryWrapper<UserRole>().lambda().eq(UserRole::getUserId, userDetails.getId()));
       if (!CollectionUtils.isEmpty(userRoleList)) {
-        List<String> roleIdList = userRoleList.stream().map(o -> o.getId()).collect(Collectors.toList());
+        List<String> roleIdList = userRoleList.stream().map(o -> o.getRoleId()).collect(Collectors.toList());
         List<Role> roleList = roleDao.selectList(
             new QueryWrapper<Role>().lambda().in(Role::getId, roleIdList));
         userDetails.setResourceRoles(roleList);

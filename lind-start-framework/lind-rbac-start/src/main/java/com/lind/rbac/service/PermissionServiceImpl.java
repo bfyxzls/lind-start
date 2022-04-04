@@ -2,41 +2,99 @@ package com.lind.rbac.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.lind.common.util.BinFlagUtils;
 import com.lind.rbac.dao.PermissionDao;
+import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
+import com.lind.rbac.dao.UserRoleDao;
 import com.lind.rbac.entity.Permission;
+import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.RolePermission;
+import com.lind.rbac.entity.UserRole;
+import com.lind.uaa.jwt.config.SecurityUtil;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class PermissionServiceImpl implements ResourcePermissionService {
-  @Autowired
-  PermissionDao permissionDao;
-  @Autowired
-  RolePermissionDao rolePermissionDao;
+    @Autowired
+    PermissionDao permissionDao;
+    @Autowired
+    RolePermissionDao rolePermissionDao;
+    @Autowired
+    UserRoleDao userRoleDao;
+    @Autowired
+    SecurityUtil securityUtil;
+    @Autowired
+    RoleDao roleDao;
 
-  @Override
-  public List<Permission> getAll() {
-    return permissionDao.selectList(new QueryWrapper<>());
-  }
+    @Override
+    public Set<? extends ResourcePermission> getUserAll() {
+        //TODO:需要实现树逻辑，用户角色过滤
+        Integer roleBtnSum = 0;
+        List<String> roleIdList = new ArrayList<>();
+        List<UserRole> userRoles = userRoleDao.selectList(new QueryWrapper<UserRole>().lambda()
+                .eq(UserRole::getUserId, securityUtil.getCurrUser().getId()));
+        if (!org.springframework.util.CollectionUtils.isEmpty(userRoles)) {
+            List<Role> roles = roleDao.selectList(new QueryWrapper<Role>().lambda()
+                    .in(Role::getId, userRoles.stream().map(o -> o.getRoleId()).collect(Collectors.toList())));
 
-  @Override
-  public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
-    QueryWrapper<RolePermission> queryWrapper = new QueryWrapper<>();
-    queryWrapper.lambda().eq(RolePermission::getRoleId, roleId);
-    List<RolePermission> list = rolePermissionDao.selectList(queryWrapper);
-    if (CollectionUtils.isNotEmpty(list)) {
-      List<String> permissionIdList = list.stream().map(o -> o.getPermissionId()).collect(Collectors.toList());
-      QueryWrapper<Permission> permissionQueryWrapper = new QueryWrapper<>();
-      permissionQueryWrapper.lambda().in(Permission::getId, permissionIdList);
-      return permissionDao.selectList(permissionQueryWrapper);
+            if (!org.springframework.util.CollectionUtils.isEmpty(roles)) {
+
+                for (Role o : roles) {
+                    roleBtnSum = roleBtnSum | o.getButtonGrant();
+                    roleIdList.add(o.getId());
+                }
+            }
+        }
+        List<RolePermission> rolePermissions = rolePermissionDao.selectList(new QueryWrapper<RolePermission>().lambda().in(RolePermission::getRoleId, roleIdList));
+        Set<String> permissionIds = new HashSet<>();
+        rolePermissions.forEach(o -> {
+            permissionIds.add(o.getPermissionId());
+        });
+        List<Permission> list = permissionDao.selectList(new QueryWrapper<Permission>().lambda().in(Permission::getId, permissionIds));
+        Set<Permission> result = new HashSet<>();
+        Integer finalRoleBtnSum = roleBtnSum;
+        for (Permission permission : list) {
+            List<Integer> bulkButtonList = permission.getBulkButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
+            List<Integer> rowButtonList = permission.getRowButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
+            result.add(Permission.builder()
+                    .title(permission.getTitle())
+                    .bulkButton(BinFlagUtils.addValueList(bulkButtonList))
+                    .rowButton(BinFlagUtils.addValueList(rowButtonList))
+                    .id(permission.getId())
+                    .parentId(permission.getParentId())
+                    .path(permission.getPath())
+                    .type(permission.getType())
+                    .build());
+        }
+        return result;
     }
-    return null;
-  }
+
+    @Override
+    public List<Permission> getAll() {
+        return permissionDao.selectList(new QueryWrapper<>());
+    }
+
+    @Override
+    public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
+        QueryWrapper<RolePermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(RolePermission::getRoleId, roleId);
+        List<RolePermission> list = rolePermissionDao.selectList(queryWrapper);
+        if (CollectionUtils.isNotEmpty(list)) {
+            List<String> permissionIdList = list.stream().map(o -> o.getPermissionId()).collect(Collectors.toList());
+            QueryWrapper<Permission> permissionQueryWrapper = new QueryWrapper<>();
+            permissionQueryWrapper.lambda().in(Permission::getId, permissionIdList);
+            return permissionDao.selectList(permissionQueryWrapper);
+        }
+        return null;
+    }
 }

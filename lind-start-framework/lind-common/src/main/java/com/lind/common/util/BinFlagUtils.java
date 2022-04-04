@@ -16,17 +16,19 @@ public class BinFlagUtils {
    */
   public static List<Integer> splitBinPower(Integer grant) {
     List<Integer> result = new ArrayList<>();
-    String numStr = Integer.toBinaryString(grant);
-    StringBuffer bf = new StringBuffer();
-    for (int i = 0; i < numStr.length(); i++) {
-      if (numStr.charAt(i) != '0') {
-        bf.append(numStr.length() - 1 - i);
+    if (grant != null && grant > 0) {
+      String numStr = Integer.toBinaryString(grant);
+      StringBuffer bf = new StringBuffer();
+      for (int i = 0; i < numStr.length(); i++) {
+        if (numStr.charAt(i) != '0') {
+          bf.append(numStr.length() - 1 - i);
+        }
       }
-    }
-    int arr[] = new int[bf.length()];
-    for (int i = 0; i < bf.length(); i++) {
-      arr[i] = bf.charAt(i) - '0';
-      result.add((int) Math.pow(2, arr[i]));
+      int arr[] = new int[bf.length()];
+      for (int i = 0; i < bf.length(); i++) {
+        arr[i] = bf.charAt(i) - '0';
+        result.add((int) Math.pow(2, arr[i]));
+      }
     }
     return result;
   }

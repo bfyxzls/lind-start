@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 从Redis中读取权限,这个是为非授权服务提供的默认实现.
@@ -21,6 +22,11 @@ import java.util.List;
 public class RedisResourcePermissionService implements ResourcePermissionService {
     @Autowired
     RedisService redisService;
+
+    @Override
+    public Set<? extends ResourcePermission> getUserAll() {
+        return null;
+    }
 
     @SneakyThrows
     @Override

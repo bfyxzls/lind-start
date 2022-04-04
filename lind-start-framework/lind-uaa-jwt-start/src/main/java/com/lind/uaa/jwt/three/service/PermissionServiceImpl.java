@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class PermissionServiceImpl implements ResourcePermissionService {
@@ -18,6 +19,11 @@ public class PermissionServiceImpl implements ResourcePermissionService {
             new Permission("5", "信息管理", "/admin/info-mgr**", 0, "1", null, null),
             new Permission("1", "系统管理", "/admin/**", 0, null, null, null)
     );
+
+    @Override
+    public Set<? extends ResourcePermission> getUserAll() {
+        return null;
+    }
 
     @Override
     public List<Permission> getAll() {
