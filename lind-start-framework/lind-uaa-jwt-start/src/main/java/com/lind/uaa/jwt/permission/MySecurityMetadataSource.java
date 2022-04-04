@@ -54,8 +54,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
             //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
             resourcePermissions = resourcePermissionService.getAll();
             if (resourcePermissions != null) {
-                redisService.set(Constants.PERMISSION_ALL,
-                        new ObjectMapper().writeValueAsString(resourcePermissions));
+                redisService.set(Constants.PERMISSION_ALL,resourcePermissions);
             }
         } else {
             resourcePermissions = resourcePermissionService.getAll();

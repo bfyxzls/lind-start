@@ -76,7 +76,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
                         List<? extends ResourcePermission> rolePermissions =
                                 resourcePermissionService.getAllByRoleId(roleGrantedAuthority.getId());
                         if (rolePermissions != null) {
-                            redisService.set(rolePermissionKey, new ObjectMapper().writeValueAsString(rolePermissions));
+                            redisService.set(rolePermissionKey,rolePermissions);
                         }
                     }
                 }

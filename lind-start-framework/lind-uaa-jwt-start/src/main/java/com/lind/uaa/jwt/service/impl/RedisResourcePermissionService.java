@@ -1,7 +1,5 @@
 package com.lind.uaa.jwt.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.SecurityUtil;
@@ -41,12 +39,7 @@ public class RedisResourcePermissionService implements ResourcePermissionService
     @Override
     public List<? extends ResourcePermission> getAll() {
         if (redisService.hasKey(Constants.PERMISSION_ALL)) {
-            List<? extends ResourcePermission> resourcePermissions =
-                    new ObjectMapper().readValue(redisService.get(Constants.PERMISSION_ALL).toString(),
-                            new TypeReference<List<ResourcePermission>>() {
-                            });
-
-            return resourcePermissions;
+            return (List<? extends ResourcePermission>) redisService.get(Constants.PERMISSION_ALL);
         }
         return null;
     }
@@ -56,12 +49,7 @@ public class RedisResourcePermissionService implements ResourcePermissionService
     public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
         String rolePermissionKey = Constants.ROLE_PERMISSION.concat(roleId);
         if (redisService.hasKey(rolePermissionKey)) {
-            List<? extends ResourcePermission> permissionList =
-                    new ObjectMapper().readValue(
-                            redisService.get(Constants.ROLE_PERMISSION + roleId).toString(),
-                            new TypeReference<List<ResourcePermission>>() {
-                            });
-            return permissionList;
+            return (List<? extends ResourcePermission>) redisService.get(Constants.ROLE_PERMISSION + roleId);
         }
         return null;
     }
