@@ -9,17 +9,22 @@ import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.PermissionDao;
 import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
-import com.lind.redis.service.RedisService;
-import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@Api(tags="菜单管理")
+@Api("菜单管理")
 @RequestMapping("permission")
 public class PermissionController {
 
@@ -27,31 +32,21 @@ public class PermissionController {
   ResourcePermissionService resourcePermissionService;
   @Autowired
   PermissionDao permissionDao;
-  @Autowired
-  RedisService redisService;
 
-  @ApiOperation("树形菜单展示")
+  @ApiOperation("树形展示")
   @GetMapping
   public CommonResult index() {
     return CommonResult.ok(resourcePermissionService.getTreeMenus());
   }
 
-
-  @ApiOperation("某个角色的树形菜单展示")
-  @GetMapping("role-index")
-  public CommonResult roleIndex() {
-     return CommonResult.ok(resourcePermissionService.getRoleTreeMenus());
-  }
-
   /**
    * 列表页
-   *
    * @param pageDTO json raw参数体.
    * @return
    */
   @ApiOperation("列表页")
-  @GetMapping("query")
-  public CommonResult list(@ApiParam("分页") PageDTO pageDTO) {
+  @PostMapping("query")
+  public CommonResult list(@ApiParam("分页") @RequestBody PageDTO pageDTO) {
     QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
     IPage<Permission> list = permissionDao.selectPage(
         new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
@@ -63,13 +58,7 @@ public class PermissionController {
   @ApiOperation("新增")
   @PostMapping
   public CommonResult add(@RequestBody Permission permission) {
-    if (permissionDao.selectOne(new QueryWrapper<Permission>().lambda()
-        .eq(Permission::getTitle, permission.getTitle())
-        .eq(Permission::getParentId, permission.getParentId())) != null) {
-      return CommonResult.clientFailure(String.format("%s在同一父级下已经存在", permission.getTitle()));
-    }
     permissionDao.insert(permission);
-    redisService.del(Constants.PERMISSION_ALL);
     return CommonResult.ok();
   }
 
@@ -81,17 +70,16 @@ public class PermissionController {
       CopyUtils.copyProperties(permission, permission1);
       permission1.setId(id);
       permissionDao.updateById(permission1);
-      redisService.del(Constants.PERMISSION_ALL);
     }
     return CommonResult.ok();
   }
+
 
   @ApiOperation("删除")
   @DeleteMapping("/{id}")
   public CommonResult del(@ApiParam("菜单ID") @PathVariable String id) {
     QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
     permissionDao.delete(new QueryWrapper<Permission>().lambda().eq(Permission::getId, id));
-    redisService.del(Constants.PERMISSION_ALL);
     return CommonResult.ok();
   }
 }

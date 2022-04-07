@@ -13,7 +13,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * mybatis实体基类.
@@ -21,51 +21,51 @@ import java.util.Date;
 @Data
 public abstract class BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键.
-     * final保证了不会被其它实体override,例如由vo向entity赋值时,需要使用final来控制一下.
-     */
-    @TableId(type = IdType.INPUT)
-    private final String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
+  /**
+   * 主键.
+   * final保证了不会被其它实体override,例如由vo向entity赋值时,需要使用final来控制一下.
+   */
+  @TableId(type = IdType.INPUT)
+  private String id = String.valueOf(SnowFlakeUtil.getFlowIdInstance().nextId());
 
-    /**
-     * 建立人Id,需要实现AuditorAware接口.
-     */
-    @TableField("create_by")
-    @CreatedBy
-    private String createBy;
+  /**
+   * 建立人Id,需要实现AuditorAware接口.
+   */
+  @TableField("create_by")
+  @CreatedBy
+  private String createBy;
 
-    /**
-     * 建立时间.
-     */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @TableField("create_time")
-    @CreatedDate
-    private Date createTime;
+  /**
+   * 建立时间.
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+  @TableField("create_time")
+  @CreatedDate
+  private LocalDateTime createTime;
 
-    /**
-     * 更新人ID,需要实现AuditorAware接口.
-     */
-    @TableField("update_by")
-    @LastModifiedBy
-    private String updateBy;
+  /**
+   * 更新人ID,需要实现AuditorAware接口.
+   */
+  @TableField("update_by")
+  @LastModifiedBy
+  private String updateBy;
 
-    /**
-     * 更新时间.
-     */
-    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @TableField("update_time")
-    @LastModifiedDate
-    private Date updateTime;
+  /**
+   * 更新时间.
+   */
+  @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+  @TableField("update_time")
+  @LastModifiedDate
+  private LocalDateTime updateTime;
 
-    /**
-     * 删除标记.
-     */
-    @TableField("del_flag")
-    @TableLogic
-    private Integer delFlag = 0;
+  /**
+   * 删除标记.
+   */
+  @TableField("del_flag")
+  @TableLogic
+  private Integer delFlag = 0;
 
 
 }

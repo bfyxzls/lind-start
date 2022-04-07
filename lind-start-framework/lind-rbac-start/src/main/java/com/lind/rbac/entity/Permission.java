@@ -1,13 +1,13 @@
 package com.lind.rbac.entity;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.lind.mybatis.base.BaseEntity;
 import com.lind.uaa.jwt.entity.ResourcePermission;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
-
-import static com.lind.common.util.BinFlagUtils.splitBinPower;
 
 /**
  * 权限菜单表.
@@ -15,10 +15,8 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @ToString
-@JsonDeserialize(as = Permission.class)
-public class Permission implements ResourcePermission {
+public class Permission extends BaseEntity implements ResourcePermission {
     private String id;
     /**
      * 菜单-按钮-名称.
@@ -37,41 +35,11 @@ public class Permission implements ResourcePermission {
      */
     private String parentId;
     /**
-     * 单行按钮组.
+     * 父菜单.
      */
-    private Integer rowButton;
-    /**
-     * 批量操作按钮组.
-     */
-    private Integer bulkButton;
-    /**
-     * 单行按钮列表.
-     */
-    private transient List<Integer> rowButtonList;
-    /**
-     * 批量操作按钮列表.
-     */
-    private transient List<Integer> bulkButtonList;
+    private transient ResourcePermission parent;
     /**
      * 子菜单列表.
      */
     private transient List<? extends ResourcePermission> sons;
-
-    /**
-     * 获取单选按钮组列表.
-     *
-     * @return
-     */
-    public List<Integer> getRowButtonList() {
-        return splitBinPower(getRowButton());
-    }
-
-    /**
-     * 获取批量按钮列表.
-     *
-     * @return
-     */
-    public List<Integer> getBulkButtonList() {
-        return splitBinPower(getBulkButton());
-    }
 }
