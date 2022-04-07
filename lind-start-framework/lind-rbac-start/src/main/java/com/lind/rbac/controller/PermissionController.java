@@ -7,79 +7,93 @@ import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.PermissionDao;
+import com.lind.rbac.dto.PermissionDTO;
 import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
+import com.lind.redis.service.RedisService;
+import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Api("菜单管理")
+@Api(tags = "菜单管理")
 @RequestMapping("permission")
 public class PermissionController {
 
-  @Autowired
-  ResourcePermissionService resourcePermissionService;
-  @Autowired
-  PermissionDao permissionDao;
+    @Autowired
+    ResourcePermissionService resourcePermissionService;
+    @Autowired
+    PermissionDao permissionDao;
+    @Autowired
+    RedisService redisService;
 
-  @ApiOperation("树形展示")
-  @GetMapping
-  public CommonResult index() {
-    return CommonResult.ok(resourcePermissionService.getTreeMenus());
-  }
-
-  /**
-   * 列表页
-   * @param pageDTO json raw参数体.
-   * @return
-   */
-  @ApiOperation("列表页")
-  @PostMapping("query")
-  public CommonResult list(@ApiParam("分页") @RequestBody PageDTO pageDTO) {
-    QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
-    IPage<Permission> list = permissionDao.selectPage(
-        new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
-        userQueryWrapper);
-
-    return CommonResult.ok(list);
-  }
-
-  @ApiOperation("新增")
-  @PostMapping
-  public CommonResult add(@RequestBody Permission permission) {
-    permissionDao.insert(permission);
-    return CommonResult.ok();
-  }
-
-  @ApiOperation("更新")
-  @PutMapping("/{id}")
-  public CommonResult update(@ApiParam("菜单ID") @PathVariable String id, @RequestBody Permission permission) {
-    Permission permission1 = permissionDao.selectById(id);
-    if (permission1 != null) {
-      CopyUtils.copyProperties(permission, permission1);
-      permission1.setId(id);
-      permissionDao.updateById(permission1);
+    @ApiOperation("所有树形菜单")
+    @GetMapping
+    public CommonResult index() {
+        return CommonResult.ok(resourcePermissionService.getTreeMenus());
     }
-    return CommonResult.ok();
-  }
+
+    @ApiOperation("登录用户的树形菜单")
+    @GetMapping("user-tree")
+    public CommonResult currentUserPermissionIndex() {
+        return CommonResult.ok(resourcePermissionService.getRoleTreeMenus());
+    }
+
+    /**
+     * 列表页
+     *
+     * @param pageDTO json raw参数体.
+     * @return
+     */
+    @ApiOperation("列表页")
+    @GetMapping("query")
+    public CommonResult list(@ApiParam("分页") PageDTO pageDTO) {
+        QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
+        IPage<Permission> list = permissionDao.selectPage(
+                new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
+                userQueryWrapper);
+
+        return CommonResult.ok(list);
+    }
+
+    @ApiOperation("新增")
+    @PostMapping
+    public CommonResult add(@RequestBody PermissionDTO permission) {
+        if (permissionDao.selectOne(new QueryWrapper<Permission>().lambda()
+                .eq(Permission::getTitle, permission.getTitle())
+                .eq(Permission::getParentId, permission.getParentId())) != null) {
+            return CommonResult.clientFailure(String.format("%s在同一父级下已经存在", permission.getTitle()));
+        }
+        Permission permissionEntity = new Permission();
+        CopyUtils.copyProperties(permission, permissionEntity);
+        permissionDao.insert(permissionEntity);
+        redisService.del(Constants.PERMISSION_ALL);
+        return CommonResult.ok();
+    }
+
+    @ApiOperation("更新")
+    @PutMapping("/{id}")
+    public CommonResult update(@ApiParam("菜单ID") @PathVariable String id, @RequestBody PermissionDTO permission) {
+        Permission permissionEntity = permissionDao.selectById(id);
+        if (permissionEntity != null) {
+            CopyUtils.copyProperties(permission, permissionEntity);
+            permissionDao.updateById(permissionEntity);
+            redisService.del(Constants.PERMISSION_ALL);
+        }
+        return CommonResult.ok();
+    }
 
 
-  @ApiOperation("删除")
-  @DeleteMapping("/{id}")
-  public CommonResult del(@ApiParam("菜单ID") @PathVariable String id) {
-    QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
-    permissionDao.delete(new QueryWrapper<Permission>().lambda().eq(Permission::getId, id));
-    return CommonResult.ok();
-  }
+    @ApiOperation("删除")
+    @DeleteMapping("/{id}")
+    public CommonResult del(@ApiParam("菜单ID") @PathVariable String id) {
+        QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
+        permissionDao.delete(new QueryWrapper<Permission>().lambda().eq(Permission::getId, id));
+        redisService.del(Constants.PERMISSION_ALL);
+        return CommonResult.ok();
+    }
 }

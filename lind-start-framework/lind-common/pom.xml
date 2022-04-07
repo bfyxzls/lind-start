@@ -162,7 +162,11 @@
             <scope>test</scope>
         </dependency>
          -->
-        
+        <dependency>
+            <groupId>com.pkulaw</groupId>
+            <artifactId>pkulaw-swagger</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

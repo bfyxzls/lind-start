@@ -77,15 +77,16 @@ public class PermissionServiceImpl implements ResourcePermissionService {
         for (Permission permission : list) {
             List<Integer> bulkButtonList = permission.getBulkButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
             List<Integer> rowButtonList = permission.getRowButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
-            result.add(Permission.builder()
+            Permission permission1 = Permission.builder()
                     .title(permission.getTitle())
                     .bulkButton(BinFlagUtils.addValueList(bulkButtonList))
                     .rowButton(BinFlagUtils.addValueList(rowButtonList))
-                    .id(permission.getId())
                     .parentId(permission.getParentId())
                     .path(permission.getPath())
                     .type(permission.getType())
-                    .build());
+                    .build();
+            permission1.setId(permission.getId());
+            result.add(permission1);
         }
         redisService.set(key, result);
         return result;

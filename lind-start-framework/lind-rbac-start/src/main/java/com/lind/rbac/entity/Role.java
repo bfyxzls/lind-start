@@ -1,6 +1,7 @@
 package com.lind.rbac.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.lind.mybatis.base.BaseEntity;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,20 +19,19 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Role implements ResourceRole {
-  private String id;
-  private String name;
-  private Integer buttonGrant;
+public class Role extends BaseEntity implements ResourceRole {
+    private String name;
+    private Integer buttonGrant;
 
-  /**
-   * 不在数据表存在，只是个导航属性.
-   */
-  @TableField(exist = false)
-  private List<Integer> buttonGrantList;
+    /**
+     * 不在数据表存在，只是个导航属性.
+     */
+    @TableField(exist = false)
+    private List<Integer> buttonGrantList;
 
-  public void initButtonGrantList() {
-    buttonGrantList = splitBinPower(buttonGrant);
-  }
+    public void initButtonGrantList() {
+        buttonGrantList = splitBinPower(buttonGrant);
+    }
 
 
 }
