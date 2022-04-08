@@ -58,7 +58,7 @@ public class UserController {
     @ApiOperation("列表")
     @GetMapping
     public CommonResult<IPage<UserVO>> index(
-            @ApiParam("时间") DateRangeDTO rangeDTO,
+            @ApiParam("时间")  DateRangeDTO rangeDTO,
             @ApiParam("页码") PageDTO pageDTO) {
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
@@ -89,6 +89,11 @@ public class UserController {
         userVOIPage.setSize(result.getSize());
         userVOIPage.setTotal(result.getTotal());
         return CommonResult.ok(userVOIPage);
+    }
+
+    @GetMapping("{id}")
+    public CommonResult<User> index(@ApiParam("用户id") @PathVariable String id) {
+        return CommonResult.ok(userDao.selectById(id));
     }
 
     @ApiOperation("获取页面上的按钮,path和title二选一即可")
