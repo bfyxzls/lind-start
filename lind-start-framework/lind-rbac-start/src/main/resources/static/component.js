@@ -10,7 +10,7 @@ var todoItem = Vue.extend({
                 {{ d.text }}
             </li>
         </ul>
-    `
+       `
 });
 //注册全局组件
 Vue.component('todoItem', todoItem)
@@ -20,7 +20,44 @@ Vue.component('my-component', {
 })
 
 Vue.component('box-body', {
-    props: { height:String },//添加最大高度
-    data: function() { return this.height ? { dialogStyle:{'max-height':this.height+'px', 'overflow-y':'auto'}} : {dialogStyle:{}}},
-    template: '<div class="panel-body" :style="dialogStyle"><slot></slot></div>'
+    props: {height: String},//添加最大高度
+    data: function () {
+        return this.height ? {dialogStyle: {'max-height': this.height + 'px', 'overflow-y': 'auto'}} : {dialogStyle: {}}
+    },
+    template: `
+          <div class="panel-body" :style="dialogStyle">
+              <slot></slot>
+          </div>
+        `
 });
+
+Vue.component('range-date', {
+    props: {title: String},//标题
+    data: function () {
+        return {
+            name: this.title ? this.title : '开始时间',
+            searchForm: {}
+        }
+    },
+    methods: {
+        selectDateRange(v) {
+            if (v) {
+                this.searchForm.fromDate = v[0];
+                this.searchForm.toDate = v[1];
+            }
+        }
+    },
+    template: `
+            <form-item :label="name">
+                    <date-picker
+                            type="daterange"
+                            format="yyyy-MM-dd"
+                            clearable
+                            @on-change="selectDateRange"
+                            placeholder="选择起始时间"
+                            style="width: 200px"
+                    ></date-picker>
+                </form-item>
+        `
+})
+;

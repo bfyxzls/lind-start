@@ -176,6 +176,7 @@
                             style="width: 200px"
                     ></date-picker>
                 </form-item>
+                <range-date title="from date"></range-date>
                 <form-item class="br">
                     <input type="button" @click="handleSearch" class="ivu-btn ivu-btn-default" value="搜 索"/>
                 </form-item>
@@ -196,7 +197,6 @@
                 <div style="font-weight:bold">账号：{{currentRecord.username}}</div>
                 <div style="font-weight:bold">Email：{{currentRecord.email}}</div>
                 <div style="font-weight:bold">建立时间：{{currentRecord.createTime}}</div>
-
             </div>
         </Modal>
 

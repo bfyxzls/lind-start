@@ -17,76 +17,25 @@ Progress	i-progress
 Switch	i-switch
 -->
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="zh-CN">
     <head>
-        <meta charset="UTF-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
         <title><#nested "head"></title>
-        <Style type="text/css">
-            .red {
-                color: red;
-            }
-
-
-            .layout {
-                border: 1px solid #d7dde4;
-                background: #f5f7f9;
-            }
-
-            .layout-logo {
-                width: 100px;
-                height: 30px;
-                background: #5b6270;
-                border-radius: 3px;
-                float: left;
-                position: relative;
-                top: 15px;
-                left: 20px;
-            }
-
-            .layout-nav {
-                width: 420px;
-                margin: 0 auto;
-            }
-
-            .layout-assistant {
-                width: 300px;
-                margin: 0 auto;
-                height: inherit;
-            }
-
-            .layout-breadcrumb {
-                padding: 10px 15px 0;
-            }
-
-            .layout-content {
-                min-height: 200px;
-                margin: 15px;
-                overflow: hidden;
-                background: #fff;
-                border-radius: 4px;
-            }
-
-            .layout-content-main {
-                padding: 10px;
-            }
-
-            .layout-copy {
-                text-align: center;
-                padding: 10px 0 20px;
-                color: #9ea7b4;
-            }
-
-        </style>
 
         <meta name="renderer" content="webkit|ie-comp|ie-stand">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta http-equiv="Cache-Control" content="no-siteapp"/>
         <link rel="stylesheet" href="/css/iview.css">
-        <script src="/js/vue.min.js"></script>
-        <script src="/js/iview.min.js"></script>
-        <script src="/js/axios.min.js"></script>
-        <script src="/js/vuejs-datepicker.js"></script>
-        <script src="/component.js"></script>
+        <link rel="stylesheet" href="/css/site.css">
+
+        <script charset="UTF-8" src="/js/vue.min.js"></script>
+        <script charset="UTF-8" src="/js/axios.min.js"></script>
+
+        <script charset="UTF-8" src="/js/iview.min.js"></script>
+        <script charset="UTF-8" src="/js/vuejs-datepicker.js"></script>
+        <script charset="UTF-8" src="/component.js"></script>
+
         <#nested "head-js">
     </head>
     <body>
@@ -118,36 +67,18 @@ Switch	i-switch
                 <Row>
                     <i-col span="5">
                         <i-menu theme="light" width="auto">
-                            <Submenu name="1">
+                            <Submenu name="1" :data="cartList">
                                 <template slot="title">
                                     内容管理
                                 </template>
-                                <menu-item name="1-1">文章管理</menu-item>
-                                <menu-item name="1-2">评论管理</menu-item>
-                                <menu-item name="1-3">举报管理</menu-item>
+                                <menu-item  v-for="(item, i) in navList.slice(sliceNum, navList.length)"
+                                            :key="i"
+                                            :name="item.name"></menu-item>
                             </Submenu>
-                            <Submenu name="2">
-                                <template slot="title">
-                                    用户管理
-                                </template>
-                                <menu-item name="2-1">新增用户</menu-item>
-                                <menu-item name="2-2">活跃用户</menu-item>
-                            </Submenu>
-                            <Submenu name="3">
-                                <template slot="title">
-                                    统计分析
-                                </template>
-                                <menu-group title="使用">
-                                    <menu-item name="3-1">新增和启动</menu-item>
-                                    <menu-item name="3-2">活跃分析</menu-item>
-                                    <menu-item name="3-3">时段分析</menu-item>
-                                </menu-group>
-                                <menu-group title="留存">
-                                    <menu-item name="3-4">用户留存</menu-item>
-                                    <menu-item name="3-5">流失用户</menu-item>
-                                </menu-group>
-                            </Submenu>
+
                         </i-menu>
+
+
                     </i-col>
                     <i-col span="19">
                         <div class="layout-header"></div>
