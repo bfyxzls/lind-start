@@ -3,6 +3,7 @@ spring:
   application:
     name: rbac
   freemarker:
+    settings.template_update_delay: 0
     suffix: .ftl                                 # 设置模板后缀名
     content-type: text/html                      # 设置文档类型
     charset: UTF-8                               # 设置页面编码格式

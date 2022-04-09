@@ -43,39 +43,40 @@
             <artifactId>lind-uaa-jwt-start</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- 热加载-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
-
     <build>
-
-        <resources>
-
-            <resource>
-
-                <directory>src/main/resources</directory>
-
-                <includes>
-
-                    <include>**/*.yml</include>
-
-                    <include>**/*.properties</include>
-
-                    <include>**/*.html</include>
-
-                    <include>**/*.js</include>
-
-                    <include>**/*.css</include>
-
-                    <include>**/*.woff2</include>
-
-                    <include>**/*.woff</include>
-
-                    <include>**/*.ttf</include>
-
-                </includes>
-
-            </resource>
-
-        </resources>
-
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <fork>true</fork>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+<!--    <build> 这个打开后，view/user就成404了 -->
+<!--        <resources>-->
+<!--            <resource>-->
+<!--                <directory>src/main/resources</directory>-->
+<!--                <includes>-->
+<!--                    <include>**/*.yml</include>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.html</include>-->
+<!--                    <include>**/*.js</include>-->
+<!--                    <include>**/*.css</include>-->
+<!--                    <include>**/*.woff2</include>-->
+<!--                    <include>**/*.woff</include>-->
+<!--                    <include>**/*.ttf</include>-->
+<!--                    <include>templates/**</include>-->
+<!--                </includes>-->
+<!--            </resource>-->
+<!--        </resources>-->
+<!--    </build>-->
 </project>

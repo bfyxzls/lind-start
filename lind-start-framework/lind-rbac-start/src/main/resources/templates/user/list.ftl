@@ -4,6 +4,7 @@
         列表
     <#elseif section="head-js">
         <script type="module">
+            import {getRequest} from "/index.js"
 
             new Vue({
                 el: '#app',
@@ -92,11 +93,7 @@
                     }
                 },
                 methods: {
-                    init() {
-                        axios.get('/user').then(res => {
-                            this.cartList = res.data.data.records;
-                        });
-                    },
+
                     selectDateRange(v) {
                         if (v) {
                             this.searchForm.fromDate = v[0];
@@ -110,8 +107,7 @@
                     },
                     getList() {
                         // 多条件搜索用户列表
-                        axios.get('/user', {params: this.searchForm}).then(res => {
-                            alert("ok");
+                        getRequest('/user', this.searchForm).then(res => {
                             this.cartList = res.data.data.records;
                         });
                     },
@@ -152,7 +148,7 @@
 
                 },
                 mounted() {
-                    this.init();
+                    this.getList();
                     // 请注意，在实例化extends组件构造器时，传入属性必须是propsData、而不是props哦
                     new todoItem({
                         propsData: {
@@ -181,7 +177,7 @@
                     ></date-picker>
                 </form-item>
                 <form-item class="br">
-                    <button @click="handleSearch" type="primary" icon="ios-search">搜 索</button>
+                    <input type="button" @click="handleSearch" class="ivu-btn ivu-btn-default" value="搜 索"/>
                 </form-item>
             </i-form>
         </div>
