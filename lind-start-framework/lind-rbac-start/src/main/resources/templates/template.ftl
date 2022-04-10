@@ -66,18 +66,9 @@ Switch	i-switch
             <div class="layout-content">
                 <Row>
                     <i-col span="5">
-                        <i-menu theme="light" width="auto">
-                            <Submenu name="1" :data="cartList">
-                                <template slot="title">
-                                    内容管理
-                                </template>
-                                <menu-item  v-for="(item, i) in navList.slice(sliceNum, navList.length)"
-                                            :key="i"
-                                            :name="item.name"></menu-item>
-                            </Submenu>
 
-                        </i-menu>
 
+                            <nav-menu></nav-menu>
 
                     </i-col>
                     <i-col span="19">

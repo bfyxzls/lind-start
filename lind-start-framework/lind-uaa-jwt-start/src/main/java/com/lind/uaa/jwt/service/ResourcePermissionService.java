@@ -2,6 +2,7 @@ package com.lind.uaa.jwt.service;
 
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ public interface ResourcePermissionService {
      */
     default List<? extends ResourcePermission> getTreeMenus() {
         List<ResourcePermission> ones = getAll().stream()
-                .filter(o -> o.getParentId() == null)
+                .filter(o -> o.getParentId() == null || StringUtils.isEmpty(o.getParentId()))
                 .collect(Collectors.toList());
         getTreeMenuRzSons(ones);
         return ones;

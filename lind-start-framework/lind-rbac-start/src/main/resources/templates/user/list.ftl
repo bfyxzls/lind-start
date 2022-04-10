@@ -149,6 +149,7 @@
                 },
                 mounted() {
                     this.getList();
+
                     // 请注意，在实例化extends组件构造器时，传入属性必须是propsData、而不是props哦
                     new todoItem({
                         propsData: {

@@ -59,5 +59,38 @@ Vue.component('range-date', {
                     ></date-picker>
                 </form-item>
         `
-})
-;
+});
+
+
+Vue.component('nav-menu', {
+    props: {navMenus: Array},
+    data: function () {
+        return {
+            navList: []
+        }
+    },
+    mounted() {
+        if (this.navMenus != null) {
+            this.navList = this.navMenus;
+        } else {
+            axios.get('/permission').then(res => (this.navList = res.data.data));
+        }
+    },
+    template: `
+     <i-menu theme="light" width="auto">
+            <label v-for="navMenu in navList">
+                  <menu-item v-if="navMenu.sons==null"
+                    :key="navMenu.id" :data="navMenu" :index="navMenu.id" :route="navMenu.path">
+                          {{navMenu.title}}
+                   </menu-item>
+                   <Submenu  v-if="navMenu.sons"
+                          :key="navMenu.id" :data="navMenu" :index="navMenu.id">
+                    <template slot="title">
+                         {{navMenu.title}}
+                    </template>
+                    <nav-menu :navMenus="navMenu.sons"></nav-menu>
+                   </Submenu>
+            </label>
+    </i-menu>
+`
+});
