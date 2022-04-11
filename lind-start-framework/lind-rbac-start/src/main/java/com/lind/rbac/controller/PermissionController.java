@@ -96,4 +96,10 @@ public class PermissionController {
         redisService.del(Constants.PERMISSION_ALL);
         return CommonResult.ok();
     }
+
+    @ApiOperation("获取")
+    @GetMapping("/{id}")
+    public CommonResult get(@ApiParam("id") @PathVariable String id) {
+        return CommonResult.ok(permissionDao.selectById(id));
+    }
 }

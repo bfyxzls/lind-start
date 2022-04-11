@@ -77,20 +77,21 @@ Vue.component('nav-menu', {
         }
     },
     template: `
-     <i-menu theme="light" width="auto">
-            <label v-for="navMenu in navList">
+     <i-menu theme="light" width="auto" >
+            <div v-for="navMenu in navList">
                   <menu-item v-if="navMenu.sons==null"
-                    :key="navMenu.id" :data="navMenu" :index="navMenu.id" :route="navMenu.path">
-                          {{navMenu.title}}
+                    :name="navMenu.id" :data="navMenu">
+                     <Icon type="ios-navigate"/>
+                          <a :href="navMenu.path">{{navMenu.title}}</a>
                    </menu-item>
                    <Submenu  v-if="navMenu.sons"
-                          :key="navMenu.id" :data="navMenu" :index="navMenu.id">
-                    <template slot="title">
+                          :name="navMenu.id" :data="navMenu">
+                    <template slot="title"> 
                          {{navMenu.title}}
                     </template>
                     <nav-menu :navMenus="navMenu.sons"></nav-menu>
                    </Submenu>
-            </label>
+            </div>
     </i-menu>
 `
 });

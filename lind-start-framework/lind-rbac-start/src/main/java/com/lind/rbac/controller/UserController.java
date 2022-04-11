@@ -92,8 +92,8 @@ public class UserController {
     }
 
     @GetMapping("{id}")
-    public CommonResult<User> index(@ApiParam("用户id") @PathVariable String id) {
-        return CommonResult.ok(userDao.selectById(id));
+    public CommonResult<UserVO> index(@ApiParam("用户id") @PathVariable String id) {
+        return CommonResult.ok(CopyUtils.copyProperties(userDao.selectById(id),UserVO.class));
     }
 
     @ApiOperation("获取页面上的按钮,path和title二选一即可")

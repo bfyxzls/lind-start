@@ -81,7 +81,8 @@
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.deleteItem(params.row.id);
+                                                    console.info('删除当前项');
+                                                    cart.deleteItem(params.row.id);
                                                 }
                                             }
                                         }, '删除')
@@ -166,6 +167,16 @@
     <#elseif section = "form">
         <div class="search">
             <i-form ref="searchForm" :model="searchForm" inline :label-width="70">
+                <form-item label="创建时间">
+                    <date-picker
+                            type="daterange"
+                            format="yyyy-MM-dd"
+                            clearable
+                            @on-change="selectDateRange"
+                            placeholder="选择起始时间"
+                            style="width: 200px"
+                    ></date-picker>
+                </form-item>
                 <range-date title="from date"></range-date>
                 <form-item class="br">
                     <input type="button" @click="handleSearch" class="ivu-btn ivu-btn-default" value="搜 索"/>
@@ -190,5 +201,11 @@
             </div>
         </Modal>
 
+        <div id="todoItem"></div>
+        <my-component></my-component>
+        <box-body height="100">
+            <h1>ok</h1>
+            <h2>ok2</h2>
+        </box-body>
     </#if>
 </@layout.registrationLayout>

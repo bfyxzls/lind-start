@@ -128,4 +128,10 @@ public class RoleController {
         redisService.del(Constants.ROLE_PERMISSION.concat(id));
         return CommonResult.ok();
     }
+
+    @ApiOperation("获取")
+    @GetMapping("/{id}")
+    public CommonResult get(@ApiParam("角色ID") @PathVariable String id) {
+        return CommonResult.ok(roleDao.selectById(id));
+    }
 }

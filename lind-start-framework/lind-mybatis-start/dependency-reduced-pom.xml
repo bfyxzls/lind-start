@@ -136,6 +136,12 @@
       <version>2.2.6.RELEASE</version>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>com.lind</groupId>
+      <artifactId>lind-common</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <dependencyManagement>
     <dependencies>

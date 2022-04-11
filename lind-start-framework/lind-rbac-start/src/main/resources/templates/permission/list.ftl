@@ -1,7 +1,7 @@
 <#import "../template.ftl" as layout>
 <@layout.registrationLayout bodyClass="<span style='color:red'>用户列表</span>";section>
     <#if section = "head">
-        用户列表
+        列表
     <#elseif section="head-js">
         <script type="module">
             import {getRequest} from "/index.js"
@@ -27,17 +27,20 @@
                                 align: "center",
                             },
                             {
-                                title: '名称',
-                                key: 'username'
+                                title: '标题',
+                                key: 'title'
                             },
                             {
-                                title: '电话',
-                                key: 'phone'
+                                title: '路径',
+                                key: 'path'
                             },
                             {
-                                title: 'Email',
-                                key: 'email'
+                                title: '单行按钮',
+                                key: 'rowButton'
                             }, {
+                                title: '批量按钮',
+                                key: 'bulkButton'
+                            },{
                                 title: '建立时间',
                                 key: 'createTime'
                             },
@@ -81,7 +84,8 @@
                                             },
                                             on: {
                                                 click: () => {
-                                                    this.deleteItem(params.row.id);
+                                                    console.info('删除当前项');
+                                                    cart.deleteItem(params.row.id);
                                                 }
                                             }
                                         }, '删除')
@@ -106,7 +110,7 @@
                     },
                     getList() {
                         // 多条件搜索用户列表
-                        getRequest('/user', this.searchForm).then(res => {
+                        getRequest('/permission', this.searchForm).then(res => {
                             this.cartList = res.data.data.records;
                         });
                     },
@@ -124,7 +128,7 @@
                         }
                         let str = JSON.stringify(v);
                         let info = JSON.parse(str);
-                        axios.get('/user/' + info.id).then(res => (this.currentRecord = res.data.data));
+                        axios.get('/permission/' + info.id).then(res => (this.currentRecord = res.data.data));
                         this.modalDetailVisible = true;
                     },
                     deleteItem: function (id) {
@@ -166,6 +170,16 @@
     <#elseif section = "form">
         <div class="search">
             <i-form ref="searchForm" :model="searchForm" inline :label-width="70">
+                <form-item label="创建时间">
+                    <date-picker
+                            type="daterange"
+                            format="yyyy-MM-dd"
+                            clearable
+                            @on-change="selectDateRange"
+                            placeholder="选择起始时间"
+                            style="width: 200px"
+                    ></date-picker>
+                </form-item>
                 <range-date title="from date"></range-date>
                 <form-item class="br">
                     <input type="button" @click="handleSearch" class="ivu-btn ivu-btn-default" value="搜 索"/>
@@ -190,5 +204,11 @@
             </div>
         </Modal>
 
+        <div id="todoItem"></div>
+        <my-component></my-component>
+        <box-body height="100">
+            <h1>ok</h1>
+            <h2>ok2</h2>
+        </box-body>
     </#if>
 </@layout.registrationLayout>

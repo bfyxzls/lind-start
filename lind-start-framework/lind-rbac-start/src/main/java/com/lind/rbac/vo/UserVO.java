@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -23,9 +23,9 @@ public class UserVO {
     @ApiModelProperty("用户的角色列表")
     private List<Role> roleList;
     @ApiModelProperty("建立时间")
-    private Date createTime;
+    private LocalDateTime createTime;
     @ApiModelProperty("更新时间")
-    private Date updateTime;
+    private LocalDateTime updateTime;
     @ApiModelProperty("建立人")
     private String createBy;
     @ApiModelProperty("更新人")
