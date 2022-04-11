@@ -58,7 +58,7 @@ public class UserController {
     @ApiOperation("列表")
     @GetMapping
     public CommonResult<IPage<UserVO>> index(
-            @ApiParam("时间")  DateRangeDTO rangeDTO,
+            @ApiParam("时间") DateRangeDTO rangeDTO,
             @ApiParam("页码") PageDTO pageDTO) {
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
@@ -93,7 +93,7 @@ public class UserController {
 
     @GetMapping("{id}")
     public CommonResult<UserVO> index(@ApiParam("用户id") @PathVariable String id) {
-        return CommonResult.ok(CopyUtils.copyProperties(userDao.selectById(id),UserVO.class));
+        return CommonResult.ok(CopyUtils.copyProperties(userDao.selectById(id), UserVO.class));
     }
 
     @ApiOperation("获取页面上的按钮,path和title二选一即可")
@@ -189,6 +189,22 @@ public class UserController {
         userQueryWrapper.eq("id", id);
         userDao.delete(userQueryWrapper);
         redisService.del(Constants.USER_PERMISSION.concat(id));
+        return CommonResult.ok();
+    }
+
+
+    @ApiOperation("批量删除")
+    @PostMapping("bulk-del")
+    public CommonResult bulkDel(@ApiParam("用户ID") @RequestParam List<String> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return CommonResult.clientFailure("ids为空");
+        }
+        for (String id : ids) {
+            QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+            userQueryWrapper.eq("id", id);
+            userDao.delete(userQueryWrapper);
+            redisService.del(Constants.USER_PERMISSION.concat(id));
+        }
         return CommonResult.ok();
     }
 }

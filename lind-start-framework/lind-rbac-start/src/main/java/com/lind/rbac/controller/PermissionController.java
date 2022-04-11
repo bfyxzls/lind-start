@@ -7,9 +7,11 @@ import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.PermissionDao;
+import com.lind.rbac.dao.RolePermissionDao;
 import com.lind.rbac.dto.PermissionDTO;
 import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
+import com.lind.rbac.entity.RolePermission;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
@@ -30,6 +32,8 @@ public class PermissionController {
     PermissionDao permissionDao;
     @Autowired
     RedisService redisService;
+    @Autowired
+    RolePermissionDao rolePermissionDao;
 
     @ApiOperation("所有树形菜单")
     @GetMapping
@@ -71,6 +75,11 @@ public class PermissionController {
         Permission permissionEntity = new Permission();
         CopyUtils.copyProperties(permission, permissionEntity);
         permissionDao.insert(permissionEntity);
+        //为管理员添加菜单权限
+        RolePermission rolePermission = new RolePermission();
+        rolePermission.setPermissionId(permissionEntity.getId());
+        rolePermission.setRoleId("1");
+        rolePermissionDao.insert(rolePermission);
         redisService.del(Constants.PERMISSION_ALL);
         return CommonResult.ok();
     }

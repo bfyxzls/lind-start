@@ -75,4 +75,17 @@ public class Permission extends BaseEntity implements ResourcePermission {
     public List<Integer> getBulkButtonList() {
         return splitBinPower(getBulkButton());
     }
+
+//    /**
+//     * http请求方式,GET,POST,PUT,DELETE
+//     */
+//    private String httpMethod;
+//    /**
+//     * 菜单路径，VUE文件路径.
+//     */
+//    private String filePath;
+//    /**
+//     * 菜单图标
+//     */
+//    private String icon;
 }
