@@ -6,7 +6,49 @@
         <script type="module">
             import {getRequest} from "/index.js"
 
+            //首页组件
+            var chatKfIndex = {
+                data: function(){
+                    return {
+                        visitors: {},
+                    }
+                },
+                methods: {
+                },
+                created: function () {
+                },
+                template:$("#chatKfIndex").html()
+            };
+            //详情组件
+            var chatKfBox = {
+                data: function(){
+                    return {
+                        msgList: [],
+                        messageContent: "",
+                        face: [],
+                    }
+                },
+                methods: {
+                    init(){
+                        alert(this.$parent.socket);
+                        alert(this.$route.params.visitorId);
+                    },
+                },
+                created: function () {
+                    this.init();
+                },
+                template:$("#chatBox").html()
+            };
+            var routes = [
+                { path: '/chatKfIndex',component:chatKfIndex}, // 这个表示会默认渲染  http://localhost:8081/view/user#/
+                {path:'/chatKfBox/:visitorId',component:chatKfBox},//http://localhost:8081/view/user#/chatKfBox
+            ];
+            var router = new VueRouter({
+                routes: routes
+            })
+
             new Vue({
+                router,
                 el: '#app',
                 data() {
                     return {
@@ -189,6 +231,14 @@
                 <div style="font-weight:bold">建立时间：{{currentRecord.createTime}}</div>
             </div>
         </Modal>
-
+        <h1>
+        <router-view></router-view>
+        </h1>
     </#if>
+    <template id="chatKfIndex">
+        <div>111</div>
+    </template>
+    <template id="chatBox">
+        <div>222</div>
+    </template>
 </@layout.registrationLayout>

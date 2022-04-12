@@ -29,6 +29,8 @@ Switch	i-switch
         <link rel="stylesheet" href="/css/iview.css">
         <link rel="stylesheet" href="/css/site.css">
         <script charset="UTF-8" src="/js/vue.min.js"></script>
+        <script charset="UTF-8" src="/js/vue-router.js"></script>
+        <script charset="UTF-8" src="/js/jquery.min.js"></script>
         <script charset="UTF-8" src="/js/axios.min.js"></script>
         <script charset="UTF-8" src="/js/iview.min.js"></script>
         <script charset="UTF-8" src="/js/vuejs-datepicker.js"></script>
