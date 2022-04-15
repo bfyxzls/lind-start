@@ -1,8 +1,8 @@
 package com.lind.uaa.jwt.service;
 
 import com.lind.uaa.jwt.entity.ResourcePermission;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -47,7 +47,7 @@ public interface ResourcePermissionService {
      */
     default List<? extends ResourcePermission> getRoleTreeMenus() {
         List<ResourcePermission> ones = getUserAll().stream()
-                .filter(o -> o.getParentId() == null)
+                .filter(o -> o.getParentId() == null || StringUtils.isEmpty(o.getParentId()))
                 .collect(Collectors.toList());
         getRoleTreeMenuRzSons(ones);
         return ones;
@@ -71,7 +71,8 @@ public interface ResourcePermissionService {
             if (resourcePermission != null) {
                 List<ResourcePermission> sons = getAll().stream()
                         .filter(o -> o.getParentId() != null
-                                && o.getParentId().equals(resourcePermission.getId()))
+                                && o.getParentId().equals(resourcePermission.getId())
+                                && o.getType() == 0)
                         .collect(Collectors.toList());
                 if (!CollectionUtils.isEmpty(sons)) {
                     resourcePermission.setSons(sons);
@@ -83,6 +84,7 @@ public interface ResourcePermissionService {
 
     /**
      * 得到用户角色下的菜单.
+     *
      * @param ones
      */
     default void getRoleTreeMenuRzSons(List<? extends ResourcePermission> ones) {
@@ -90,7 +92,8 @@ public interface ResourcePermissionService {
             if (resourcePermission != null) {
                 List<ResourcePermission> sons = getUserAll().stream()
                         .filter(o -> o.getParentId() != null
-                                && o.getParentId().equals(resourcePermission.getId()))
+                                && o.getParentId().equals(resourcePermission.getId())
+                                && o.getType() == 0)
                         .collect(Collectors.toList());
                 if (!CollectionUtils.isEmpty(sons)) {
                     resourcePermission.setSons(sons);
@@ -100,4 +103,23 @@ public interface ResourcePermissionService {
         }
     }
 
+    /**
+     * 递归找祖宗，并添加到列表中.
+     *
+     * @param current
+     * @param list
+     */
+    default void findFather(ResourcePermission current, List<ResourcePermission> list) {
+        if (current != null) {
+            list.add(current);
+            if (current.getParentId() != null
+                    && StringUtils.isNoneBlank(current.getParentId())) {
+                ResourcePermission father = getAll().stream().filter(o -> o.getId().equals(current.getParentId()))
+                        .findFirst().orElse(null);
+                if (father != null) {
+                    findFather(father, list);
+                }
+            }
+        }
+    }
 }

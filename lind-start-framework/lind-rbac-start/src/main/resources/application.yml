@@ -23,5 +23,5 @@ mybatis:
     mapUnderscoreToCamelCase: true
 
 jwt:
-  expiresAt: 30
+  expiresAt: 3000
   permitAll: /doc/**,/user/**,/permission/**,/role/**,/view/*

@@ -8,11 +8,7 @@ import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
-import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.plugin.Intercepts;
-import org.apache.ibatis.plugin.Invocation;
-import org.apache.ibatis.plugin.Plugin;
-import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.plugin.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -21,7 +17,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.domain.AuditorAware;
 
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Properties;
 
@@ -76,7 +72,7 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
             if (SqlCommandType.INSERT.equals(sqlCommandType)) {
                 if (field.getAnnotation(CreatedDate.class) != null) {
                     field.setAccessible(true);
-                    field.set(parameter, new Timestamp(System.currentTimeMillis()));
+                    field.set(parameter, LocalDateTime.now());
                 }
 
                 if (field.getAnnotation(CreatedBy.class) != null) {
@@ -103,9 +99,9 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
                     //兼容mybatis plus的update
                     if (isPlugUpdate) {
                         Map<String, Object> updateParam = (Map<String, Object>) parameter;
-                        field.set(updateParam.get("param1"), new Timestamp(System.currentTimeMillis()));
+                        field.set(updateParam.get("param1"), LocalDateTime.now());
                     } else {
-                        field.set(parameter, new Timestamp(System.currentTimeMillis()));
+                        field.set(parameter, LocalDateTime.now());
                     }
                 }
                 if (field.getAnnotation(LastModifiedBy.class) != null) {

@@ -23,7 +23,7 @@ import java.util.TimeZone;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class KafkaSenderInspector {
+public class KafkaSenderInterceptor {
 
   @Autowired(required = false)
   CurrentUserAware currentUserAware;

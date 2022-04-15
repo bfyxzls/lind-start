@@ -1,5 +1,6 @@
 package com.lind.rbac.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import com.lind.uaa.jwt.entity.ResourceUser;
@@ -15,6 +16,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonDeserialize(as = User.class)
 public class User extends BaseEntity implements ResourceUser {
   private String username;
   private String password;

@@ -1,5 +1,6 @@
 package com.lind.rbac.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import io.swagger.annotations.ApiModelProperty;
@@ -17,6 +18,7 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @NoArgsConstructor
 @Builder
 @ToString
+@JsonDeserialize(as = Permission.class)
 public class Permission extends BaseEntity implements ResourcePermission {
     /**
      * 菜单-按钮-名称.
@@ -76,16 +78,16 @@ public class Permission extends BaseEntity implements ResourcePermission {
         return splitBinPower(getBulkButton());
     }
 
-//    /**
-//     * http请求方式,GET,POST,PUT,DELETE
-//     */
-//    private String httpMethod;
-//    /**
-//     * 菜单路径，VUE文件路径.
-//     */
-//    private String filePath;
-//    /**
-//     * 菜单图标
-//     */
-//    private String icon;
+    /**
+     * http请求方式,GET,POST,PUT,DELETE
+     */
+    private String httpMethod;
+    /**
+     * 菜单路径，VUE文件路径.
+     */
+    private String filePath;
+    /**
+     * 菜单图标
+     */
+    private String icon;
 }

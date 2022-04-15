@@ -8,20 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("view")
 public class ViewController {
-    @GetMapping("user")
+    @GetMapping("index")
     public String userList(Model model) {
-        return "user/list";
-    }
-
-    /**
-     * 菜单表中配置了role地址之后，这个/role就需要先认证了.
-     *
-     * @param model
-     * @return
-     */
-    @GetMapping("permission")
-    public String roleList(Model model) {
-        return "permission/list";
+        return "view/index";
     }
 
     /**

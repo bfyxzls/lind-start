@@ -28,14 +28,15 @@ Switch	i-switch
         <meta http-equiv="Cache-Control" content="no-siteapp"/>
         <link rel="stylesheet" href="/css/iview.css">
         <link rel="stylesheet" href="/css/site.css">
+
         <script charset="UTF-8" src="/js/vue.min.js"></script>
         <script charset="UTF-8" src="/js/vue-router.js"></script>
         <script charset="UTF-8" src="/js/jquery.min.js"></script>
         <script charset="UTF-8" src="/js/axios.min.js"></script>
         <script charset="UTF-8" src="/js/iview.min.js"></script>
         <script charset="UTF-8" src="/js/vuejs-datepicker.js"></script>
-        <script charset="UTF-8" src="/component.js"></script>
-
+        <script charset="UTF-8" src="/component.js" type="module"></script>
+        <!-- 因为在component.js中引用了其它模块，所以需要添加type=module-->
         <#nested "head-js">
     </head>
     <body>
@@ -70,13 +71,7 @@ Switch	i-switch
                     </i-col>
                     <i-col span="19">
                         <div class="layout-header"></div>
-                        <div class="layout-breadcrumb">
-                            <Breadcrumb :style="{margin: '24px 0'}">
-                                <Breadcrumb-item>首页</Breadcrumb-item>
-                                <Breadcrumb-item>内容管理</Breadcrumb-Item>
-                                <Breadcrumb-item>文章管理</Breadcrumb-item>
-                            </Breadcrumb>
-                        </div>
+                        <breadcrumb></breadcrumb>
                         <div class="layout-content">
                             <p>
                                 ${bodyClass}
