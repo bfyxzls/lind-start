@@ -1,14 +1,15 @@
 package com.lind.rbac.entity;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.lind.common.enums.EnumUtils;
 import com.lind.mybatis.base.BaseEntity;
+import com.lind.rbac.enums.PermissionType;
 import com.lind.uaa.jwt.entity.ResourcePermission;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import java.util.List;
-
-import static com.lind.common.util.BinFlagUtils.splitBinPower;
 
 /**
  * 权限菜单表.
@@ -16,78 +17,69 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @ToString
 @JsonDeserialize(as = Permission.class)
+@ApiModel("权限菜单表")
 public class Permission extends BaseEntity implements ResourcePermission {
     /**
      * 菜单-按钮-名称.
      */
+    @ApiModelProperty("名称")
     private String title;
     /**
      * 资源相对路径.
      */
+    @ApiModelProperty("相对路径")
     private String path;
     /**
      * 类型：0菜单,1按钮.
      */
+    @ApiModelProperty("类型：0菜单,1按钮")
     private Integer type;
     /**
      * 上级Id
      */
+    @ApiModelProperty("上级Id")
     private String parentId;
+    /**
+     * http请求方式
+     */
+    @ApiModelProperty("http请求方式")
+    private String httpMethod;
 
     /**
-     * 单行按钮组.
+     * 文件路径.
      */
-    @ApiModelProperty("单行按钮组")
-    private Integer rowButton;
+    @ApiModelProperty("文件路径")
+    private String filePath;
     /**
-     * 批量操作按钮组.
+     * 图标.
      */
-    @ApiModelProperty("批量操作按钮组")
-    private Integer bulkButton;
+    @ApiModelProperty("图标")
+    private String icon;
+
     /**
-     * 单行按钮列表.
+     * 排序,支持小数.
      */
-    private transient List<Integer> rowButtonList;
+    @ApiModelProperty("排序,支持小数")
+    private double sortNumber;
+
     /**
-     * 批量操作按钮列表.
+     * 授权标志.
      */
-    private transient List<Integer> bulkButtonList;
+    @ApiModelProperty("授权标志")
+    private String flag;
+
     /**
      * 子菜单列表.
      */
     private transient List<? extends ResourcePermission> sons;
 
-    /**
-     * 获取单选按钮组列表.
-     *
-     * @return
-     */
-    public List<Integer> getRowButtonList() {
-        return splitBinPower(getRowButton());
-    }
+    @ApiModelProperty("类型名称")
+    private transient String typeName;
 
-    /**
-     * 获取批量按钮列表.
-     *
-     * @return
-     */
-    public List<Integer> getBulkButtonList() {
-        return splitBinPower(getBulkButton());
+    public String getTypeName() {
+        return EnumUtils.getEnumByValue(PermissionType.class, type).getName();
     }
-
-    /**
-     * http请求方式,GET,POST,PUT,DELETE
-     */
-    private String httpMethod;
-    /**
-     * 菜单路径，VUE文件路径.
-     */
-    private String filePath;
-    /**
-     * 菜单图标
-     */
-    private String icon;
 }

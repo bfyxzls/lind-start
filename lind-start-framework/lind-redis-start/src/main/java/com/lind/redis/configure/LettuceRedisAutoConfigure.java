@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.lind.redis.properties.LettuceRedisProperties;
 import com.lind.redis.service.RedisService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -39,6 +43,19 @@ public class LettuceRedisAutoConfigure {
                 ObjectMapper.DefaultTyping.NON_FINAL,
                 JsonTypeInfo.As.WRAPPER_ARRAY);
         jackson2JsonRedisSerializer.setObjectMapper(om);
+        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+        // 日期序列化处理
+        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        om.registerModule(new Jdk8Module())
+                .registerModule(new JavaTimeModule())
+                .registerModule(new ParameterNamesModule());
+
+        om.activateDefaultTyping(
+                LaissezFaireSubTypeValidator.instance ,
+                ObjectMapper.DefaultTyping.NON_FINAL,
+                JsonTypeInfo.As.WRAPPER_ARRAY);
+        jackson2JsonRedisSerializer.setObjectMapper(om);
+
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         // key采用String的序列化方式
         template.setKeySerializer(stringRedisSerializer);

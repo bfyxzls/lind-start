@@ -1,5 +1,6 @@
 package com.lind.rbac;
 
+import com.lind.common.jackson.convert.EnableJacksonFormatting;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -10,6 +11,7 @@ import org.springframework.core.env.Environment;
 @SpringBootApplication
 @Slf4j
 @MapperScan("com.lind.rbac.dao")
+@EnableJacksonFormatting
 public class RbacApplication {
   public static void main(String[] args) {
 

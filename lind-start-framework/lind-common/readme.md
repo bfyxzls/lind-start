@@ -14,7 +14,7 @@
 * encrypt 加密解密，hash,非对称，对称等
 * com.lind.common.event 观察者模式，事件发布与订阅的实现，完成了对订阅者的自动初始化
 * execption 异常管理，包含基类和control的异常拦截器
-* jackson.convert 对springboot在http响应时，对jackson序列化的重写
+* jackson.convert 对springboot在http响应时,对jackson序列化的重写,`@EnableJacksonFormatting`开启自定义序列化功能
 * locale 国际化组件
 * opt 通过时间（TOTP）或者数量（HOTP）进行校验，一般用在二步验证上面
 * rest restful接口的返回值封装

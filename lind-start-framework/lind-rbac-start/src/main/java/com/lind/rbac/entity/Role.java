@@ -23,17 +23,4 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @JsonDeserialize(as = Role.class)
 public class Role extends BaseEntity implements ResourceRole {
     private String name;
-    private Integer buttonGrant;
-
-    /**
-     * 不在数据表存在，只是个导航属性.
-     */
-    @TableField(exist = false)
-    private List<Integer> buttonGrantList;
-
-    public void initButtonGrantList() {
-        buttonGrantList = splitBinPower(buttonGrant);
-    }
-
-
 }

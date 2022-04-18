@@ -53,7 +53,6 @@ public class RoleController {
                     RoleDTO role = new RoleDTO();
                     role.setId(o.getId());
                     role.setName(o.getName());
-                    role.setButtonGrantList(o.getButtonGrantList());
                     role.setPermissionList(resourcePermissionService.getAllByRoleId(o.getId()));
                     return role;
                 }).collect(Collectors.toList());

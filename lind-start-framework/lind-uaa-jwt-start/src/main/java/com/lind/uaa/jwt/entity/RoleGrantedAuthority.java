@@ -3,42 +3,32 @@ package com.lind.uaa.jwt.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 public class RoleGrantedAuthority implements GrantedAuthority {
-  private String name;
-  private String id;
-  private Integer buttonGrant;
+    private String name;
+    private String id;
 
-  public RoleGrantedAuthority(String name, String id, Integer buttonGrant) {
-    this.name = name;
-    this.id = id;
-    this.buttonGrant = buttonGrant;
-  }
+    public RoleGrantedAuthority(String name, String id) {
+        this.name = name;
+        this.id = id;
+    }
 
-  public Integer getButtonGrant() {
-    return buttonGrant;
-  }
+    public String getName() {
+        return name;
+    }
 
-  public void setButtonGrant(Integer buttonGrant) {
-    this.buttonGrant = buttonGrant;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getId() {
+        return id;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
-  }
-
-  @Override
-  public String getAuthority() {
-    return name;
-  }
+    @Override
+    public String getAuthority() {
+        return name;
+    }
 }

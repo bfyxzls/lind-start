@@ -2,7 +2,6 @@ package com.lind.rbac.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.lind.common.util.BinFlagUtils;
 import com.lind.rbac.dao.PermissionDao;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
@@ -61,7 +60,6 @@ public class PermissionServiceImpl implements ResourcePermissionService {
             if (!org.springframework.util.CollectionUtils.isEmpty(roles)) {
 
                 for (Role o : roles) {
-                    roleBtnSum = roleBtnSum | o.getButtonGrant();
                     roleIdList.add(o.getId());
                 }
             }
@@ -73,17 +71,16 @@ public class PermissionServiceImpl implements ResourcePermissionService {
         });
         List<Permission> list = permissionDao.selectList(new QueryWrapper<Permission>().lambda().in(Permission::getId, permissionIds));
         Set<Permission> result = new HashSet<>();
-        Integer finalRoleBtnSum = roleBtnSum;
         for (Permission permission : list) {
-            List<Integer> bulkButtonList = permission.getBulkButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
-            List<Integer> rowButtonList = permission.getRowButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList());
             Permission permission1 = Permission.builder()
                     .title(permission.getTitle())
-                    .bulkButton(BinFlagUtils.addValueList(bulkButtonList))
-                    .rowButton(BinFlagUtils.addValueList(rowButtonList))
                     .parentId(permission.getParentId())
                     .path(permission.getPath())
                     .type(permission.getType())
+                    .filePath(permission.getFilePath())
+                    .icon(permission.getIcon())
+                    .flag(permission.getFlag())
+                    .sortNumber(permission.getSortNumber())
                     .build();
             permission1.setId(permission.getId());
             result.add(permission1);

@@ -3,18 +3,15 @@ package com.lind.rbac.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.ImmutableMap;
 import com.lind.common.dto.DateRangeDTO;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
-import com.lind.common.util.BinFlagUtils;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.PermissionDao;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.UserDao;
 import com.lind.rbac.dao.UserRoleDao;
 import com.lind.rbac.dto.UserDTO;
-import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.User;
 import com.lind.rbac.entity.UserRole;
@@ -25,9 +22,7 @@ import com.lind.uaa.jwt.config.SecurityUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -96,45 +91,6 @@ public class UserController {
         return CommonResult.ok(CopyUtils.copyProperties(userDao.selectById(id), UserVO.class));
     }
 
-    @ApiOperation("获取页面上的按钮,path和title二选一即可")
-    @GetMapping("page-btn")
-    @Cacheable(cacheNames = "page-btn")
-    public CommonResult getPermissionByRoleId(@ApiParam("路径") @RequestParam(required = false) String path,
-                                              @ApiParam("模型名称") @RequestParam(required = false) String title) {
-        if (securityUtil.getCurrUser() == null) {
-            return CommonResult.unauthorizedFailure("需要先进行登录");
-        }
-        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        if (StringUtils.isNotBlank(path)) {
-            queryWrapper.lambda().eq(Permission::getPath, path);
-        }
-        if (StringUtils.isNotBlank(title)) {
-            queryWrapper.lambda().eq(Permission::getTitle, title);
-        }
-        Integer roleBtnSum = 0;
-        List<UserRole> userRoles = userRoleDao.selectList(new QueryWrapper<UserRole>().lambda()
-                .eq(UserRole::getUserId, securityUtil.getCurrUser().getId()));
-        if (!CollectionUtils.isEmpty(userRoles)) {
-            List<Role> roles = roleDao.selectList(new QueryWrapper<Role>().lambda()
-                    .in(Role::getId, userRoles.stream().map(o -> o.getRoleId()).collect(Collectors.toList())));
-
-            if (!CollectionUtils.isEmpty(roles)) {
-
-                for (Role o : roles) {
-                    roleBtnSum = roleBtnSum | o.getButtonGrant();
-                }
-            }
-        }
-        List<Permission> list = permissionDao.selectList(queryWrapper);
-        Integer finalRoleBtnSum = roleBtnSum;
-        return CommonResult.ok(
-                list.stream().map(i -> ImmutableMap.of(
-                        "title", i.getTitle(),
-                        "path", i.getPath(),
-                        "bulkButtonList", i.getBulkButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList()),
-                        "rowButtonList", i.getRowButtonList().stream().filter(j -> BinFlagUtils.hasValue(finalRoleBtnSum, j)).collect(Collectors.toList())
-                )).collect(Collectors.toList()));
-    }
 
     @ApiOperation("新增")
     @PostMapping

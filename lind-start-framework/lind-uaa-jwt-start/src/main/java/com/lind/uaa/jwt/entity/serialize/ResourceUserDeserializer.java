@@ -75,8 +75,8 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
             JsonNode next = elements.next();
             String id = next.get("id").asText();
             String name = next.get("name").asText();
-            Integer buttonGrant = next.get("buttonGrant").asInt();
-            roleGrantedAuthority.add(new RoleGrantedAuthority(name, id, buttonGrant));
+            roleGrantedAuthority.add(new RoleGrantedAuthority(name, id));
+
           }
         }
         return roleGrantedAuthority;

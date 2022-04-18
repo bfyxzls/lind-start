@@ -25,14 +25,6 @@ public class ResourceRoleDeserializer extends JsonDeserializer<ResourceRole> {
                 return node.get("name").asText();
             }
 
-            @Override
-            public Integer getButtonGrant() {
-                return node.get("buttonGrant").asInt();
-            }
-
-            @Override
-            public void setButtonGrant(Integer grant) {
-            }
         };
 
         return defaultSourcePermission;

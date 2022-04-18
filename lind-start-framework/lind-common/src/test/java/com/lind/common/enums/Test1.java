@@ -1,13 +1,13 @@
 package com.lind.common.enums;
 
-enum Test1 implements NameValueEnum<String> {
-  T1("01", "String类型测试1"),
-  T2("02", "String类型测试2");
+enum Test1 implements NameValueEnum {
+  T1(1, "String类型测试1"),
+  T2(2, "String类型测试2");
 
-  private String value;
+  private Integer value;
   private String name;
 
-  Test1(String value, String name) {
+  Test1(Integer value, String name) {
     this.value = value;
     this.name = name;
   }
@@ -18,7 +18,7 @@ enum Test1 implements NameValueEnum<String> {
   }
 
   @Override
-  public String getValue() {
+  public Integer getValue() {
     return this.value;
   }
 }
