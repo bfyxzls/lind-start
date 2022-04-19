@@ -14,6 +14,7 @@
         <module>demo/log4j-bug-rmi</module>
         <module>demo/java-agent-demo</module>
         <module>demo/a-start-activiti</module>
+        <module>lind-doc2html</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
