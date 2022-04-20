@@ -1,20 +1,9 @@
 package com.lind.office.convert.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
-import org.apache.poi.ss.usermodel.HorizontalAlignment;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFCellStyle;
-import org.apache.poi.xssf.usermodel.XSSFFont;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xssf.usermodel.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,13 +19,8 @@ import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.apache.poi.ss.usermodel.CellType.STRING;
 
 public class ExcelUtils {
     private static final String excel2003L = ".xls";    //2003- 版本的excel
@@ -123,10 +107,10 @@ public class ExcelUtils {
         DecimalFormat df2 = new DecimalFormat("0.00");  //格式化数字
 
         switch (cell.getCellType()) {
-            case STRING:
+            case Cell.CELL_TYPE_STRING:
                 value = cell.getRichStringCellValue().getString();
                 break;
-            case NUMERIC:
+            case Cell.CELL_TYPE_NUMERIC:
                 if ("General".equals(cell.getCellStyle().getDataFormatString())) {
                     value = df.format(cell.getNumericCellValue());
                 } else if ("m/d/yy".equals(cell.getCellStyle().getDataFormatString())) {
@@ -135,10 +119,10 @@ public class ExcelUtils {
                     value = df2.format(cell.getNumericCellValue());
                 }
                 break;
-            case BOOLEAN:
+            case Cell.CELL_TYPE_BOOLEAN:
                 value = cell.getBooleanCellValue();
                 break;
-            case BLANK:
+            case Cell.CELL_TYPE_BLANK:
                 value = "";
                 break;
             default:
@@ -264,7 +248,7 @@ public class ExcelUtils {
 
                 if (currentRow.getCell(columnNum) != null) {
                     XSSFCell currentCell = currentRow.getCell(columnNum);
-                    if (currentCell.getCellType() == STRING) {
+                    if (currentCell.getCellType() == Cell.CELL_TYPE_STRING) {
                         int length = currentCell.getStringCellValue().getBytes(Charset.defaultCharset()).length;
                         if (columnWidth < length) {
                             columnWidth = length;
@@ -306,7 +290,7 @@ public class ExcelUtils {
                 Method getMethod = pd.getReadMethod();
                 Object rtn = getMethod.invoke(obj);
                 XSSFCell cell = row.createCell(i);
-                cell.setCellType(STRING);
+                cell.setCellType(Cell.CELL_TYPE_STRING);
                 // 如果是日期类型 进行 转换
                 String value = "";
                 // 如果是日期类型 进行 转换
@@ -317,10 +301,10 @@ public class ExcelUtils {
                         cell.setCellValue(value);
                     } else if (rtn instanceof Integer) {
                         cell.setCellValue((Integer) rtn);
-                        cell.setCellType(CellType.NUMERIC);
+                        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
                     } else if (rtn instanceof Double || rtn instanceof BigDecimal) {
                         cell.setCellValue((Double) rtn);
-                        cell.setCellType(CellType.NUMERIC);
+                        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
                     } else {
                         cell.setCellValue(value);
                     }

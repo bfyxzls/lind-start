@@ -6,6 +6,6 @@ import org.junit.Test;
 public class WordToHtmlTest {
     @Test
     public void docToHtml() throws Exception {
-        WordToHtml.docxToHtml("D:\\SoFlu飞算全自动软件程平台调研.docx", "d:\\outHtml");
+        WordToHtml.docxToHtml("D:\\接口管理平台-DOClever使用文档v1.0.docx", "d:\\outHtml");
     }
 }
