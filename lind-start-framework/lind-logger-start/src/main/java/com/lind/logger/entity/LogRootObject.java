@@ -10,7 +10,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public class LogRootObject {
-  final static String OBJ_ID = "objectId";
+
   private static final InheritableThreadLocal<Map<String, Object>> VAR_MAP = new InheritableThreadLocal<>();
   /**
    * Target method
@@ -51,23 +51,6 @@ public class LogRootObject {
     }
     return VAR_MAP.get().get(key);
   }
-
-  /**
-   * 获取ObjId
-   * @return
-   */
-  public static String getObjId() {
-    return (String) getVar(OBJ_ID);
-  }
-
-  /**
-   * 设置ObjId
-   * @param value
-   */
-  public static void setObjId(String value) {
-    putVar(OBJ_ID, value);
-  }
-
   /**
    * 清空线程上下文值
    */

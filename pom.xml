@@ -414,7 +414,12 @@
                     <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                 </configuration>
             </plugin>
-
+            <!-- 发布时带上资源文件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+            </plugin>
         </plugins>
     </build>
 

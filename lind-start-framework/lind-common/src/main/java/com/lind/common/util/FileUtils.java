@@ -2,14 +2,7 @@ package com.lind.common.util;
 
 import org.springframework.util.ResourceUtils;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -212,5 +205,63 @@ public class FileUtils {
                 }
             }
         }
+    }
+
+    /**
+     * 读取文本文件.
+     *
+     * @param filePath
+     */
+    public static String readTxtFile(String filePath) {
+        try {
+            String encoding = "utf-8";
+            File file = new File(filePath);
+            StringBuffer buffer = new StringBuffer();
+            if (file.isFile() && file.exists()) { //判断文件是否存在
+                InputStreamReader read = new InputStreamReader(
+                        new FileInputStream(file), encoding);//考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    buffer.append(lineTxt);
+                }
+                read.close();
+                return buffer.toString();
+            } else {
+                throw new IllegalArgumentException("找不到指定的文件");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 通过流的方式读取，注意jar包中的文件只能使用这种方式.
+     *
+     * @param inputStream
+     * @return
+     */
+    public static String readTxtFile(InputStream inputStream) {
+        try {
+            String encoding = "utf-8";
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream != null) { //判断文件是否存在
+                InputStreamReader read = new InputStreamReader(inputStream, encoding);//考虑到编码格式
+                BufferedReader bufferedReader = new BufferedReader(read);
+                String lineTxt = null;
+                while ((lineTxt = bufferedReader.readLine()) != null) {
+                    buffer.append(lineTxt);
+                }
+                read.close();
+                inputStream.close();
+                return buffer.toString();
+            } else {
+                throw new IllegalArgumentException("找不到指定的文件");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

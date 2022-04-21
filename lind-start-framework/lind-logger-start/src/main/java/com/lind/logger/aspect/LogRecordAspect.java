@@ -70,7 +70,7 @@ public class LogRecordAspect {
       LoggerInfo loggerInfo = LoggerInfo.builder()
           .detail(content)
           .module(targetClass.getName() + "." + method.getName())
-          .objectId(LogRootObject.getObjId())
+          .objectId(annotation.objectId())
           .operateTime(new Date())
           .operateUser(currentUserAware.username()).build();
       return loggerInfo;

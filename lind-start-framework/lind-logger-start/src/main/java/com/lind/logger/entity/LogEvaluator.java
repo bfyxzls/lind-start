@@ -27,7 +27,7 @@ public class LogEvaluator {
   /**
    * 表达式模板
    */
-  private final ParserContext template = new TemplateParserContext("{","}");
+  private final ParserContext template = new TemplateParserContext("${","}");
 
   /**
    * 解析

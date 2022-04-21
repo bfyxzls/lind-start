@@ -5,7 +5,6 @@ import com.lind.mybatis.util.ClassHelper;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
@@ -60,11 +59,7 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
         if (isPlugUpdate) {
             Map<String, Object> updateParam = (Map<String, Object>) parameter;
             Class<?> updateParamType = updateParam.get("param1").getClass();
-            declaredFields = updateParamType.getDeclaredFields();
-            if (updateParamType.getSuperclass() != null) {
-                Field[] superField = updateParamType.getSuperclass().getDeclaredFields();
-                declaredFields = ArrayUtils.addAll(declaredFields, superField);
-            }
+            declaredFields = ClassHelper.getAllFields(updateParamType);
         }
         for (Field field : declaredFields) {
 
