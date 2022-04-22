@@ -1,8 +1,10 @@
 package com.lind.logger.config;
 
 import com.lind.logger.aspect.LogRecordAspect;
+import com.lind.logger.service.CurrentIpAware;
 import com.lind.logger.service.CurrentUserAware;
 import com.lind.logger.service.LoggerService;
+import com.lind.logger.service.impl.DefaultCurrentIpAware;
 import com.lind.logger.service.impl.DefaultCurrentUserAware;
 import com.lind.logger.service.impl.DefaultLoggerService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -26,5 +28,11 @@ public class LoggerConfig {
   @ConditionalOnMissingBean(CurrentUserAware.class)
   public CurrentUserAware defaultCurrentUserAware() {
     return new DefaultCurrentUserAware();
+  }
+
+  @Bean
+  @ConditionalOnMissingBean(CurrentIpAware.class)
+  public CurrentIpAware defaultCurrentIpAware() {
+    return new DefaultCurrentIpAware();
   }
 }

@@ -91,10 +91,6 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>3.1</version>
@@ -134,12 +130,6 @@
             <artifactId>aesh</artifactId>
             <version>2.4</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.aesh</groupId>
-            <artifactId>aesh</artifactId>
-            <version>2.4</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- Remote caches

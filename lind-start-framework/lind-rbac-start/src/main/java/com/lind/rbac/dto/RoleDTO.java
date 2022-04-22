@@ -19,8 +19,8 @@ public class RoleDTO {
   @TableField("name")
   @Size(max = 10, min = 4, message = "长度限制")
   private String name;
-  @ApiModelProperty("按钮组列表")
-  private List<Integer> buttonGrantList;
+  @ApiModelProperty("菜单ID列表")
+  private List<String> permissionIdList;
   @ApiModelProperty("菜单列表")
   private List<? extends ResourcePermission> permissionList;
 }

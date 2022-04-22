@@ -1,12 +1,12 @@
 package com.lind.rbac.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
-import com.lind.mybatis.util.QueryFactory;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
 import com.lind.rbac.dto.RoleDTO;
@@ -18,8 +18,10 @@ import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,12 +40,36 @@ public class RoleController {
     @Autowired
     RedisService redisService;
 
+    /**
+     * 更新角色的菜单列表.
+     *
+     * @param permissionList
+     * @param role
+     */
+    private void updateRolePermissions(List<String> permissionList, Role role) {
+        if (!CollectionUtil.isNotEmpty(permissionList)) {
+            rolePermissionDao.delete(new QueryWrapper<RolePermission>().lambda().eq(RolePermission::getRoleId, role.getId()));
+            permissionList.forEach(o -> {
+                RolePermission rolePermission = new RolePermission();
+                rolePermission.setPermissionId(o);
+                rolePermission.setRoleId(role.getId());
+                rolePermission.setSelected(false);
+                rolePermissionDao.insert(rolePermission);
+            });
+            redisService.del(Constants.ROLE_PERMISSION.concat(role.getId()));
+        }
+    }
+
     @ApiOperation("列表")
-    @GetMapping
+    @GetMapping("list")
     public CommonResult<IPage<RoleDTO>> index(
+            @ApiParam("名称") @RequestParam(required = false) String name,
             @ApiParam("页码") PageDTO pageDTO) {
         QueryWrapper<Role> userQueryWrapper = new QueryWrapper<>();
-        IPage<Role> roleList = roleDao.selectPage(
+        if (StringUtils.isNotBlank(name)) {
+            userQueryWrapper.lambda().like(Role::getName, name);
+        }
+         IPage<Role> roleList = roleDao.selectPage(
                 new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
                 userQueryWrapper);
 
@@ -65,18 +91,8 @@ public class RoleController {
         return CommonResult.ok(roleDTOIPage);
     }
 
-    @ApiOperation("列表检索")
-    @PostMapping("query")
-    public CommonResult<IPage<Role>> query(@RequestBody RoleDTO roleDTO) {
-
-        QueryWrapper<Role> userQueryWrapper = QueryFactory.entityToWrapper(roleDTO);
-        return CommonResult.ok(roleDao.selectPage(
-                new Page<>(1, 10),
-                userQueryWrapper));
-    }
-
     @ApiOperation("新增")
-    @PostMapping
+    @PostMapping("add")
     public CommonResult add(@RequestBody RoleDTO roleDTO) {
         if (roleDao.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, roleDTO.getName())) != null) {
             return CommonResult.clientFailure(String.format("%s已经存在", roleDTO.getName()));
@@ -84,42 +100,36 @@ public class RoleController {
         Role role = new Role();
         CopyUtils.copyProperties(roleDTO, role);
         roleDao.insert(role);
+        updateRolePermissions(roleDTO.getPermissionIdList(), role);
         return CommonResult.ok();
     }
 
     @ApiOperation("更新")
-    @PutMapping("/{id}")
+    @PutMapping("update/{id}")
     public CommonResult update(@ApiParam("角色ID") @PathVariable String id, @RequestBody RoleDTO roleDTO) {
         Role role = roleDao.selectById(id);
         if (role != null) {
             CopyUtils.copyProperties(roleDTO, role);
             roleDao.updateById(role);
+            updateRolePermissions(roleDTO.getPermissionIdList(), role);
             redisService.del(Constants.ROLE_PERMISSION.concat(id));
         }
         return CommonResult.ok();
     }
 
     @ApiOperation("更新角色的权限")
-    @PutMapping("/{id}/permission")
+    @PutMapping("update/{id}/permission")
     @Transactional
     public CommonResult updatePermission(@ApiParam("角色ID") @PathVariable String id, @RequestBody List<String> permissions) {
         Role role = roleDao.selectById(id);
         if (role != null) {
-            rolePermissionDao.delete(new QueryWrapper<RolePermission>().lambda().eq(RolePermission::getRoleId, id));
-            permissions.forEach(o -> {
-                RolePermission rolePermission = new RolePermission();
-                rolePermission.setPermissionId(o);
-                rolePermission.setRoleId(id);
-                rolePermission.setSelected(false);
-                rolePermissionDao.insert(rolePermission);
-            });
-            redisService.del(Constants.ROLE_PERMISSION.concat(id));
+            updateRolePermissions(permissions, role);
         }
         return CommonResult.ok();
     }
 
     @ApiOperation("删除")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("del/{id}")
     public CommonResult del(@ApiParam("角色ID") @PathVariable String id) {
         QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
         roleQueryWrapper.eq("id", id);
@@ -132,5 +142,17 @@ public class RoleController {
     @GetMapping("/{id}")
     public CommonResult get(@ApiParam("角色ID") @PathVariable String id) {
         return CommonResult.ok(roleDao.selectById(id));
+    }
+
+    @ApiOperation("批量删除")
+    @PostMapping("bulk-del")
+    public CommonResult bulkDel(@ApiParam("ID列表") @RequestParam List<String> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return CommonResult.clientFailure("ids为空");
+        }
+        for (String id : ids) {
+            del(id);
+        }
+        return CommonResult.ok();
     }
 }

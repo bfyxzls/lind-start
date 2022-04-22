@@ -1,8 +1,10 @@
 package com.lind.common.collection;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class Student implements Comparable<Student> {
     private int age;
     private String name;

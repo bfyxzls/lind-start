@@ -3,27 +3,25 @@ package com.lind.rbac.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.common.collect.Lists;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
-import com.lind.rbac.dao.PermissionDao;
-import com.lind.rbac.dao.RolePermissionDao;
+import com.lind.rbac.dao.*;
 import com.lind.rbac.dto.PermissionDTO;
 import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.RolePermission;
+import com.lind.rbac.entity.UserRole;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
-import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,6 +29,10 @@ import java.util.List;
 @RequestMapping("permission")
 public class PermissionController {
 
+    /**
+     * 初始化数据，管理员的角色ID.
+     */
+    static final String MANAGER_ROLE_ID = "1";
     @Autowired
     ResourcePermissionService resourcePermissionService;
     @Autowired
@@ -39,6 +41,12 @@ public class PermissionController {
     RedisService redisService;
     @Autowired
     RolePermissionDao rolePermissionDao;
+    @Autowired
+    RoleDao roleDao;
+    @Autowired
+    UserDao userDao;
+    @Autowired
+    UserRoleDao userRoleDao;
 
     @ApiOperation("所有树形菜单")
     @GetMapping
@@ -52,16 +60,6 @@ public class PermissionController {
         return CommonResult.ok(resourcePermissionService.getRoleTreeMenus());
     }
 
-    @ApiOperation("菜单面包绡")
-    @GetMapping("father/{id}")
-    public CommonResult breadcrumb(@PathVariable String id) {
-        List<ResourcePermission> list = new ArrayList<>();
-        Permission permission = permissionDao.selectById(id);
-        resourcePermissionService.findFather(permission, list);
-        return CommonResult.ok(Lists.reverse(list));
-    }
-
-
     /**
      * 列表页
      *
@@ -72,11 +70,11 @@ public class PermissionController {
     @GetMapping("query")
     public CommonResult list(@ApiParam("分页") PageDTO pageDTO) {
         QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
-        IPage<Permission> list = permissionDao.selectPage(
+        IPage<Permission> result = permissionDao.selectPage(
                 new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
                 userQueryWrapper);
 
-        return CommonResult.ok(list);
+        return CommonResult.ok(result);
     }
 
     @ApiOperation("新增")
@@ -90,12 +88,13 @@ public class PermissionController {
         Permission permissionEntity = new Permission();
         CopyUtils.copyProperties(permission, permissionEntity);
         permissionDao.insert(permissionEntity);
-        //为管理员添加菜单权限
+        //管理员添加新菜单权限
         RolePermission rolePermission = new RolePermission();
         rolePermission.setPermissionId(permissionEntity.getId());
-        rolePermission.setRoleId("1");
+        rolePermission.setRoleId(MANAGER_ROLE_ID);
+        rolePermission.setSelected(false);
         rolePermissionDao.insert(rolePermission);
-        redisService.del(Constants.PERMISSION_ALL);
+        delRedisPermission();
         return CommonResult.ok();
     }
 
@@ -106,18 +105,17 @@ public class PermissionController {
         if (permissionEntity != null) {
             CopyUtils.copyProperties(permission, permissionEntity);
             permissionDao.updateById(permissionEntity);
-            redisService.del(Constants.PERMISSION_ALL);
+            delRedisPermission();
         }
         return CommonResult.ok();
     }
-
 
     @ApiOperation("删除")
     @DeleteMapping("/{id}")
     public CommonResult del(@ApiParam("菜单ID") @PathVariable String id) {
         QueryWrapper<Role> roleQueryWrapper = new QueryWrapper<>();
         permissionDao.delete(new QueryWrapper<Permission>().lambda().eq(Permission::getId, id));
-        redisService.del(Constants.PERMISSION_ALL);
+        delRedisPermission();
         return CommonResult.ok();
     }
 
@@ -125,5 +123,33 @@ public class PermissionController {
     @GetMapping("/{id}")
     public CommonResult get(@ApiParam("id") @PathVariable String id) {
         return CommonResult.ok(permissionDao.selectById(id));
+    }
+
+    @ApiOperation("批量删除")
+    @PostMapping("bulk-del")
+    public CommonResult bulkDel(@ApiParam("ID列表") @RequestParam List<String> ids) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return CommonResult.clientFailure("ids为空");
+        }
+        for (String id : ids) {
+            del(id);
+        }
+        delRedisPermission();
+        return CommonResult.ok();
+    }
+
+    /**
+     * 清除缓存.
+     */
+    void delRedisPermission() {
+        // 所有菜单缓存
+        redisService.del(Constants.PERMISSION_ALL);
+        // 管理员角色菜单缓存
+        redisService.del(Constants.ROLE_PERMISSION.concat(MANAGER_ROLE_ID));
+        // 管理员角色用户的菜单缓存
+        userRoleDao.selectList(new QueryWrapper<UserRole>().lambda().eq(UserRole::getRoleId, MANAGER_ROLE_ID)).forEach(o -> {
+            redisService.del(Constants.USER_PERMISSION.concat(o.getUserId()));
+        });
+
     }
 }

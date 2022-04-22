@@ -1,4 +1,4 @@
-package com.lind.mybatis.handler;
+package com.lind.mybatis.type.handler;
 
 import com.lind.common.encrypt.RSAUtils;
 import com.lind.common.util.FileUtils;

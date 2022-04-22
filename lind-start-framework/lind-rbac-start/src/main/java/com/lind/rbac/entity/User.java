@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
-import com.lind.mybatis.handler.RsaTypeHandler;
+import com.lind.mybatis.type.handler.RsaTypeHandler;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import com.lind.uaa.jwt.entity.ResourceUser;
 import io.swagger.annotations.ApiModel;

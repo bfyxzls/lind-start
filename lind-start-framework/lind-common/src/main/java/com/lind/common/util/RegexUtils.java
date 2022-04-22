@@ -14,6 +14,22 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
  */
 public class RegexUtils {
   /**
+   * 密码长度不少于8位且至少包含大写字母、小写字母、数字和特殊符号中的四种
+   */
+  public static final String password1 = "^(?![A-Za-z0-9]+$)(?![a-z0-9\\W]+$)(?![A-Za-z\\W]+$)(?![A-Z0-9\\W]+$)[a-zA-Z0-9\\W]{8,}$";
+  /**
+   * 密码长度8-20位且至少包含大写字母、小写字母、数字或特殊符号中的任意三种，排序组合算法
+   */
+  public static final String password2 = "^(?![a-zA-Z]+$)(?![A-Z0-9]+$)(?![A-Z\\W_]+$)(?![a-z0-9]+$)(?![a-z\\W_]+$)(?![0-9\\W_]+$)[a-zA-Z0-9\\W_]{8,20}$";
+  /**
+   * 密码长度8-20位且至少包含大写字母、小写字母、数字或特殊符号中的任意两种，排序组合算法
+   */
+  public static final String password3 = "^(?![a-z]+$)(?![0-9]+$)(?![\\W_]+$)(?![A-Z]+$)[a-zA-Z0-9\\W_]{8,20}$";
+  /**
+   * 邮件email
+   */
+  public static  String email = "[a-zA-Z_]{1,}[0-9]{0,}@(([a-zA-z0-9]-*){1,}\\.){1,3}[a-zA-z\\-]{1,}";
+  /**
    * 隐藏出生日期、职位、年龄、工作、民族等信息.
    */
   public static String hideOtherText(String myText) {

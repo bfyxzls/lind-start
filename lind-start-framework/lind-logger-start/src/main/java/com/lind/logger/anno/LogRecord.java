@@ -20,9 +20,30 @@ public @interface LogRecord {
   String detail() default "";
 
   /**
-   * 需要记录的更新对象ID.
+   * 数据ID.
    *
    * @return
    */
-  String objectId() default "";
+  String dataId() default "";
+
+  /**
+   * 数据标题
+   *
+   * @return
+   */
+  String dataTitle() default "";
+
+  /**
+   * 操作类型
+   *
+   * @return
+   */
+  int operateType() ;
+
+  /**
+   * 模块类型
+   *
+   * @return
+   */
+  int moduleType() ;
 }

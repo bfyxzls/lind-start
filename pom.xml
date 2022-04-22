@@ -14,7 +14,6 @@
         <module>demo/log4j-bug-rmi</module>
         <module>demo/java-agent-demo</module>
         <module>demo/a-start-activiti</module>
-        <module>lind-doc2html</module>
     </modules>
     <properties>
         <skipTests>true</skipTests>
@@ -242,7 +241,7 @@
 
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-com.lind.common.rest-high-level-client</artifactId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
                 <version>6.5.4</version>
             </dependency>
             <dependency>
@@ -253,60 +252,6 @@
 
         </dependencies>
     </dependencyManagement>
-    <repositories>
-        <repository>
-            <id>nexus-aliyun</id>
-            <name>Nexus aliyun</name>
-            <layout>default</layout>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-        </repository>
-
-        <repository>
-            <id>spring-milestone</id>
-            <name>Spring Milestone</name>
-            <url>https://repo.spring.io/milestone</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
-        <repository>
-            <id>spring-snapshot</id>
-            <name>Spring Snapshot</name>
-            <url>https://repo.spring.io/snapshot</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <!--    <distributionManagement>-->
-    <!--        <repository>-->
-    <!--            <id>rdc-releases</id>-->
-    <!--            <url>https://repo.rdc.aliyun.com/repository/44454-release-3afmGw/</url>-->
-    <!--        </repository>-->
-    <!--        <snapshotRepository>-->
-    <!--            <id>rdc-snapshots</id>-->
-    <!--            <url>https://repo.rdc.aliyun.com/repository/44454-snapshot-Ejfhso/</url>-->
-    <!--        </snapshotRepository>-->
-    <!--    </distributionManagement>-->
-<!--    <distributionManagement>-->
-<!--        <repository>-->
-<!--            <id>releases</id>-->
-<!--            <name>Nexus Release Repository</name>-->
-<!--            <url>http://192.168.0.203:8081/repository/maven-releases/</url>-->
-<!--        </repository>-->
-<!--        <snapshotRepository>-->
-<!--            <id>snapshots</id>-->
-<!--            <name>Nexus Snapshot Repository</name>-->
-<!--            <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>-->
-<!--        </snapshotRepository>-->
-<!--    </distributionManagement>-->
 
     <build>
         <!-- 所有子项目重命名jar-->
@@ -392,28 +337,28 @@
             <!--                </configuration>-->
             <!--            </plugin>-->
             <!-- mvn site时使用 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>3.8.2</version>
-                <configuration>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.doxia</groupId>
-                        <artifactId>doxia-site-renderer</artifactId>
-                        <version>1.9.2</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-project-info-reports-plugin</artifactId>
-                <version>3.1.0</version>
-                <configuration>
-                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-site-plugin</artifactId>-->
+<!--                <version>3.8.2</version>-->
+<!--                <configuration>-->
+<!--                </configuration>-->
+<!--                <dependencies>-->
+<!--                    <dependency>-->
+<!--                        <groupId>org.apache.maven.doxia</groupId>-->
+<!--                        <artifactId>doxia-site-renderer</artifactId>-->
+<!--                        <version>1.9.2</version>-->
+<!--                    </dependency>-->
+<!--                </dependencies>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-project-info-reports-plugin</artifactId>-->
+<!--                <version>3.1.0</version>-->
+<!--                <configuration>-->
+<!--                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <!-- 发布时带上资源文件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
