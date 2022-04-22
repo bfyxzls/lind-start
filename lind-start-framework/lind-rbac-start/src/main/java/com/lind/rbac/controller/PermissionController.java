@@ -14,6 +14,7 @@ import com.lind.rbac.entity.RolePermission;
 import com.lind.rbac.entity.UserRole;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
+import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,13 +51,13 @@ public class PermissionController {
 
     @ApiOperation("所有树形菜单")
     @GetMapping
-    public CommonResult index() {
+    public CommonResult<List<? extends ResourcePermission>> index() {
         return CommonResult.ok(resourcePermissionService.getTreeMenus());
     }
 
     @ApiOperation("登录用户的树形菜单")
     @GetMapping("user-tree")
-    public CommonResult currentUserPermissionIndex() {
+    public CommonResult<List<? extends ResourcePermission>> currentUserPermissionIndex() {
         return CommonResult.ok(resourcePermissionService.getRoleTreeMenus());
     }
 
@@ -68,7 +69,7 @@ public class PermissionController {
      */
     @ApiOperation("列表页")
     @GetMapping("query")
-    public CommonResult list(@ApiParam("分页") PageDTO pageDTO) {
+    public CommonResult<IPage<Permission> > list(@ApiParam("分页") PageDTO pageDTO) {
         QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
         IPage<Permission> result = permissionDao.selectPage(
                 new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
@@ -121,7 +122,7 @@ public class PermissionController {
 
     @ApiOperation("获取")
     @GetMapping("/{id}")
-    public CommonResult get(@ApiParam("id") @PathVariable String id) {
+    public CommonResult<Permission> get(@ApiParam("id") @PathVariable String id) {
         return CommonResult.ok(permissionDao.selectById(id));
     }
 

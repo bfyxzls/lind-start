@@ -36,6 +36,11 @@ public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePer
             }
 
             @Override
+            public String getApiUrl() {
+                return node.get("apiUrl").asText();
+            }
+
+            @Override
             public String getParentId() {
                 return node.get("parentId").asText();
             }
@@ -43,6 +48,11 @@ public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePer
             @Override
             public Integer getType() {
                 return node.get("type").asInt();
+            }
+
+            @Override
+            public String getHttpMethod() {
+                return node.get("httpMethod").asText();
             }
 
             @Override

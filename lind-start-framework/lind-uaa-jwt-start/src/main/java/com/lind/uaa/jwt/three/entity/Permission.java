@@ -39,4 +39,14 @@ public class Permission implements ResourcePermission {
      * 子菜单列表.
      */
     private List<? extends ResourcePermission> sons;
+
+    @Override
+    public String getApiUrl() {
+        return null;
+    }
+
+    @Override
+    public String getHttpMethod() {
+        return null;
+    }
 }

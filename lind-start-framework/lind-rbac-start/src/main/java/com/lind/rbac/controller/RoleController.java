@@ -10,6 +10,7 @@ import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
 import com.lind.rbac.dto.RoleDTO;
+import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.RolePermission;
 import com.lind.redis.service.RedisService;
@@ -140,7 +141,7 @@ public class RoleController {
 
     @ApiOperation("获取")
     @GetMapping("/{id}")
-    public CommonResult get(@ApiParam("角色ID") @PathVariable String id) {
+    public CommonResult<Role> get(@ApiParam("角色ID") @PathVariable String id) {
         return CommonResult.ok(roleDao.selectById(id));
     }
 
