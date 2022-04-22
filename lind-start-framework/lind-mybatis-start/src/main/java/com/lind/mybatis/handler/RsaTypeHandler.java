@@ -7,7 +7,10 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,6 +27,7 @@ import java.sql.SQLException;
 public class RsaTypeHandler extends BaseTypeHandler<String> {
     static String publicKey;
     static String privateKey;
+    static Logger logger = LoggerFactory.getLogger(RsaTypeHandler.class);
 
     /**
      * 加载公钥
@@ -32,7 +36,8 @@ public class RsaTypeHandler extends BaseTypeHandler<String> {
      */
     public static String getPublicKey() {
         if (publicKey == null) {
-            publicKey = FileUtils.readTxtFile(RsaTypeHandler.class.getClassLoader().getResourceAsStream("public.key"));
+            InputStream inputStream = RsaTypeHandler.class.getClassLoader().getResourceAsStream("public.key");
+            publicKey = FileUtils.readTxtFile(inputStream);
         }
         return publicKey;
     }
@@ -44,7 +49,8 @@ public class RsaTypeHandler extends BaseTypeHandler<String> {
      */
     public static String getPrivateKey() {
         if (privateKey == null) {
-            privateKey = FileUtils.readTxtFile(RsaTypeHandler.class.getClassLoader().getResourceAsStream("private.key"));
+            InputStream inputStream = RsaTypeHandler.class.getClassLoader().getResourceAsStream("private.key");
+            privateKey = FileUtils.readTxtFile(inputStream);
         }
         return privateKey;
     }

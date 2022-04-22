@@ -1,9 +1,8 @@
 package com.lind.rbac.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.lind.common.enums.EnumUtils;
 import com.lind.mybatis.base.BaseEntity;
-import com.lind.rbac.enums.PermissionType;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,6 +20,7 @@ import java.util.List;
 @ToString
 @JsonDeserialize(as = Permission.class)
 @ApiModel("权限菜单表")
+@TableName("sys_permission")
 public class Permission extends BaseEntity implements ResourcePermission {
     /**
      * 菜单-按钮-名称.
@@ -64,22 +64,20 @@ public class Permission extends BaseEntity implements ResourcePermission {
      */
     @ApiModelProperty("排序,支持小数")
     private double sortNumber;
-
+    /**
+     * 后端地址.
+     */
+    @ApiModelProperty("后端地址")
+    private String apiUrl;
     /**
      * 授权标志.
      */
     @ApiModelProperty("授权标志")
-    private String flag;
+    private String operateType;
 
     /**
      * 子菜单列表.
      */
     private transient List<? extends ResourcePermission> sons;
 
-    @ApiModelProperty("类型名称")
-    private transient String typeName;
-
-    public String getTypeName() {
-        return EnumUtils.getEnumByValue(PermissionType.class, type).getName();
-    }
 }

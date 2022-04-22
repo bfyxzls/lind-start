@@ -1,17 +1,15 @@
 package com.lind.rbac.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
 import com.lind.uaa.jwt.entity.ResourceRole;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.List;
-
-import static com.lind.common.util.BinFlagUtils.splitBinPower;
 
 /**
  * 角色表.
@@ -21,6 +19,9 @@ import static com.lind.common.util.BinFlagUtils.splitBinPower;
 @NoArgsConstructor
 @ToString
 @JsonDeserialize(as = Role.class)
-public class Role extends BaseEntity implements ResourceRole {
-    private String name;
+@ApiModel("角色表")
+@TableName("sys_role")
+public class Role  extends BaseEntity implements ResourceRole {
+  @ApiModelProperty("名称")
+  private String name;
 }

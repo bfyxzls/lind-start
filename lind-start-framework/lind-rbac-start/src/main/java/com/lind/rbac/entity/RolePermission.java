@@ -1,6 +1,7 @@
 package com.lind.rbac.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.ToString;
 
@@ -9,6 +10,7 @@ import lombok.ToString;
  */
 @Data
 @ToString
+@TableName("sys_role_permission")
 public class RolePermission {
     private String id;
     private String roleId;
