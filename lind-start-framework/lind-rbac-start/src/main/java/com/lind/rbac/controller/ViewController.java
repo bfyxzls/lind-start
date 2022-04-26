@@ -14,10 +14,11 @@ public class ViewController {
     /**
      * 登录
      */
-    @GetMapping("/viewlogin")
+    @GetMapping("/view/login")
     public String login(Model model) {
         return "common/login";
     }
+
     @GetMapping("/xtsz/roleList")
     public String roleList(Model model) {
         return "view/index";

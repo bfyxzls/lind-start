@@ -8,7 +8,7 @@
 
             new Vue({
                 router: new VueRouter({
-                    mode: 'history',  //  访问路径不带#号
+                    //mode: 'history',  //  访问路径不带#号
                     routes: routerConfig
                 }),
                 el: '#app'

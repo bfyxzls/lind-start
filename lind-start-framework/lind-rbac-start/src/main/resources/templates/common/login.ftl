@@ -37,6 +37,7 @@
         </div>
          <script type="module">
             import {auth} from "/lib/index.js";
+
             new Vue({
                 el: '#login',
                 data() {
@@ -64,9 +65,7 @@
                         this.$refs.form.validate(valid => {
                             if (valid) {
                                 auth(this.form).catch(function (error) {
-                               //   alert("用户名密码错误");
-                                    swal("Hello world!");
-
+                                    alert('测试')
                                 });
                             }
                         });

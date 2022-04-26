@@ -116,7 +116,7 @@ Vue.component("breadcrumb", {
     watch: {
         $route: {
             handler(newName, oldName) {
-                getRequest('/permission/father/' + newName.name).then(res => (this.breadcrumbList = res.data.data));
+                getRequest('/permission/father?path=' + newName.path).then(res => (this.breadcrumbList = res.data.data));
             },
             deep: true,
             immediate: true
@@ -493,21 +493,6 @@ export const news = {
     template: "<h2>这里是新闻部分</h2>"
 }
 
-// return getRequest('/permission/list?pageSize=10000').then(res => {
-//     var item = res.data.data.records;
-//     for (var i in item) {
-//         if (item[i].path != null && item[i].path != '' && item[i].type == 0) {
-//             if (item[i].path == "/xtsz/roleList") {
-//                 routes.push({path: item[i].path, component: roleList})
-//             } else if (item[i].path == "/sys/userList") {
-//                 routes.push({path: item[i].path, component: userList})
-//             } else {
-//                 routes.push({path: item[i].path, component: news})
-//             }
-//         }
-//     }
-//     return routes;
-// });
 var routes = [];
 $.ajax({
     url: "/permission/list?pageSize=10000",
@@ -529,4 +514,6 @@ $.ajax({
     }
 })
 export const routerConfig = routes;
+
+
 

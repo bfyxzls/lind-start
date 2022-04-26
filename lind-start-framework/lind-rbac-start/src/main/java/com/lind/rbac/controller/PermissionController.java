@@ -3,6 +3,7 @@ package com.lind.rbac.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
@@ -147,12 +148,19 @@ public class PermissionController {
     }
 
     @ApiOperation("菜单面包绡")
-    @GetMapping("father/{id}")
-    public CommonResult breadcrumb(@PathVariable String id) {
+    @GetMapping("father")
+    public CommonResult breadcrumb(@RequestParam(required = false) String id, @RequestParam(required = false) String path) {
         List<Permission> list = new ArrayList<>();
-        Permission permission = permissionDao.selectById(id);
+        QueryWrapper<Permission> queryWrapper = new QueryWrapper();
+        if (StringUtils.isNotBlank(id)) {
+            queryWrapper.lambda().eq(Permission::getId, id);
+        }
+        if (StringUtils.isNoneBlank(path)) {
+            queryWrapper.lambda().eq(Permission::getPath, path);
+        }
+        Permission permission = permissionDao.selectOne(queryWrapper);
         findFather(permission, list);
-        return CommonResult.ok(list);
+        return CommonResult.ok(Lists.reverse(list));
     }
 
     /**
