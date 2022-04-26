@@ -7,9 +7,13 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
         <link rel="stylesheet" href="/css/iview.css">
         <link rel="stylesheet" href="/css/site.css">
+        <link href="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.css" rel="stylesheet">
         <script charset="UTF-8" src="/js/vue.min.js"></script>
         <script charset="UTF-8" src="/js/axios.min.js"></script>
         <script charset="UTF-8" src="/js/iview.min.js"></script>
+        <script charset="UTF-8" src="/lib/index.js" type="module"></script>
+        <script src="https://cdn.bootcss.com/sweetalert/1.1.3/sweetalert.min.js"></script>
+
         <style>
             body {
                 text-align: center;

@@ -19,10 +19,12 @@ import com.lind.uaa.jwt.service.ResourcePermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -69,13 +71,18 @@ public class PermissionController {
      */
     @ApiOperation("列表页")
     @GetMapping("query")
-    public CommonResult<IPage<Permission> > list(@ApiParam("分页") PageDTO pageDTO) {
+    public CommonResult<IPage<Permission>> query(@ApiParam("分页") PageDTO pageDTO) {
         QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
         IPage<Permission> result = permissionDao.selectPage(
                 new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
                 userQueryWrapper);
 
         return CommonResult.ok(result);
+    }
+
+    @GetMapping("list")
+    public CommonResult<IPage<Permission>> list(@ApiParam("分页") PageDTO pageDTO) {
+        return query(pageDTO);
     }
 
     @ApiOperation("新增")
@@ -137,6 +144,33 @@ public class PermissionController {
         }
         delRedisPermission();
         return CommonResult.ok();
+    }
+
+    @ApiOperation("菜单面包绡")
+    @GetMapping("father/{id}")
+    public CommonResult breadcrumb(@PathVariable String id) {
+        List<Permission> list = new ArrayList<>();
+        Permission permission = permissionDao.selectById(id);
+        findFather(permission, list);
+        return CommonResult.ok(list);
+    }
+
+    /**
+     * 递归找爸爸.
+     *
+     * @param current
+     * @param list
+     */
+    void findFather(Permission current, List<Permission> list) {
+        if (current != null) {
+            list.add(current);
+            if (StringUtils.isNotBlank(current.getParentId())) {
+                Permission father = permissionDao.selectById(current.getParentId());
+                if (father != null) {
+                    findFather(father, list);
+                }
+            }
+        }
     }
 
     /**

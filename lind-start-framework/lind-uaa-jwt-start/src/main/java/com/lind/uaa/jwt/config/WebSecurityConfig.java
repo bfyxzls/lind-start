@@ -129,7 +129,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
   /**
-   * 跨域支持.
+   * 跨域支持,SpringBoot默认跨域方法只支持HEAD,GET,POST.
    *
    * @return
    */
@@ -137,7 +137,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   protected CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
     configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "OPTION"));
+    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "PUT","DELETE","OPTION"));
     configuration.setAllowedHeaders(Arrays.asList("*"));
     configuration.addExposedHeader("Authorization");
     UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

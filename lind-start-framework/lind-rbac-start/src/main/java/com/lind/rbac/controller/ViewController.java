@@ -3,12 +3,10 @@ package com.lind.rbac.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("view")
 public class ViewController {
-    @GetMapping("index")
+    @GetMapping("/view/index")
     public String userList(Model model) {
         return "view/index";
     }
@@ -16,8 +14,12 @@ public class ViewController {
     /**
      * 登录
      */
-    @GetMapping("login")
+    @GetMapping("/viewlogin")
     public String login(Model model) {
         return "common/login";
+    }
+    @GetMapping("/xtsz/roleList")
+    public String roleList(Model model) {
+        return "view/index";
     }
 }

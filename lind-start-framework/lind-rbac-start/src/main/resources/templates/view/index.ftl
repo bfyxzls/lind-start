@@ -4,28 +4,14 @@
         用户列表
     <#elseif section="head-js">
         <script type="module">
-            var home = {
-                template: "<home/>"
-            }
-
-            var news = {
-                template: "<h2>这里是新闻部分</h2>"
-            }
+            import {routerConfig} from "/lib/component.js"
 
             new Vue({
-                router: new VueRouter({this.routes}),
-                el: '#app',
-                data() {
-                    return {routes: []};
-                },
-                created() {
-                    this.routes = [
-                        {name: "8971410885fd5c6dc5de6a6ca2cfa889", path: "/home", component: home},
-                        {name: "9", path: "/role", component: news},
-                        {name: "8971410885fd5c6dc5de6a6ca2cfa889", path: "/", component: home},
-
-                    ]
-                }
+                router: new VueRouter({
+                    mode: 'history',  //  访问路径不带#号
+                    routes: routerConfig
+                }),
+                el: '#app'
             });
         </script>
     <#elseif section = "form">

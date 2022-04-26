@@ -1,12 +1,9 @@
 package com.lind.common.jackson.convert;
 
+import com.lind.common.enums.serializer.NameValueEnumSerializer;
 import org.springframework.context.annotation.Import;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * 开启json格式化.
@@ -14,6 +11,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({JacksonFormatSerializerModifierConfig.class, JacksonDateSerializerModifier.class, JacksonNullValueSerializerModifier.class})
+@Import({NameValueEnumSerializer.class,
+        JacksonDateSerializerModifier.class,
+        JacksonNullValueSerializerModifier.class})
 public @interface EnableJacksonFormatting {
 }

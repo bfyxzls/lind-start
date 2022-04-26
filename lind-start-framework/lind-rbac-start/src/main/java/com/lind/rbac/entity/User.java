@@ -31,6 +31,7 @@ public class User extends BaseEntity implements ResourceUser {
      * 接口中的几个字段
      */
     @ApiModelProperty("账号")
+    @TableField(typeHandler = RsaTypeHandler.class)
     private String username;
     @ApiModelProperty("密码")
     private String password;

@@ -31,11 +31,13 @@ Switch	i-switch
 
         <script charset="UTF-8" src="/js/vue.min.js"></script>
         <script charset="UTF-8" src="/js/vue-router.js"></script>
+        <script charset="UTF-8" src="/js/vuex.min.js"></script>
         <script charset="UTF-8" src="/js/jquery.min.js"></script>
         <script charset="UTF-8" src="/js/axios.min.js"></script>
-        <script charset="UTF-8" src="/js/iview.min.js"></script>
         <script charset="UTF-8" src="/js/vuejs-datepicker.js"></script>
-        <script charset="UTF-8" src="/component.js" type="module"></script>
+
+        <script charset="UTF-8" src="/js/iview.min.js"></script>
+        <script charset="UTF-8" src="/lib/component.js" type="module"></script>
         <!-- 因为在component.js中引用了其它模块，所以需要添加type=module-->
         <#nested "head-js">
     </head>
