@@ -1,5 +1,7 @@
 package com.lind.common.proxy.staticproxy;
 
+import com.lind.common.proxy.User;
+
 /**
  * 静态代理测试
  */
@@ -10,6 +12,6 @@ public class Test {
         UserService proxy = new UserServiceProxy(userServiceImpl);
 
         proxy.select();
-        proxy.update();
+        proxy.update(new User());
     }
 }

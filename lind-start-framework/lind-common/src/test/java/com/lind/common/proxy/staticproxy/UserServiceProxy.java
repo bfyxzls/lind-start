@@ -1,5 +1,7 @@
 package com.lind.common.proxy.staticproxy;
 
+import com.lind.common.proxy.User;
+
 import java.util.Date;
 
 public class UserServiceProxy implements UserService {
@@ -13,9 +15,9 @@ public class UserServiceProxy implements UserService {
         target.select();    // 这里才实际调用真实主题角色的方法
         after();
     }
-    public void update() {
+    public void update(User user) {
         before();
-        target.update();    // 这里才实际调用真实主题角色的方法
+        target.update(user);    // 这里才实际调用真实主题角色的方法
         after();
     }
 

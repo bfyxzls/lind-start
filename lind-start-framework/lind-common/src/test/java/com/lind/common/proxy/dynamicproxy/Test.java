@@ -1,5 +1,6 @@
 package com.lind.common.proxy.dynamicproxy;
 
+import com.lind.common.proxy.User;
 import com.lind.common.proxy.staticproxy.UserService;
 import com.lind.common.proxy.staticproxy.UserServiceImpl;
 
@@ -28,7 +29,7 @@ public class Test {
         UserService proxy = (UserService) Proxy.newProxyInstance(classLoader, interfaces, logHandler);
         // 调用代理的方法
         proxy.select();
-        proxy.update();
+        proxy.update(new User());
 
         // 保存JDK动态代理生成的代理类，类名保存为 UserServiceProxy
         // ProxyUtils.generateClassFile(userServiceImpl.getClass(), "UserServiceProxy");
