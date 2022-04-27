@@ -34,7 +34,7 @@ public class DictionaryAdapterAspect {
             Field[] fields = ReflectUtil.getFields(arg.getClass());
             for (Field field : fields) {
                 log.info("dictionaryAdapterMethod.field:{}", field.getName());
-                if (field.getAnnotation(DictionaryAdapterField.class) != null) {
+                if (field.isAnnotationPresent(DictionaryAdapterField.class)) {
                     changObjectValue(arg, field.getName(), "hello");
                 }
             }

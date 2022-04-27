@@ -26,7 +26,7 @@ public class ScopeJsonSerializer<T> extends JsonSerializer<T> {
         jsonGenerator.writeStartObject();
         for (Field field : t.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            if (field.getAnnotation(ScopeSet.class) != null) {
+            if (field.isAnnotationPresent(ScopeSet.class)) {
                 String value = field.getAnnotation(ScopeSet.class).value();
                 if (Arrays.asList(SecurityUser.getScope()).contains(value)) {
                     jsonGenerator.writeObjectField(field.getName(), field.get(t));

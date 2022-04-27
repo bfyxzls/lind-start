@@ -65,19 +65,19 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
 
             // 添加
             if (SqlCommandType.INSERT.equals(sqlCommandType)) {
-                if (field.getAnnotation(CreatedDate.class) != null) {
+                if (field.isAnnotationPresent(CreatedDate.class)) {
                     field.setAccessible(true);
                     field.set(parameter, LocalDateTime.now());
                 }
 
-                if (field.getAnnotation(CreatedBy.class) != null) {
+                if (field.isAnnotationPresent(CreatedBy.class)) {
                     if (auditorAware != null) {
                         field.setAccessible(true);
                         field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
                     }
                 }
 
-                if (field.getAnnotation(CreatedDepartmentBy.class) != null) {
+                if (field.isAnnotationPresent(CreatedDepartmentBy.class)) {
                     if (auditorAware != null) {
                         field.setAccessible(true);
                         field.set(parameter, auditorAware.getCurrentAuditor().orElse(null));
@@ -90,7 +90,7 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
             if (SqlCommandType.INSERT.equals(sqlCommandType)
                     || SqlCommandType.UPDATE.equals(sqlCommandType)) {
                 field.setAccessible(true);
-                if (field.getAnnotation(LastModifiedDate.class) != null) {
+                if (field.isAnnotationPresent(LastModifiedDate.class)) {
                     //兼容mybatis plus的update
                     if (isPlugUpdate) {
                         Map<String, Object> updateParam = (Map<String, Object>) parameter;
@@ -99,7 +99,7 @@ public class AuditInterceptor extends AbstractSqlParserHandler implements Interc
                         field.set(parameter, LocalDateTime.now());
                     }
                 }
-                if (field.getAnnotation(LastModifiedBy.class) != null) {
+                if (field.isAnnotationPresent(LastModifiedBy.class)) {
                     field.setAccessible(true);
                     if (auditorAware != null) {
                         if (isPlugUpdate) {

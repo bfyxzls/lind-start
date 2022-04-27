@@ -18,11 +18,7 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -91,8 +87,8 @@ public class AuditAspect {
     void saveAudit(Object esBaseEntity) {
         Field[] fields = ClassHelper.getAllFields(esBaseEntity.getClass());
         List<Field> fieldList = Arrays.stream(fields)
-                .filter(o -> o.getAnnotation(CreatedDate.class) != null
-                        || o.getAnnotation(LastModifiedDate.class) != null)
+                .filter(o -> o.isAnnotationPresent(CreatedDate.class)
+                        || o.isAnnotationPresent(LastModifiedDate.class))
                 .collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(fieldList)) {
             for (Field field : fieldList) {
@@ -103,8 +99,8 @@ public class AuditAspect {
             }
         }
         List<Field> auditFieldList = Arrays.stream(fields)
-                .filter(o -> o.getAnnotation(CreatedBy.class) != null
-                        || o.getAnnotation(LastModifiedBy.class) != null)
+                .filter(o -> o.isAnnotationPresent(CreatedBy.class)
+                        || o.isAnnotationPresent(LastModifiedBy.class))
                 .collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(auditFieldList)) {
             for (Field field : auditFieldList) {
@@ -129,7 +125,7 @@ public class AuditAspect {
             Map source = updateQuery.getUpdateRequest().doc().sourceAsMap();
             Field[] fields = ClassHelper.getAllFields(updateQuery.getClazz());
             List<Field> fieldList = Arrays.stream(fields)
-                    .filter(o -> o.getAnnotation(LastModifiedDate.class) != null)
+                    .filter(o -> o.isAnnotationPresent(LastModifiedDate.class))
                     .collect(Collectors.toList());
             for (Field field : fieldList) {
                 if (!source.containsKey(field.getName())) {
@@ -137,7 +133,7 @@ public class AuditAspect {
                 }
             }
             List<Field> auditFieldList = Arrays.stream(fields)
-                    .filter(o -> o.getAnnotation(LastModifiedBy.class) != null)
+                    .filter(o -> o.isAnnotationPresent(LastModifiedBy.class))
                     .collect(Collectors.toList());
             for (Field field : auditFieldList) {
                 if (!source.containsKey(field.getName()) && esAuditorAware != null) {
