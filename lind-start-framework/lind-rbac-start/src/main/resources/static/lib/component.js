@@ -88,6 +88,7 @@ Vue.component('nav-menu', {
         } else {
             getRequest('/permission').then(res => (this.navList = res.data.data));
         }
+
     },
     template: `
          <i-menu  theme="light" width="auto" :active-name="activeName"  @on-select='menuSelect' >

@@ -19,7 +19,7 @@ public class RbacApplication {
     Environment env = application.getEnvironment();
     log.info("\n----------------------------------------------------------\n\t" +
             "Application '{}' is running! Access URLs:\n\t" +
-            "Local: \t\thttp://localhost:{}\n\t" +
+            "Local: \t\thttp://localhost:{}/index\n\t" +
             "Doc: \thttp://localhost:{}/doc.html\n" +
             "----------------------------------------------------------",
         env.getProperty("spring.application.name"),

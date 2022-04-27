@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.lind.common.dto.PageDTO;
 import com.lind.common.dto.PageParam;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
@@ -65,7 +66,7 @@ public class RoleController {
     @GetMapping("list")
     public CommonResult<IPage<RoleDTO>> index(
             @ApiParam("名称") @RequestParam(required = false) String name,
-            @ApiParam("页码") PageParam pageParam) {
+            @ApiParam("页码") PageDTO pageParam) {
         QueryWrapper<Role> userQueryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             userQueryWrapper.lambda().like(Role::getName, name);

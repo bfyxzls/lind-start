@@ -1,5 +1,5 @@
 <#import "../template.ftl" as layout>
-<@layout.registrationLayout bodyClass="<span style='color:red'>用户列表</span>";section>
+<@layout.registrationLayout ;section>
     <#if section = "head">
         用户列表
     <#elseif section="head-js">

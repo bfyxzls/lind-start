@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.common.dto.DateRangeDTO;
+import com.lind.common.dto.PageDTO;
 import com.lind.common.dto.PageParam;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
@@ -76,7 +77,7 @@ public class UserController {
     public CommonResult<IPage<UserVO>> index(
             @ApiParam("用户名") @RequestParam(required = false) String username,
             @ApiParam("时间") DateRangeDTO rangeDTO,
-            @ApiParam("页码") PageParam pageParam) {
+            @ApiParam("页码") PageDTO pageParam) {
 
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         Optional.ofNullable(rangeDTO.getFromDate()).ifPresent(o ->

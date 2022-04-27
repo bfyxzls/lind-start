@@ -12,7 +12,7 @@ export function getRequest(url, params) {
         }
     }).catch((err) => {
         if (err.response.status == 401) {
-            location.href = "/view/login";
+            location.href = "/login";
         }
     });
 }
@@ -28,7 +28,7 @@ export function postRequest(url, params) {
         }
     }).catch((err) => {
         if (err.response.status == 401) {
-            location.href = "/view/login";
+            location.href = "/login";
         }
     });
 }
@@ -41,7 +41,7 @@ export function auth(params) {
         data: params
     }).then(res => {
         setStore("auth", res.data.token);
-        location.href = "/view/index";
+        location.href = "/index";
     });
 }
 

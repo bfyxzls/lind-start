@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ViewController {
-    @GetMapping("/view/index")
+    @GetMapping("index")
     public String userList(Model model) {
         return "view/index";
     }
@@ -14,7 +14,7 @@ public class ViewController {
     /**
      * 登录
      */
-    @GetMapping("/view/login")
+    @GetMapping("login")
     public String login(Model model) {
         return "common/login";
     }

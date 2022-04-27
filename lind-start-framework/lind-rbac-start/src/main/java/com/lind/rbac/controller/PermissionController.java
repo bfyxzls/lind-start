@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
-import com.lind.common.dto.PageParam;
+import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.*;
@@ -72,7 +72,7 @@ public class PermissionController {
      */
     @ApiOperation("列表页")
     @GetMapping("query")
-    public CommonResult<IPage<Permission>> query(@ApiParam("分页") PageParam pageParam) {
+    public CommonResult<IPage<Permission>> query(@ApiParam("分页") PageDTO pageParam) {
         QueryWrapper<Permission> userQueryWrapper = new QueryWrapper<>();
         IPage<Permission> result = permissionDao.selectPage(
                 new Page<>(pageParam.getPageNumber(), pageParam.getPageSize()),
@@ -82,7 +82,7 @@ public class PermissionController {
     }
 
     @GetMapping("list")
-    public CommonResult<IPage<Permission>> list(@ApiParam("分页") PageParam pageParam) {
+    public CommonResult<IPage<Permission>> list(@ApiParam("分页") PageDTO pageParam) {
         return query(pageParam);
     }
 
