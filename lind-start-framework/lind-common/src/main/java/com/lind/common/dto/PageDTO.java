@@ -6,7 +6,7 @@ import lombok.Data;
  * 分页参数.
  */
 @Data
-public class PageDTO {
+public class PageDTO implements PageParam {
 
   /**
    * 页号.
@@ -28,10 +28,12 @@ public class PageDTO {
    */
   private String order;
 
+  @Override
   public int getPageNumber() {
     return pageNumber < 1 ? 1 : pageNumber;
   }
 
+  @Override
   public int getPageSize() {
     return pageSize;
   }

@@ -4,13 +4,12 @@ import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.lind.common.dto.PageDTO;
+import com.lind.common.dto.PageParam;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.RoleDao;
 import com.lind.rbac.dao.RolePermissionDao;
 import com.lind.rbac.dto.RoleDTO;
-import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
 import com.lind.rbac.entity.RolePermission;
 import com.lind.redis.service.RedisService;
@@ -25,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,13 +65,13 @@ public class RoleController {
     @GetMapping("list")
     public CommonResult<IPage<RoleDTO>> index(
             @ApiParam("名称") @RequestParam(required = false) String name,
-            @ApiParam("页码") PageDTO pageDTO) {
+            @ApiParam("页码") PageParam pageParam) {
         QueryWrapper<Role> userQueryWrapper = new QueryWrapper<>();
         if (StringUtils.isNotBlank(name)) {
             userQueryWrapper.lambda().like(Role::getName, name);
         }
          IPage<Role> roleList = roleDao.selectPage(
-                new Page<>(pageDTO.getPageNumber(), pageDTO.getPageSize()),
+                new Page<>(pageParam.getPageNumber(), pageParam.getPageSize()),
                 userQueryWrapper);
 
         List<RoleDTO> roles = roleList.getRecords()
@@ -94,7 +94,7 @@ public class RoleController {
 
     @ApiOperation("新增")
     @PostMapping("add")
-    public CommonResult add(@RequestBody RoleDTO roleDTO) {
+    public CommonResult add(@Valid @RequestBody RoleDTO roleDTO) {
         if (roleDao.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, roleDTO.getName())) != null) {
             return CommonResult.clientFailure(String.format("%s已经存在", roleDTO.getName()));
         }

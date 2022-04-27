@@ -2,6 +2,7 @@ package com.lind.mybatis;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lind.common.dto.PageDTO;
+import com.lind.common.dto.PageParam;
 import com.lind.mybatis.entity.TUser;
 import com.lind.mybatis.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class BasicTest {
     }
     @Test
     public void servicePageList() {
-        PageDTO pageVo = new PageDTO();
+        PageParam pageVo = new PageDTO();
         pageVo.setPageNumber(1);
         pageVo.setPageSize(2);
         userService.findByCondition(PageUtil.initPage(pageVo));

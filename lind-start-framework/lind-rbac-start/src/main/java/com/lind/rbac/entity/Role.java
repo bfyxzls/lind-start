@@ -3,6 +3,7 @@ package com.lind.rbac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
+import com.lind.rbac.valid.PrefixAdmin;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

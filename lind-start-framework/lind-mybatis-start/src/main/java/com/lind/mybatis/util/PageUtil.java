@@ -1,10 +1,11 @@
 package com.lind.mybatis.util;
 
+import com.lind.common.dto.PageParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import com.lind.common.dto.PageDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public class PageUtil {
      * @param page
      * @return
      */
-    public static Pageable initPage(PageDTO page) {
+    public static Pageable initPage(PageParam page) {
 
         Pageable pageable = null;
         int pageNumber = page.getPageNumber();
@@ -58,7 +59,7 @@ public class PageUtil {
      * @param list
      * @return
      */
-    public static List listToPage(PageDTO page, List list) {
+    public static List listToPage(PageParam page, List list) {
 
         int pageNumber = page.getPageNumber() - 1;
         int pageSize = page.getPageSize();

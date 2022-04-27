@@ -8,7 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Data
-public class DateRangeDTO {
+public class DateRangeDTO implements DateRangeParam {
   @ApiParam("开始时间")
   @ApiModelProperty("开始时间")
   @DateTimeFormat(pattern = "yyyy-MM-dd")
