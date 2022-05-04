@@ -502,13 +502,7 @@ $.ajax({
         var item = res.data.records;
         for (var i in item) {
             if (item[i].path != null && item[i].path != '' && item[i].type == 0) {
-                if (item[i].path == "/xtsz/roleList") {
-                    routes.push({path: item[i].path, component: roleList})
-                } else if (item[i].path == "/sys/userList") {
-                    routes.push({path: item[i].path, component: userList})
-                } else {
-                    routes.push({path: item[i].path, component: news})
-                }
+                routes.push({path: item[i].path, component: {template: item[i].filePath}})
             }
         }
         return routes;
