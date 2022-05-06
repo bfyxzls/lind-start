@@ -28,11 +28,11 @@ Switch	i-switch
         <meta http-equiv="Cache-Control" content="no-siteapp"/>
         <link rel="stylesheet" href="/css/iview.css">
         <link rel="stylesheet" href="/css/site.css">
-<style type="text/css">
-    .ivu-form-item-content{
-        margin-left: 0px !important;
-    }
-</style>
+        <style type="text/css">
+            .ivu-form-item-content {
+                margin-left: 0px !important;
+            }
+        </style>
         <script charset="UTF-8" src="/js/vue.min.js"></script>
         <script charset="UTF-8" src="/js/vue-router.js"></script>
         <script charset="UTF-8" src="/js/vuex.min.js"></script>
@@ -73,7 +73,7 @@ Switch	i-switch
             <div class="layout-content">
                 <Row>
                     <i-col span="5">
-                        <nav-menu></nav-menu>
+                        <nav-menu/>
                     </i-col>
                     <i-col span="19">
                         <div class="layout-header"></div>

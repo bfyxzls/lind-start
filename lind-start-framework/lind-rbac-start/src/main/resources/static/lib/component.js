@@ -63,6 +63,7 @@ Vue.component('range-date', {
         `
 });
 
+// 左侧菜单
 Vue.component('nav-menu', {
     props: {
         navMenus: Array
@@ -72,42 +73,40 @@ Vue.component('nav-menu', {
             activeName: '',
             navList: []
         }
-    }, methods: {
+    },
+    methods: {
         menuSelect: function (name) {
             this.activeName = name;
-            console.log(name, " is clicked!");
             //调用子组件breadcrumb
             if (this.$route.path != name) {
                 this.$router.push(name);//按着路由path完成跳转，menu上绑定name时可以直接使用route.path，注意初需要先把路由字典初始化
             }
         }
-    },
-    mounted() {
-        if (this.navMenus != null) {
+    }, mounted() {
+        if (this.navMenus != null && this.navMenus != undefined) {
             this.navList = this.navMenus;
         } else {
             getRequest('/permission').then(res => (this.navList = res.data.data));
         }
-
     },
     template: `
-         <i-menu  theme="light" width="auto" :active-name="activeName"  @on-select='menuSelect' >
-            <div v-for="navMenu in navList">
-                  <menu-item v-if="navMenu.sons==null" :name="navMenu.path" >               
+         <i-menu theme="light" width="auto" :active-name="activeName"  @on-select='menuSelect' :open-names="['1','6']" >
+               <div v-for="navMenu in navList">
+                  <menu-item v-if="navMenu.sons==null" :name="navMenu.path">               
                       <Icon type="ios-navigate"/>
                       {{navMenu.title}}
                    </menu-item>
-                   <Submenu v-if="navMenu.sons" :name="navMenu.id"  :data="navMenu">
+                    <Submenu v-if="navMenu.sons" :name="navMenu.id"  :data="navMenu">
                     <template slot="title"> 
                          {{navMenu.title}}
                     </template>
                     <nav-menu :navMenus="navMenu.sons"></nav-menu>
                    </Submenu>
             </div>
-    </i-menu>   
-`
+         </i-menu>`
 });
 
+// 面包绡
 Vue.component("breadcrumb", {
     data: function () {
         return {
@@ -132,7 +131,7 @@ Vue.component("breadcrumb", {
 `
 });
 
-Vue.component('home', {
+Vue.component('user-list', {
     data() {
         return {
             modalDetailVisible: false,//是否显示弹层
@@ -259,7 +258,9 @@ Vue.component('home', {
                         title: '提示',
                         content: '确定要删除吗？',
                         onOk: () => {
-                            this.cartList.splice(i, 1);
+                            axios.del('/user/del/' + info.id).then(res => {
+                                this.cartList.splice(i, 1);
+                            });
                         },
                         onCancel: () => {
                             // 什么也不做
@@ -431,7 +432,9 @@ Vue.component('role-list', {
                         title: '提示',
                         content: '确定要删除吗？',
                         onOk: () => {
-                            this.cartList.splice(i, 1);
+                            axios.del('/role/del' + info.id).then(res => {
+                                this.cartList.splice(i, 1);
+                            });
                         },
                         onCancel: () => {
                             // 什么也不做
@@ -484,15 +487,179 @@ Vue.component('role-list', {
                 `
 });
 
-export const userList = {
-    template: "<home/>"
-}
-export const roleList = {
-    template: "<role-list/>"
-}
-export const news = {
-    template: "<h2>这里是新闻部分</h2>"
-}
+Vue.component('menu-list', {
+    data() {
+        return {
+            modalDetailVisible: false,//是否显示弹层
+            cartList: [],//列表对象
+            modalTitle: null,//当前条目标题
+            currentRecord: {},//当前条目
+            searchForm: {//检索表单
+                pageNumber: 1,
+                pageSize: 10,
+                fromDate: "",
+                toDate: "",
+            },
+            columns: [
+                {
+                    type: "selection",
+                    width: 60,
+                    align: "center",
+                },
+                {
+                    title: '名称',
+                    key: 'title'
+                }, {
+                    title: '建立时间',
+                    key: 'createTime'
+                },
+                {
+                    title: '操作',
+                    render: (h, params) => {
+                        return h('div', [
+                            h('Button', {
+                                props: {
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.detail(params.row);
+                                    }
+                                }
+                            }, '查看'),
+                            h('Button', {
+                                props: {
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.edit(params.row);
+                                    }
+                                }
+                            }, '编辑'),
+                            h('Button', {
+                                props: {
+                                    type: 'error',
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '5px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.deleteItem(params.row.id);
+                                    }
+                                }
+                            }, '删除')
+                        ]);
+                    }
+                }
+            ]
+        }
+    },
+    methods: {
+        selectDateRange(v) {
+
+            if (v) {
+                this.searchForm.fromDate = v[0];
+                this.searchForm.toDate = v[1];
+            }
+        },
+        handleSearch() {
+            this.searchForm.pageNumber = 1;
+            this.searchForm.pageSize = 10;
+            this.getList();
+        },
+        getList() {
+            getRequest('/permission/query', this.searchForm).then(res => {
+                this.cartList = res.data.data.records;
+            });
+        },
+        edit(v) {
+            this.modalTitle = "编辑";
+            this.$refs.searchForm.resetFields();
+            this.detail(v);
+        },
+        detail(v) {
+            this.modalTitle = "查看";
+            for (let attr in v) {
+                if (v[attr] == null) {
+                    v[attr] = "";
+                }
+            }
+            let str = JSON.stringify(v);
+            let info = JSON.parse(str);
+            axios.get('/permission/' + info.id).then(res => (this.currentRecord = res.data.data));
+            this.modalDetailVisible = true;
+        },
+        deleteItem: function (id) {
+            for (let i = 0; i < this.cartList.length; i++) {
+                if (this.cartList[i].id === id) {
+                    // 询问是否删除
+                    this.$Modal.confirm({
+                        title: '提示',
+                        content: '确定要删除吗？',
+                        onOk: () => {
+                            axios.del('/permission/' + info.id).then(res => {
+                                this.cartList.splice(i, 1);
+                            });
+                        },
+                        onCancel: () => {
+                            // 什么也不做
+                        }
+                    });
+                }
+            }
+        }
+
+    },
+    mounted() {
+        this.getList();
+    },
+    template: `<div>
+                    <div class="search">
+                        <i-form ref="searchForm" :model="searchForm" inline :label-width="70">
+                              <form-item :label="name">
+                                <date-picker
+                                        type="daterange"
+                                        format="yyyy-MM-dd"
+                                        clearable
+                                        @on-change="selectDateRange"
+                                        placeholder="选择起始时间"
+                                        style="width: 200px"
+                                ></date-picker>
+                            </form-item>
+                            <form-item class="br">
+                                <input type="button" @click="handleSearch" class="ivu-btn ivu-btn-default" value="搜 索"/>
+                            </form-item>
+                        </i-form>
+                     </div>
+                    <i-table id="datatable1"
+                             size="small"
+                             :columns="columns"
+                             :data="cartList"
+                             stripe
+                             highlight-row>
+                    </i-table>
+    
+                    <Modal :title="modalTitle" v-model="modalDetailVisible" :mask-closable="false" :width="500">
+                        <div style="border-bottom:1px dashed #aaa;padding:5px;font-weight:bold">
+                            <div style="font-weight:bold">姓名：{{currentRecord.realName}}</div>
+                            <div style="font-weight:bold">电话：{{currentRecord.phone}}</div>
+                            <div style="font-weight:bold">账号：{{currentRecord.username}}</div>
+                            <div style="font-weight:bold">Email：{{currentRecord.email}}</div>
+                            <div style="font-weight:bold">建立时间：{{currentRecord.createTime}}</div>
+                        </div>
+                    </Modal>
+                </div>
+                `
+});
 
 var routes = [];
 $.ajax({
@@ -502,13 +669,48 @@ $.ajax({
         var item = res.data.records;
         for (var i in item) {
             if (item[i].path != null && item[i].path != '' && item[i].type == 0) {
-                routes.push({path: item[i].path, component: {template: item[i].filePath}})
+                routes.push({path: item[i].path, component: {template: item[i].filePath}});
             }
         }
         return routes;
     }
 })
 export const routerConfig = routes;
+
+//组件嵌套
+Vue.component('father', {
+    props: {
+        navMenus: Array
+    },
+    data: function () {
+        return {
+            list: [{
+                name: "儿子",
+                son: [
+                    {name: "儿子1", son: [{name: "儿子1-孙子1"}]},
+                    {name: "儿子2", son: [{name: "儿子2-孙子1"}, {name: "儿子2-孙子2"}]}]
+            }]
+        }
+    },
+    mounted() {
+        if (this.navMenus != null && this.navMenus != undefined) {
+            this.list = this.navMenus;
+        }
+    },
+    template: `
+<div><h1>父亲</h1>
+    <ul  v-for="item in list">
+        <li v-if="item.son==null">{{item.name}}</li>
+         <li v-if="item.son" >
+            <ul>
+               <b>{{item.name}}</b>
+               <father :navMenus="item.son"/>
+            </ul>
+          </li>     
+    </ul>
+</div>`
+
+});
 
 
 
