@@ -47,33 +47,29 @@ Switch	i-switch
     </head>
     <body>
     <div id="app">
-        <div class="layout">
+        <div class="layout" style="position: absolute;top: 0px;bottom: 0px;left: 0px;right: 0px;">
 
             <i-menu mode="horizontal" theme="dark" active-name="1">
-                <div class="layout-logo"></div>
-                <div class="layout-nav">
+                <span  style="font-size: 18px; font-weight: bolder;color:#ffffff;padding-left:10px;">后台管理系统</span>
+                <div class="nav-left" style="float: right">
                     <menu-item name="1">
                         <Icon type="ios-navigate"></Icon>
-                        Item 1
+                        系统介绍
                     </menu-item>
                     <menu-item name="2">
                         <Icon type="ios-keypad"></Icon>
-                        Item 2
+                        关于大叔
                     </menu-item>
                     <menu-item name="3">
                         <Icon type="ios-analytics"></Icon>
-                        Item 3
-                    </menu-item>
-                    <menu-item name="4">
-                        <Icon type="ios-paper"></Icon>
-                        Item 4
+                        个人中心
                     </menu-item>
                 </div>
             </i-menu>
             <div class="layout-content">
                 <Row>
                     <i-col span="5">
-                        <nav-menu/>
+                        <nav-menu></nav-menu>
                     </i-col>
                     <i-col span="19">
                         <div class="layout-header"></div>

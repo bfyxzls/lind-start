@@ -65,13 +65,9 @@ Vue.component('range-date', {
 
 // 左侧菜单
 Vue.component('nav-menu', {
-    props: {
-        navMenus: Array
-    },
     data: function () {
         return {
-            activeName: '',
-            navList: []
+            activeName: '/sys/userList',
         }
     },
     methods: {
@@ -82,30 +78,51 @@ Vue.component('nav-menu', {
                 this.$router.push(name);//按着路由path完成跳转，menu上绑定name时可以直接使用route.path，注意初需要先把路由字典初始化
             }
         }
-    }, mounted() {
-        if (this.navMenus != null && this.navMenus != undefined) {
-            this.navList = this.navMenus;
-        } else {
-            getRequest('/permission').then(res => (this.navList = res.data.data));
-        }
     },
     template: `
          <i-menu theme="light" width="auto" :active-name="activeName"  @on-select='menuSelect' :open-names="['1','6']" >
-               <div v-for="navMenu in navList">
-                  <menu-item v-if="navMenu.sons==null" :name="navMenu.path">               
-                      <Icon type="ios-navigate"/>
-                      {{navMenu.title}}
-                   </menu-item>
-                    <Submenu v-if="navMenu.sons" :name="navMenu.id"  :data="navMenu">
-                    <template slot="title"> 
-                         {{navMenu.title}}
-                    </template>
-                    <nav-menu :navMenus="navMenu.sons"></nav-menu>
-                   </Submenu>
-            </div>
+              <nav-menu-item/>
          </i-menu>`
 });
 
+// 递归构建组件
+Vue.component('nav-menu-item', {
+    props: {
+        navMenus: Array
+    }, methods: {
+        load: function () {
+            var data;
+            $.ajax({
+                url: "/permission",
+                async: false,//这块需要是同步请求，将同步的结果赋值常量routerConfig
+                success: function (res) {
+                    data = res.data;
+                }
+            })
+            return data;
+        }
+    },
+    data() {
+        return {
+            navList: this.navMenus ? this.navMenus : this.load()
+        }
+    }, template: `
+           <div>
+               <div v-for="navMenu in navList">
+                    <menu-item  v-if="navMenu.sons==null" :name="navMenu.path">               
+                           <Icon type="ios-navigate"/>
+                          {{navMenu.title}}
+                    </menu-item>
+                    <Submenu v-if="navMenu.sons" :name="navMenu.id">
+                        <template slot="title"> 
+                             {{navMenu.title}}
+                        </template>
+                         <nav-menu-item :navMenus="navMenu.sons"></nav-menu-item>
+                   </Submenu>
+                  
+               </div>
+           </div>`
+});
 // 面包绡
 Vue.component("breadcrumb", {
     data: function () {
@@ -677,14 +694,21 @@ $.ajax({
 })
 export const routerConfig = routes;
 
-//组件嵌套
-Vue.component('father', {
+//父组件调用子组件
+Vue.component('tree', {
+    template: `
+    <div>大树<sons/></div>`
+
+});
+//子组件完成递归
+Vue.component('sons', {
+
     props: {
-        navMenus: Array
+        subList: Array
     },
     data: function () {
         return {
-            list: [{
+            list: this.subList ? this.subList : [{ //空值判断，递归时subList不为空
                 name: "儿子",
                 son: [
                     {name: "儿子1", son: [{name: "儿子1-孙子1"}]},
@@ -692,25 +716,24 @@ Vue.component('father', {
             }]
         }
     },
-    mounted() {
-        if (this.navMenus != null && this.navMenus != undefined) {
-            this.list = this.navMenus;
-        }
-    },
+
     template: `
-<div><h1>父亲</h1>
-    <ul  v-for="item in list">
-        <li v-if="item.son==null">{{item.name}}</li>
-         <li v-if="item.son" >
-            <ul>
-               <b>{{item.name}}</b>
-               <father :navMenus="item.son"/>
-            </ul>
-          </li>     
-    </ul>
-</div>`
+              <div><!-- 这个div标签是必须的 -->
+                <ul v-for="item in list" :key="item.name">
+                    <li>
+                        {{item.name}}
+                    </li>
+                    <ul v-if="item.son">
+                       <sons :subList="item.son"></sons>
+                    </ul>
+                </ul>
+              </div>
+            `
 
 });
+
+
+
 
 
 
