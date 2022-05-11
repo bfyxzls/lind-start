@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableConfigurationProperties(ActivitiConfig.ActivitiExtendProperties.class)
 @EnableJpaRepositories(basePackages = {"com.lind.activiti.repository"})
 @EntityScan("com.lind.activiti.entity")
-public class ActivitiConfig {
+public class  ActivitiConfig {
 
   @Autowired
   private ActivitiExtendProperties properties;
