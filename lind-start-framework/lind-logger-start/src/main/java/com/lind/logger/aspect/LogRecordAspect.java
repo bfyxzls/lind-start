@@ -1,5 +1,6 @@
 package com.lind.logger.aspect;
 
+import com.lind.common.rest.CommonResult;
 import com.lind.logger.anno.LogRecord;
 import com.lind.logger.entity.LogEvaluationContext;
 import com.lind.logger.entity.LogEvaluator;
@@ -9,9 +10,9 @@ import com.lind.logger.service.CurrentIpAware;
 import com.lind.logger.service.CurrentUserAware;
 import com.lind.logger.service.LoggerService;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
-import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -43,14 +44,13 @@ public class LogRecordAspect {
     public void pointcut() {
     }
 
-    @Around("pointcut()")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        try {
-            Object obj = proceedingJoinPoint.proceed();
-            loggerService.insert(generateLog(proceedingJoinPoint));
-            return obj;
-
-        } finally {
+    @AfterReturning(pointcut = "pointcut()",returning = "result")
+    public void after(JoinPoint joinPoint, Object result) {
+        if (result instanceof CommonResult) {
+            if (((CommonResult) result).getCode() == 200)//正常返回
+            {
+                loggerService.insert(generateLog(joinPoint));
+            }
         }
     }
 
@@ -60,7 +60,7 @@ public class LogRecordAspect {
      * @param joinPoint 切入点
      * @return 日志实体
      */
-    private LoggerInfo generateLog(ProceedingJoinPoint joinPoint) {
+    private LoggerInfo generateLog(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
@@ -71,15 +71,33 @@ public class LogRecordAspect {
             LogRootObject rootObject = new LogRootObject(method, args, targetClass);
             LogEvaluationContext context = new LogEvaluationContext(rootObject, evaluator.getDiscoverer());
             Object content = evaluator.parse(annotation.detail(), context);
+
+            Integer moduleType = annotation.moduleType();
+            if (LogRootObject.getVar("moduleType") != null) {
+                moduleType = Integer.parseInt(LogRootObject.getVar("moduleType").toString());
+            }
+            Integer operateType = annotation.operateType();
+            if (LogRootObject.getVar("operateType") != null) {
+                operateType = Integer.parseInt(LogRootObject.getVar("operateType").toString());
+            }
+            String dataId = Optional.ofNullable(evaluator.parse(annotation.dataId(), context)).orElse("").toString();
+            if (LogRootObject.getVar("dataId") != null) {
+                dataId = LogRootObject.getVar("dataId").toString();
+            }
+            String dataTitle = Optional.ofNullable(evaluator.parse(annotation.dataId(), context)).orElse("").toString();
+            if (LogRootObject.getVar("dataTitle") != null) {
+                dataTitle = LogRootObject.getVar("dataTitle").toString();
+            }
             LoggerInfo loggerInfo = LoggerInfo.builder()
                     .detail(content.toString())
-                    .moduleType(annotation.moduleType())
-                    .dataId(Optional.ofNullable(evaluator.parse(annotation.dataId(), context)).orElse("").toString())
-                    .dataTitle(Optional.ofNullable(evaluator.parse(annotation.dataTitle(), context)).orElse("").toString())
-                    .operateType(annotation.operateType())
+                    .moduleType(moduleType)
+                    .dataId(dataId)
+                    .dataTitle(dataTitle)
+                    .operateType(operateType)
                     .operateTime(LocalDateTime.now())
                     .operatorIp(currentIpAware.address())
                     .operator(currentUserAware.username()).build();
+
             return loggerInfo;
         }
         return null;

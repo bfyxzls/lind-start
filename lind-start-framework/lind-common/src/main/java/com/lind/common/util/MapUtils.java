@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author meilin.huang
- * @version 1.0
- * @date 2019-12-04 5:29 下午
+ * Map工具类.
  */
 public final class MapUtils {
 
@@ -191,10 +189,10 @@ public final class MapUtils {
     }
 
     static int capacity(int expectedSize) {
-        if (expectedSize <3) {
+        if (expectedSize < 3) {
             return expectedSize + 1;
         }
-        return expectedSize < 1073741824 ? (int)((float)expectedSize / 0.75F + 1.0F) :  2147483647;
+        return expectedSize < 1073741824 ? (int) ((float) expectedSize / 0.75F + 1.0F) : 2147483647;
     }
 
 

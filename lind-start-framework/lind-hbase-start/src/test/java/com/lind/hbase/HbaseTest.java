@@ -90,10 +90,18 @@ public class HbaseTest {
 
   @Test
   public void getByRowKey() {
-    DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618432", "id");
+    DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "537467955563204608" );
     Assert.assertNotNull(dataRecord != null);
-    dataRecord = hBaseService.getByKey(TABLE_NAME, "407730685881618431", "id");
+    dataRecord = hBaseService.getByKey(TABLE_NAME, "537467955563204608");
     Assert.assertNotNull(dataRecord != null);
+  }
+
+  @Test
+  public void updateIfNotExist() {
+    DataRecord dataRecord = hBaseService.getByKey(TABLE_NAME, "537467955563204608" );
+    dataRecord.put("name","zhangsan");
+    dataRecord.setId("532");
+    hBaseService.update(TABLE_NAME,dataRecord);
   }
 
   @Test

@@ -103,6 +103,9 @@ public class HBaseServiceImpl implements HBaseService {
     public String update(String tableName, DataRecord dataRecord) {
         Assert.notNull(dataRecord, "更新数据不能为空");
         Assert.hasText(dataRecord.getId(), "更新id不能为空");
+        if (getByKey(tableName, dataRecord.getId()) == null) {
+            throw new IllegalArgumentException("要更新的数据不存在:" + dataRecord.getId());
+        }
         return save(tableName, dataRecord);
     }
 

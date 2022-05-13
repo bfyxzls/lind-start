@@ -8,14 +8,14 @@ import java.nio.channels.FileChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class FileReader {
+public class DemoFileReader {
     private int threadNum = 3;//线程数,默认为3
     private String filePath;//文件路径
     private int bufSize = 1024;//缓冲区大小,默认为1024
     private DataProcessHandler dataProcessHandler;//数据处理接口
     private ExecutorService threadPool;
 
-    public FileReader(String filePath, int bufSize, int threadNum) {
+    public DemoFileReader(String filePath, int bufSize, int threadNum) {
         this.threadNum = threadNum;
         this.bufSize = bufSize;
         this.filePath = filePath;

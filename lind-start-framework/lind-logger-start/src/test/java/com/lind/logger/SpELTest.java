@@ -9,14 +9,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class SpELTest {
-  @Autowired
-  UserService userService;
 
-  @Test
-  public void test() {
-    User user = new User();
-    user.setAddr("beijing");
-    user.setName("zzl");
-    userService.insert(user);
-  }
+
+    @Autowired
+    UserService userService;
+
+
+
+    @Test
+    public void test() {
+        User user = new User();
+        user.setAddr("beijing");
+        user.setName("zzl");
+        userService.insert(user);
+    }
+
 }

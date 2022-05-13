@@ -31,13 +31,25 @@ public class OptionalTest {
         Optional.ofNullable(student).ifPresent(u -> System.out.println("The student name is : " + u.getName()));
         Student student1 = Student.builder().name("    hello   ").build();
         Optional.ofNullable(student1).ifPresent(u -> {
-                    System.out.println("The student1 name is:" + u.getName());
-                    student1.setName(u.getName().trim());
-                });
+            System.out.println("The student1 name is:" + u.getName());
+            student1.setName(u.getName().trim());
+        });
         System.out.println("The student1 name is:" + student1.getName());
         String a = "hello";
         Optional.ofNullable(a).ifPresent(u -> System.out.println("The hello name is : " + u));
 
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void orElseThrow() {
+        Student student = null;
+        Optional.ofNullable(student).orElseThrow(IllegalArgumentException::new);
+    }
+
+    @Test
+    public void orElseThrowMessage() {
+        Student student = null;
+        Optional.ofNullable(student).orElseThrow(() -> new IllegalArgumentException("student is not null!"));
     }
 }

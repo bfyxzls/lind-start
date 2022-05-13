@@ -1,6 +1,7 @@
 package com.lind.start.test;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.aesh.command.Command;
 import org.aesh.command.CommandDefinition;
 import org.aesh.command.CommandException;
@@ -14,9 +15,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.io.IOException;
 
 @SpringBootApplication
+@Slf4j
 public class TestApplication {
   @SneakyThrows
   public static void main(String[] args) throws CommandRegistryException, IOException {
+
     SpringApplication.run(TestApplication.class, args);
     // 命令行输入
     // AeshRuntimeRunner.builder().command(AddUserCommand.class).args(args).execute();
