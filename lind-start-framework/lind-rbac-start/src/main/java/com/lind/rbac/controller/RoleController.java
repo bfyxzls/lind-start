@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.common.dto.PageDTO;
-import com.lind.common.dto.PageParam;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.rbac.dao.RoleDao;
@@ -111,6 +110,13 @@ public class RoleController {
     public CommonResult update(@ApiParam("角色ID") @PathVariable String id, @RequestBody RoleDTO roleDTO) {
         Role role = roleDao.selectById(id);
         if (role != null) {
+            if (roleDao.selectOne(
+                    new QueryWrapper<Role>()
+                            .lambda()
+                            .ne(Role::getId, id)
+                            .eq(Role::getName, roleDTO.getName())) != null) {
+                return CommonResult.clientFailure(String.format("%s已经存在", roleDTO.getName()));
+            }
             CopyUtils.copyProperties(roleDTO, role);
             roleDao.updateById(role);
             updateRolePermissions(roleDTO.getPermissionIdList(), role);

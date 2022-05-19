@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
+import com.lind.uaa.jwt.config.SecurityUtil;
 import com.lind.uaa.jwt.entity.ResourcePermission;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import lombok.SneakyThrows;
@@ -20,9 +21,15 @@ import java.util.Set;
 public class RedisResourcePermissionService implements ResourcePermissionService {
     @Autowired
     RedisService redisService;
+    @Autowired
+    SecurityUtil securityUtil;
 
     @Override
     public Set<? extends ResourcePermission> getUserAll() {
+        String key = Constants.USER_PERMISSION.concat(securityUtil.getCurrUser().getId());
+        if (redisService.hasKey(key)) {
+            return (Set<? extends ResourcePermission>) redisService.get(key);
+        }
         return null;
     }
 

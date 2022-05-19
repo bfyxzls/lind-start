@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.common.dto.DateRangeDTO;
 import com.lind.common.dto.PageDTO;
-import com.lind.common.dto.PageParam;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
 import com.lind.logger.anno.LogRecord;
@@ -148,15 +147,14 @@ public class UserController {
     public CommonResult update(@ApiParam("用户ID") @PathVariable String id, @RequestBody UserDTO user) {
         User userEntity = userDao.selectById(id);
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();
-        queryWrapper.lambda().ne(User::getId, id);
-        queryWrapper.lambda().eq(User::getUsername, user.getUsername())
-                .or().eq(User::getPhone, user.getPhone())
-                .or().eq(User::getEmail, user.getEmail());
-        if (userDao.selectCount(queryWrapper) > 0) {
-            return CommonResult.clientFailure(String.format("用户已经存在【%s %s %s】",
-                    user.getUsername(),
-                    user.getPhone(),
-                    user.getEmail()));
+        if (userDao.selectCount(queryWrapper.lambda().eq(User::getUsername, user.getUsername()).ne(User::getId, id)) > 0) {
+            return CommonResult.clientFailure(String.format("用户名%s已经存在", user.getUsername()));
+        }
+        if (userDao.selectCount(queryWrapper.lambda().eq(User::getPhone, user.getPhone()).ne(User::getId, id)) > 0) {
+            return CommonResult.clientFailure(String.format("手机号%s已经存在", user.getPhone()));
+        }
+        if (userDao.selectCount(queryWrapper.lambda().eq(User::getEmail, user.getEmail()).ne(User::getId, id)) > 0) {
+            return CommonResult.clientFailure(String.format("邮箱%s已经存在", user.getEmail()));
         }
         if (userEntity != null) {
 

@@ -152,8 +152,10 @@ Vue.component('user-list', {
     data() {
         return {
             modalDetailVisible: false,//是否显示弹层
-            cartList: [],//列表对象
             modalTitle: null,//当前条目标题
+            modalEditTitle: null,
+            modalEditVisible: false,
+            cartList: [],//列表对象
             currentRecord: {},//当前条目
             searchForm: {//检索表单
                 pageNumber: 1,
@@ -251,9 +253,11 @@ Vue.component('user-list', {
             });
         },
         edit(v) {
-            this.modalTitle = "编辑";
+            this.modalEditTitle = "编辑";
+            this.modalEditVisible = true;
             this.$refs.searchForm.resetFields();
-            this.detail(v);
+            let str = JSON.stringify(v);
+            this.currentRecord = JSON.parse(str);
         },
         detail(v) {
             this.modalTitle = "查看";
@@ -285,8 +289,10 @@ Vue.component('user-list', {
                     });
                 }
             }
+        },
+        save() {
+        alert("保存");
         }
-
     },
     mounted() {
         this.getList();
@@ -318,14 +324,45 @@ Vue.component('user-list', {
                     </i-table>
     
                     <Modal :title="modalTitle" v-model="modalDetailVisible" :mask-closable="false" :width="500">
-                        <div style="border-bottom:1px dashed #aaa;padding:5px;font-weight:bold">
-                            <div style="font-weight:bold">姓名：{{currentRecord.realName}}</div>
-                            <div style="font-weight:bold">电话：{{currentRecord.phone}}</div>
-                            <div style="font-weight:bold">账号：{{currentRecord.username}}</div>
-                            <div style="font-weight:bold">Email：{{currentRecord.email}}</div>
-                            <div style="font-weight:bold">建立时间：{{currentRecord.createTime}}</div>
+                        <div style="padding:5px;">
+                            <div style="padding:5px;border-bottom: 1px dashed #ddd;">姓名：{{currentRecord.realName}}</div>
+                            <div style="padding:5px;border-bottom: 1px dashed #ddd;">电话：{{currentRecord.phone}}</div>
+                            <div style="padding:5px;border-bottom: 1px dashed #ddd;">账号：{{currentRecord.username}}</div>
+                            <div style="padding:5px;border-bottom: 1px dashed #ddd;">Email：{{currentRecord.email}}</div>
+                            <div style="padding:5px;border-bottom: 1px dashed #ddd;">建立时间：{{currentRecord.createTime}}</div>
                         </div>
                     </Modal>
+                    
+                       <Modal :title="modalEditTitle" v-model="modalEditVisible" :mask-closable="false" :width="500">
+                          <i-form ref="currentRecord" :model="currentRecord" inline :label-width="70">
+                                <div style="padding:5px;">
+                                    
+                                     <form-item class="br">姓名
+                                         <i-input type="username"  v-model="currentRecord.username" placeholder="username">
+                                          </i-input>
+                                    </form-item>
+                                    <form-item class="br">电话
+                                         <i-input type="phone"  v-model="currentRecord.phone" placeholder="phone">
+                                          </i-input>
+                                    </form-item>
+                                     <form-item class="br">Email
+                                         <i-input type="email"  v-model="currentRecord.email" placeholder="email">
+                                          </i-input>
+                                    </form-item>
+                                     <form-item class="br">建立时间
+                                         <i-input type="createTime"  v-model="currentRecord.createTime" placeholder="createTime">
+                                          </i-input>
+                                    </form-item>
+                              
+                                </div>
+                              
+                                <div slot="footer" align="center">
+                                  <Button class="btn" size="default" type="default" @click="modalEditVisible = false">取消</Button>
+                                  <Button class="btn" size="default" type="primary" @click="save">确定</Button>
+                                 </div>
+                            </i-form>
+                    </Modal>
+                    
                 </div>
                 `
 });

@@ -112,6 +112,13 @@ public class PermissionController {
     public CommonResult update(@ApiParam("菜单ID") @PathVariable String id, @RequestBody PermissionDTO permission) {
         Permission permissionEntity = permissionDao.selectById(id);
         if (permissionEntity != null) {
+            if (permissionDao.selectOne(new QueryWrapper<Permission>()
+                    .lambda()
+                    .eq(Permission::getTitle, permission.getTitle())
+                    .eq(Permission::getParentId, permission.getParentId())
+                    .ne(Permission::getId, id)) != null) {
+                return CommonResult.clientFailure(String.format("%s在同一父级下已经存在", permission.getTitle()));
+            }
             CopyUtils.copyProperties(permission, permissionEntity);
             permissionDao.updateById(permissionEntity);
             delRedisPermission();

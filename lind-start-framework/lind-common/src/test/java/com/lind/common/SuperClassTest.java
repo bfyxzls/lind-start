@@ -26,6 +26,14 @@ public class SuperClassTest {
         print(sub);
     }
 
+    @Test
+    public void extendsParam() {
+        ShopIdentityProviderConfig shopIdentityProviderConfig = new ShopIdentityProviderConfig();
+        shopIdentityProviderConfig.setTitle("demo");
+        shopIdentityProviderConfig.setInfo("描述");
+        AbstractOAuth2IdentityProvider<ShopIdentityProviderConfig> abstractOAuth2IdentityProvider = new ShopAbstractOAuth2IdentityProvider(shopIdentityProviderConfig);
+    }
+
     @Data
     class Super {
         String name;
@@ -36,4 +44,52 @@ public class SuperClassTest {
     class Sub extends Super {
         String email;
     }
+
+    /**
+     * 超级配置
+     */
+    @Data
+    public class OAuth2IdentityProviderConfig {
+        private String title;
+    }
+
+    /**
+     * 具体配置
+     */
+    @Data
+    @ToString(callSuper = true)
+    public class ShopIdentityProviderConfig extends OAuth2IdentityProviderConfig {
+        private String info;
+    }
+
+    /**
+     * 基本实现
+     *
+     * @param <C>
+     */
+    public abstract class AbstractOAuth2IdentityProvider<C extends OAuth2IdentityProviderConfig> {
+        C config;
+
+        public AbstractOAuth2IdentityProvider(C config) {
+            System.out.println(config.toString());
+            this.config = config;
+        }
+
+        public C getConfig() {
+            return this.config;
+        }
+    }
+
+    /**
+     * 具体实现
+     **/
+    public class ShopAbstractOAuth2IdentityProvider extends AbstractOAuth2IdentityProvider<ShopIdentityProviderConfig> {
+        public ShopAbstractOAuth2IdentityProvider(ShopIdentityProviderConfig config) {
+            super(config);
+            System.out.println(config.toString());
+        }
+    }
+
+
 }
+

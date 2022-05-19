@@ -49,7 +49,6 @@ public class PermissionServiceImpl implements ResourcePermissionService {
             Set<? extends ResourcePermission> resourcePermissions = (Set<ResourcePermission>) redisService.get(key);
             return resourcePermissions;
         }
-        Integer roleBtnSum = 0;
         List<String> roleIdList = new ArrayList<>();
         List<UserRole> userRoles = userRoleDao.selectList(new QueryWrapper<UserRole>().lambda()
                 .eq(UserRole::getUserId, securityUtil.getCurrUser().getId()));
