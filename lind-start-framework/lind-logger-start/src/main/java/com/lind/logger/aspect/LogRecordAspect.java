@@ -44,9 +44,10 @@ public class LogRecordAspect {
     public void pointcut() {
     }
 
-    @AfterReturning(pointcut = "pointcut()",returning = "result")
+    @AfterReturning(pointcut = "pointcut()", returning = "result")
     public void after(JoinPoint joinPoint, Object result) {
         if (result instanceof CommonResult) {
+            // 方法正常返回之后，记录日志
             if (((CommonResult) result).getCode() == 200)//正常返回
             {
                 loggerService.insert(generateLog(joinPoint));
