@@ -33,6 +33,21 @@ export function postRequest(url, params) {
     });
 }
 
+export function putRequest(url, params) {
+    return axios({
+        method: 'put',
+        url: url,
+        data: params,
+        headers: {
+            'Authorization': getStore("auth")
+        }
+    }).catch((err) => {
+        if (err.response.status == 401) {
+            location.href = "/login";
+        }
+    });
+}
+
 // 认证
 export function auth(params) {
     return axios({

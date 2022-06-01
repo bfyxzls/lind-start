@@ -290,8 +290,8 @@ Vue.component('user-list', {
                 }
             }
         },
-        save() {
-        alert("保存");
+        save:function() {
+             putRequest("/user/update/"+this.currentRecord.id,$this.$data.form)
         }
     },
     mounted() {
@@ -355,12 +355,12 @@ Vue.component('user-list', {
                                     </form-item>
                               
                                 </div>
-                              
-                                <div slot="footer" align="center">
-                                  <Button class="btn" size="default" type="default" @click="modalEditVisible = false">取消</Button>
-                                  <Button class="btn" size="default" type="primary" @click="save">确定</Button>
-                                 </div>
+      
                             </i-form>
+                          <div slot="footer" align="center">
+                              <Button class="btn" size="default" type="default" @click="modalEditVisible = false">取消</Button>
+                              <Button class="btn" size="default" type="primary" @click="save">确定1</Button>
+                          </div>  
                     </Modal>
                     
                 </div>
