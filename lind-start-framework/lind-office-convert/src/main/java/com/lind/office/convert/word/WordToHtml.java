@@ -110,7 +110,7 @@ public class WordToHtml {
             }
             options.URIResolver(new BasicURIResolver(imagePathResolver));
             outputStreamWriter = new OutputStreamWriter(new FileOutputStream(targetFileName), "utf-8");
-            XHTMLConverter xhtmlConverter = (XHTMLConverter) XHTMLConverter.getInstance();
+            XHTMLConverter xhtmlConverter = (XHTMLConverter) XHTMLConverterAdapter.getInstance();
             xhtmlConverter.convert(document, outputStreamWriter, options);
         } finally {
             if (outputStreamWriter != null) {
