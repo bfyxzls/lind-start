@@ -6,6 +6,8 @@ import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.config.JwtConfig;
 import com.lind.uaa.jwt.service.JwtUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +22,12 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * 自动刷新token，通过token访问资源时，当达到某个时间，会返回新的token.
+ * 自动刷新token，通过token访问资源时，当达到某个时间，会在Response响应头中输出Authorization,前端需要根据这个值来刷新本地存储的token.
+ * IssuedAt是生成token的当前时间，然后与RefreshToken的时间做对比，达到了，需要从新获取新token
+ * 注意RefreshToken expire的值需要小于token expire的值
  */
 public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler {
+  private static Logger logger = LoggerFactory.getLogger(JwtRefreshSuccessHandler.class);
   @Autowired
   JwtConfig jwtConfig;
   @Autowired
@@ -39,9 +44,11 @@ public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler {
     DecodedJWT jwt = ((JwtAuthenticationToken) authentication).getToken();
     boolean shouldRefresh = shouldTokenRefresh(jwt.getIssuedAt());
     if (shouldRefresh) {
-      // 在线token续期
-      redisService.expire(Constants.ONLINE_USER + jwt.getToken(), jwtConfig.getExpiresAt() * 60);
-      String newToken = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
+      // 刷新后的新token在线状态
+      logger.info("JwtRefreshSuccessHandler");
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      String newToken = jwtUserService.generateJwtJoinToken(userDetails.getUsername(), jwt.getClaim("user"));
+      redisService.expire(Constants.ONLINE_USER + newToken, jwtConfig.getExpiresAt() * 60);
       response.setHeader("Authorization", newToken);
     }
   }

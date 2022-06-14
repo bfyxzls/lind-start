@@ -51,6 +51,25 @@ public class JwtUserService {
     }
 
     /**
+     * 在原来用户jwt主体基础上，生成新的token.
+     *
+     * @param username
+     * @param claim
+     * @return
+     */
+    @SneakyThrows
+    public String generateJwtJoinToken(String username, Claim claim) {
+        Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
+        Date date = DateUtils.addMinutes(new Date(), Integer.parseInt(jwtConfig.getExpiresAt().toString()));
+        JWTCreator.Builder jwt = JWT.create()
+                .withSubject(username)
+                .withClaim(CLAIM_USER, claim.asString())
+                .withExpiresAt(date)
+                .withIssuedAt(new Date());
+        return jwt.sign(algorithm);
+    }
+
+    /**
      * 通过token解析用户信息.
      *
      * @param token

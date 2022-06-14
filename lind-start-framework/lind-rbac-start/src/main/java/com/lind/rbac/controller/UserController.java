@@ -159,7 +159,8 @@ public class UserController {
         if (userEntity != null) {
 
             Optional.ofNullable(user.getPassword()).ifPresent(o -> {
-                user.setPassword(passwordEncoder.encode(o));
+                if (StringUtils.isNoneBlank(o))
+                    user.setPassword(passwordEncoder.encode(o));
             });
             CopyUtils.copyProperties(user, userEntity);
             userDao.updateById(userEntity);

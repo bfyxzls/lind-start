@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static com.lind.uaa.jwt.config.Constants.LOGIN_FAIL_LIMIT;
+import static com.lind.uaa.jwt.config.Constants.LOGIN_FAIL_LOCK_LIMIT;
 
 @RequiredArgsConstructor
 public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandler {
@@ -25,19 +26,24 @@ public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandl
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                       AuthenticationException exception) throws IOException, ServletException {
     response.setCharacterEncoding("utf-8");
-    response.setStatus(HttpStatus.UNAUTHORIZED.value());
+    response.setStatus(HttpStatus.OK.value());
     response.setContentType("application/json;charset=utf-8");
-
-    String key = LOGIN_FAIL_LIMIT + request.getSession().getId();
-    if (!redisService.hasKey(key)) {
-      redisService.set(key, 0, 60L);
+    if (!exception.getMessage().equals("Bad credentials")) {
+      // token超时
+      response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("登录超时!")));
+    } else {//用户密码错误
+      Object username = request.getAttribute("username");
+      String key = LOGIN_FAIL_LIMIT + username;
+      String lockKey = LOGIN_FAIL_LOCK_LIMIT + username;
+      if (!redisService.hasKey(key)) {
+        redisService.set(key, 0, jwtConfig.getFailLimitTime() * 60);
+      }
+      if (Integer.valueOf(redisService.get(key).toString()) >= jwtConfig.getFailLimit()) {
+        redisService.set(lockKey, 0, jwtConfig.getFailLockTime() * 60);
+      }
+      redisService.incr(key, 1L);
+      response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("用户名或密码错误!")));
     }
-    if (Integer.valueOf(redisService.get(key).toString()) >= jwtConfig.getFailLimit()) {
-      response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("用户登录被限制,请1分钟后重试!")));
-      return;
-    }
-    redisService.incr(key, 1L);
-    response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("用户名密码错误!")));
   }
 
 }
