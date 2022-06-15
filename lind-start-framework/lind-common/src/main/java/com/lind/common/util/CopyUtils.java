@@ -33,9 +33,17 @@ public class CopyUtils {
      * @param target
      */
     public static void copyProperties(Object src, Object target) {
-
         BeanUtil.copyProperties(src, target, getNullPropertyNames(src));
+    }
 
+    /**
+     * 复制实体.
+     *
+     * @param src
+     * @param target
+     */
+    public static void copyProperties(Object src, Object target, String... ignoreProperties) {
+        BeanUtil.copyProperties(src, target, ignoreProperties);
     }
 
     /**

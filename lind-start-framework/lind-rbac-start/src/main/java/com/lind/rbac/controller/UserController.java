@@ -157,12 +157,11 @@ public class UserController {
             return CommonResult.clientFailure(String.format("邮箱%s已经存在", user.getEmail()));
         }
         if (userEntity != null) {
-
+            CopyUtils.copyProperties(user, userEntity,"password");
             Optional.ofNullable(user.getPassword()).ifPresent(o -> {
                 if (StringUtils.isNoneBlank(o))
-                    user.setPassword(passwordEncoder.encode(o));
+                    userEntity.setPassword(passwordEncoder.encode(o));
             });
-            CopyUtils.copyProperties(user, userEntity);
             userDao.updateById(userEntity);
             user.setUsername(userEntity.getUsername());
 
