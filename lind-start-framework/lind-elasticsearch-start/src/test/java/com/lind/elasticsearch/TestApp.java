@@ -1,12 +1,9 @@
 package com.lind.elasticsearch;
 
 import com.lind.elasticsearch.entity.EsDto;
-import com.lind.elasticsearch.entity.EsPathHandlerEntity;
 import com.lind.elasticsearch.entity.Reply;
-import com.lind.elasticsearch.repository.EsPathHandlerRepository;
 import com.lind.elasticsearch.repository.EsRepo;
 import com.lind.elasticsearch.util.EsPageUtils;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -35,21 +32,11 @@ import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
 import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
-import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @SpringBootTest()
 @RunWith(SpringRunner.class) //让测试在Spring容器环境下执行
@@ -60,8 +47,6 @@ public class TestApp {
   EsRepo testDao;
   @Autowired
   ElasticsearchRestTemplate elasticsearchTemplate;
-  @Autowired
-  EsPathHandlerRepository esPathHandlerRepository;
 
   /**
    * 索引初始化.
@@ -80,21 +65,7 @@ public class TestApp {
     }
   }
 
-  @SneakyThrows
-  @Test
-  public void insertEsPathHandlerEntity() {
-    EsPathHandlerEntity esPathHandlerEntity = new EsPathHandlerEntity();
-    esPathHandlerEntity.setBody("");
-    esPathHandlerEntity.setCreateBy("zzl");
-    esPathHandlerEntity.setCreateTime(new Date());
-    esPathHandlerEntity.setIp("192.168.6.3");
-    esPathHandlerEntity.setPathDescribes("用户中心");
-    esPathHandlerEntity.setPath("/user/info");
-    esPathHandlerEntity.setRequestMethod("get");
-    esPathHandlerEntity.setProject("v6");
-    esPathHandlerEntity.setTimestamp(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss+0800").format(new Date()));
-    esPathHandlerRepository.save(esPathHandlerEntity);
-  }
+
 
   @Test
   public void insert() {

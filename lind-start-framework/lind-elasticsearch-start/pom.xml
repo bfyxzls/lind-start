@@ -13,6 +13,8 @@
 
     <properties>
         <fastjson.version>1.2.68</fastjson.version>
+        <elasticsearch.high.version>6.5.4</elasticsearch.high.version>
+        <elasticsearch.client.version>6.8.7</elasticsearch.client.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -39,12 +41,13 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>6.5.4</version>
+            <version>${elasticsearch.high.version}</version>
         </dependency>
+        <!--  elasticsearch对应兼容版本为6.8.7-->
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.8.7</version>
+            <version>${elasticsearch.client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -67,15 +70,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <dependency>
-            <groupId>pl.allegro.tech</groupId>
-            <artifactId>embedded-elasticsearch</artifactId>
-            <version>2.7.0</version>
-            <scope>test</scope>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
         </dependency>
     </dependencies>
 </project>

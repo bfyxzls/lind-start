@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.kafka.config.KafkaListenerEndpointRegistry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,64 +19,80 @@ import java.util.Date;
 @EnableMqKafka
 @ActiveProfiles("dev")
 public class KafkaTest {
-  @Autowired
-  MessageSender messageSender;
-  @Autowired
-  MessageDataSend messageDataSend;
+    @Autowired
+    MessageSender messageSender;
+    @Autowired
+    MessageDataSend messageDataSend;
+    @Autowired
+    private KafkaListenerEndpointRegistry kafkaRegistry;
 
-  @SneakyThrows
-  @Test
-  public void testReceivingKafkaEvents() throws InterruptedException {
-    MessageEntity testMessageEntity = new MessageEntity();
-    UserDTO userDTO = new UserDTO();
-    userDTO.setTitle("世界你好" + new Date());
-    testMessageEntity.setData(userDTO);
-    messageSender.send("lind-demo", testMessageEntity);
-    Thread.sleep(10000);
-  }
+    @SneakyThrows
+    @Test
+    public void testReceivingKafkaEvents() throws InterruptedException {
+        for (int i = 0; i < 20; i++) {
+            if (i >= 10) {
+                kafkaRegistry.getListenerContainer("demo1").stop();
+            }
 
-  @Test
-  public void annoSender() {
+            MessageEntity testMessageEntity = new MessageEntity();
+            UserDTO userDTO = new UserDTO();
+            userDTO.setTitle("世界你好" + new Date());
+            testMessageEntity.setData(userDTO);
+            messageSender.send("lind-demo", testMessageEntity);
+        }
+        Thread.sleep(10000);
+    }
 
-    UserDTO userDTO = new UserDTO();
-    userDTO.setTitle("世界你好" + new Date());
-    messageDataSend.sendDataMessage(userDTO, "bo");
-  }
+    @Test
+    public void resume() throws InterruptedException {
+        kafkaRegistry.getListenerContainer("demo1").resume();
+        Thread.sleep(10000);
 
-  @SneakyThrows
-  @Test
-  public void sleep1000() {
-    MessageEntity testMessageEntity = new MessageEntity();
-    UserDTO userDTO = new UserDTO();
-    userDTO.setTitle("世界你好1" + new Date());
-    testMessageEntity.setData(userDTO);
-    messageSender.send("sleep-test", testMessageEntity);
-    Thread.sleep(10);
-    userDTO.setTitle("世界你好2" + new Date());
-    testMessageEntity.setData(userDTO);
-    messageSender.send("sleep-test", testMessageEntity);
-    Thread.sleep(10);
-    userDTO.setTitle("世界你好3" + new Date());
-    testMessageEntity.setData(userDTO);
-    messageSender.send("sleep-test", testMessageEntity);
 
-    messageSender.send("sleep-test1", testMessageEntity);
+    }
 
-    Thread.sleep(10000 * 5);
-  }
+    @Test
+    public void annoSender() {
 
-  /**
-   * 让消费时长大于max.poll.interval.ms的时间，是否有重复消费情况
-   */
-  @SneakyThrows
-  @Test
-  public void manual() {
-    UserDTO userDTO = new UserDTO();
-    MessageEntity testMessageEntity = new MessageEntity();
-    testMessageEntity.setData(userDTO);
-    messageSender.send("sleep3", testMessageEntity);
-    messageSender.send("sleep3", testMessageEntity);
+        UserDTO userDTO = new UserDTO();
+        userDTO.setTitle("世界你好" + new Date());
+        messageDataSend.sendDataMessage(userDTO, "bo");
+    }
 
-    Thread.sleep(1000 * 30);
-  }
+    @SneakyThrows
+    @Test
+    public void sleep1000() {
+        MessageEntity testMessageEntity = new MessageEntity();
+        UserDTO userDTO = new UserDTO();
+        userDTO.setTitle("世界你好1" + new Date());
+        testMessageEntity.setData(userDTO);
+        messageSender.send("sleep-test", testMessageEntity);
+        Thread.sleep(10);
+        userDTO.setTitle("世界你好2" + new Date());
+        testMessageEntity.setData(userDTO);
+        messageSender.send("sleep-test", testMessageEntity);
+        Thread.sleep(10);
+        userDTO.setTitle("世界你好3" + new Date());
+        testMessageEntity.setData(userDTO);
+        messageSender.send("sleep-test", testMessageEntity);
+
+        messageSender.send("sleep-test1", testMessageEntity);
+
+        Thread.sleep(10000 * 5);
+    }
+
+    /**
+     * 让消费时长大于max.poll.interval.ms的时间，是否有重复消费情况
+     */
+    @SneakyThrows
+    @Test
+    public void manual() {
+        UserDTO userDTO = new UserDTO();
+        MessageEntity testMessageEntity = new MessageEntity();
+        testMessageEntity.setData(userDTO);
+        messageSender.send("sleep3", testMessageEntity);
+        messageSender.send("sleep3", testMessageEntity);
+
+        Thread.sleep(1000 * 30);
+    }
 }
