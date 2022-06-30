@@ -3,7 +3,6 @@ package com.lind.rbac.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lind.mybatis.base.BaseEntity;
-import com.lind.rbac.valid.PrefixAdmin;
 import com.lind.uaa.jwt.entity.ResourceRole;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,4 +24,6 @@ import lombok.ToString;
 public class Role  extends BaseEntity implements ResourceRole {
   @ApiModelProperty("名称")
   private String name;
+  @ApiModelProperty("备注")
+  private String remark;
 }

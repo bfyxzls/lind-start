@@ -1,6 +1,5 @@
 package com.lind.uaa.jwt.permission;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.entity.ResourcePermission;
@@ -17,11 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 权限资源管理器
@@ -62,11 +57,11 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         if (resourcePermissions != null) {
             for (ResourcePermission resourcePermission : resourcePermissions) {
                 if (StringUtils.isNotBlank(resourcePermission.getTitle())
-                        && StringUtils.isNotBlank(resourcePermission.getPath())) {
+                        && StringUtils.isNotBlank(resourcePermission.getUrl())) {
                     configAttributes = new ArrayList<>();
                     cfg = new SecurityConfig(resourcePermission.getTitle());//权限名称就是权限表里的title字段
                     configAttributes.add(cfg);
-                    map.put(resourcePermission.getPath(), configAttributes);
+                    map.put(resourcePermission.getUrl(), configAttributes);
                 }
             }
         }

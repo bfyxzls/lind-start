@@ -4,6 +4,8 @@ import cn.hutool.core.lang.Assert;
 import com.lind.common.collection.Student;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -51,5 +53,17 @@ public class OptionalTest {
     public void orElseThrowMessage() {
         Student student = null;
         Optional.ofNullable(student).orElseThrow(() -> new IllegalArgumentException("student is not null!"));
+    }
+
+    @Test
+    public void findAny() {
+        List<String> array = new ArrayList<>();
+        array.stream().filter(o -> o.equals("zzl")).findAny().ifPresent(m -> {
+            throw  new IllegalArgumentException("已存在zzl");
+        });
+        array.add("zzl");
+        array.stream().filter(o -> o.equals("zzl")).findAny().ifPresent(m -> {
+            throw  new IllegalArgumentException("已存在zzl");
+        });
     }
 }

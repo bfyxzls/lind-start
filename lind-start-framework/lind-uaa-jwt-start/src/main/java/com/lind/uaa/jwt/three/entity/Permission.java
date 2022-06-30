@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Permission implements ResourcePermission {
-    private String id= SnowFlakeUtils.getFlowIdInstance().toString();
+    private String id = SnowFlakeUtils.getFlowIdInstance().toString();
     /**
      * 菜单-按钮-名称.
      */
@@ -22,7 +22,7 @@ public class Permission implements ResourcePermission {
     /**
      * 资源相对路径.
      */
-    private String path;
+    private String url;
     /**
      * 类型：0菜单,1按钮.
      */
@@ -40,13 +40,6 @@ public class Permission implements ResourcePermission {
      */
     private List<? extends ResourcePermission> sons;
 
-    @Override
-    public String getApiUrl() {
-        return null;
-    }
+    private String permissions;
 
-    @Override
-    public String getHttpMethod() {
-        return null;
-    }
 }

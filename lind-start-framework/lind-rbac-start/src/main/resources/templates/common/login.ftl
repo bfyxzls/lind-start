@@ -1,7 +1,7 @@
 <#import "../template_login.ftl" as layout>
 <@layout.registrationLayout bodyClass="<span style='color:red'>修改模板里的变量</span>";section>
     <#if section = "head">
-        登录
+        登录【admin,abcd1234】
     <#elseif section = "form">
         <div id="login" class="flex" style="padding: 10% 10%;">
             <!-- 实例化对象里面可以开始使用iview标签了（注意更改） -->

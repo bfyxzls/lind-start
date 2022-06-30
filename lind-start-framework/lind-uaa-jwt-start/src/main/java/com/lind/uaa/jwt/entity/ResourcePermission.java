@@ -25,14 +25,8 @@ public interface ResourcePermission extends Serializable {
     /**
      * 页面路径/资源url.
      */
-    @ApiModelProperty("页面路径")
-    String getPath();
-
-    /**
-     * api后台接口URL.
-     */
-    @ApiModelProperty("api后台接口URL")
-    String getApiUrl();
+    @ApiModelProperty("路径")
+    String getUrl();
 
     /**
      * 上级权限Id.
@@ -49,13 +43,14 @@ public interface ResourcePermission extends Serializable {
      */
     @ApiModelProperty("权限类型，0菜单，1按钮")
     Integer getType();
+
     /**
-     * http请求方式：GET,POST,DELETE,PUT
+     * 权限标志.
      *
      * @return
      */
-    @ApiModelProperty("http请求方式：GET,POST,DELETE,PUT")
-    String getHttpMethod();
+    @ApiModelProperty("权限标志")
+    String getPermissions();
 
     List<? extends ResourcePermission> getSons();
 

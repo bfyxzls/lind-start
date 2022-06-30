@@ -53,6 +53,8 @@ public class MyUsernamePasswordAuthenticationFilter extends AbstractAuthenticati
         username = username.trim();
         UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
                 username, password);
+        //添加用户名参数，以便在LoginFailureHandler中使用它
+        request.setAttribute("username", username);
         // 对账号和密码进行认证
         return this.getAuthenticationManager().authenticate(authRequest);
     }

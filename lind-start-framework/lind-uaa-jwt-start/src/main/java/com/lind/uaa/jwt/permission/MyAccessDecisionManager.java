@@ -18,6 +18,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -38,7 +39,10 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
             throws AccessDeniedException, InsufficientAuthenticationException {
         log.info("path permission:{}", configAttributes);
-        log.info("current user role:{}", authentication.getAuthorities());
+        log.info("current user role:");
+        Optional.ofNullable(authentication.getAuthorities()).ifPresent(o -> {
+            o.forEach(i -> log.info("{}", i));
+        });
         if (configAttributes == null) {
             return;
         }

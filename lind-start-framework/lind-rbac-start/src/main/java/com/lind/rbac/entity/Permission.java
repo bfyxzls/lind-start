@@ -30,8 +30,8 @@ public class Permission extends BaseEntity implements ResourcePermission {
     /**
      * 资源相对路径.
      */
-    @ApiModelProperty("相对路径")
-    private String path;
+    @ApiModelProperty("路径")
+    private String url;
     /**
      * 类型：0菜单,1按钮.
      */
@@ -42,17 +42,7 @@ public class Permission extends BaseEntity implements ResourcePermission {
      */
     @ApiModelProperty("上级Id")
     private String parentId;
-    /**
-     * http请求方式
-     */
-    @ApiModelProperty("http请求方式")
-    private String httpMethod;
 
-    /**
-     * 文件路径.
-     */
-    @ApiModelProperty("文件路径")
-    private String filePath;
     /**
      * 图标.
      */
@@ -64,16 +54,12 @@ public class Permission extends BaseEntity implements ResourcePermission {
      */
     @ApiModelProperty("排序,支持小数")
     private double sortNumber;
+
     /**
-     * 后端地址.
-     */
-    @ApiModelProperty("后端地址")
-    private String apiUrl;
-    /**
-     * 授权标志.
+     * 授权(多个用逗号分隔，如：sys:user:list,sys:user:save)
      */
     @ApiModelProperty("授权标志")
-    private String operateType;
+    private String permissions;
 
     /**
      * 子菜单列表.

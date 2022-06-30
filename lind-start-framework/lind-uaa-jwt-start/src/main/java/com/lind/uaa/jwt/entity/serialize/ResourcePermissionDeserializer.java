@@ -31,13 +31,8 @@ public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePer
             }
 
             @Override
-            public String getPath() {
-                return node.get("path").asText();
-            }
-
-            @Override
-            public String getApiUrl() {
-                return node.get("apiUrl").asText();
+            public String getUrl() {
+                return node.get("url").asText();
             }
 
             @Override
@@ -51,8 +46,8 @@ public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePer
             }
 
             @Override
-            public String getHttpMethod() {
-                return node.get("httpMethod").asText();
+            public String getPermissions() {
+                return node.get("permissions").asText();
             }
 
             @Override

@@ -163,7 +163,7 @@ public class PermissionController {
             queryWrapper.lambda().eq(Permission::getId, id);
         }
         if (StringUtils.isNoneBlank(path)) {
-            queryWrapper.lambda().eq(Permission::getPath, path);
+            queryWrapper.lambda().eq(Permission::getUrl, path);
         }
         Permission permission = permissionDao.selectOne(queryWrapper);
         findFather(permission, list);

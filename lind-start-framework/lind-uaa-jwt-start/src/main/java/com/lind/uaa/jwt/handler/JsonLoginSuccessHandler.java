@@ -3,7 +3,6 @@ package com.lind.uaa.jwt.handler;
 import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.common.util.IpInfoUtil;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
@@ -76,12 +75,13 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
                         List<? extends ResourcePermission> rolePermissions =
                                 resourcePermissionService.getAllByRoleId(roleGrantedAuthority.getId());
                         if (rolePermissions != null) {
-                            redisService.set(rolePermissionKey,rolePermissions);
+                            redisService.set(rolePermissionKey, rolePermissions);
                         }
                     }
                 }
             }
         }
+
         // 登录成功后发布一个事件,外部可以订阅它.
         applicationEventPublisher.publishEvent(new LoginSuccessEvent(tokenResult, ipInfoUtil.getIpAddr(request)));
     }

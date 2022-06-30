@@ -1,5 +1,6 @@
 package com.lind.uaa.jwt.three.controller;
 
+import com.lind.uaa.jwt.anno.RequiresPermissions;
 import com.lind.uaa.jwt.config.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +20,13 @@ public class ArticleController {
                 securityUtil.getCurrUser().getEmail();
     }
 
+    @RequiresPermissions("sys:delete")
     @GetMapping("/del")
     public String del() {
         return "del  my first blog";
     }
 
+    @RequiresPermissions({"sys:list", "sys:add"})
     @GetMapping("/create")
     public String create() {
         return "create  my first blog";

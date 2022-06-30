@@ -36,7 +36,6 @@ public class UserServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<User> userDetails = userDao.selectList(new QueryWrapper<>());
         QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
         userQueryWrapper.lambda().eq(User::getUsername, username);
         //这块需要将明文取出来后才能检索

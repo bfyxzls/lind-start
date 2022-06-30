@@ -18,7 +18,7 @@ import java.io.Serializable;
 @ToString(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "ds_dto_#{@environment.getProperty('spring.profiles.active')}")
+@Document(indexName = "esdto")
 @Setting(settingPath = "mapping/es-setting.json")//@Setting里的配置会覆盖@Document里的配置
 public class EsDto extends EsBaseEntity implements Serializable {
 

@@ -21,14 +21,16 @@ import static com.lind.uaa.jwt.config.Constants.LOGIN_FAIL_LOCK_LIMIT;
 public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandler {
   private final RedisService redisService;
   private final JwtConfig jwtConfig;
-
+  public static final String BAD_CREDENTIALS = "bad credentials";
+  public static final String USER_NOT_FOUND = "userdetailsservice returned null, which is an interface contract violation";
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                       AuthenticationException exception) throws IOException, ServletException {
     response.setCharacterEncoding("utf-8");
     response.setStatus(HttpStatus.OK.value());
     response.setContentType("application/json;charset=utf-8");
-    if (!exception.getMessage().equals("Bad credentials")) {
+    if (!exception.getMessage().toLowerCase().equals(BAD_CREDENTIALS) &&
+            !exception.getMessage().toLowerCase().equals(USER_NOT_FOUND)) {
       // token超时
       response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("登录超时!")));
     } else {//用户密码错误

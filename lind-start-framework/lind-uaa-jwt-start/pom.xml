@@ -62,6 +62,11 @@
             <artifactId>lind-common</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
+            <version>2.12.2</version>
+        </dependency>
     </dependencies>
 
 

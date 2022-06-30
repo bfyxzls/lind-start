@@ -74,12 +74,11 @@ public class PermissionServiceImpl implements ResourcePermissionService {
             Permission permission1 = Permission.builder()
                     .title(permission.getTitle())
                     .parentId(permission.getParentId())
-                    .path(permission.getPath())
                     .type(permission.getType())
-                    .filePath(permission.getFilePath())
                     .icon(permission.getIcon())
                     .sortNumber(permission.getSortNumber())
-                    .apiUrl(permission.getApiUrl())
+                    .url(permission.getUrl())
+                    .permissions(permission.getPermissions())
                     .build();
             permission1.setId(permission.getId());
             result.add(permission1);
