@@ -1,5 +1,6 @@
 package com.lind.mybatis.base;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,6 +13,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * 实体基类.
+ */
 @Data
 public abstract class BaseEntityGeneric implements Serializable {
 
@@ -20,7 +24,7 @@ public abstract class BaseEntityGeneric implements Serializable {
     /**
      * 建立人Id,需要实现AuditorAware接口.
      */
-    @TableField("create_by")
+    @TableField(value = "create_by", fill = FieldFill.INSERT)
     @CreatedBy
     private String createBy;
 
@@ -28,14 +32,14 @@ public abstract class BaseEntityGeneric implements Serializable {
      * 建立时间.
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @TableField("create_time")
+    @TableField(value = "create_time", fill = FieldFill.INSERT)
     @CreatedDate
     private LocalDateTime createTime;
 
     /**
      * 更新人ID,需要实现AuditorAware接口.
      */
-    @TableField("update_by")
+    @TableField(value = "update_by", fill = FieldFill.INSERT_UPDATE)
     @LastModifiedBy
     private String updateBy;
 
@@ -43,7 +47,7 @@ public abstract class BaseEntityGeneric implements Serializable {
      * 更新时间.
      */
     @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
-    @TableField("update_time")
+    @TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)
     @LastModifiedDate
     private LocalDateTime updateTime;
 

@@ -29,6 +29,8 @@
         <module>lind-feign-start</module>
         <module>lind-logger-start</module>
         <module>lind-rbac-start</module>
+        <module>lind-seata-start</module>
+
     </modules>
 
     <properties>

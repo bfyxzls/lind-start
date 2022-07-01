@@ -73,3 +73,14 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 * 实体value字段添加@EnumValue
 * mybatis-plus配置中添加`mybatis-plus.default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler`
 > 注意，在mybatis-plus3.3.0里，我使用重写BaseTypeHandler并没有实现类型自动转换功能
+
+# 添加字段自动填充
+将之前自定义的填充改成mybatis提供的填充，`@TableField(fill = FieldFill.INSERT)`,`FieldFill.INSERT_UPDATE`等方法,
+配合`MetaObjectHandler`接口，在实例类中对字段进行赋值，并统一注册它
+```
+@Bean
+public MybatisPlusMetaObjectHandler mybatisPlusMetaObjectHandler() {
+    return new MybatisPlusMetaObjectHandler();
+}
+```
+

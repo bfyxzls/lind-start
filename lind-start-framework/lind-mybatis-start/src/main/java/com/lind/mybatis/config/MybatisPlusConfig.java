@@ -1,8 +1,8 @@
 package com.lind.mybatis.config;
 
+import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.lind.mybatis.audit.AuditInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,21 +21,20 @@ public class MybatisPlusConfig {
         return new PaginationInterceptor();
     }
 
-    /**
-     * 建立与更新时间填充插件.
-     *
-     * @return
-     */
-    @Bean
-    public AuditInterceptor timeFullInterceptor() {
-        return new AuditInterceptor();
-    }
-
-    /**
+     /**
      * 乐观锁插件.
      */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
         return new OptimisticLockerInterceptor();
+    }
+
+    /**
+     * 审计字段自动填充
+     * @return {@link MetaObjectHandler}
+     */
+    @Bean
+    public MybatisPlusMetaObjectHandler mybatisPlusMetaObjectHandler() {
+        return new MybatisPlusMetaObjectHandler();
     }
 }
