@@ -41,4 +41,25 @@ public class LoggerInfo {
      * 内容
      */
     private String detail;
+
+    /**
+     * 请求URI
+     */
+    private String requestUri;
+    /**
+     * 请求方式
+     */
+    private String requestMethod;
+    /**
+     * 请求参数
+     */
+    private String requestParams;
+    /**
+     * 请求时长(毫秒)
+     */
+    private Integer requestTime;
+    /**
+     * 用户代理
+     */
+    private String userAgent;
 }

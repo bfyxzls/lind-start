@@ -38,7 +38,7 @@ public class HttpStatusLoginFailureHandler implements AuthenticationFailureHandl
       String key = LOGIN_FAIL_LIMIT + username;
       String lockKey = LOGIN_FAIL_LOCK_LIMIT + username;
       if (!redisService.hasKey(key)) {
-        redisService.set(key, 0, jwtConfig.getFailLimitTime() * 60);
+         redisService.set(key, 0, jwtConfig.getFailLimitTime() * 60);
       }
       if (Integer.valueOf(redisService.get(key).toString()) >= jwtConfig.getFailLimit()) {
         redisService.set(lockKey, 0, jwtConfig.getFailLockTime() * 60);

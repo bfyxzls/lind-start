@@ -1,14 +1,13 @@
 package com.lind.common.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.Calendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -16,134 +15,159 @@ import java.util.Date;
  * 日期工具类.
  */
 public class DateUtils {
+  /** 时间格式(yyyy-MM-dd) */
+  public final static String DATE_PATTERN = "yyyy-MM-dd";
+  /** 时间格式(yyyy-MM-dd HH:mm:ss) */
+  public final static String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
   /**
-   * 默认日期格式化方式.
+   * 日期格式化 日期格式为：yyyy-MM-dd
+   * @param date  日期
+   * @return  返回yyyy-MM-dd格式日期
    */
-  public static final String DEFAULT_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
-
-  /**
-   * 将字符串类型日期转换Date.
-   *
-   * @param date 字符串日期
-   */
-  public static LocalDateTime getDateFormat(String date) {
-    if (StringUtils.isBlank(date)) {
-      throw new IllegalArgumentException("日期不能为空");
-    }
-    try {
-      DateTimeFormatter df = DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT);
-      LocalDateTime ldt = LocalDateTime.parse(date, df);
-      return ldt;
-    } catch (DateTimeParseException e) {
-      DateTimeFormatter df = DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT);
-      LocalDateTime dt = LocalDateTime.parse(date);
-      LocalDateTime ldt = LocalDateTime.parse(getDateFormat(dt), df);
-      return ldt;
-    } catch (Exception e) {
-      throw new IllegalArgumentException("字符串日期转换date失败");
-    }
+  public static String format(Date date) {
+    return format(date, DATE_PATTERN);
   }
 
   /**
-   * 将Date转换字符串类型日期.
-   *
-   * @param date 字符串日期
+   * 日期格式化 日期格式为：yyyy-MM-dd
+   * @param date  日期
+   * @param pattern  格式，如：DateUtils.DATE_TIME_PATTERN
+   * @return  返回yyyy-MM-dd格式日期
    */
-  public static String getDateFormat(LocalDateTime date) {
-    if (date == null) {
-      throw new IllegalArgumentException("日期不能为空");
-    }
-    try {
-      DateTimeFormatter df = DateTimeFormatter.ofPattern(DEFAULT_DATE_FORMAT);
-      String localTime = df.format(date);
-      return localTime;
-    } catch (Exception e) {
-      throw new IllegalArgumentException("LocalDateTime转换字符串类型日期失败");
-    }
-  }
-
-  /**
-   * 时分秒.
-   *
-   * @param time .
-   */
-  public static String secToTime(int time) {
-    String timeStr = null;
-    int hour = 0;
-    int minute = 0;
-    int second = 0;
-    if (time <= 0) {
-      return "00:00";
-    } else {
-      minute = time / 60;
-      if (minute < 60) {
-        second = time % 60;
-        timeStr = unitFormat(minute) + ":" + unitFormat(second);
-      } else {
-        hour = minute / 60;
-        if (hour > 99) {
-          return "99:59:59";
-        }
-        minute = minute % 60;
-        second = time - hour * 3600 - minute * 60;
-        timeStr = unitFormat(hour) + ":" + unitFormat(minute) + ":" + unitFormat(second);
-      }
-    }
-    return timeStr;
-  }
-
-  /**
-   * unitFormat.
-   */
-  public static String unitFormat(int i) {
-    String retStr = null;
-    if (i >= 0 && i < 10) {
-      retStr = "0" + Integer.toString(i);
-    } else {
-      retStr = "" + i;
-    }
-    return retStr;
-
-  }
-
-  /**
-   * LocalDateTime 转换 localDate.
-   */
-  public static LocalDate toLocalDate(LocalDateTime localDateTime) {
-    if (localDateTime != null) {
-      return localDateTime.toLocalDate();
+  public static String format(Date date, String pattern) {
+    if(date != null){
+      SimpleDateFormat df = new SimpleDateFormat(pattern);
+      return df.format(date);
     }
     return null;
   }
 
   /**
-   * LocalDateTime 转换 Date.
+   * 日期解析
+   * @param date  日期
+   * @param pattern  格式，如：DateUtils.DATE_TIME_PATTERN
+   * @return  返回Date
    */
-  public static Date toDate(LocalDateTime localDateTime) {
-    ZoneId zone = ZoneId.systemDefault();
-    Instant instant = localDateTime.atZone(zone).toInstant();
-    return Date.from(instant);
+  public static Date parse(String date, String pattern) {
+    try {
+      return new SimpleDateFormat(pattern).parse(date);
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
 
   /**
-   * 是否相同周.
-   *
-   * @param date1
-   * @param date2
-   * @return
+   * 字符串转换成日期
+   * @param strDate 日期字符串
+   * @param pattern 日期的格式，如：DateUtils.DATE_TIME_PATTERN
    */
-  public static boolean isSameWeek(Date date1, Date date2) {
-    boolean result = false;
-    Calendar calendar = Calendar.getInstance();
-    calendar.setTime(date1);
-    int weekNum1 = calendar.get(Calendar.WEEK_OF_YEAR);
-
-    calendar.setTime(date2);
-    int weekNum2 = calendar.get(Calendar.WEEK_OF_YEAR);
-    if (weekNum1 == weekNum2) {
-      result = true;
+  public static Date stringToDate(String strDate, String pattern) {
+    if (StringUtils.isBlank(strDate)){
+      return null;
     }
-    return result;
+
+    DateTimeFormatter fmt = DateTimeFormat.forPattern(pattern);
+    return fmt.parseLocalDateTime(strDate).toDate();
+  }
+
+  /**
+   * 根据周数，获取开始日期、结束日期
+   * @param week  周期  0本周，-1上周，-2上上周，1下周，2下下周
+   * @return  返回date[0]开始日期、date[1]结束日期
+   */
+  public static Date[] getWeekStartAndEnd(int week) {
+    DateTime dateTime = new DateTime();
+    LocalDate date = new LocalDate(dateTime.plusWeeks(week));
+
+    date = date.dayOfWeek().withMinimumValue();
+    Date beginDate = date.toDate();
+    Date endDate = date.plusDays(6).toDate();
+    return new Date[]{beginDate, endDate};
+  }
+
+  /**
+   * 对日期的【秒】进行加/减
+   *
+   * @param date 日期
+   * @param seconds 秒数，负数为减
+   * @return 加/减几秒后的日期
+   */
+  public static Date addDateSeconds(Date date, int seconds) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusSeconds(seconds).toDate();
+  }
+
+  /**
+   * 对日期的【分钟】进行加/减
+   *
+   * @param date 日期
+   * @param minutes 分钟数，负数为减
+   * @return 加/减几分钟后的日期
+   */
+  public static Date addDateMinutes(Date date, int minutes) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusMinutes(minutes).toDate();
+  }
+
+  /**
+   * 对日期的【小时】进行加/减
+   *
+   * @param date 日期
+   * @param hours 小时数，负数为减
+   * @return 加/减几小时后的日期
+   */
+  public static Date addDateHours(Date date, int hours) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusHours(hours).toDate();
+  }
+
+  /**
+   * 对日期的【天】进行加/减
+   *
+   * @param date 日期
+   * @param days 天数，负数为减
+   * @return 加/减几天后的日期
+   */
+  public static Date addDateDays(Date date, int days) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusDays(days).toDate();
+  }
+
+  /**
+   * 对日期的【周】进行加/减
+   *
+   * @param date 日期
+   * @param weeks 周数，负数为减
+   * @return 加/减几周后的日期
+   */
+  public static Date addDateWeeks(Date date, int weeks) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusWeeks(weeks).toDate();
+  }
+
+  /**
+   * 对日期的【月】进行加/减
+   *
+   * @param date 日期
+   * @param months 月数，负数为减
+   * @return 加/减几月后的日期
+   */
+  public static Date addDateMonths(Date date, int months) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusMonths(months).toDate();
+  }
+
+  /**
+   * 对日期的【年】进行加/减
+   *
+   * @param date 日期
+   * @param years 年数，负数为减
+   * @return 加/减几年后的日期
+   */
+  public static Date addDateYears(Date date, int years) {
+    DateTime dateTime = new DateTime(date);
+    return dateTime.plusYears(years).toDate();
   }
 }

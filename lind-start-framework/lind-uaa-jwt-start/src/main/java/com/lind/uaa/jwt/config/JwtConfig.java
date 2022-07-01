@@ -50,6 +50,8 @@ public class JwtConfig {
     this.expiresAt = 60L;
     this.refreshTokenExpiresAt = 50L;
     this.failLimit = 5;
+    this.failLimitTime=10L;
+    this.failLockTime=30L;
     this.permitAll = new String[]{};
   }
 
