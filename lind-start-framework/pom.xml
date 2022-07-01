@@ -78,7 +78,6 @@
         <!-- mvn site时跳过包检查，加快构建速度-->
         <dependency.locations.enabled>false</dependency.locations.enabled>
         <cn.hutool.version>5.5.5</cn.hutool.version>
-        <easypoi.version>4.1.0</easypoi.version>
     </properties>
 
     <dependencies>

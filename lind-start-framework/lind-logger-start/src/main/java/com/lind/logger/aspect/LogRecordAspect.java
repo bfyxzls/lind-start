@@ -1,8 +1,6 @@
 package com.lind.logger.aspect;
 
 import com.lind.common.rest.CommonResult;
-import com.lind.common.util.HttpContextUtils;
-import com.lind.common.util.JsonUtils;
 import com.lind.logger.anno.LogRecord;
 import com.lind.logger.entity.LogEvaluationContext;
 import com.lind.logger.entity.LogEvaluator;
@@ -20,9 +18,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -93,7 +89,6 @@ public class LogRecordAspect {
             if (LogRootObject.getVar("dataTitle") != null) {
                 dataTitle = LogRootObject.getVar("dataTitle").toString();
             }
-
             LoggerInfo loggerInfo = LoggerInfo.builder()
                     .detail(content.toString())
                     .moduleType(moduleType)
@@ -103,18 +98,6 @@ public class LogRecordAspect {
                     .operateTime(LocalDateTime.now())
                     .operatorIp(currentIpAware.address())
                     .operator(currentUserAware.username()).build();
-
-            HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
-            loggerInfo.setUserAgent(request.getHeader(HttpHeaders.USER_AGENT));
-            loggerInfo.setRequestUri(request.getRequestURI());
-            loggerInfo.setRequestMethod(request.getMethod());
-            loggerInfo.setRequestTime(0);
-            //请求参数
-            try {
-                String params = JsonUtils.toJsonString(args[0]);
-                loggerInfo.setRequestParams(params);
-            } catch (Exception e) {
-            }
 
             return loggerInfo;
         }

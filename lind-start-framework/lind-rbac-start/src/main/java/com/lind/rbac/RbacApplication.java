@@ -10,7 +10,7 @@ import org.springframework.core.env.Environment;
 
 @SpringBootApplication
 @Slf4j
-@MapperScan({"com.lind.rbac.sys.dao","com.lind.rbac.log.dao"})
+@MapperScan("com.lind.rbac.dao")
 @EnableJacksonFormatting
 public class RbacApplication {
   public static void main(String[] args) {

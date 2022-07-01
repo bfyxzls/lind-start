@@ -18,7 +18,7 @@ spring:
     password: 123456
 mybatis:
   mapperLocations: classpath:mapper/*.xml
-  typeAliasesPackage: com.lind.rbac.sys.entity,com.lind.rbac.log.entity
+  typeAliasesPackage: com.lind.rbac.entity
   configuration:
     mapUnderscoreToCamelCase: true
 
