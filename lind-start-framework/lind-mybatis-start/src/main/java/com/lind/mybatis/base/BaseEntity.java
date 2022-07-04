@@ -3,11 +3,13 @@ package com.lind.mybatis.base;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * @author Exrickx
  */
 @Data
+@ToString(callSuper = true)
 public abstract class BaseEntity extends BaseEntityGeneric {
     /**
      * 主键.

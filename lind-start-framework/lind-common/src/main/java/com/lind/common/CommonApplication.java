@@ -1,6 +1,6 @@
 package com.lind.common;
 
-import com.lind.common.locale.MessageUtil;
+import com.lind.common.locale.LocaleMessageUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 @RestController
 public class CommonApplication {
+
+
     public static void main(String[] args) {
         SpringApplication.run(CommonApplication.class, args);
     }
@@ -19,8 +21,8 @@ public class CommonApplication {
         return ResponseEntity.ok("1.0.0");
     }
 
-    @GetMapping("locale")
-    public ResponseEntity locale() {
-        return ResponseEntity.ok(MessageUtil.getMessage("title"));
+    @GetMapping("m")
+    public String m() {
+       return  LocaleMessageUtils.getMessage("title");
     }
 }

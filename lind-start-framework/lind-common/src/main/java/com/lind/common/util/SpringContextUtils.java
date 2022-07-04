@@ -40,8 +40,8 @@ public class SpringContextUtils implements ApplicationContextAware, DisposableBe
      * @param name .
      * @return .
      */
-    public static Object getBean(String name) {
-        return applicationContext.getBean(name);
+    public static  <T> T  getBean(String name) {
+        return  (T) applicationContext.getBean(name);
     }
 
     /**

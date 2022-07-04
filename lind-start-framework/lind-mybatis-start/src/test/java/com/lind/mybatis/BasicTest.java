@@ -3,6 +3,7 @@ package com.lind.mybatis;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.dto.PageParam;
+import com.lind.mybatis.config.Constant;
 import com.lind.mybatis.entity.TUser;
 import com.lind.mybatis.util.PageUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @ActiveProfiles("integTest")
 @SpringBootTest()
@@ -41,6 +45,7 @@ public class BasicTest {
         userService.update(user);
         print("lind修改");
     }
+
     @Test
     public void servicePageList() {
         PageParam pageVo = new PageDTO();
@@ -48,6 +53,7 @@ public class BasicTest {
         pageVo.setPageSize(2);
         userService.findByCondition(PageUtil.initPage(pageVo));
     }
+
     @Test
     public void pageList() {
         for (int i = 0; i < 10; i++) {
@@ -70,4 +76,21 @@ public class BasicTest {
             log.info("user={}", item.toString());
         }
     }
+
+    @Test
+    public void pageData() {
+        for (int i = 0; i < 10; i++) {
+            TUser user = new TUser();
+            user.setUsername("lind" + i);
+            userService.insert(user);
+        }
+        Map<String, Object> params = new HashMap<>();
+        params.put(Constant.PAGE, "1");
+        params.put(Constant.LIMIT, "3");
+        params.put(Constant.ORDER_FIELD, "username");
+        params.put(Constant.ORDER, "desc");
+        params.put("username", "lind");
+        userService.page(params).getList().forEach(o -> log.info("{}", o.getUsername()));
+    }
+
 }
