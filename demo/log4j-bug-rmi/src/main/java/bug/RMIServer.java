@@ -3,10 +3,7 @@ package bug;
 import com.sun.jndi.rmi.registry.ReferenceWrapper;
 import lombok.SneakyThrows;
 
-import javax.naming.NamingException;
 import javax.naming.Reference;
-import java.rmi.AlreadyBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -28,7 +25,7 @@ public class RMIServer {
       ReferenceWrapper referenceWrapper = new ReferenceWrapper(reference);
       // 把远程对象注册到RMI注册服务器上，并命名为evil
       registry.bind("evil", referenceWrapper);
-    } catch (RemoteException | AlreadyBoundException | NamingException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }

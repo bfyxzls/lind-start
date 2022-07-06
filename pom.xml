@@ -17,19 +17,6 @@
     </modules>
     <properties>
         <skipTests>true</skipTests>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
-        <!-- Maven Plugin Versions -->
-        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-        <!-- 部署插件-->
-        <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <!-- 执行测试用例的插件 -->
-        <maven-surefire-plugin.version>2.21.0</maven-surefire-plugin.version>
-        <!-- 打包时同时打源代码插件 -->
-        <maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-        <!-- javadoc注释插件 -->
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
         <!-- jdk版本 1.8有一些新的语法 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -42,7 +29,7 @@
         <guava.version>28.2-jre</guava.version>
         <mysql.drive.version>8.0.17</mysql.drive.version>
         <HikariCP.version>3.4.2</HikariCP.version>
-        <mybatis-plus-boot-starter.version>3.3.0</mybatis-plus-boot-starter.version>
+        <mybatis-plus-boot-starter.version>3.5.2</mybatis-plus-boot-starter.version>
         <fastjson.version>1.2.69</fastjson.version>
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <httpclient.version>4.5.12</httpclient.version>
@@ -50,7 +37,6 @@
         <swagger.fox.version>2.9.2</swagger.fox.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
         <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
-        <maven-source-plugin.version>2.1.2</maven-source-plugin.version>
         <commons-lang3-version>3.10</commons-lang3-version>
         <!-- 在官方的文档里面，规定了2.2.6的jedis版本就是3.1.0,3.1.0会有连接池问题 -->
         <jedis-version>2.9.0</jedis-version>
@@ -62,28 +48,70 @@
         <!-- mvn site时跳过包检查，加快构建速度-->
         <dependency.locations.enabled>false</dependency.locations.enabled>
         <cn.hutool.version>5.5.5</cn.hutool.version>
+        <skipTests>true</skipTests>
+        <git.commit.plugin>4.9.9</git.commit.plugin>
+        <spring.checkstyle.plugin>0.0.34</spring.checkstyle.plugin>
+        <jasypt.version>2.1.0</jasypt.version>
+        <spring-boot-admin.version>2.6.7</spring-boot-admin.version>
+
     </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>releases</id>
+            <name>Nexus Release Repository</name>
+            <url>http://192.168.0.203:8081/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>Nexus Snapshot Repository</name>
+            <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <!-- 公用配置管理 -->
     <dependencies>
-        <!-- Generating Your Own Metadata by Using the Annotation Processor -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-configuration-processor</artifactId>-->
-        <!--            <optional>true</optional>-->
-        <!--        </dependency>-->
+        <!-- 以下依赖 全局所有的模块都会引入  -->
+        <!--配置文件处理器-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!--配置文件加解密-->
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>${jasypt.version}</version>
+        </dependency>
+        <!--监控-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <!--监控客户端-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>${spring-boot-admin.version}</version>
+        </dependency>
+        <!--Lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <!-- optional为true时子项目不会强制以来这个lombok，为false时（默认值）子项目会直接依赖父项目的lombok-->
-            <!-- <optional>true</optional>-->
-            <version>1.18.12</version>
+            <scope>provided</scope>
         </dependency>
+        <!--测试依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
         <dependencies>
-
             <!--spring boot 版本-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -116,18 +144,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot-dependencies.version}</version>
+                <!-- 移除嵌入式tomcat插件 -->
                 <exclusions>
-                    <!-- 排除Tomcat 以使用 Undertow，这个会导致子项目引web时没有tomcat，而项目无法启动问题,需要把tomcat包含进来-->
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-starter-tomcat</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-tomcat</artifactId>
-                <scope>compile</scope>
             </dependency>
 
             <!-- Google 编码助手 -->
@@ -249,123 +272,94 @@
                 <artifactId>hutool-all</artifactId>
                 <version>${cn.hutool.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-dependencies.version}</version>
+                    <configuration>
+                        <finalName>${project.build.finalName}</finalName>
+                        <layers>
+                            <enabled>true</enabled>
+                        </layers>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+
         <!-- 所有子项目重命名jar-->
         <!--        <finalName>${project.artifactId}</finalName>-->
         <!-- defaultGoal：执行build任务时，如果没有指定目标，将使用的默认值 -->
         <plugins>
-            <!-- 生成源码jar -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>${maven-source-plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <!-- 代码检查 -->
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-checkstyle-plugin</artifactId>-->
-            <!--                <version>3.1.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>checkstyle</id>-->
-            <!--                        <phase>test</phase>&lt;!&ndash; 步骤：绑定到lifecycle的validate上&ndash;&gt;-->
-            <!--                        <goals>-->
-            <!--                            <goal>check</goal>&lt;!&ndash;spotbugs失败后也生成jar,check失败后不生成jar &ndash;&gt;-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <dependencies>-->
-            <!--                    <dependency>-->
-            <!--                        <groupId>com.puppycrawl.tools</groupId>-->
-            <!--                        <artifactId>checkstyle</artifactId>-->
-            <!--                        <version>8.29</version>-->
-            <!--                    </dependency>-->
-            <!--                </dependencies>-->
-            <!--                <configuration>-->
-            <!--                    <configLocation>/google_checkstyle.xml</configLocation>-->
-            <!--                    <encoding>UTF-8</encoding>-->
-            <!--                    <consoleOutput>true</consoleOutput>&lt;!&ndash; 控制台显示&ndash;&gt;-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-            <!-- bug检查 -->
-            <!--            <plugin>-->
-            <!--                <groupId>com.github.spotbugs</groupId>-->
-            <!--                <artifactId>spotbugs-maven-plugin</artifactId>-->
-            <!--                <version>4.0.4</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <id>spotbugs</id>-->
-            <!--                        <phase>test</phase>&lt;!&ndash; 需要等代码编译完之后再检查 &ndash;&gt;-->
-            <!--                        <goals>-->
-            <!--                            <goal>check</goal>&lt;!&ndash; 动作：plugin的goal绑定到validate步骤上&ndash;&gt;-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--                <configuration>-->
-            <!--                    <skip>false</skip>&lt;!&ndash; 是否跳过检查spotbugs &ndash;&gt;-->
 
-            <!--                </configuration>-->
-            <!--                <dependencies>-->
-            <!--                    <dependency>-->
-            <!--                        <groupId>com.github.spotbugs</groupId>-->
-            <!--                        <artifactId>spotbugs</artifactId>-->
-            <!--                        <version>4.1.2</version>-->
-            <!--                    </dependency>-->
-            <!--                </dependencies>-->
-            <!--            </plugin>-->
-            <!-- 测试报告 -->
+            <!--打包jar 与git commit 关联插件-->
+<!--            <plugin>-->
+<!--                <groupId>io.github.git-commit-id</groupId>-->
+<!--                <artifactId>git-commit-id-maven-plugin</artifactId>-->
+<!--                <version>${git.commit.plugin}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>get-the-git-infos</id>-->
+<!--                        <goals>-->
+<!--                            <goal>revision</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>initialize</phase>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <failOnNoGitDirectory>false</failOnNoGitDirectory>-->
+<!--                    <generateGitPropertiesFile>true</generateGitPropertiesFile>-->
+<!--                    &lt;!&ndash;因为项目定制了jackson的日期时间序列化/反序列化格式，因此这里要进行配置,不然通过management.info.git.mode=full进行完整git信息监控时会存在问题&ndash;&gt;-->
+<!--                    <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>-->
+<!--                    <includeOnlyProperties>-->
+<!--                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>-->
+<!--                        <includeOnlyProperty>^git.commit.(id|message|time).*$</includeOnlyProperty>-->
+<!--                    </includeOnlyProperties>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+            <!--
+            	代码格式插件，默认使用spring 规则，可运行命令进行项目格式化：./mvnw spring-javaformat:apply 或 mvn spring-javaformat:apply，可在IDEA中安装插件以下插件进行自动格式化：
+            	https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin
+            -->
             <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
-            <!--                <version>2.22.2</version>-->
-            <!--                <configuration>-->
-            <!--                    <skip>true</skip>-->
-            <!--                    <skipTests>true</skipTests>&lt;!&ndash; false不跳过测试,true表示跳过测试项目&ndash;&gt;-->
-            <!--                    <testFailureIgnore>true</testFailureIgnore>-->
-            <!--                </configuration>-->
+            <!--                <groupId>io.spring.javaformat</groupId>-->
+            <!--                <artifactId>spring-javaformat-maven-plugin</artifactId>-->
+            <!--                <version>${spring.checkstyle.plugin}</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <phase>validate</phase>-->
+            <!--                        <inherited>true</inherited>-->
+            <!--                        <goals>-->
+            <!--                            <goal>validate</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
             <!--            </plugin>-->
-            <!-- mvn site时使用 -->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-site-plugin</artifactId>-->
-<!--                <version>3.8.2</version>-->
-<!--                <configuration>-->
-<!--                </configuration>-->
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.apache.maven.doxia</groupId>-->
-<!--                        <artifactId>doxia-site-renderer</artifactId>-->
-<!--                        <version>1.9.2</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-project-info-reports-plugin</artifactId>-->
-<!--                <version>3.1.0</version>-->
-<!--                <configuration>-->
-<!--                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-            <!-- 发布时带上资源文件 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.7</version>
-            </plugin>
+
         </plugins>
     </build>
+
 
 </project>
