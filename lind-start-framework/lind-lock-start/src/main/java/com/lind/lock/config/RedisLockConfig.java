@@ -32,8 +32,8 @@ public class RedisLockConfig {
     }
 
     @Bean
-    public RepeatSubmitAspect repeatSubmitAspect(RedisTemplate redisTemplate, UserIdAuditorAware userIdAuditorAware) {
-        return new RepeatSubmitAspect(redisTemplate, userIdAuditorAware);
+    public RepeatSubmitAspect repeatSubmitAspect(RedisTemplate redisTemplate) {
+        return new RepeatSubmitAspect(redisTemplate);
     }
 
     @Bean
@@ -48,8 +48,7 @@ public class RedisLockConfig {
     public RedisUserManualLockTemplate redisUserManualLockTemplate(
             RedisTemplate<String, String> redisTemplate,
             RedisLockProperty redisLockProperty,
-            RedisLockTemplate redisLockTemplate,
-            UserIdAuditorAware auditorAware) {
-        return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate, auditorAware);
+            RedisLockTemplate redisLockTemplate) {
+        return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate);
     }
 }

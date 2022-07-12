@@ -6,6 +6,7 @@ import com.lind.lock.exception.RedisUserManualLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.validation.constraints.NotNull;
@@ -26,7 +27,8 @@ public class RedisUserManualLockTemplate {
     private final RedisTemplate<String, String> redisTemplate;
     private final RedisLockProperty redisLockProperty;
     private final RedisLockTemplate redisLockTemplate;
-    private final UserIdAuditorAware auditorAware;
+    @Autowired(required = false)
+    UserIdAuditorAware auditorAware;
 
     /**
      * 执行手动锁.
