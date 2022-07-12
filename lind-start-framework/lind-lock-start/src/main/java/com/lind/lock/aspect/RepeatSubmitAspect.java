@@ -2,6 +2,7 @@ package com.lind.lock.aspect;
 
 import com.lind.lock.annotation.RepeatSubmit;
 import com.lind.lock.exception.RepeatSubmitException;
+import com.lind.lock.template.UserIdAuditorAware;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -34,6 +35,7 @@ public class RepeatSubmitAspect {
      * @after
      */
     private final RedisTemplate<String, String> redisTemplate;
+    private final UserIdAuditorAware userIdAuditorAware;
 
     @Around("@annotation(repeatSubmit)")
     public Object around(ProceedingJoinPoint proceedingJoinPoint, RepeatSubmit repeatSubmit) throws Throwable {
@@ -42,7 +44,7 @@ public class RepeatSubmitAspect {
                     (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             notNull(attributes, "attributes is null");
             HttpServletRequest request = attributes.getRequest();
-            String key = repeatSubmit.redisKey() + ":" + DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
+            String key = repeatSubmit.redisKey() + ":" + userIdAuditorAware.getCurrentAuditor() + ":" + DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
             // 如果缓存中有这个url视为重复提交
             Object hasSubmit = redisTemplate.opsForValue().get(key);
             if (Objects.isNull(hasSubmit)) {

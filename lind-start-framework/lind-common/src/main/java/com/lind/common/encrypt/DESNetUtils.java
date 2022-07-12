@@ -1,7 +1,7 @@
 package com.lind.common.encrypt;
 
 import lombok.SneakyThrows;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.net.util.Base64;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.Cipher;

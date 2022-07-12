@@ -1,7 +1,7 @@
 package com.lind.common.encrypt;
 
 import lombok.SneakyThrows;
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.net.util.Base64;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;

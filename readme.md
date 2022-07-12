@@ -28,6 +28,14 @@
 1. lind-uaa-start 用户授权组件
 1. lind-verification-code-start 验证码组件
 
+# maven的执行阶段
+```
+    clean: 删除项目路径下的target文件，但是不会删除本地的maven仓库已经生成的jar文件.
+    complie:对项目进行编译,生成target文件,但是不会生成jar包
+    package:在compile的基础上,会在target文件目录下生成jar包,但是该jar包并没有放到本地仓库里.
+    install:在package的基础上,会把生成的jar包放到本地仓库中,这个时候,如果项目A依赖项目B,A的pom文件导入B的依赖就可以找到了,否则找不到.
+    deploy: 会把生成的jar包push到远程仓库去,这样项目发布到服务器上就可以实现项目A依赖项目B了.
+```
 # springloaded热部署
 ```$xslt
 java -javaagent:springloaded-1.2.5.RELEASE.jar -noverify -Dspringloaded="watchJars=a-start-hot-dependency-1.0.0.jar"   -jar a-start-hot-deploy-1.0.0.jar

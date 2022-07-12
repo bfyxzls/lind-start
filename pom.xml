@@ -16,7 +16,6 @@
         <module>demo/a-start-activiti</module>
     </modules>
     <properties>
-        <skipTests>true</skipTests>
         <!-- jdk版本 1.8有一些新的语法 -->
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
@@ -48,7 +47,6 @@
         <!-- mvn site时跳过包检查，加快构建速度-->
         <dependency.locations.enabled>false</dependency.locations.enabled>
         <cn.hutool.version>5.5.5</cn.hutool.version>
-        <skipTests>true</skipTests>
         <git.commit.plugin>4.9.9</git.commit.plugin>
         <spring.checkstyle.plugin>0.0.34</spring.checkstyle.plugin>
         <jasypt.version>2.1.0</jasypt.version>
@@ -106,6 +104,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!--server-api-->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
         </dependency>
 
     </dependencies>
@@ -308,57 +312,6 @@
             </plugins>
         </pluginManagement>
 
-
-        <!-- 所有子项目重命名jar-->
-        <!--        <finalName>${project.artifactId}</finalName>-->
-        <!-- defaultGoal：执行build任务时，如果没有指定目标，将使用的默认值 -->
-        <plugins>
-
-            <!--打包jar 与git commit 关联插件-->
-<!--            <plugin>-->
-<!--                <groupId>io.github.git-commit-id</groupId>-->
-<!--                <artifactId>git-commit-id-maven-plugin</artifactId>-->
-<!--                <version>${git.commit.plugin}</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>get-the-git-infos</id>-->
-<!--                        <goals>-->
-<!--                            <goal>revision</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>initialize</phase>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--                    <failOnNoGitDirectory>false</failOnNoGitDirectory>-->
-<!--                    <generateGitPropertiesFile>true</generateGitPropertiesFile>-->
-<!--                    &lt;!&ndash;因为项目定制了jackson的日期时间序列化/反序列化格式，因此这里要进行配置,不然通过management.info.git.mode=full进行完整git信息监控时会存在问题&ndash;&gt;-->
-<!--                    <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>-->
-<!--                    <includeOnlyProperties>-->
-<!--                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>-->
-<!--                        <includeOnlyProperty>^git.commit.(id|message|time).*$</includeOnlyProperty>-->
-<!--                    </includeOnlyProperties>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-            <!--
-            	代码格式插件，默认使用spring 规则，可运行命令进行项目格式化：./mvnw spring-javaformat:apply 或 mvn spring-javaformat:apply，可在IDEA中安装插件以下插件进行自动格式化：
-            	https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin
-            -->
-            <!--            <plugin>-->
-            <!--                <groupId>io.spring.javaformat</groupId>-->
-            <!--                <artifactId>spring-javaformat-maven-plugin</artifactId>-->
-            <!--                <version>${spring.checkstyle.plugin}</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>validate</phase>-->
-            <!--                        <inherited>true</inherited>-->
-            <!--                        <goals>-->
-            <!--                            <goal>validate</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
-
-        </plugins>
     </build>
 
 

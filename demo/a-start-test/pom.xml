@@ -12,7 +12,6 @@
     <artifactId>a-start-test</artifactId>
     <properties>
         <version.org.infinispan>11.0.9.Final</version.org.infinispan>
-
         <poi.version>4.1.2</poi.version>
         <maven.test.skip>true</maven.test.skip>
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
@@ -230,6 +229,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
+
         </plugins>
     </build>
 
