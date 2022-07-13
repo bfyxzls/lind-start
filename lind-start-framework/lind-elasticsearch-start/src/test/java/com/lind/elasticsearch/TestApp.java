@@ -6,20 +6,17 @@ import com.lind.elasticsearch.repository.EsRepo;
 import com.lind.elasticsearch.util.EsPageUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.bucket.terms.TermsAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.sum.ParsedSum;
-import org.elasticsearch.search.aggregations.metrics.sum.SumAggregationBuilder;
-import org.elasticsearch.search.aggregations.metrics.tophits.TopHits;
+import org.elasticsearch.search.aggregations.metrics.ParsedSum;
+import org.elasticsearch.search.aggregations.metrics.SumAggregationBuilder;
+import org.elasticsearch.search.aggregations.metrics.TopHits;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,20 +25,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.SearchResultMapper;
 import org.springframework.data.elasticsearch.core.aggregation.AggregatedPage;
-import org.springframework.data.elasticsearch.core.aggregation.impl.AggregatedPageImpl;
-import org.springframework.data.elasticsearch.core.query.*;
+import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
+import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @SpringBootTest()
 @RunWith(SpringRunner.class) //让测试在Spring容器环境下执行
 @Slf4j
 public class TestApp {
 
+    public static final IndexCoordinates ESDTO = IndexCoordinates.of("esdto");
     @Autowired
     EsRepo testDao;
     @Autowired
@@ -87,7 +93,7 @@ public class TestApp {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
         boolQueryBuilder.must(QueryBuilders.matchQuery("memo", "中国"));
         Pageable pageable = EsPageUtils.getPageable(0, 10);
-        SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
+        NativeSearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(null) //返回所有字段
                 .withPageable(pageable)
                 .build();
@@ -114,7 +120,7 @@ public class TestApp {
         boolQueryBuilder.must(QueryBuilders.termQuery("memo.keyword", "中国"));
         Pageable pageable = EsPageUtils.getPageable(0, 10);
         String[] fieldNames = new String[]{"name", "age", "memo"};
-        SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
+        NativeSearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(new FetchSourceFilter(fieldNames, null))
                 .withSourceFilter(null) //返回所有字段
                 .withPageable(pageable)
@@ -134,11 +140,11 @@ public class TestApp {
 
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.must(QueryBuilders.termsQuery("id", Arrays.asList("554401577478131712", "554401577478131716")));
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder)
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder)
                 .withSourceFilter(new FetchSourceFilter(new String[]{"id"} ,null))
                 .build();
 
-        List<EsDto> content = elasticsearchTemplate.queryForList(searchQuery, EsDto.class);
+        List<EsDto> content = elasticsearchTemplate.queryForList(searchQuery, EsDto.class,ESDTO);
         for (EsDto esDto : content) {
             System.out.println(esDto);
         }
@@ -162,13 +168,13 @@ public class TestApp {
                 .field("age"); // 字段
         sexAgg.subAggregation(sexSumAgg);
         // 创建查询对象
-        SearchQuery build = new NativeSearchQueryBuilder()
+        NativeSearchQuery build = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder) //添加查询条件
                 .addAggregation(sexAgg) // 添加聚合条件
                 .withPageable(PageRequest.of(0, 1)) //符合查询条件的文档分页，如果文档比较大，可以把这个分页改小（不是聚合的分页）
                 .build();
         // 执行查询
-        AggregatedPage<EsDto> testEntities = elasticsearchTemplate.queryForPage(build, EsDto.class);
+        AggregatedPage<EsDto> testEntities = elasticsearchTemplate.queryForPage(build, EsDto.class, ESDTO);
         // 取出聚合结果
         Aggregations entitiesAggregations = testEntities.getAggregations();
         Terms terms = (Terms) entitiesAggregations.asMap().get("sex");
@@ -208,13 +214,13 @@ public class TestApp {
         sexAgg.subAggregation(descAgg);
 
         // 创建查询对象
-        SearchQuery build = new NativeSearchQueryBuilder()
+        NativeSearchQuery build = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder) //添加查询条件
                 .addAggregation(sexAgg) // 添加聚合条件
                 .withPageable(PageRequest.of(0, 1)) //符合查询条件的文档分页，如果文档比较大，可以把这个分页改小（不是聚合的分页）
                 .build();
         // 执行查询
-        AggregatedPage<EsDto> testEntities = elasticsearchTemplate.queryForPage(build, EsDto.class);
+        AggregatedPage<EsDto> testEntities = elasticsearchTemplate.queryForPage(build, EsDto.class,ESDTO);
 
         // 取出聚合结果
         Aggregations entitiesAggregations = testEntities.getAggregations();
@@ -248,7 +254,7 @@ public class TestApp {
         String preTag = "<font color='#dd4b39'>";
         String postTag = "</font>";
 
-        SearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
+        NativeSearchQuery searchQuery = queryBuilder.withQuery(boolQueryBuilder)
                 .withSourceFilter(null) //返回所有字段
                 .withHighlightFields(
                         new HighlightBuilder.Field("desc")
@@ -258,41 +264,6 @@ public class TestApp {
                 ) //高亮显示
                 .withPageable(pageable)
                 .build();
-
-        AggregatedPage<EsDto> pageinfo = elasticsearchTemplate.queryForPage(searchQuery, EsDto.class, new SearchResultMapper() {
-            @Override
-            public <T> AggregatedPage<T> mapResults(SearchResponse searchResponse, Class<T> aClass, Pageable pageable) {
-                //先来一个容器把数据装起来...
-                List<EsDto> gzDataList = new ArrayList<>();
-                //我们所有查询的结果都放在这个searchResponse里面
-                //我们现在就是要把我们想要的内容从这个searchResponse里面获取到
-                SearchHits hits = searchResponse.getHits();
-                //如果getTotalHits是0 则表示查询不到数据
-                if (hits.getTotalHits() <= 0) {
-                    return null;
-                } else {
-                    //从里面获取到一条一条的数据了
-                    for (SearchHit hit : hits) {
-                        EsDto gzData = new EsDto();
-                        //还要获取到某个字段的高亮特征 高亮的特征和当前的数据 做一个替换
-                        HighlightField companyHighlight = hit.getHighlightFields().get("desc");
-                        if (companyHighlight != null) {
-                            gzData.setName(companyHighlight.fragments()[0].toString());
-                        } else {
-                            gzData.setName((String) hit.getSourceAsMap().get("desc"));
-                        }
-                        gzDataList.add(gzData);
-                    }
-                }
-                return new AggregatedPageImpl(gzDataList);
-            }
-
-            @Override
-            public <T> T mapSearchHit(SearchHit searchHit, Class<T> aClass) {
-                return null;
-            }
-        });
-        pageinfo.forEach(o -> log.info(o.toString()));
 
     }
 
@@ -306,11 +277,8 @@ public class TestApp {
         sourceMap.put("name", "占岭");
         IndexRequest indexRequest = new IndexRequest();
         indexRequest.source(sourceMap);
-        UpdateQuery updateQuery = new UpdateQueryBuilder()
-                .withId(id)
-                .withClass(EsDto.class)
-                .withIndexRequest(indexRequest).build();
-        elasticsearchTemplate.update(updateQuery);
+        UpdateQuery updateQuery = UpdateQuery.builder(id).withDocument(Document.from(sourceMap)).build();
+        elasticsearchTemplate.update(updateQuery, ESDTO);
     }
 
     /**
@@ -337,13 +305,13 @@ public class TestApp {
         operateTypeAggBuilder.subAggregation(AggregationBuilders.topHits("top").size(2)
                 .fetchSource("content", "delFlag"));
         // 创建查询对象
-        SearchQuery build = new NativeSearchQueryBuilder()
+        NativeSearchQuery build = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder) //添加查询条件
                 .addAggregation(operateTypeAggBuilder) // 添加聚合条件
                 .withPageable(PageRequest.of(0, 1)) //符合查询条件的文档分页，如果文档比较大，可以把这个分页改小（不是聚合的分页）
                 .build();
 
-        AggregatedPage<Reply> testEntities = elasticsearchTemplate.queryForPage(build, Reply.class);
+        AggregatedPage<Reply> testEntities = elasticsearchTemplate.queryForPage(build, Reply.class, ESDTO);
         Aggregations entitiesAggregations = testEntities.getAggregations();
         Terms terms = (Terms) entitiesAggregations.asMap().get("commentId");
         // 遍历取出聚合字段列的值，与对应的数量

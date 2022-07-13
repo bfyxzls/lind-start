@@ -9,7 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>lind-activiti</artifactId>
-    <version>1.0.0</version>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <dependencyManagement>
         <dependencies>
 
@@ -105,5 +108,12 @@
             <artifactId>lind-swagger-start</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+        <!-- 1.2是使用最广泛的版本 -->
+        <dependency>
+            <groupId>javax.interceptor</groupId>
+            <artifactId>javax.interceptor-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+
     </dependencies>
 </project>

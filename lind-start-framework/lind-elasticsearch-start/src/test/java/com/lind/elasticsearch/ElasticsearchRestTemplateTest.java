@@ -8,9 +8,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
-import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Arrays;
@@ -23,18 +24,17 @@ import java.util.Map;
 public class ElasticsearchRestTemplateTest {
     @Autowired
     ElasticsearchRestTemplate elasticsearchTemplate;
+
     @Test
-    public void simpleQuery(){
+    public void simpleQuery() {
         BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
         queryBuilder.must(QueryBuilders.termsQuery("id", Arrays.asList("554401577478131712", "554401577478131716")));
-        SearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withIndices("esdto")
-                .withTypes("esdto")
+        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
                 .withQuery(queryBuilder)
-                .withSourceFilter(new FetchSourceFilter(new String[]{"id"} ,null))
+                .withSourceFilter(new FetchSourceFilter(new String[]{"id"}, null))
                 .build();
 
-        List<Map> content = elasticsearchTemplate.queryForList(searchQuery, Map.class);
+        List<Map> content = elasticsearchTemplate.queryForList(searchQuery, Map.class, IndexCoordinates.of("esdto"));
         for (Map esDto : content) {
             System.out.println(esDto);
         }

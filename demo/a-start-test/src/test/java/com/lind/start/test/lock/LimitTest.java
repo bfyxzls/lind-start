@@ -1,7 +1,7 @@
 package com.lind.start.test.lock;
 
-import com.lind.limit.config.LimitProperties;
-import com.lind.limit.LimitRaterInterceptor;
+import com.lind.redis.limit.config.LimitProperties;
+import com.lind.redis.limit.aop.LimitRaterInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

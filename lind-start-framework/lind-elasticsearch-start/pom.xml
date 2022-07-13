@@ -13,8 +13,8 @@
 
     <properties>
         <fastjson.version>1.2.68</fastjson.version>
-        <elasticsearch.high.version>6.5.4</elasticsearch.high.version>
-        <elasticsearch.client.version>6.8.7</elasticsearch.client.version>
+        <elasticsearch.high.version>7.6.2</elasticsearch.high.version>
+        <elasticsearch.client.version>7.6.2</elasticsearch.client.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -22,7 +22,7 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.2.6.RELEASE</version>
+                <version>2.3.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

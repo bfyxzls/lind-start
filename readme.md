@@ -10,17 +10,15 @@
 以lind开头，以start结尾的项目，是其它项目的基础包
 1. lind-activiti 工作流组件
 1. lind-common 公用工具包
-1. lind-elasticsearch-start 封装了es的操作，工厂模块完成对类型的动态转换
+1. lind-elasticsearch-start 封装了es7.x的操作，工厂模块完成对类型的动态转换
 1. lind-feign-start 接口调用组件
 1. lind-hbase-start 封装了hbase的操作，封装了常用字段，AOP完成赋值
 1. lind-kafka-start 封装了kafka工具，动态代理实现生产者
-1. lind-limit-start 限流组件
-1. lind-lock-start  分布锁组件
 1. lind-mybatis-start 封装了mybatis plus的操作
 1. lind-redis-start 封装了redis读写操作
 1. lind-nacos-start 统一了nacos的版本，添加了配置热更新demo
 1. lind-office-convert 封装了对excel,word的操作
-1. lind-redis-start 对redis的封装，序列化的统一
+1. lind-redis-start 对redis的封装，序列化的统一，分布锁组件， 限流组件
 1. lind-schedule 任务调组件
 1. lind-spi java原生的插件组件
 1. lind-uaa-jwt-start 基于JWT的授权组件

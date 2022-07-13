@@ -13,6 +13,9 @@
     <version>1.0.0</version>
     <packaging>pom</packaging>
     <description>basic framework for all project.</description>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
     <modules>
         <module>lind-redis-start</module>
         <module>lind-hbase-start</module>
@@ -20,8 +23,6 @@
         <module>lind-elasticsearch-start</module>
         <module>lind-mybatis-start</module>
         <module>lind-uaa-start</module>
-        <module>lind-lock-start</module>
-        <module>lind-limit-start</module>
         <module>lind-verification-code-start</module>
         <module>lind-activiti</module>
         <module>lind-uaa-keycloak-start</module>

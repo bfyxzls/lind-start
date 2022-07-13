@@ -3,17 +3,15 @@ package com.lind.elasticsearch;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.common.unit.TimeValue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
-import org.springframework.data.elasticsearch.core.query.BulkOptions;
+import org.springframework.data.elasticsearch.core.document.Document;
+import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
-import org.springframework.data.elasticsearch.core.query.UpdateQueryBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -45,8 +43,6 @@ public class BulkUpdateTest {
         Map<String, Object> sourceMap = new HashMap<>();
         sourceMap.put("name", "占岭1");
         indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
-        indexQuery.setType("esdto");
-        indexQuery.setIndexName("esdto");
         queries.add(indexQuery);
 
         indexQuery = new IndexQuery();
@@ -54,12 +50,9 @@ public class BulkUpdateTest {
         sourceMap = new HashMap<>();
         sourceMap.put("name", "占岭2");
         indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
-        indexQuery.setType("esdto");
-        indexQuery.setIndexName("esdto");
         queries.add(indexQuery);
 
-        elasticsearchRestTemplate.bulkIndex(queries,
-                BulkOptions.builder().withTimeout(TimeValue.MINUS_ONE).build());
+        elasticsearchRestTemplate.bulkIndex(queries, IndexCoordinates.of("esdto"));
     }
 
     /**
@@ -73,30 +66,22 @@ public class BulkUpdateTest {
 
         Map<String, Object> sourceMap = new HashMap<>();
         sourceMap.put("name", "占岭3");
-        UpdateRequest updateRequest = new UpdateRequest();
-        updateRequest.doc(sourceMap);
-        UpdateQuery updateQuery = new UpdateQueryBuilder()
-                .withId("552629576220545024")
-                .withIndexName("esdto")
-                .withType("esdto")
-                .withUpdateRequest(updateRequest)
+        Document document = Document.from(sourceMap);
+        UpdateQuery updateQuery = UpdateQuery.builder("552629576220545024")
+                .withDocument(document)
                 .build();
         updateQueries.add(updateQuery);
 
 
         sourceMap = new HashMap<>();
         sourceMap.put("name", "占岭4");
-        updateRequest = new UpdateRequest();
-        updateRequest.doc(sourceMap);
-        updateQuery = new UpdateQueryBuilder()
-                .withId("552629636035514368")
-                .withIndexName("esdto")
-                .withType("esdto")
-                .withUpdateRequest(updateRequest)
+        document = Document.from(sourceMap);
+        updateQuery = UpdateQuery.builder("552629636035514368")
+                .withDocument(document)
                 .build();
         updateQueries.add(updateQuery);
 
-        elasticsearchRestTemplate.bulkUpdate(updateQueries);
+        elasticsearchRestTemplate.bulkUpdate(updateQueries, IndexCoordinates.of("esdto"));
     }
 
 }

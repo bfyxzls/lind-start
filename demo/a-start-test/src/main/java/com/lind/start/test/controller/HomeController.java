@@ -1,8 +1,8 @@
 package com.lind.start.test.controller;
 
 import com.lind.common.event.EventBusService;
-import com.lind.lock.annotation.RepeatSubmit;
-import com.lind.lock.template.RedisUserManualLockTemplate;
+import com.lind.redis.lock.annotation.RepeatSubmit;
+import com.lind.redis.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.Info;
 import com.lind.start.test.dto.Product;
 import com.lind.start.test.dto.Shop;

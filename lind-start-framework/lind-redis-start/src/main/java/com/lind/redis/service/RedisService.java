@@ -1,6 +1,6 @@
 package com.lind.redis.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Arrays;
@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * 定义常用的 Redis操作.
  */
+@RequiredArgsConstructor
 public class RedisService {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 指定缓存失效时间.
@@ -78,6 +78,7 @@ public class RedisService {
 
     /**
      * 普通缓存获取.
+     * RedisConnectionFactory
      *
      * @param key 键
      * @return 值

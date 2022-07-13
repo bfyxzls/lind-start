@@ -17,37 +17,8 @@
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
         <spring.cloud.version>Hoxton.SR5</spring.cloud.version>
         <spring.cloud.alibaba.version>2.2.1.RELEASE</spring.cloud.alibaba.version>
-
     </properties>
-
-    <!--维护依赖-->
-
-    <dependencyManagement>
-
-        <dependencies>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>${version.org.infinispan}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <!-- Import the infinispan core -->
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-core</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Import the Infinispan client hotrod -->
-        <dependency>
-            <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-client-hotrod</artifactId>
-            <scope>compile</scope>
-        </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
@@ -68,10 +39,7 @@
             <artifactId>guava</artifactId>
             <version>25.1-jre</version>
         </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -80,64 +48,14 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <!-- 移除嵌入式tomcat插件 -->
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.hibernate</groupId>
-                    <artifactId>hibernate-validator</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter.json</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- 引入log4j2依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.searchbox</groupId>
-            <artifactId>jest</artifactId>
-            <version>5.3.3</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>org.elasticsearch.client</groupId>-->
-        <!--            <artifactId>elasticsearch-rest-high-level-client</artifactId>-->
-        <!--            <version>6.5.4</version>-->
-        <!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
-
-        <!-- 公用库 -->
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-elasticsearch-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-hbase-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-swagger-start</artifactId>
@@ -166,60 +84,10 @@
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>
-            <artifactId>lind-lock-start</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-limit-start</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
             <artifactId>lind-redis-start</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.11.3</version>
-        </dependency>
 
-        <dependency>
-            <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox</artifactId>
-            <version>2.0.22</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.aesh</groupId>
-            <artifactId>aesh</artifactId>
-            <version>2.4</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-nacos-start</artifactId>
-            <version>1.0.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>de.codecentric</groupId>
-            <artifactId>spring-boot-admin-starter-client</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
 
     </dependencies>
 
@@ -229,7 +97,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-
 
         </plugins>
     </build>

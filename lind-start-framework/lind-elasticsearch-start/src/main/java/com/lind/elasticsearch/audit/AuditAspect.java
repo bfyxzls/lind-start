@@ -11,6 +11,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.elasticsearch.core.document.Document;
 import org.springframework.data.elasticsearch.core.query.UpdateQuery;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -18,7 +19,11 @@ import org.springframework.util.CollectionUtils;
 import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -122,8 +127,8 @@ public class AuditAspect {
         System.out.println("update aspect");
         if (joinPoint.getArgs().length == 1 && joinPoint.getArgs()[0] instanceof UpdateQuery) {
             UpdateQuery updateQuery = (UpdateQuery) joinPoint.getArgs()[0];
-            Map source = updateQuery.getUpdateRequest().doc().sourceAsMap();
-            Field[] fields = ClassHelper.getAllFields(updateQuery.getClazz());
+            Map source = updateQuery.getDocument();
+            Field[] fields = ClassHelper.getAllFields(updateQuery.getDocument().getClass());
             List<Field> fieldList = Arrays.stream(fields)
                     .filter(o -> o.isAnnotationPresent(LastModifiedDate.class))
                     .collect(Collectors.toList());
@@ -140,7 +145,7 @@ public class AuditAspect {
                     source.put(field.getName(), esAuditorAware.getCurrentAuditor().orElse(null));
                 }
             }
-            updateQuery.getUpdateRequest().doc().source(source);
+            updateQuery.builder(updateQuery.getId()).withDocument(Document.from(source));
         }
     }
 }

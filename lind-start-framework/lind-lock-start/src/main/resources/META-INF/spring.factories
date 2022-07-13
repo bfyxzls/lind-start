@@ -1,3 +1,0 @@
-# 自动注入的bean
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.lind.lock.config.RedisLockConfig
