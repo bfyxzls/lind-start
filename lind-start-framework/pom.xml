@@ -36,5 +36,15 @@
         <module>lind-rbac-start</module>
         <module>lind-seata-start</module>
     </modules>
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-dependencies</artifactId>
+                <version>${project.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

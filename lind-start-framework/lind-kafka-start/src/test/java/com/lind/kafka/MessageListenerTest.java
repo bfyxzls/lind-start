@@ -26,6 +26,7 @@ public class MessageListenerTest {
                 message,
                 new TypeReference<MessageEntity<UserDTO>>() {
                 });
+        int a=1/0;
         System.out.println("default demo" + userDTOMessageEntity.getData());
     }
 

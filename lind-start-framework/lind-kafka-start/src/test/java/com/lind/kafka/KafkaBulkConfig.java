@@ -16,7 +16,7 @@ import java.util.Map;
 public class KafkaBulkConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
-    @Value("${spring.kafka.consumer.max-poll-records}")
+    @Value("${spring.kafka.consumer.max-poll-records:10}")
     private Integer maxPollRecords;
 
 

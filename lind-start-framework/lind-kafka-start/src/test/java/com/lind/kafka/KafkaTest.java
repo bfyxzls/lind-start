@@ -26,14 +26,11 @@ public class KafkaTest {
     @Autowired
     private KafkaListenerEndpointRegistry kafkaRegistry;
 
+    // MessageListenerTest.messageReceive批量收消息，自动ack，当有异常时，消息不会被消费.
     @SneakyThrows
     @Test
     public void testReceivingKafkaEvents() throws InterruptedException {
         for (int i = 0; i < 20; i++) {
-            if (i >= 10) {
-                kafkaRegistry.getListenerContainer("demo1").stop();
-            }
-
             MessageEntity testMessageEntity = new MessageEntity();
             UserDTO userDTO = new UserDTO();
             userDTO.setTitle("世界你好" + new Date());

@@ -8,18 +8,7 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <dependencyManagement>
-        <dependencies>
-            <!--spring boot 版本-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.2.6.RELEASE</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+
     <artifactId>lind-mybatis-start</artifactId>
 
     <dependencies>
@@ -27,12 +16,10 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-extension</artifactId>
-            <version>${mybatis-plus-boot-starter.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -71,43 +58,4 @@
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-shade-plugin</artifactId>-->
-<!--                <version>2.4.3</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>shade</goal>-->
-<!--                        </goals>-->
-<!--                        <configuration>-->
-<!--                            &lt;!&ndash; 过滤器排除配置文件&ndash;&gt;-->
-<!--                            <filters>-->
-<!--                                <filter>-->
-<!--                                    <artifact>*:*</artifact>-->
-<!--                                    <excludes>-->
-<!--                                        <exclude>**/*.properties</exclude>-->
-<!--                                    </excludes>-->
-<!--                                </filter>-->
-<!--                            </filters>-->
-<!--                            <artifactSet>-->
-<!--                                &lt;!&ndash; 捆绑包含,目标项目不需要再手动引用这个包了 &ndash;&gt;-->
-<!--                                <includes>-->
-<!--                                    <include>com.baomidou:*</include>-->
-
-<!--                                </includes>-->
-<!--                                &lt;!&ndash; 排除调所有的properties配置文件&ndash;&gt;-->
-<!--                                &lt;!&ndash; <excludes>&ndash;&gt;-->
-<!--                                &lt;!&ndash; </excludes>&ndash;&gt;-->
-<!--                            </artifactSet>-->
-<!--                            <createSourcesJar>true</createSourcesJar>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
 </project>
