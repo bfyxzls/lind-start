@@ -53,7 +53,6 @@ public class JasyptUtils {
         config.setPoolSize(1);
         config.setProviderName("SunJCE");
         config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator");
-        config.setIvGeneratorClassName("org.jasypt.iv.RandomIvGenerator");
         config.setStringOutputType("base64");
         return config;
     }

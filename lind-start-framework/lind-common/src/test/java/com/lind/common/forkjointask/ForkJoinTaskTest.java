@@ -1,9 +1,14 @@
 package com.lind.common.forkjointask;
 
+import cn.hutool.core.collection.ListUtil;
 import com.google.common.collect.Lists;
 import lombok.SneakyThrows;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.StopWatch;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
@@ -12,6 +17,8 @@ import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
 
 public class ForkJoinTaskTest {
+
+    static Logger logger = LoggerFactory.getLogger(ForkJoinTaskTest.class);
 
     @SneakyThrows
     public static void main(String[] args) {
@@ -32,6 +39,50 @@ public class ForkJoinTaskTest {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 大任务拆分,拆分成一个一个小任务，不是小集合.
+     * parallelism:可并行数量
+     */
+    @Test
+    public void bigTaskFork() {
+        List<Integer> maps = Lists.newArrayList();
+        int count = 100;
+        for (int i = 0; i < count; i++) {
+            maps.add(i);
+        }
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+        List<Integer> odds = new ArrayList<>();
+        ForkJoinPool forkJoinPool = new ForkJoinPool(10);
+        forkJoinPool.submit(() -> {
+            maps.parallelStream()
+                    .forEach(map -> {
+                        if (map % 2 == 0) {
+                            odds.add(map);
+                            try {
+                                Thread.sleep(1);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                    });
+
+        }).join();
+        stopWatch.stop();
+        logger.info(stopWatch.prettyPrint());
+
+        //fork集合
+        List<List<Integer>> jihe = new ArrayList<>();
+        jihe = ListUtil.split(maps, 9);
+        List<List<Integer>> finalJihe = jihe;
+        forkJoinPool.submit(() -> {
+            finalJihe.parallelStream()
+                    .forEach(map -> {
+                        logger.info("map size:{}", map.size());
+                    });
+        }).join();
     }
 
     @Test
@@ -60,7 +111,7 @@ public class ForkJoinTaskTest {
         }
         if (count != successList.size()) {
             System.out.println(successList.size());
-        maps.stream().filter(t-> !successList.contains(t)).collect(Collectors.toList()).forEach(System.out::println);
+            maps.stream().filter(t -> !successList.contains(t)).collect(Collectors.toList()).forEach(System.out::println);
 
         }
     }

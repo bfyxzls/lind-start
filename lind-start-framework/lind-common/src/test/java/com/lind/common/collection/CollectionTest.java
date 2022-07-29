@@ -1,11 +1,24 @@
 package com.lind.common.collection;
 
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableMap;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -76,8 +89,8 @@ public class CollectionTest {
                     String columnName = columnVo.getName();
                     return record.containsKey(columnName);
                 }).forEach(o -> {
-            System.out.println(o.name);
-        });
+                    System.out.println(o.name);
+                });
 
     }
 
@@ -105,6 +118,21 @@ public class CollectionTest {
                                 .map(p -> p.getLoginAccount())
                                 .collect(Collectors.toList()))).collect(ConcurrentHashMap::new, Map::putAll, Map::putAll);
         System.out.println(concurrentHashMap);
+    }
+
+    @Test
+    public void anyMath() {
+        List<UserAccountSet> userAccountSets = Arrays.asList(
+                new UserAccountSet("zzl", "a1"),
+                new UserAccountSet("lisi", "a2"),
+                new UserAccountSet("zhz", "a1")
+        );
+        Assert.isTrue(
+                userAccountSets.stream()
+                        .map(o -> o.loginAccount)
+                        .filter(StrUtil::isNotBlank)
+                        .anyMatch(o -> o.equals("zzl"))
+        );
     }
 
     /**
