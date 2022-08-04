@@ -135,6 +135,32 @@ public class CollectionTest {
         );
     }
 
+    @Test
+    public void computeIfAbsent() {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            int key = i % 5;
+            List<Integer> list = map.computeIfAbsent(key, k -> new ArrayList<>());
+            list.add(i);
+        }
+        System.out.println(map);
+    }
+
+    @Test
+    public void testOld() {
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (int i = 0; i < 10; i++) {
+            int key = i % 5;
+            List<Integer> list = map.get(key);
+            if (list == null) {
+                list = new ArrayList<>();
+                map.put(key, list);
+            }
+            list.add(i);
+        }
+        System.out.println(map);
+    }
+
     /**
      * putIfAbsent 如果key存在则不存进行put
      */

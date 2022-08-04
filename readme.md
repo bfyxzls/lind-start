@@ -1,6 +1,8 @@
 # 项目介绍 
 主要是由框架级工具进行封装，springboot的start包的使用，完成对工具包的自动注入，所有start包的版本都继承lind-framework的版本
 
+> 目前正在开发基于最新的springboot2.7的精简版本lind-fast框架
+
 # 升级
 * 命令行执行 mvn versions:set -DnewVersion=1.0.1 //更新整个项目版本
 * 提交 mvn versions:commit //提交，删除多余的pom.xml.versionsBackup
@@ -15,10 +17,9 @@
 1. lind-hbase-start 封装了hbase的操作，封装了常用字段，AOP完成赋值
 1. lind-kafka-start 封装了kafka工具，动态代理实现生产者
 1. lind-mybatis-start 封装了mybatis plus的操作
-1. lind-redis-start 封装了redis读写操作
+1. lind-redis-start 对redis的封装，序列化的统一，分布锁组件， 限流组件
 1. lind-nacos-start 统一了nacos的版本，添加了配置热更新demo
 1. lind-office-convert 封装了对excel,word的操作
-1. lind-redis-start 对redis的封装，序列化的统一，分布锁组件， 限流组件
 1. lind-schedule 任务调组件
 1. lind-spi java原生的插件组件
 1. lind-uaa-jwt-start 基于JWT的授权组件
@@ -69,7 +70,7 @@ jar -uvf a-start-hot-deploy-1.0.0.jar    BOOT-INF/lib/a-start-hot-dependency-1.0
         <artifactId>spring-boot-starter-tomcat</artifactId>
     </dependency>
 docker-compose -f example/standalone-mysql.yaml up
-```
+ ```
 
 # 项目报告
 mvn site
@@ -172,34 +173,3 @@ mvn site
 ```
 * 日志采集之后的内容
 ![](./assets/readme-1623215825373.png)
-* 公司kafka,es,hbase
-```
-spring:
-  cloud:
-    #    服务发现配置
-    nacos:
-      discovery:
-        server-addr: 192.168.60.138:80
-        namespace: uniform-background-test
-  elasticsearch:
-    rest:
-      uris: 192.168.60.136:9200,192.168.60.137:9200,192.168.60.138:9200
-  autoconfigure:
-    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-
-#hbase配置
-winter:
-  hbase:
-    zookeeper:
-      quorum: 192.168.10.37,192.168.10.38,192.168.10.39
-    name-space: nezha
-
-  kafka:
-    consumer:
-      group-id: ${spring.application.name}-${spring.cloud.nacos.discovery.namespace}
-      offset:
-        rest: earliest #earliest
-      error-retry: 3
-    hosts: 192.168.10.132:9091，192.168.10.133:9092,192.168.10.134:9097
-
-```

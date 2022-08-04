@@ -57,22 +57,36 @@
 ```
 
 # 对第三方应用开启审讯注解
-```$xslt
+```
 @EnableMybatisAuditing
 public class BasicTest {}
 ```
 
 # mybatis统一的配置
 对于一些软删除，分页等配置，我们在resources/META-INF/spring.factories里进行了自动注入，不需要开发人员去干预
-```$xslt
+```
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.mybatis.config.MybatisPlusConfig
 
 ```
+
 # 实体枚举类型，数据表整型
 * 实体value字段添加@EnumValue
-* mybatis-plus配置中添加`mybatis-plus.default-enum-type-handler: org.apache.ibatis.type.EnumOrdinalTypeHandler`
+* mybatis-plus配置中添加`mybatis-plus.default-enum-type-handler:org.apache.ibatis.type.EnumOrdinalTypeHandler`
 > 注意，在mybatis-plus3.3.0里，我使用重写BaseTypeHandler并没有实现类型自动转换功能
+
+# 字段加解密处理
+通过BaseTypeHandler对mybatis进行处理，写入与读取都会走rsa加密方法
+```
+@TableField(typeHandler = RsaTypeHandler.class)
+private String realName;
+```
+
+# 字段的Map对象处理
+```
+@TableField(typeHandler = MapTypeHandler.class)
+private String extensionInfo;
+```
 
 # 添加字段自动填充
 将之前自定义的填充改成mybatis提供的填充，`@TableField(fill = FieldFill.INSERT)`,`FieldFill.INSERT_UPDATE`等方法,
