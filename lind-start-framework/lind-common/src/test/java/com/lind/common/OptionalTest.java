@@ -30,7 +30,7 @@ public class OptionalTest {
     public void ifPresent() {
         Student student = null;
         //如果对象不为null，就执行ifPresent里的方法
-        Optional.ofNullable(student).ifPresent(u -> System.out.println("The student name is : " + u.getName()));
+        System.out.println("studnet!=null," + Optional.ofNullable(student).isPresent());
         Student student1 = Student.builder().name("    hello   ").build();
         Optional.ofNullable(student1).ifPresent(u -> {
             System.out.println("The student1 name is:" + u.getName());
@@ -59,11 +59,11 @@ public class OptionalTest {
     public void findAny() {
         List<String> array = new ArrayList<>();
         array.stream().filter(o -> o.equals("zzl")).findAny().ifPresent(m -> {
-            throw  new IllegalArgumentException("已存在zzl");
+            throw new IllegalArgumentException("已存在zzl");
         });
         array.add("zzl");
         array.stream().filter(o -> o.equals("zzl")).findAny().ifPresent(m -> {
-            throw  new IllegalArgumentException("已存在zzl");
+            throw new IllegalArgumentException("已存在zzl");
         });
     }
 }
