@@ -94,6 +94,7 @@ public class RoleController {
 
     @ApiOperation("新增")
     @PostMapping("add")
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult add(@Valid @RequestBody RoleDTO roleDTO) {
         if (roleDao.selectOne(new QueryWrapper<Role>().lambda().eq(Role::getName, roleDTO.getName())) != null) {
             return CommonResult.clientFailure(String.format("%s已经存在", roleDTO.getName()));
@@ -107,6 +108,7 @@ public class RoleController {
 
     @ApiOperation("更新")
     @PutMapping("update/{id}")
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult update(@ApiParam("角色ID") @PathVariable String id, @RequestBody RoleDTO roleDTO) {
         Role role = roleDao.selectById(id);
         if (role != null) {

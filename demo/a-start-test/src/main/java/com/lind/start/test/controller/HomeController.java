@@ -165,7 +165,7 @@ public class HomeController {
         return ResponseEntity.ok(redisUserManualLockTemplate.getSourceList());
     }
 
-    @RepeatSubmit()
+    @RepeatSubmit(expireTime = 10)
     @RequestMapping(value = "/repeat", method = RequestMethod.GET)
     public String repeat() {
         return "OK";

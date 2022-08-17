@@ -31,6 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -111,6 +112,7 @@ public class UserController {
             dataTitle = "${#user.username}",
             moduleType = ModuleTypeCons.USER_MGR,
             operateType = OperateTypeCons.ADD)
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult add(@RequestBody @Validated UserDTO user) {
         if (userDao.selectCount(
                 new QueryWrapper<User>().lambda().eq(User::getUsername, user.getUsername())
@@ -144,6 +146,7 @@ public class UserController {
             dataTitle = "${#user.username}",
             moduleType = ModuleTypeCons.USER_MGR,
             operateType = OperateTypeCons.EDIT)
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult update(@ApiParam("用户ID") @PathVariable String id, @RequestBody UserDTO user) {
         User userEntity = userDao.selectById(id);
         QueryWrapper<User> queryWrapper = new QueryWrapper<User>();

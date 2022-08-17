@@ -7,7 +7,11 @@ import com.google.common.collect.Lists;
 import com.lind.common.dto.PageDTO;
 import com.lind.common.rest.CommonResult;
 import com.lind.common.util.CopyUtils;
-import com.lind.rbac.dao.*;
+import com.lind.rbac.dao.PermissionDao;
+import com.lind.rbac.dao.RoleDao;
+import com.lind.rbac.dao.RolePermissionDao;
+import com.lind.rbac.dao.UserDao;
+import com.lind.rbac.dao.UserRoleDao;
 import com.lind.rbac.dto.PermissionDTO;
 import com.lind.rbac.entity.Permission;
 import com.lind.rbac.entity.Role;
@@ -22,8 +26,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +101,7 @@ public class PermissionController {
 
     @ApiOperation("新增")
     @PostMapping
+    @Transactional(rollbackFor = Exception.class)
     public CommonResult add(@RequestBody PermissionDTO permission) {
         if (permissionDao.selectOne(new QueryWrapper<Permission>().lambda()
                 .eq(Permission::getTitle, permission.getTitle())

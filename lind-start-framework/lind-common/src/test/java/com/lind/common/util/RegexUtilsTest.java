@@ -3,6 +3,7 @@ package com.lind.common.util;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.util.PatternMatchUtils;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -197,6 +198,36 @@ public class RegexUtilsTest {
             ans.append(cur.word != null ? cur.word : word);
         }
         log.info(ans.toString());
+    }
+
+    @Test
+    public void findStr() {
+        String query = "user.userName";
+        String[] kv = query.split("\\.");
+        log.info("len:{} {} {}", kv.length, kv[0], kv[1]);
+
+    }
+
+    @Test
+    public void simpleMatch() {
+        log.debug("true {}", PatternMatchUtils.simpleMatch("/**", "/index"));
+        log.debug("true {}", PatternMatchUtils.simpleMatch("/user/**", "/user/add/1"));
+        log.debug("true {}", PatternMatchUtils.simpleMatch("/user/*", "/user/add/1"));
+        log.debug("false {}", PatternMatchUtils.simpleMatch("/user", "/user/add/1"));
+    }
+
+    @Test
+    public void verifyBearerToken() {
+        // CASE_INSENSITIVE 不区分大小写
+        Pattern authorizationPattern = Pattern.compile("^Bearer (?<token>[a-zA-Z0-9-:._~+/]+=*)$", Pattern.CASE_INSENSITIVE);
+        String token = "bearer abcd";
+        Matcher matcher = authorizationPattern.matcher(token);
+        if (!matcher.matches()) {
+            log.error("Bearer token is malformed");
+        } else {
+            log.info("Bearer token is {}", matcher.group("token"));
+        }
+
     }
 
     class TrieNode {

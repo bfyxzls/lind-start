@@ -29,19 +29,20 @@
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <httpclient.version>4.5.12</httpclient.version>
         <feign-httpclient.version>11.0</feign-httpclient.version>
-        <swagger.fox.version>2.9.2</swagger.fox.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
-        <nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
         <commons-lang3-version>3.10</commons-lang3-version>
         <!-- 在官方的文档里面，规定了2.2.6的jedis版本就是3.1.0,3.1.0会有连接池问题 -->
         <jedis-version>2.9.0</jedis-version>
+
+        <!-- jackson与springboot版本有着密切关系， springboot2.3.0以上的版本jackson需要2.11.2-->
+        <jackson.verson>2.11.2</jackson.verson>
+
+        <!-- mvn site时跳过包检查，加快构建速度-->
+        <dependency.locations.enabled>false</dependency.locations.enabled>
         <maven.checkstyle.plugin.version>3.1.1</maven.checkstyle.plugin.version>
         <maven.sevntu.checkstyle.plugin.version>1.37.1</maven.sevntu.checkstyle.plugin.version>
         <maven.sevntu-checkstyle-check.checkstyle.version>8.29</maven.sevntu-checkstyle-check.checkstyle.version>
-        <!-- jackson与springboot版本有着密切关系， springboot2.3.0以上的版本jackson需要2.11.2-->
-        <jackson.verson>2.11.2</jackson.verson>
-        <!-- mvn site时跳过包检查，加快构建速度-->
-        <dependency.locations.enabled>false</dependency.locations.enabled>
+
         <cn.hutool.version>5.5.5</cn.hutool.version>
         <git.commit.plugin>4.9.9</git.commit.plugin>
         <spring.checkstyle.plugin>0.0.34</spring.checkstyle.plugin>
