@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.lind.common.bean.family.Father,\
+  com.lind.common.bean.family.GrandFather,\
+  com.lind.common.bean.family.Son

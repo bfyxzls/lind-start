@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -208,6 +209,16 @@ public class CollectionTest {
         allData.stream().filter(o -> dic.contains(o)).collect(Collectors.toList()).forEach(o -> {
             System.out.println(o);
         });
+    }
+
+    @Test
+    public void iterator() {
+        Collection<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
+        Iterator var5 = list.iterator();
+
+        while (var5.hasNext()) {
+            System.out.println(var5.next());
+        }
     }
 
     @Data
