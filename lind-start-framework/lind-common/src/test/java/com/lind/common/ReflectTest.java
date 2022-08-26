@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -17,8 +18,13 @@ public class ReflectTest {
         System.out.println(a);
     }
 
+    public void go() {
+        System.out.println("go");
+    }
+
     /**
      * 反射调用方法.
+     *
      * @throws ClassNotFoundException
      * @throws NoSuchMethodException
      * @throws InvocationTargetException
@@ -31,5 +37,14 @@ public class ReflectTest {
         String param = "{hello:\"ok\",sex:\"1\"}";
         JSONObject anchorParam = JSON.parseObject(param);
         method.invoke(new ReflectTest(), anchorParam);
+    }
+
+    @Test
+    public void instance() throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Class<?> clazz = Class.forName("com.lind.common.ReflectTest");
+        Constructor<?> customStrategy = clazz.getConstructor();
+        ReflectTest reflectTest = (ReflectTest) customStrategy.newInstance();
+        reflectTest.go();
+
     }
 }

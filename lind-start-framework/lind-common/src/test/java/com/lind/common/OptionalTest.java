@@ -31,6 +31,11 @@ public class OptionalTest {
         Student student = null;
         //如果对象不为null，就执行ifPresent里的方法
         System.out.println("studnet!=null," + Optional.ofNullable(student).isPresent());
+        Optional.ofNullable(student).ifPresent(u -> {
+            System.out.println("The null object not ifPresent");
+            student.setName(u.getName().trim());
+        });
+
         Student student1 = Student.builder().name("    hello   ").build();
         Optional.ofNullable(student1).ifPresent(u -> {
             System.out.println("The student1 name is:" + u.getName());

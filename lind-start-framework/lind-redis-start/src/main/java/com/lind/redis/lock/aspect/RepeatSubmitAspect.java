@@ -39,30 +39,22 @@ public class RepeatSubmitAspect {
 
     @Around("@annotation(repeatSubmit)")
     public Object around(ProceedingJoinPoint proceedingJoinPoint, RepeatSubmit repeatSubmit) throws Throwable {
-        try {
-            ServletRequestAttributes attributes =
-                    (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            notNull(attributes, "attributes is null");
-            HttpServletRequest request = attributes.getRequest();
-            String key = repeatSubmit.redisKey() + ":" + userIdAuditorAware.getCurrentAuditor().orElse("system") + ":" + DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
-            // 如果缓存中有这个url视为重复提交
-            Object hasSubmit = redisTemplate.opsForValue().get(key);
-            if (Objects.isNull(hasSubmit)) {
-                redisTemplate.opsForValue().set(key, request.getServletPath());
-                redisTemplate.expire(key, repeatSubmit.expireTime(), TimeUnit.SECONDS);
-                Object o = proceedingJoinPoint.proceed();
-                return o;
-            } else {
-                String message = String.format("重复提交url:%s", request.getServletPath());
-                log.warn(message);
-                throw new RepeatSubmitException(message);
-            }
-
-        } catch (Throwable e) {
-            e.printStackTrace();
-            log.error("验证重复提交时出现未知异常!");
-            throw e;
+        ServletRequestAttributes attributes =
+                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        notNull(attributes, "attributes is null");
+        HttpServletRequest request = attributes.getRequest();
+        String key = repeatSubmit.redisKey() + ":" + userIdAuditorAware.getCurrentAuditor().orElse("system") + ":" + DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
+        // 如果缓存中有这个url视为重复提交
+        Object hasSubmit = redisTemplate.opsForValue().get(key);
+        if (Objects.isNull(hasSubmit)) {
+            redisTemplate.opsForValue().set(key, request.getServletPath());
+            redisTemplate.expire(key, repeatSubmit.expireTime(), TimeUnit.SECONDS);
+            Object o = proceedingJoinPoint.proceed();
+            return o;
+        } else {
+            String message = String.format("重复提交url:%s", request.getServletPath());
+            log.warn(message);
+            throw new RepeatSubmitException(message);
         }
     }
-
 }
