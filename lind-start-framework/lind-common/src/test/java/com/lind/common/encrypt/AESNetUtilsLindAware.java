@@ -3,7 +3,7 @@ package com.lind.common.encrypt;
 import com.lind.common.zip.LZString;
 import org.junit.Test;
 
-public class AESNetUtilsTest {
+public class AESNetUtilsLindAware {
     @Test
     public void aes_base16_lz() {
         String str = "12345678_f_20200612_D_100_V6";
