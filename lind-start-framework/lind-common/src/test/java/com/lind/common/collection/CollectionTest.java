@@ -14,12 +14,15 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -219,6 +222,15 @@ public class CollectionTest {
         while (var5.hasNext()) {
             System.out.println(var5.next());
         }
+    }
+
+    /**
+     * 只读集合
+     */
+    @Test
+    public void unmodifiableSet(){
+     Set<String> read= Collections.unmodifiableSet(new HashSet<>(5));
+     read.add("a");
     }
 
     @Data
