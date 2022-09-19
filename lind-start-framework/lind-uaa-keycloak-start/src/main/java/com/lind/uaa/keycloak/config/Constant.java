@@ -13,7 +13,10 @@ public interface Constant {
   String TOKEN_AUTHORIZATION_CODE_REDIRECT = "token/authorizationCodeRedirect";
   String TOKEN_AUTHORIZATION_CODE_RESPONSE = "token/authorizationCodeResponse";
   String VERIFY_SESSION = "/realms/fabao/protocol/openid-connect/token/introspect";
-
+  // kc里的权限列表
+  String KC_PERMISSION = "kc_permission::";
+  // kc里的角色对应的权限
+  String KC_ROLE_PERMISSION = "kc_role_permission::";
   /**
    * 返回当前Url，除去参数的部分.
    *

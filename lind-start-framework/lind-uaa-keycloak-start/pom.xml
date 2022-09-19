@@ -30,6 +30,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
         <!-- keycloak -->
         <dependency>
             <groupId>org.keycloak</groupId>
@@ -63,6 +67,11 @@
             <groupId>com.lind</groupId>
             <artifactId>lind-swagger-start</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.5.5</version>
         </dependency>
     </dependencies>
 
