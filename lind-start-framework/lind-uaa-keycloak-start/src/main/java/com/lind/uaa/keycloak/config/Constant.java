@@ -12,7 +12,8 @@ public interface Constant {
   String TOKEN_CLIENT_CREDENTIALS_LOGIN = "token/clientCredentialsLogin";
   String TOKEN_AUTHORIZATION_CODE_REDIRECT = "token/authorizationCodeRedirect";
   String TOKEN_AUTHORIZATION_CODE_RESPONSE = "token/authorizationCodeResponse";
-  String VERIFY_SESSION = "/realms/fabao/protocol/openid-connect/token/introspect";
+  // 验证token有效性
+  String VERIFY_TOKEN = "/realms/%s/protocol/openid-connect/token/introspect";
   // kc里的权限列表
   String KC_PERMISSION = "kc_permission::";
   // kc里的角色对应的权限

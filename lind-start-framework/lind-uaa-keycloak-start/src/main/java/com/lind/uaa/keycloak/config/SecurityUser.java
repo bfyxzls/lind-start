@@ -1,5 +1,6 @@
 package com.lind.uaa.keycloak.config;
 
+import org.keycloak.KeycloakPrincipal;
 import org.keycloak.adapters.springsecurity.account.SimpleKeycloakAccount;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
@@ -20,9 +21,12 @@ public class SecurityUser {
      */
     public static String getCurrentUserName() {
         Object principal = getCurrentPrincipal();
-
+        if (principal instanceof KeycloakPrincipal) {
+            return ((KeycloakPrincipal) principal).getName();
+        }
         return (String) principal;
     }
+
 
     /**
      * 获取当前用户Id

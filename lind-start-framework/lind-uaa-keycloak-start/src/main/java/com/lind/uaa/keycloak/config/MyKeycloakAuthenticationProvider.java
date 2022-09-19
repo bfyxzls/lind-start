@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
+
 /**
  * 重写token与认证的适配.
  * 20210716添加token在线校验功能
@@ -42,7 +44,6 @@ public class MyKeycloakAuthenticationProvider implements AuthenticationProvider 
   private final static Logger logger = LoggerFactory.getLogger(MyKeycloakAuthenticationProvider.class);
   private final KeycloakSpringBootProperties keycloakSpringBootProperties;
   private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
-  private String verify = "/realms/fabao/protocol/openid-connect/token/introspect";
   private HttpServletRequest request;
   private HttpServletResponse response;
   private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
@@ -61,6 +62,7 @@ public class MyKeycloakAuthenticationProvider implements AuthenticationProvider 
     params.put("client_id", keycloakSpringBootProperties.getResource());
     params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
     params.put("token", tokenString);
+    String verify=String.format(VERIFY_TOKEN,keycloakSpringBootProperties.getRealm());
     String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl() + verify, params);
     logger.info("token.verify:" + verifyResult);
     JSONObject jsonObj = JSON.parseObject(verifyResult);
