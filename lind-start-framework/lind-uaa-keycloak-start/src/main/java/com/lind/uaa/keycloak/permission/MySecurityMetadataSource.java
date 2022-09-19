@@ -44,7 +44,7 @@ public class MySecurityMetadataSource implements FilterInvocationSecurityMetadat
         Collection<ConfigAttribute> configAttributes;
         ConfigAttribute cfg;
         // 获取启用的权限操作请求
-        List<ResourcePermission> permissions = permissionDao.getAll();
+        List<? extends ResourcePermission> permissions = permissionDao.getAll();
         for (ResourcePermission permission : permissions) {
             configAttributes = new ArrayList<>();
             if (StringUtils.isNotBlank(permission.getPath())

@@ -53,7 +53,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
                     return;
                 } else {
                     //通过角色取它的权限列表
-                    List<ResourcePermission> permissionList = permissionService.getByRoleId(userAuth);
+                    List<? extends ResourcePermission> permissionList = permissionService.getByRoleId(userAuth);
                     if (!CollectionUtils.isEmpty(permissionList)) {
                         List<String> authTitles = permissionList.stream().map(permission -> permission.getTitle()).collect(Collectors.toList());
                         if (authTitles.contains(needPerm)) {

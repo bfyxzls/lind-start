@@ -15,12 +15,12 @@ import java.util.List;
 public class DefaultPermissionServiceImpl implements PermissionService {
 
     @Override
-    public List<ResourcePermission> getAll() {
+    public List<? extends ResourcePermission> getAll() {
         return null;
     }
 
     @Override
-    public List<ResourcePermission> getByRoleId(String roleKey) {
+    public List<? extends ResourcePermission> getByRoleId(String roleKey) {
         return null;
     }
 }
