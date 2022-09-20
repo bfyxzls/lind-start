@@ -8,11 +8,12 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import com.lind.uaa.keycloak.config.permit.PermitAllSecurityConfig;
+import com.lind.uaa.keycloak.scope.ScopeSetInterceptor;
 import com.lind.uaa.keycloak.config.permit.PermitAllUrl;
 import com.lind.uaa.keycloak.permission.DefaultPermissionServiceImpl;
+import com.lind.uaa.keycloak.permission.MethodPermissionService;
 import com.lind.uaa.keycloak.permission.PermissionService;
 import com.lind.uaa.keycloak.permission.PermissionServiceManager;
-import com.lind.uaa.keycloak.scope.ScopeSetInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
@@ -89,7 +90,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
    */
   @Bean
   @ConditionalOnMissingBean
-  public PermissionServiceManager permissionServiceManager(RedisTemplate redisTemplate, PermissionService permissionService, KeycloakSpringBootProperties keycloakSpringBootProperties) {
+  public PermissionServiceManager permissionServiceManager(RedisTemplate redisTemplate, PermissionService permissionService) {
     return new PermissionServiceManager(redisTemplate, permissionService, keycloakSpringBootProperties);
   }
 
@@ -132,6 +133,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
 
   /**
    * 存储纯json字符串
+   *
    * @param factory
    * @return
    */
@@ -159,5 +161,15 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
     template.setHashValueSerializer(jackson2JsonRedisSerializer);
     template.afterPropertiesSet();
     return template;
+  }
+
+  /**
+   * 鉴权具体的实现逻辑
+   *
+   * @return @PreAuthorize("@pms.hasPermission('权限名称')")
+   */
+  @Bean("pms")
+  public MethodPermissionService methodPermissionService(KeycloakSpringBootProperties keycloakSpringBootProperties) {
+    return new MethodPermissionService(keycloakSpringBootProperties);
   }
 }
