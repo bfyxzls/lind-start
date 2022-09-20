@@ -168,7 +168,7 @@ class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter implements Web
      * @return @PreAuthorize("@pms.hasPermission('权限名称')")
      */
     @Bean("pms")
-    public MethodPermissionService methodPermissionService(KeycloakSpringBootProperties keycloakSpringBootProperties) {
+    public MethodPermissionService methodPermissionService() {
         return new MethodPermissionService(keycloakSpringBootProperties);
     }
 }
