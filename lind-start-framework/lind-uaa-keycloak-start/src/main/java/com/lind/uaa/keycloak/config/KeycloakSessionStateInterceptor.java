@@ -52,13 +52,15 @@ public class KeycloakSessionStateInterceptor implements HandlerInterceptor {
                         }
                     }
                     // 重定向到kc写入登录状态
-                    String url = keycloakSpringBootProperties.getAuthServerUrl() + "/realms/fabao/sms/kc-sessions?"
+                    String url = keycloakSpringBootProperties.getAuthServerUrl()
+                            + String.format("/realms/%s/sms/kc-sessions?", keycloakSpringBootProperties.getRealm())
                             + COOKIE_IS_LOGIN + "=" + isLogin
                             + "&client=" + keycloakSpringBootProperties.getResource()
                             + "&redirect_uri=" + getCurrentHost(request, Constant.TOKEN_AUTHORIZATION_CODE_REDIRECT)
                             + "&refer_uri=" + request.getRequestURL();
                     response.sendRedirect(url);
                     return false;
+
                 }
             }
         }
