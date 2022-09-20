@@ -16,27 +16,6 @@
         <version.infinispan>13.0.0.CR1</version.infinispan>
         <version.spring.boot>2.3.0.RELEASE</version.spring.boot>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.infinispan</groupId>
-                <artifactId>infinispan-bom</artifactId>
-                <version>${version.infinispan}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${version.spring.boot}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -109,11 +88,7 @@
             <version>1.64</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.5.7</version>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
@@ -191,6 +166,13 @@
             <!--                    </execution>-->
             <!--                </executions>-->
             <!--            </plugin>-->
+
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
         </plugins>
     </build>
 </project>

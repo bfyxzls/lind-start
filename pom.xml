@@ -14,7 +14,6 @@
         <module>demo/log4j-bug-rmi</module>
         <module>demo/java-agent-demo</module>
         <module>demo/a-start-activiti</module>
-        <module>lind-framework-dependencies</module>
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -22,7 +21,67 @@
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
         <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <version.infinispan>13.0.0.CR1</version.infinispan>
+
     </properties>
+    <dependencyManagement>
+        <dependencies>
+
+            <!--spring boot 版本-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--阿里巴巴组件-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--spring cloud 版本-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- lind-framework依赖的pom列表,子类直接引用pom名称不需要版本号  -->
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-dependencies</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+    </dependencies>
     <distributionManagement>
         <repository>
             <id>releases</id>
@@ -35,40 +94,30 @@
             <url>http://192.168.0.203:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-            <version>1.18.24</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
 
-    </dependencies>
     <build>
-        <finalName>${project.name}</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot-dependencies.version}</version>
+                    <configuration>
+                        <finalName>${project.build.finalName}</finalName>
+                        <layers>
+                            <enabled>true</enabled>
+                        </layers>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
 
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <compilerArgument>-Xlint:unchecked</compilerArgument>
-                </configuration>
-            </plugin>
-        </plugins>
-
+            </plugins>
+        </pluginManagement>
     </build>
-
-
 </project>

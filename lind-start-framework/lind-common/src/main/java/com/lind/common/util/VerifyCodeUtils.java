@@ -1,12 +1,9 @@
 package com.lind.common.util;
 
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;

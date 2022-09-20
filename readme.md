@@ -8,6 +8,10 @@
 * 提交 mvn versions:commit //提交，删除多余的pom.xml.versionsBackup
 * deploy根项目
 
+# 项目结构
+![](./assets/readme-1663643864051.png)
+
+
 # lind-start-framework项目介绍（springboot）
 以lind开头，以start结尾的项目，是其它项目的基础包
 1. lind-activiti 工作流组件
