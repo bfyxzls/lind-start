@@ -139,6 +139,33 @@ public class CollectionTest {
         );
     }
 
+    /**
+     * 至少有一个元素包含了admin
+     */
+    @Test
+    public void anyMath2() {
+        List<String> role=Arrays.asList("admin","editor","");
+        Assert.isTrue(
+                role.stream()
+                        .filter(StrUtil::isNotBlank)
+                        .anyMatch(o -> o.equals("admin"))
+        );
+    }
+
+
+    /**
+     * 所有元素都不包含admin
+     */
+    @Test
+    public void notAnyMath() {
+        List<String> role=Arrays.asList("admin","editor","");
+        Assert.isTrue(
+                role.stream()
+                        .filter(StrUtil::isNotBlank)
+                        .noneMatch(o -> o.equals("write"))
+        );
+    }
+
     @Test
     public void computeIfAbsent() {
         Map<Integer, List<Integer>> map = new HashMap<>();
