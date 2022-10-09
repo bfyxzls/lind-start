@@ -1,15 +1,11 @@
 package com.lind.start.test.controller;
 
-import com.lind.common.event.EventBusService;
 import com.lind.redis.lock.annotation.RepeatSubmit;
 import com.lind.redis.lock.template.RedisUserManualLockTemplate;
 import com.lind.start.test.dto.Info;
 import com.lind.start.test.dto.Product;
 import com.lind.start.test.dto.Shop;
 import com.lind.start.test.dto.UserDTO;
-import com.lind.start.test.handler.UserEvent;
-import com.lind.start.test.handler.listener.EmailEventBusListener;
-import com.lind.start.test.handler.listener.SmsEventBusListener;
 import com.lind.verification.code.image.ImageCodeProcessor;
 import com.lind.verification.code.image.ImageStreamCodeProcessor;
 import io.swagger.annotations.Api;
@@ -48,17 +44,9 @@ public class HomeController {
     @Autowired
     ApplicationContext applicationContext;
     @Autowired
-    EventBusService userEventService;
-    @Autowired
-    SmsEventBusListener smsEventListener;
-    @Autowired
-    EmailEventBusListener emailEventListener;
-    @Autowired
     ImageCodeProcessor imageCodeProcessor;
     @Autowired
     ImageStreamCodeProcessor imageStreamCodeProcessor;
-    @Autowired
-    EventBusService eventBusService;
 
     @GetMapping("/index")
     public String index() {
@@ -97,12 +85,6 @@ public class HomeController {
         );
     }
 
-    @GetMapping("/pub-event")
-    public ResponseEntity event() {
-        eventBusService.publisher(new UserEvent("1", "zzl"));
-
-        return ResponseEntity.ok("发布成功");
-    }
 
     @GetMapping("/no-get")
     public ResponseEntity noGet() {
