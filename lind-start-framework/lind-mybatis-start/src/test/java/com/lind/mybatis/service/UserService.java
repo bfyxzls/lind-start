@@ -1,10 +1,9 @@
-package com.lind.mybatis;
+package com.lind.mybatis.service;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.lind.common.dto.PageData;
 import com.lind.mybatis.entity.TUser;
-import com.lind.mybatis.service.BaseService;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Map;

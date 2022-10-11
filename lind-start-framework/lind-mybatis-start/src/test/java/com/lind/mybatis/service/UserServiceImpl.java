@@ -1,4 +1,4 @@
-package com.lind.mybatis;
+package com.lind.mybatis.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.common.dto.PageData;
 import com.lind.mybatis.dao.UserDao;
 import com.lind.mybatis.entity.TUser;
-import com.lind.mybatis.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
