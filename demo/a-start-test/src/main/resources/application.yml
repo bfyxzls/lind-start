@@ -1,18 +1,15 @@
-server.port: 8081
 spring:
-  application.name: micro-order
+  application:
+    name: a-start-test
   cloud:
     nacos:
       discovery:
         server-addr: 192.168.60.138:80
         namespace: zzl
-      config:
-        server-addr: 192.168.60.138:80
-        file-extension: yaml
-        namespace: zzl
   redis:
-    database: 0
-    password: bdyh@2020
+    database: 0 # 数据库，每个库由16384（0~16383）槽位组成，实现了库的分片
+    password: bdyh@2020 # 密码
+    timeout: 50000 # 连接超时时间
     cluster:
       nodes:
         - 192.168.4.26:6379
@@ -28,8 +25,10 @@ spring:
         max-active: 10
         min-idle: 0
       cluster:
-        refresh:
+        refresh: # 动态感应
           adaptive: true
           period: 10000
 
-    timeout: 50000 # 连接超时时间
+
+    profiles:
+    active: dev

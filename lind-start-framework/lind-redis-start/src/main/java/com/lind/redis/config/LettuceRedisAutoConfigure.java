@@ -13,7 +13,7 @@ import com.lind.redis.service.RedisService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,7 +26,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class LettuceRedisAutoConfigure {
 
     @Bean(name = "redisTemplateString")
-    public StringRedisTemplate redisTemplateString(LettuceConnectionFactory factory) {
+    public StringRedisTemplate redisTemplateString(RedisConnectionFactory factory) {
         StringRedisTemplate template = new StringRedisTemplate();
         template.setConnectionFactory(factory);
         return template;
@@ -34,7 +34,7 @@ public class LettuceRedisAutoConfigure {
 
     @Bean(name = "redisTemplate")
     @ConditionalOnClass(RedisOperations.class)//依据RedisOperations是否存在而决定是否注册这个bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(factory);
         Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);

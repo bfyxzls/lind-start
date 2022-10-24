@@ -18,11 +18,7 @@ spring:
     font:
       activityFontName: 宋体
       labelFontName: 宋体
-  # Redis
-  redis:
-    host: 127.0.0.1
-    # 数据库索引 默认0
-    database: 10
+
   cloud:
     nacos:
       discovery:

@@ -29,12 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {
-        LettuceConnectionFactory.class,
-        LettuceRedisAutoConfigure.class,
-        RedisLockConfig.class,
-        RepeatSubmitController.class,
-        CurrentUser.class})
+@SpringBootTest(classes = {LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class, RedisLockConfig.class, RepeatSubmitController.class, CurrentUser.class})
 public class LockTest {
     protected MockMvc mockMvc;
     @Autowired
@@ -79,10 +74,7 @@ public class LockTest {
     @Test
     public void tokenIndex() throws Exception {
         for (int i = 1; i < 3; i++)
-            mockMvc.perform(
-                    get("/get"))
-                    .andDo(print())
-                    .andExpect(status().isOk());
+            mockMvc.perform(get("/get")).andDo(print()).andExpect(status().isOk());
 
     }
 

@@ -2,6 +2,7 @@ package com.lind.redis.lock.config;
 
 import com.lind.redis.config.LettuceRedisAutoConfigure;
 import com.lind.redis.lock.aspect.RepeatSubmitAspect;
+import com.lind.redis.lock.template.DefaultUserIdAuditorAwareImpl;
 import com.lind.redis.lock.template.RedisLockTemplate;
 import com.lind.redis.lock.template.RedisUserManualLockTemplate;
 import com.lind.redis.lock.template.UserIdAuditorAware;
@@ -60,5 +61,11 @@ public class RedisLockConfig {
             RedisLockProperty redisLockProperty,
             RedisLockTemplate redisLockTemplate) {
         return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(UserIdAuditorAware.class)
+    public UserIdAuditorAware userIdAuditorAware() {
+        return new DefaultUserIdAuditorAwareImpl();
     }
 }
