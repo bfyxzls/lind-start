@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <properties>
         <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
-        <poi.version>3.12</poi.version>
+        <poi.version>4.1.2</poi.version>
         <opensagres.version>1.0.5</opensagres.version>
     </properties>
     <artifactId>lind-office-convert</artifactId>
@@ -46,6 +46,11 @@
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.ozlerhakan</groupId>
+            <artifactId>poiji</artifactId>
+            <version>3.1.0</version>
         </dependency>
         <!-- poi核心结束 -->
 
@@ -89,6 +94,10 @@
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.13.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
         <!-- html转doc结束 -->
     </dependencies>
