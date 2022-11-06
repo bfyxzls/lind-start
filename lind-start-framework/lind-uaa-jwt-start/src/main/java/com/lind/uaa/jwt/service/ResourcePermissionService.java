@@ -40,6 +40,10 @@ public interface ResourcePermissionService {
         return ones;
     }
 
+
+
+
+
     /**
      * 得到具有角色控制的树型菜单结构.
      *

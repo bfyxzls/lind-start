@@ -15,6 +15,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.infinispan>13.0.0.CR1</version.infinispan>
         <version.spring.boot>2.3.0.RELEASE</version.spring.boot>
+        <netty-all.version>4.1.63.Final</netty-all.version>
     </properties>
     <dependencies>
         <dependency>
@@ -150,6 +151,13 @@
             <version>7.1.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- netty -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>${netty-all.version}</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
