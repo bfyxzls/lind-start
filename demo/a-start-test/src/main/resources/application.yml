@@ -29,6 +29,8 @@ spring:
           adaptive: true
           period: 10000
 
-
     profiles:
     active: dev
+
+  main:
+    allow-bean-definition-overriding: true

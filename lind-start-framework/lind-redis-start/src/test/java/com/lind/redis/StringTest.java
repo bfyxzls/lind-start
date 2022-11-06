@@ -7,7 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -17,10 +17,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest(classes = {LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class})
 public class StringTest {
     @Autowired
-    RedisTemplate<String,String> redisService;
+    StringRedisTemplate redisService;
+
 
     @Test
     public void write() {
-        redisService.opsForValue().set("test", "oktest");
+        redisService.opsForValue().set("test3", "oktest");
+    }
+
+    @Test
+    public void read() {
+        System.out.println(redisService.opsForValue().get("hello"));
     }
 }

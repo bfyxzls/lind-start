@@ -18,18 +18,23 @@ public class BitTest {
   private static final int TERMINATED = 3 << COUNT_BITS;//3*536,870,912
   private final AtomicInteger ctl = new AtomicInteger(ctlOf(RUNNING, 0));
 
-  // 运行状态[高3位]
+  // 获取行状态[高3位]
   // 简单来说，比如从100开始为状态，则第二个状态为100*2=200，而100到200之前有100个单元（0~99），每个状态之间都是100个空位，来存储（0~99）个数。
   private static int runStateOf(int c) {
     return c & ~CAPACITY;
   }
 
-  // 工作数[低29位]
+  // 获取工作数[低29位]
   private static int workerCountOf(int c) {
     return c & CAPACITY;
   }
 
-  // 状态和工作数生成的ctl,是一个数字，每个区间段通过runState来区分
+  /**
+   * 状态和工作数生成的ctl,是一个数字，每个区间段通过runState来区分
+   * @param rs 工作数
+   * @param wc 状态值
+   * @return
+   */
   private static int ctlOf(int rs, int wc) {
     return rs | wc;
   }
@@ -65,7 +70,7 @@ public class BitTest {
     log.debug("需要持久化的数：{} | {}={}", indexCount, status, saveValue);
     log.debug("获取状态数：{}，获取对应的递增数：{}", runStateOf(saveValue),workerCountOf(saveValue));
     log.debug("-------------------------------------------");
-    ctl.set(ctlOf(RUNNING, 256));
+    ctl.set(ctlOf(SHUTDOWN, 256));
     log.debug("ctl={}", ctl.get());
     System.out.println("runStateOf=" + runStateOf(ctl.get()));
     System.out.println("workerCountOf=" + workerCountOf(ctl.get()));

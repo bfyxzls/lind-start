@@ -85,6 +85,7 @@ public class ExcelToListMap {
                 String columnName = head.getCell(cell.getColumnIndex()).toString();
                 switch (cell.getCellType()) {
                     case STRING:    //field that represents string cell type
+
                         try {
                             JsonNode node = mapper.readTree(cell.getStringCellValue());
                             if (node.isArray()) {
