@@ -26,6 +26,7 @@ import io.netty.handler.codec.http.HttpUtil;
 import io.netty.handler.codec.http.HttpVersion;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.CharsetUtil;
+import lombok.SneakyThrows;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,11 +119,13 @@ public class Server {
         future.channel().closeFuture().sync();
     }
 
+    @SneakyThrows
     private static Object process(HttpMethod httpMethod, String uri, String requestData) {
         // valid
         if (HttpMethod.POST != httpMethod) {
             return "invalid request, HttpMethod not support.";
         }
+        Thread.sleep(2000);
         // services mapping
         try {
             switch (uri) {
