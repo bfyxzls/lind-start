@@ -1,6 +1,5 @@
 package com.lind.common.pattern.factorymethod;
 
-import com.sun.org.glassfish.gmbal.Description;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;

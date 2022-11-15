@@ -27,6 +27,10 @@ public class CommonApplication {
         SpringApplication.run(CommonApplication.class, args);
     }
 
+    public String print(){
+        System.out.println("print class loader1.1");
+        return "print class loader1.1";
+    }
     @GetMapping("version")
     public ResponseEntity version() {
         return ResponseEntity.ok("1.0.0");

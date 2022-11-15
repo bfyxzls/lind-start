@@ -30,4 +30,9 @@ public class RedisController {
         redisService.opsForValue().set("test2", new Date().toString());
         return ResponseEntity.ok("success");
     }
+    @GetMapping("se3t")
+    public ResponseEntity set3() {
+        redisService.opsForValue().set("test3", new Date().toString());
+        return ResponseEntity.ok("success");
+    }
 }

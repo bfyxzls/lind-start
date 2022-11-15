@@ -1,4 +1,4 @@
-package com.lind.common.util;
+package com.lind.common.classloader;
 
 import cn.hutool.core.io.IoUtil;
 import lombok.SneakyThrows;
@@ -12,12 +12,13 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 /**
  * 外部Jar类型加载器.
  */
-public class JarClassLoader {
+public class JarClassLoader extends ClassLoader {
 
   final static Logger LOGGER = LoggerFactory.getLogger(JarClassLoader.class);
 
@@ -91,6 +92,7 @@ public class JarClassLoader {
 
   /**
    * 将jar包添加到当前类加载器.
+   * 在当前类加载器 this.getClass().getClassLoader()中，是可以使用这些类的.
    *
    * @param path
    * @param clazz
@@ -127,4 +129,75 @@ public class JarClassLoader {
     return bytes;
   }
 
+  public JarFile jarFile;
+
+  public ClassLoader parent;
+
+  public JarClassLoader(JarFile jarFile) {
+    super(Thread.currentThread().getContextClassLoader());
+    this.parent = Thread.currentThread().getContextClassLoader();
+    this.jarFile = jarFile;
+  }
+
+
+  public JarClassLoader(JarFile jarFile, ClassLoader parent) {
+    super(parent);
+    this.parent = parent;
+    this.jarFile = jarFile;
+  }
+
+  public String classNameToJarEntry(String name){
+    String s = name.replaceAll("\\.", "\\/");
+    StringBuilder stringBuilder = new StringBuilder(s);
+    stringBuilder.append(".class");
+    return stringBuilder.toString();
+
+  }
+  @Override
+  protected Class<?> findClass(String name) throws ClassNotFoundException {
+    try {
+      Class c = null;
+      if (null != jarFile) {
+        String jarEntryName = classNameToJarEntry(name);
+        JarEntry entry = jarFile.getJarEntry(jarEntryName);
+        if (null != entry) {
+          InputStream is = jarFile.getInputStream(entry);
+          int availableLen = is.available();
+          int len = 0;
+          byte[] bt1 = new byte[availableLen];
+          while (len < availableLen) {
+            len += is.read(bt1, len, availableLen - len);
+          }
+          c = defineClass(name, bt1, 0, bt1.length);
+        } else {
+          if (parent != null) {
+            return parent.loadClass(name);
+          }
+        }
+      }
+      return c;
+    } catch (IOException e) {
+      throw new ClassNotFoundException("Class " + name + " not found.");
+    }
+  }
+
+  @Override
+  public InputStream getResourceAsStream(String name) {
+    InputStream is = null;
+    try {
+      if (null != jarFile) {
+        JarEntry entry = jarFile.getJarEntry(name);
+        if (entry != null) {
+          is = jarFile.getInputStream(entry);
+        }
+        if (is == null) {
+          is = super.getResourceAsStream(name);
+        }
+      }
+    } catch (IOException e) {
+      // logger.error(e.getMessage());
+      System.out.println(e.getMessage());
+    }
+    return is;
+  }
 }

@@ -11,9 +11,12 @@ import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 @Slf4j
 public class ThreadStatusTest {
     static void print(Map<String, String> map) {
@@ -48,7 +51,7 @@ public class ThreadStatusTest {
         threadPoolExecutor.submit(() -> {
             print(map);
         });
-       System.out.println("map:"+map);
+        System.out.println("map:" + map);
     }
 
     /**
@@ -77,7 +80,7 @@ public class ThreadStatusTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        TimeUnit.SECONDS.sleep(10L);
+        TimeUnit.SECONDS.sleep(1000L);
     }
 
     @Test
@@ -124,6 +127,44 @@ public class ThreadStatusTest {
         System.out.println(thread.getState());//TIMED_WAITING
         TimeUnit.SECONDS.sleep(2L);
         System.out.println(thread.getState());//RUNNABLE
+    }
+
+    @Test
+    public void createThread() throws InterruptedException {
+        ThreadPoolExecutor bizThreadPool = new ThreadPoolExecutor(
+                5,
+                5,
+                60L,
+                TimeUnit.SECONDS,
+                new LinkedBlockingQueue<Runnable>(2000),
+                new ThreadFactory() {
+                    @Override
+                    public Thread newThread(Runnable r) {
+                        return new Thread(r, "xxl-job, EmbedServer bizThreadPool-" + r.hashCode());
+                    }
+                },
+                new RejectedExecutionHandler() {
+                    @Override
+                    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                        throw new RuntimeException("xxl-job, EmbedServer bizThreadPool is EXHAUSTED!");
+                    }
+                });
+
+        for (int i=0;i<20;i++) {
+            // invoke
+            bizThreadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("hello");
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        }
+        Thread.sleep(50000);
     }
 
     public static class MyList {
@@ -258,6 +299,5 @@ public class ThreadStatusTest {
 
         }
     }
-
 
 }

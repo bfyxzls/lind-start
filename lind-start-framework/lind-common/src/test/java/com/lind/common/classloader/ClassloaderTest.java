@@ -1,7 +1,6 @@
-package com.lind.common;
+package com.lind.common.classloader;
 
 import cn.hutool.core.lang.Assert;
-import com.lind.common.util.JarClassLoader;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 

@@ -2,10 +2,20 @@ package com.lind.common.util;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.UUID;
 
+/**
+ * 一致性hash算法.
+ */
 public class ConsistenceHashUtil {
-    public  void test() {
+    public void test() {
         final String IP_PREFIX = "192.168.0.";
         // 每台真实机器节点上保存的记录条数
         Map<String, Integer> map = new HashMap<String, Integer>();
@@ -43,6 +53,7 @@ public class ConsistenceHashUtil {
     public interface IHashService {
         Long hash(String key);
     }
+
     public class HashService implements IHashService {
 
         /**
@@ -91,6 +102,7 @@ public class ConsistenceHashUtil {
 
         }
     }
+
     public class Node<T> {
         private String ip;
         private String name;
@@ -126,11 +138,12 @@ public class ConsistenceHashUtil {
             return ip;
         }
     }
+
     public class ConsistentHash<T> {
         // Hash函数接口
         private final IHashService iHashService;
         // 每个机器节点关联的虚拟节点数量
-        private final int          numberOfReplicas;
+        private final int numberOfReplicas;
         // 环形虚拟节点
         private final SortedMap<Long, T> circle = new TreeMap<Long, T>();
 

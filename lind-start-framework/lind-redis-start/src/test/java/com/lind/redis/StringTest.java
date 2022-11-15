@@ -6,14 +6,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @Slf4j
-@TestPropertySource("classpath:application.yml")  //配置文件注入
+@PropertySource(value = "classpath:application.yml", factory = YamlPropertySourceFactory.class)
 @SpringBootTest(classes = {LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class})
 public class StringTest {
     @Autowired
@@ -22,7 +22,7 @@ public class StringTest {
 
     @Test
     public void write() {
-        redisService.opsForValue().set("test3", "oktest");
+        redisService.opsForValue().set("test4", "oktest");
     }
 
     @Test
