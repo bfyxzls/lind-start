@@ -40,7 +40,7 @@
         <module>lind-rbac-start</module>
         <module>lind-seata-start</module>
         <module>lind-framework-dependencies</module>
-        <module>lind-admin</module>
+        <module>mini-admin</module>
 
     </modules>
 

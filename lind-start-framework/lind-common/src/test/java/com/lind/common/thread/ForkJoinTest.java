@@ -2,8 +2,12 @@ package com.lind.common.thread;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 /**
@@ -69,5 +73,23 @@ public class ForkJoinTest {
         return taskLeft.join() + taskRight.join();
       }
     }
+  }
+
+  /**
+   * 注意点：
+   * parallelStream并行流一定要使用线程安全的对象，比如有这样的一个场景ArrayList，因为它是线程不安全的，所以有可能会溢出
+   * 此时，要么使用线程安全的容器，比如Vector，要么使用collect完成串行收集。
+   */
+  @Test
+  public void notice(){
+    List<Integer> list = new ArrayList<>();
+    IntStream.rangeClosed(1, 10000).parallel().forEach(i -> list.add(i));
+  }
+  @Test
+  public void notice_true(){
+    List<Integer> collect = IntStream.rangeClosed(1, 10000)
+            .parallel()
+            .boxed()
+            .collect(Collectors.toList());
   }
 }
