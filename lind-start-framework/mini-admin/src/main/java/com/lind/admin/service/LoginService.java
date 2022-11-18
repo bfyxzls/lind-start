@@ -12,6 +12,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author xuxueli 2019-05-04 22:13:264
@@ -102,5 +107,39 @@ public class LoginService {
         return null;
     }
 
+    public Map<String, Object> dashboardInfo() {
 
+        Map<String, Object> dashboardMap = new HashMap<String, Object>();
+        dashboardMap.put("jobInfoCount", 1);
+        dashboardMap.put("jobLogCount", 10);
+        dashboardMap.put("jobLogSuccessCount", 15);
+        dashboardMap.put("executorCount", 8);
+        return dashboardMap;
+    }
+
+    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+
+        // process
+        List<String> triggerDayList = Arrays.asList("2022-11-12", "2022-11-13", "2022-11-14", "2022-11-15", "2022-11-16", "2022-11-17" );
+        List<Integer> triggerDayCountRunningList = Arrays.asList(1,3,7,2,9,1);
+        List<Integer> triggerDayCountSucList =  Arrays.asList(1,13,27,12,9,1);
+        List<Integer> triggerDayCountFailList = Arrays.asList(1,3,71,22,19,1);
+        int triggerCountRunningTotal = 0;
+        int triggerCountSucTotal = 0;
+        int triggerCountFailTotal = 0;
+
+
+
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("triggerDayList", triggerDayList);
+        result.put("triggerDayCountRunningList", triggerDayCountRunningList);
+        result.put("triggerDayCountSucList", triggerDayCountSucList);
+        result.put("triggerDayCountFailList", triggerDayCountFailList);
+
+        result.put("triggerCountRunningTotal", triggerCountRunningTotal);
+        result.put("triggerCountSucTotal", triggerCountSucTotal);
+        result.put("triggerCountFailTotal", triggerCountFailTotal);
+
+        return new ReturnT<Map<String, Object>>(result);
+    }
 }

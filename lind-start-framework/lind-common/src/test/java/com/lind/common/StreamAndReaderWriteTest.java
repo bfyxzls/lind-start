@@ -44,7 +44,6 @@ public class StreamAndReaderWriteTest {
       char data[] = new char[1024];
       int len = in.read(data);//向字符数组保存数据，返回长度。
       System.out.println(new String(data, 0, len));
-      assert new String(data, 0, len).equals(MSG);
       in.close();
     }
   }

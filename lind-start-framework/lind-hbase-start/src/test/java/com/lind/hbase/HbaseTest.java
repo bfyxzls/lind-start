@@ -23,7 +23,7 @@ import java.util.Date;
 @RunWith(SpringRunner.class)
 @Slf4j
 public class HbaseTest {
-  static final String TABLE_NAME = "lind-test";
+  static final String TABLE_NAME = "law_communique_svt";
   @Autowired
   HBaseService hBaseService;
 

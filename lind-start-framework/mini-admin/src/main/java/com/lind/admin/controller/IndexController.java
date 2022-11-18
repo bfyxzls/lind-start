@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * index controller
@@ -33,7 +34,16 @@ public class IndexController {
 
     @RequestMapping("/")
     public String index(Model model) {
+        Map<String, Object> dashboardMap = loginService.dashboardInfo();
+        model.addAllAttributes(dashboardMap);
+
         return "index";
+    }
+    @RequestMapping("/chartInfo")
+    @ResponseBody
+    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+        ReturnT<Map<String, Object>> chartInfo = loginService.chartInfo(startDate, endDate);
+        return chartInfo;
     }
 
     @RequestMapping("/toLogin")

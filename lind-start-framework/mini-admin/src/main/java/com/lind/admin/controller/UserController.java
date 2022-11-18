@@ -1,12 +1,16 @@
 package com.lind.admin.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lind.admin.annotation.PermissionLimit;
+import com.lind.admin.dao.PermissionDao;
+import com.lind.admin.entity.Permission;
 import com.lind.admin.entity.User;
 import com.lind.admin.service.LoginService;
 import com.lind.admin.service.UserService;
 import com.lind.admin.util.I18nUtil;
 import com.lind.admin.util.ReturnT;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.DigestUtils;
@@ -15,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
@@ -28,13 +31,16 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    @Resource
+    @Autowired
     private UserService userService;
+    @Autowired
+    private PermissionDao permissionDao;
 
     @RequestMapping
     @PermissionLimit(adminuser = true)
     public String index(Model model) {
-
+        List<Permission> permissions = permissionDao.selectList(new QueryWrapper<>());
+        model.addAttribute("permissions", permissions);
         return "user/user.index";
     }
 

@@ -135,9 +135,8 @@
 			<ul class="sidebar-menu">
                 <li class="header">${I18n.system_nav}</li>
                 <li class="nav-click <#if pageName == "index">active</#if>" ><a href="${request.contextPath}/"><i class="fa fa-circle-o text-aqua"></i><span>${I18n.job_dashboard_name}</span></a></li>
- 				<#if Request["XXL_JOB_LOGIN_IDENTITY"].role == 1>
                     <li class="nav-click <#if pageName == "user">active</#if>" ><a href="${request.contextPath}/user"><i class="fa fa-circle-o text-purple"></i><span>${I18n.user_manage}</span></a></li>
-				</#if>
+				<li class="nav-click <#if pageName == "permission">active</#if>" ><a href="${request.contextPath}/permission"><i class="fa fa-circle-o text-purple"></i><span>权限管理</span></a></li>
 				<li class="nav-click <#if pageName == "help">active</#if>" ><a href="${request.contextPath}/help"><i class="fa fa-circle-o text-gray"></i><span>${I18n.job_help}</span></a></li>
 			</ul>
 		</section>
