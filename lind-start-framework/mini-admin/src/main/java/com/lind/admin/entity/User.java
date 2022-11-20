@@ -17,6 +17,10 @@ public class User {
     private int role;                // 角色：0-普通用户、1-管理员
     private String permission;    // 权限：执行器ID列表，多个逗号分割
 
+    private String email;
+    private String phone;
+    private String realName;
+
     // plugin
     public boolean validPermission(int permission) {
         if (this.role == 1) {

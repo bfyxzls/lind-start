@@ -58,9 +58,12 @@
 					            	<tr>
                                         <th name="id" >ID</th>
                                         <th name="username" >${I18n.user_username}</th>
+										<th name="realName">真实姓名</th>
 					                  	<th name="password" >${I18n.user_password}</th>
                                         <th name="role" >${I18n.user_role}</th>
 					                  	<th name="permission" >${I18n.user_permission}</th>
+										<th name="email">email</th>
+										<th name="phone">phone</th>
 					                  	<th>${I18n.system_opt}</th>
 					                </tr>
 				                </thead>

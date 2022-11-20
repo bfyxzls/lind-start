@@ -194,8 +194,11 @@ public class ThreadPoolUtilsTest {
          *     sums the results using the Collectors.summingInt collector
          */
         TreeNode tree = new TreeNode(5,
-                new TreeNode(3), new TreeNode(2,
-                new TreeNode(2), new TreeNode(8)));
+                new TreeNode(3),
+                new TreeNode(2,
+                        new TreeNode(3), new TreeNode(8),
+                        new TreeNode(4))
+        );
 
         ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
         int sum = forkJoinPool.invoke(new CountingTask(tree));
