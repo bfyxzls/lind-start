@@ -82,11 +82,7 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
@@ -102,11 +98,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-swagger-start</artifactId>
-            <version>${project.parent.version}</version>
         </dependency>
         <!-- 1.2是使用最广泛的版本 -->
         <dependency>

@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 /**
  * 数据处理辅助类.
  */
+@SuppressWarnings("unchecked")
 public class DataHelper {
     /**
      * 每个线程处理的集合的长度.

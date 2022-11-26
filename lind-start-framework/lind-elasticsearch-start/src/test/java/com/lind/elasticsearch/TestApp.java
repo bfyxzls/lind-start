@@ -57,7 +57,7 @@ public class TestApp {
      * 索引初始化.
      * 对于开启了@RunWith(SpringRunner.class)注入之后，这个索引初始化的代码就不需要了.
      */
-    //@Before
+    @Test
     public void initIndexMapping() {
         System.out.println("init...");
         elasticsearchTemplate.deleteIndex(EsDto.class);

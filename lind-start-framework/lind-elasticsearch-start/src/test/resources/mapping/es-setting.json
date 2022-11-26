@@ -1,10 +1,7 @@
 {
   "index": {
-    // 分页数
     "max_result_window": 1000000,
-    // 翻页最大值
     "number_of_shards": 1,
-    // 分片数
     "number_of_replicas": 1
   }
 }

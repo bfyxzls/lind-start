@@ -39,11 +39,7 @@
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-spring-boot-starter</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -61,11 +57,6 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-common</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-swagger-start</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>

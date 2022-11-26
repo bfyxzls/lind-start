@@ -15,6 +15,10 @@
         <fastjson.version>1.2.68</fastjson.version>
         <elasticsearch.high.version>7.6.2</elasticsearch.high.version>
         <elasticsearch.client.version>7.6.2</elasticsearch.client.version>
+
+<!--        <elasticsearch.high.version>6.5.4</elasticsearch.high.version>
+        <elasticsearch.client.version>6.5.4</elasticsearch.client.version>-->
+
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -54,11 +58,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
 
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>

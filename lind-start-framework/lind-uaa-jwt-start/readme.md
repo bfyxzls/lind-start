@@ -6,9 +6,22 @@
 * 优先级：using > as
 * @JsonDeserialize(as=ValueImpl.class)将类型反序列化成指定类型；
 * @JsonDeserialize(using=CustomDateDeserialize.class)用于在反序列化时嵌入我们自定义的代码。
-## jwt payload
-jwt payload中包括的内容太多，对网络传输是需要考虑的，比如我们是否在JWT里直接包括权限信息，还是只包括角色信息，然后再通过角色信息去查询它的权限。
+## jwt 
+### 签名验证
+* JWT签名算法中，一般有两个选择，一个采用HS256,另外一个就是采用RS256。
+* 签名实际上是一个加密的过程，生成一段标识（也是JWT的一部分）作为接收方验证信息是否被篡改的依据。
+* HS256 (带有 SHA-256 的 HMAC 是一种对称算法, 双方之间仅共享一个 密钥。由于使用相同的密钥生成签名和验证签名, 因此必须注意确保密钥不被泄密。
+* RS256 (采用SHA-256 的 RSA 签名) 是一种非对称算法, 它使用公共/私钥对: 标识提供方采用私钥生成签名, JWT 的使用方获取公钥以验证签名。由于公钥 (与私钥相比) 不需要保护, 因此大多数标识提供方使其易于使用方获取和使用 (通常通过一个元数据URL)。
 
+### payload
+jwt payload中包括的内容太多，对网络传输是需要考虑的，比如我们是否在JWT里直接包括权限信息，还是只包括角色信息，然后再通过角色信息去查询它的权限。
+* iss(Issuser)：如果签发的时候这个claim的值是“a.com”，验证的时候如果这个claim的值不是“a.com”就属于验证失败
+* sub(Subject)：如果签发的时候这个claim的值是“liuyunzhuge”，验证的时候如果这个claim的值不是“liuyunzhuge”就属于验证失败
+* aud(Audience)：如果签发的时候这个claim的值是“['b.com','c.com']”，验证的时候这个claim的值至少要包含b.com，c.com的其中一个才能验证通过
+* exp(Expiration time)：如果验证的时候超过了这个claim指定的时间，就属于验证失败；
+* nbf(Not Before)：如果验证的时候小于这个claim指定的时间，就属于验证失败
+* iat(Issued at)：它可以用来做一些maxAge之类的验证，假如验证时间与这个claim指定的时间相差的时间大于通过maxAge指定的一个值，就属于验证失败
+* jti(JWT ID)：如果签发的时候这个claim的值是“1”，验证的时候如果这个claim的值不是“1”就属于验证失败
 ## 使用
 ### 登录
 * url: http://localhost:8080/login

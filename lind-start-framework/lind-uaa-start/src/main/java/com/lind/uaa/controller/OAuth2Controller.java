@@ -29,13 +29,11 @@ import static com.lind.uaa.util.UAAConstant.LOGIN_ACCOUNT;
 
 @RestController
 @Slf4j
+@SuppressWarnings("unchecked")
 public class OAuth2Controller {
 
     @Autowired
     private TokenEndpoint tokenEndpoint;
-
-    @Autowired
-    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private RedisUtil redisService;
@@ -100,7 +98,6 @@ public class OAuth2Controller {
     @GetMapping("/oauth/user-me")
     public Authentication principal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        log.info("user-me:{}" + authentication.getName());
         return authentication;
     }
 

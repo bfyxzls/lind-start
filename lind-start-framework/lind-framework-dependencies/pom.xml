@@ -190,12 +190,6 @@
                 <artifactId>jasypt-spring-boot-starter</artifactId>
                 <version>${jasypt.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <optional>true</optional>
-                <version>1.18.24</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
     <distributionManagement>

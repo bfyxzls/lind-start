@@ -9,11 +9,12 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>demo/a-start-test</module>
         <module>lind-start-framework</module>
-        <module>demo/log4j-bug-rmi</module>
-        <module>demo/java-agent-demo</module>
-        <module>demo/a-start-activiti</module>
+
+<!--        <module>demo/a-start-test</module>-->
+<!--        <module>demo/log4j-bug-rmi</module>-->
+<!--        <module>demo/java-agent-demo</module>-->
+<!--        <module>demo/a-start-activiti</module>-->
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -31,9 +31,9 @@ public class EsDto extends EsBaseEntity implements Serializable {
     private Integer age;
     @Field(type = FieldType.Integer)
     private Integer sex;
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String desc;
-    @Field(type = FieldType.Text, analyzer = "ik_max_word")
+    @Field(type = FieldType.Text, analyzer = "standard")
     private String memo;
     @Field(type = FieldType.Nested, fielddata = true)
     private Address address;

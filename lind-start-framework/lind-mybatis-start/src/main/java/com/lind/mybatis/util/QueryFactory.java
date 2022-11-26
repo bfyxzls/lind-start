@@ -10,6 +10,7 @@ import java.lang.reflect.Method;
 /**
  * 查询生成器.
  */
+@SuppressWarnings("unchecked")
 public class QueryFactory {
     /**
      * 实体字段封装条件.

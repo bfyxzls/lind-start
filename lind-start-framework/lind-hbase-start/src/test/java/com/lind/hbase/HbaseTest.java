@@ -1,6 +1,5 @@
 package com.lind.hbase;
 
-import com.lind.common.util.SnowFlakeUtils;
 import com.lind.hbase.entity.DataRecord;
 import com.lind.hbase.service.HBaseService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -44,7 +44,7 @@ public class HbaseTest {
   @Test
   public void insert() throws ParseException {
     DataRecord dataRecord = new DataRecord();
-    dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
+    dataRecord.setId(UUID.randomUUID().toString());
     dataRecord.append("name", "zzl");
     dataRecord.append("age", "男");
     dataRecord.append("marry", true);
@@ -62,7 +62,7 @@ public class HbaseTest {
   @Test
   public void insertDynamicFields() {
     DataRecord dataRecord = new DataRecord();
-    dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
+    dataRecord.setId(UUID.randomUUID().toString());
     dataRecord.append("name", "zhanghangzheng");
     dataRecord.append("age", "男");
     dataRecord.append("marry", false);
@@ -73,7 +73,7 @@ public class HbaseTest {
   @Test
   public void append() {
     DataRecord dataRecord = new DataRecord();
-    dataRecord.setId(String.valueOf(SnowFlakeUtils.getFlowIdInstance().nextId()));
+    dataRecord.setId(UUID.randomUUID().toString());
     dataRecord.append("name", "zhangzhanling");
     dataRecord.append("age", "男");
     dataRecord.append("marry", true);

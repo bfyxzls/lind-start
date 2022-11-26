@@ -1,7 +1,7 @@
 package com.lind.hbase.util;
 
 
-import com.alibaba.fastjson.JSONObject;
+import cn.hutool.json.JSONObject;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;

@@ -34,20 +34,9 @@
             <version>1.2.0</version>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-common</artifactId>
-            <scope>test</scope>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
 </project>
