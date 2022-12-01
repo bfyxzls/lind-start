@@ -1,10 +1,13 @@
 package com.lind.admin.annotation;
 
 
+import javax.xml.bind.annotation.XmlType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 权限限制
@@ -25,5 +28,11 @@ public @interface PermissionLimit {
 	 * @return
 	 */
 	boolean adminuser() default false;
+
+	/**
+	 * 操作权限列表，由开发者定义，如read,modify_product,delete_all,read_news
+	 * @return
+	 */
+	String[] permissions() default "";
 
 }

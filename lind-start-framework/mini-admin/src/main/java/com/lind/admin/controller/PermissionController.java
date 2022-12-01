@@ -29,14 +29,14 @@ public class PermissionController {
     private PermissionDao permissionDao;
 
     @RequestMapping
-    @PermissionLimit(adminuser = true)
+    @PermissionLimit(permissions = "list")
     public String index(Model model) {
         return "permission/index";
     }
 
     @RequestMapping("/pageList")
     @ResponseBody
-    @PermissionLimit(adminuser = true)
+    @PermissionLimit(permissions = "list")
     public IPage<Permission> pageList(Page page) {
 
         // page list

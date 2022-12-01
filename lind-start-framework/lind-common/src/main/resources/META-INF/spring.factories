@@ -6,4 +6,5 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.util.VerifyCodeUtils,\
   com.lind.common.util.IpInfoUtil,\
   com.lind.common.enums.NameValueEnumConverterFactory,\
-  com.lind.common.locale.LocalMessageConfig
+  com.lind.common.locale.LocalMessageConfig,\
+  com.lind.common.init.ApplicationLoggerInitializer

@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @since 1.0.0
  */
 @Configuration
-public class LindConfig {
+public class LindAwareConfig {
     @Bean
     public LindAware testAware() {
         return new LindAware();

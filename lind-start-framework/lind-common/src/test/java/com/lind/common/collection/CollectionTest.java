@@ -1,5 +1,6 @@
 package com.lind.common.collection;
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableMap;
@@ -8,6 +9,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.bag.HashBag;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -240,7 +244,36 @@ public class CollectionTest {
             System.out.println(o);
         });
     }
+    public static List<String> subtract(List<String> list1, List<String> list2) {
+        ArrayList<String> result = new ArrayList();
+        HashBag<String> bag = new HashBag(list2);
+        Iterator i$ = list1.iterator();
 
+        while(i$.hasNext()) {
+            String e = (String)i$.next();
+            if (!bag.remove(e, 1)) {
+                result.add(e);
+            }
+        }
+
+        return result;
+    }
+    @Test
+    public void sub(){
+        List<String> olds= new ArrayList<>();
+        olds.add("a");
+        olds.add("b");
+        List<String> news= new ArrayList<>();
+        news.add("a");
+        news.add("c");
+        news.add("d");
+
+        System.out.println(subtract(olds,news));
+        System.out.println(CollectionUtils.subtract(olds,news));
+        olds.removeAll(news);
+        System.out.println(olds);
+
+    }
     @Test
     public void iterator() {
         Collection<Integer> list = Arrays.asList(1, 2, 3, 4, 5);
