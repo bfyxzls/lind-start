@@ -3,9 +3,9 @@ package com.lind.admin.interceptor;
 
 import com.lind.admin.annotation.PermissionLimit;
 import com.lind.admin.entity.User;
+import com.lind.admin.exception.PermissionLimitException;
 import com.lind.admin.service.LoginService;
 import com.lind.admin.util.I18nUtil;
-import com.lind.admin.util.PermissionLimitException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;

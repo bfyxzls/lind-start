@@ -1,13 +1,11 @@
 package com.lind.admin.interceptor;
 
-import com.lind.admin.util.PermissionLimitException;
+import com.lind.admin.exception.PermissionLimitException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {

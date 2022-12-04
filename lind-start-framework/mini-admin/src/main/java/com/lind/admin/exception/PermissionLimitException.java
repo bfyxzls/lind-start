@@ -1,4 +1,4 @@
-package com.lind.admin.util;
+package com.lind.admin.exception;
 
 public class PermissionLimitException extends RuntimeException {
     public PermissionLimitException(String message) {
