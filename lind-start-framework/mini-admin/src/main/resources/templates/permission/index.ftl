@@ -18,7 +18,7 @@
 	<div class="content-wrapper">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
-			<h1>${I18n.user_manage}</h1>
+			<h1>${I18n.permission_manage}</h1>
 		</section>
 
 		<!-- Main content -->
@@ -36,7 +36,7 @@
 	            	<button class="btn btn-block btn-info" id="searchBtn">${I18n.system_search}</button>
 	            </div>
 	            <div class="col-xs-2">
-	            	<button class="btn btn-block btn-success add" type="button">${I18n.user_add}</button>
+	            	<button class="btn btn-block btn-success add" type="button">${I18n.permission_add}</button>
 	            </div>
           	</div>
 
@@ -74,13 +74,13 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-            	<h4 class="modal-title" >${I18n.user_add}</h4>
+            	<h4 class="modal-title" >${I18n.permission_add}</h4>
          	</div>
 			<div class="modal-body">
 				<form class="form-horizontal form" role="form" >
 					<div class="form-group">
 						<label for="lastname" class="col-sm-2 control-label">名称<font color="red">*</font></label>
-						<div class="col-sm-8"><input type="text" class="form-control" name="name" placeholder="${I18n.system_please_input}" maxlength="20" readonly ></div>
+						<div class="col-sm-8"><input type="text" class="form-control" name="name" placeholder="${I18n.system_please_input}" maxlength="20" ></div>
 					</div>
 					<div class="form-group">
 						<label for="lastname" class="col-sm-2 control-label">路径<font color="red">*</font></label>
@@ -123,13 +123,13 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-            	<h4 class="modal-title" >${I18n.user_update}</h4>
+            	<h4 class="modal-title" >${I18n.permission_update}</h4>
          	</div>
          	<div class="modal-body">
 				<form class="form-horizontal form" role="form" >
                     <div class="form-group">
                         <label for="lastname" class="col-sm-2 control-label">名称<font color="red">*</font></label>
-                        <div class="col-sm-8"><input type="text" class="form-control" name="name" placeholder="${I18n.system_please_input}" maxlength="20" readonly ></div>
+                        <div class="col-sm-8"><input type="text" class="form-control" name="name" placeholder="${I18n.system_please_input}" maxlength="20" ></div>
                     </div>
                     <div class="form-group">
                         <label for="lastname" class="col-sm-2 control-label">路径<font color="red">*</font></label>

@@ -154,12 +154,15 @@ $(function () {
         rules: {
             name: {
                 required: true,
-                rangelength: [4, 20],
-                myValid01: true
+                rangelength: [4, 20]
+
             },
             path: {
+                required: true
+            },
+            permissionCode:{
                 required: true,
-                rangelength: [4, 20]
+                myValid01: true
             }
         },
         messages: {
@@ -190,10 +193,10 @@ $(function () {
             });
 
             var paramData = {
-                "username": $("#addModal .form input[name=username]").val(),
-                "password": $("#addModal .form input[name=password]").val(),
-                "role": $("#addModal .form input[name=role]:checked").val(),
-                "permission": permissionArr.join(',')
+                "name": $("#addModal .form input[name=name]").val(),
+                "path": $("#addModal .form input[name=path]").val(),
+                "permissionCode": $("#addModal .form input[name=permissionCode]").val(),
+                "type": $("#addModal .form input[name=type]").val(),
             };
 
             $.post(base_url + "/permission/add", paramData, function (data, status) {
