@@ -11,6 +11,7 @@ $(function () {
             type: "post",
             data: function (d) {
                 var obj = {};
+                obj.name = $('#name').val();
                 obj.current = d.current;
                 obj.size = d.size;
                 return obj;

@@ -7,12 +7,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lind.admin.annotation.PermissionLimit;
 import com.lind.admin.dao.PermissionDao;
 import com.lind.admin.entity.Permission;
+import com.lind.admin.entity.User;
 import com.lind.admin.util.I18nUtil;
 import com.lind.admin.util.ReturnT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,10 +40,15 @@ public class PermissionController {
     @RequestMapping("/pageList")
     @ResponseBody
     @PermissionLimit(permissions = "list")
-    public IPage<Permission> pageList(Page page) {
-
+    public IPage<Permission> pageList(String name,
+                                      @RequestParam(required = false, defaultValue = "0") int current,
+                                      @RequestParam(required = false, defaultValue = "10") int size) {
+        QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+        if (StringUtils.hasLength(name)) {
+            queryWrapper.lambda().eq(Permission::getName, name);
+        }
         // page list
-        return permissionDao.selectPage(page, new QueryWrapper<>());
+        return permissionDao.selectPage(new Page<>(current,size), queryWrapper);
     }
 
     @RequestMapping("/add")
