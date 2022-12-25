@@ -21,6 +21,8 @@ public class UserDTO {
     @ApiModelProperty("电子邮件")
     @Email(message = "email格式不合法")
     private String email;
+    @ApiModelProperty("是否管理员")
+    private Integer isAdmin;
     @ApiModelProperty("手机")
     @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "手机格式不合法")
     private String phone;

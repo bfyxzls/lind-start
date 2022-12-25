@@ -18,6 +18,9 @@ public class UserVO {
     private String email;
     @ApiModelProperty("手机")
     private String phone;
+    @ApiModelProperty("是否管理员")
+    private Integer isAdmin;
+
     @ApiModelProperty("真实姓名")
     private String realName;
     @ApiModelProperty("用户的角色列表")

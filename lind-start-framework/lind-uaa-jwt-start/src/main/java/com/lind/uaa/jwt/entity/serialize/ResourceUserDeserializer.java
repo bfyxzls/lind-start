@@ -43,6 +43,14 @@ public class ResourceUserDeserializer extends JsonDeserializer<ResourceUser> {
       }
 
       @Override
+      public Integer isAdmin() {
+        if (node.get("isAdmin") != null) {
+          return node.get("isAdmin").asInt();
+        }
+        return null;
+      }
+
+      @Override
       public List<? extends ResourceRole> getResourceRoles() {
         return this.resourceRoles;
       }

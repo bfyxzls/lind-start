@@ -36,6 +36,8 @@ public class User extends BaseEntity implements ResourceUser {
     private String password;
     @ApiModelProperty("邮件")
     private String email;
+    @ApiModelProperty("是否为管理员,1是;0否")
+    private Integer isAdmin;
 
     /*
      * 自定义的几个字段phone,realName
@@ -59,4 +61,9 @@ public class User extends BaseEntity implements ResourceUser {
      * 用户的角色列表
      */
     private transient List<? extends ResourceRole> resourceRoles;
+
+    @Override
+    public Integer isAdmin() {
+        return null;
+    }
 }

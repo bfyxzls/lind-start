@@ -10,6 +10,7 @@ package com.lind.uaa.jwt.permission;
 
 import com.lind.uaa.jwt.anno.RequiresPermissions;
 import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.entity.RoleGrantedAuthority;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
 import com.lind.uaa.jwt.utils.SecurityUtils;
@@ -54,7 +55,9 @@ public class PermissionAspect {
         Method method = point.getTarget().getClass().getDeclaredMethod(signature.getName(), signature.getParameterTypes());
         if (method.isAnnotationPresent(RequiresPermissions.class)) {
             RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
-            UserDetails userDetails = SecurityUtils.getUser();
+            ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
+            if (userDetails.isAdmin().equals(1))
+                return point.proceed();
             Boolean flag = requiresPermissions.logical().equals(Logical.AND) ? true : false;
 
             for (String needPerm : requiresPermissions.value()) {

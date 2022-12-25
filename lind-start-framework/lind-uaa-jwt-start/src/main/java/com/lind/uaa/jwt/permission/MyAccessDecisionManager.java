@@ -2,8 +2,10 @@ package com.lind.uaa.jwt.permission;
 
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.entity.ResourcePermission;
+import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.entity.RoleGrantedAuthority;
 import com.lind.uaa.jwt.service.ResourcePermissionService;
+import com.lind.uaa.jwt.utils.SecurityUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,10 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
             o.forEach(i -> log.info("{}", i));
         });
         if (configAttributes == null) {
+            return;
+        }
+        ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
+        if (userDetails.isAdmin().equals(1)) {
             return;
         }
         // 遍历当前path所需的权限进行断言

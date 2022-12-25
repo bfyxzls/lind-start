@@ -20,7 +20,10 @@ import java.util.List;
 @JsonSerialize(using = ResourceUserSerializer.class)
 public interface ResourceUser extends UserDetails {
     String getEmail();
+
     String getId();
+
+    Integer isAdmin();
 
     /**
      * 返回用户角色.
@@ -31,6 +34,7 @@ public interface ResourceUser extends UserDetails {
 
     /**
      * 设置用户角色.
+     *
      * @param resourceRoles
      */
     void setResourceRoles(List<? extends ResourceRole> resourceRoles);
