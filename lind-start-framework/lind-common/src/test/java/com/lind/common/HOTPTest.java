@@ -17,8 +17,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest()
 @Slf4j
 public class HOTPTest extends AbstractTest {
     final static String password = "pkulaw";
@@ -57,7 +55,7 @@ public class HOTPTest extends AbstractTest {
     public void totpGenerator() throws Exception {
         final Instant now = Instant.now();
         String passKey = String.valueOf(timeBasedOneTimePasswordGenerator.generateOneTimePassword("pkulaw", now));
-        System.out.format("Current password: %06d\n", passKey);
+        System.out.println("Current password: "+passKey);
     }
 
     /**
