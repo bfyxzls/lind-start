@@ -1,16 +1,14 @@
 package com.lind.common;
 
 import com.lind.common.encrypt.DESCbcUtils;
+import com.lind.common.otp.HmacOneTimePasswordGenerator;
 import com.lind.common.otp.TimeBasedOneTimePasswordGenerator;
-import com.lind.common.util.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
+import java.security.NoSuchAlgorithmException;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
@@ -18,10 +16,13 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @Slf4j
-public class HOTPTest extends AbstractTest {
+public class HOTPTest {
     final static String password = "pkulaw";
-    @Autowired
     TimeBasedOneTimePasswordGenerator timeBasedOneTimePasswordGenerator;
+
+    public HOTPTest() throws NoSuchAlgorithmException {
+        timeBasedOneTimePasswordGenerator = new TimeBasedOneTimePasswordGenerator(Duration.ofSeconds(30));
+    }
 
     static Stream<Arguments> hotpTestVectorSource() {
         return Stream.of(
@@ -44,18 +45,27 @@ public class HOTPTest extends AbstractTest {
     @Test
     public void instantTest() {
         Instant now = Instant.now().plusMillis(TimeUnit.HOURS.toMillis(8));// beijing时间
-        System.out.println("now:" + now);
+        System.out.printf("now:%s", now);
     }
 
     /**
      * 生成动态密钥.
+     *
      * @throws Exception
      */
     @Test
     public void totpGenerator() throws Exception {
+        System.out.format("format用0补全结果: %06d", 9696);
         final Instant now = Instant.now();
         String passKey = String.valueOf(timeBasedOneTimePasswordGenerator.generateOneTimePassword("pkulaw", now));
-        System.out.println("Current password: "+passKey);
+        System.out.printf("Current password: %s\n", passKey);
+    }
+
+    @Test
+    public void hotp() throws Exception {
+        HmacOneTimePasswordGenerator hmacOneTimePasswordGenerator = new HmacOneTimePasswordGenerator();
+        for (int i = 0; i < 10; i++)
+            System.out.format("hmac:%06d\n", hmacOneTimePasswordGenerator.generateOneTimePassword("pkulaw", i));
     }
 
     /**
@@ -70,31 +80,17 @@ public class HOTPTest extends AbstractTest {
 
         // 动态同密钥
         String dynamicPassKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-        log.info("dynamicPassKey:{}",dynamicPassKey);
+        log.info("dynamicPassKey:{}", dynamicPassKey);
         String result = DESCbcUtils.encrypt(dynamicPassKey, plaintext);
 
         log.info("encryptDES result={}", result);
         for (int i = 0; i < 30; i++) {
             // 动态同密钥
             dynamicPassKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-            log.info("dynamicPassKey:{}",dynamicPassKey);
+            log.info("dynamicPassKey:{}", dynamicPassKey);
 
             log.info("{} decryptDES result={}", i, DESCbcUtils.decrypt(dynamicPassKey, result));
             TimeUnit.SECONDS.sleep(1);
         }
     }
-
-    @Test
-    public void fileEncryption() throws Exception {
-        FileUtils.setResourcePath();
-
-        String result = new String(FileUtils.readResourceByteArray("pkg.txt"));
-        for (int i = 0; i < 5; i++) {
-            // 解密
-            String passKey = String.format("%08d", timeBasedOneTimePasswordGenerator.generateOneTimePassword(password, Instant.now()));
-            log.info("{} decryptDES result={}", i, DESCbcUtils.decrypt(passKey, result));
-            TimeUnit.SECONDS.sleep(1);
-        }
-    }
-
 }
