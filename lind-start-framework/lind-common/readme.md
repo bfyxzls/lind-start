@@ -20,6 +20,12 @@
 * rest restful接口的返回值封装
 * typetools 类型处理工具
 * util 工具类
+  * ArrayTool 数组工具类
+  * LindID 主要是对字节数据到定制化字符串的转换，设计了一种ID规范
+  * BinFlagUtils 位运算
+  * BinHexSwitchUtils 二进制与十六进制转换
+  * ByteUtil 字符数组转换工具，对int,char,long等互转
+  * 
 * zip 压缩工具
 
 # 事件处理

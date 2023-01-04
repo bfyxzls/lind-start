@@ -21,14 +21,12 @@ import java.io.InputStream;
  * 对数字和字节进行转换。<br>
  * 基础知识：<br>
  * 假设数据存储是以大端模式存储的：<br>
- * byte: 字节类型 占8位二进制 00000000<br>
+ * byte: 字节类型 占1个字节 8位二进制 00000000<br>
  * char: 字符类型 占2个字节 16位二进制 byte[0] byte[1]<br>
  * int : 整数类型 占4个字节 32位二进制 byte[0] byte[1] byte[2] byte[3]<br>
- * long: 长整数类型 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4] byte[5]
- * byte[6] byte[7]<br>
+ * long: 长整数类型 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4] byte[5] byte[6] byte[7]<br>
  * float: 浮点数(小数) 占4个字节 32位二进制 byte[0] byte[1] byte[2] byte[3]<br>
- * double: 双精度浮点数(小数) 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4]
- * byte[5] byte[6] byte[7]<br>
+ * double: 双精度浮点数(小数) 占8个字节 64位二进制 byte[0] byte[1] byte[2] byte[3] byte[4] byte[5] byte[6] byte[7]<br>
  */
 public class ByteUtil {
 
@@ -96,10 +94,10 @@ public class ByteUtil {
    * @return 整数
    */
   public static int bytesToInt(byte[] b) {
-    int i = (b[0] << 24) & 0xFF000000;
-    i |= (b[1] << 16) & 0xFF0000;
-    i |= (b[2] << 8) & 0xFF00;
-    i |= b[3] & 0xFF;
+    int i = (b[0] << 24) & 0xFF000000;//4278190080
+    i |= (b[1] << 16) & 0xFF0000;//16711680
+    i |= (b[2] << 8) & 0xFF00;//65280
+    i |= b[3] & 0xFF;//255
     return i;
   }
 
