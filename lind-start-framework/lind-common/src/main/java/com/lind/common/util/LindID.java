@@ -1,6 +1,7 @@
 package com.lind.common.util;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 /**
  * 设计一个主键生成器,支持前缀，中缀，最后是增量，自定义byte[]和ToString().
@@ -29,6 +30,18 @@ public class LindID implements Serializable {
         this.offset = offset;
         bytes = new byte[TYPE_LENGTH + SUB_LENGTH + subjectLength + OFFSET_LENGTH];
 
+    }
+
+    /**
+     * 验证ID合法性.
+     *
+     * @param id
+     */
+    public static void validate(String id) {
+        Pattern DOT = Pattern.compile("\\-");
+        if (DOT.split(id).length != 4) {
+            throw new IllegalArgumentException("LindID is not match.");
+        }
     }
 
     /**

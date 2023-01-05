@@ -7,11 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Test;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.testng.collections.Sets;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -203,6 +205,44 @@ public class ThreadPoolUtilsTest {
         ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
         int sum = forkJoinPool.invoke(new CountingTask(tree));
         System.out.println("sum=" + sum);
+    }
+
+    /**
+     * 一般性的线程池.
+     */
+    @Test
+    public void standard() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        // 核心线程大小 默认区 CPU 数量
+        taskExecutor.setCorePoolSize(2);
+        // 最大线程大小 默认区 CPU * 2 数量
+        taskExecutor.setMaxPoolSize(2 * 2);
+        // 队列最大容量
+        taskExecutor.setQueueCapacity(10);
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+        taskExecutor.setAwaitTerminationSeconds(60);
+        taskExecutor.setThreadNamePrefix("Standard-Thread-");
+        taskExecutor.initialize();
+        List<Callable<Integer>> retryWriterThreads = new ArrayList<>();
+
+        for (int i = 0; i < 100; i++) {
+            int finalI = i;
+            retryWriterThreads.add(() -> {
+                System.out.format("i=%s,id=%s\n", String.valueOf(finalI), Thread.currentThread().getName());
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                return 0;
+            });
+        }
+        for (Callable<Integer> item : retryWriterThreads) {
+            taskExecutor.submit(item);
+        }
+
+        taskExecutor.shutdown();
     }
 
     static class TreeNode {

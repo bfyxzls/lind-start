@@ -21,5 +21,8 @@ public class LindIDTest {
         System.out.printf("arr=" + uid);
     }
 
-
+    @Test
+    public void validate() {
+        LindID.validate("1-1-2");
+    }
 }
