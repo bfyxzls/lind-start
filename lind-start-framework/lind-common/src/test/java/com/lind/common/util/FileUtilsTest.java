@@ -13,10 +13,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FileUtilsTest {
+    private static final Logger logger = LoggerFactory.getLogger(FileUtilsTest.class);
     static String path = "D:\\tools\\jdk8-windowsx64.zip";
     static String pathObj = "D:\\jar.zip";
-    private static Logger logger = LoggerFactory.getLogger(FileUtilsTest.class);
-    private volatile AtomicLong maxFileId = new AtomicLong();
+    private final AtomicLong maxFileId = new AtomicLong();
+
 
     @SneakyThrows
     @Test
@@ -44,7 +45,7 @@ public class FileUtilsTest {
     @Test
     public void generateId() {
         for (int i = 0; i < 10; i++) {
-            System.out.println(String.format("data.%020d", nextDiskFileId()));
+            System.out.printf("data.%020d%n", nextDiskFileId());
         }
     }
 
@@ -63,6 +64,13 @@ public class FileUtilsTest {
         while (-1 != (len = resource.read(buffer, 0, bufSize))) {
             bos.write(buffer, 0, len);
         }
-        logger.info(new String(bos.toByteArray()));
+        logger.info(bos.toString());
     }
+
+    @Test
+    public void readBigFile() throws IOException {
+        FileUtils.splitBigFile();
+    }
+
+
 }

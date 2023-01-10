@@ -17,7 +17,6 @@ public class AnnoTest {
 
     @Test
     public void update() {
-        userService.select();
         userService.update(new User());
     }
 }

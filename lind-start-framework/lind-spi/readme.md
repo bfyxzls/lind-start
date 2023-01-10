@@ -9,14 +9,22 @@ spi是一种将服务接口与服务实现分离以达到解耦、大大提升�
 到具体的实现类，轻松可插拔spi实现了动态加载，插件化。
 
 # sdk spi
-> 文件路是：META-INF/services
-这里的文件名称是接口的全名，如com.lind.interfaces包下面的HelloProvider接口，它的名称就是`com.lind.interfaces.HelloProvider`,它里
->面的内容为这个接口的实现类.
+* 文件路是：META-INF/services/com.lind.interfaces.HelloProvider
+这里的文件名称是接口的全名，如com.lind.interfaces包下面的HelloProvider接口，它的名称就是`com.lind.interfaces.HelloProvider`,它里面的内容为这个接口的实现类.
+* java里的调用
+```
+  ServiceLoader<ProviderFactory> s = ServiceLoader.load(ProviderFactory.class);
+        Iterator<ProviderFactory> iterable = s.iterator();
+        while (iterable.hasNext()) {
+            Provider provider = iterable.next().create();
+            log.info("hello:{}", provider.login());
+        }
+```
 
 # spring spi
 > 文件路径：META-INF/spring.factories
 
-# 使用
+# SpiFactory使用,不需要META-INF/spring.factories
 插件目录监控
 ```
 SpiFactory.watchDir("d:\\jar");

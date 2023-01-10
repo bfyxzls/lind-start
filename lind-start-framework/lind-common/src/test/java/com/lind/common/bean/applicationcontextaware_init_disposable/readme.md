@@ -1,0 +1,3 @@
+* ApplicationContextAware,主要是在类中可以使用spring ioc里的bean对象，通过重写setApplicationContext()方法，来将当前的ApplicationContext
+赋给你的临时变量。
+* InitializingBean接口，提示了bean的销毁destroy和bean的初始化之后afterPropertiesSet的事件

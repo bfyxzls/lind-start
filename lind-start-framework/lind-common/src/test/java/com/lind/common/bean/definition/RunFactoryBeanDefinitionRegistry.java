@@ -13,7 +13,7 @@ public class RunFactoryBeanDefinitionRegistry implements ImportBeanDefinitionReg
   @Override
   public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
                                       BeanDefinitionRegistry beanDefinitionRegistry) {
-    Class beanClazz= Demo.Bird.class;
+    Class beanClazz= Demo.Bird.class;//这块需要确定可以被代码的接口或者类
     BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
     GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
 

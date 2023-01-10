@@ -1,11 +1,30 @@
 package com.lind.common.util;
 
+import lombok.SneakyThrows;
 import org.springframework.util.ResourceUtils;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.LineNumberReader;
+import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static org.springframework.util.Assert.notNull;
@@ -141,8 +160,7 @@ public class FileUtils {
             notNull(f, OBJ_NO_NULL);
 
             fc = new RandomAccessFile(f.getAbsoluteFile(), "r").getChannel();
-            MappedByteBuffer byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0,
-                    fc.size()).load();
+            MappedByteBuffer byteBuffer = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size()).load();
             System.out.println(byteBuffer.isLoaded());
             byte[] result = new byte[(int) fc.size()];
             if (byteBuffer.remaining() > 0) {
@@ -182,8 +200,7 @@ public class FileUtils {
             FileChannel channel = fos.getChannel();
             ByteBuffer src = ByteBuffer.wrap(obj);
             // 字节缓冲的容量和limit会随着数据长度变化，不是固定不变的
-            System.out.println("初始化容量和limit：" + src.capacity() + ","
-                    + src.limit());
+            System.out.println("初始化容量和limit：" + src.capacity() + "," + src.limit());
             int length = 0;
             while ((length = channel.write(src)) != 0) {
                 /*
@@ -218,8 +235,7 @@ public class FileUtils {
             File file = new File(filePath);
             StringBuffer buffer = new StringBuffer();
             if (file.isFile() && file.exists()) { //判断文件是否存在
-                InputStreamReader read = new InputStreamReader(
-                        new FileInputStream(file), encoding);//考虑到编码格式
+                InputStreamReader read = new InputStreamReader(new FileInputStream(file), encoding);//考虑到编码格式
                 BufferedReader bufferedReader = new BufferedReader(read);
                 String lineTxt = null;
                 while ((lineTxt = bufferedReader.readLine()) != null) {
@@ -264,4 +280,153 @@ public class FileUtils {
         }
         return null;
     }
+
+    /**
+     * 写入文件
+     *
+     * @param output
+     * @param list
+     * @param count
+     * @throws IOException
+     */
+    private static void extracted(String output, List<String> list, long count) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(output + count + ".txt", true));
+        for (String s : list) {
+            bw.append(s);
+            if (!s.endsWith("\r")) {
+                bw.newLine();
+            }
+            bw.flush();
+        }
+        bw.close();
+    }
+
+    @SneakyThrows
+    public static void splitBigFile() {
+        splitBigFile("d:\\Untitled-1.csv", "d:\\dudu\\" + UUID.randomUUID() + "@", 10000);
+    }
+
+    /**
+     * 拆分大文件.
+     *
+     * @param input  从哪个文件读取
+     * @param output 指定分拆后文件所在位置
+     * @param batch  拆分批次
+     */
+    @SneakyThrows
+    public static void splitBigFile(String input, String output, Integer batch) {
+        File file = new File(input);
+        FileReader fileReader = new FileReader(input);
+        LineNumberReader lineNumberReader = new LineNumberReader(fileReader);
+        lineNumberReader.skip(Long.MAX_VALUE);
+        long lines = lineNumberReader.getLineNumber() + 1;
+        fileReader.close();
+        lineNumberReader.close();
+
+        FileChannel fileChannel = new RandomAccessFile(file, "r").getChannel();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+        //使用temp字节数组用于存储不完整的行的内容
+        byte[] temp = new byte[0];
+        List<String> list = new ArrayList<>();
+        long count = 0;
+        while (fileChannel.read(byteBuffer) != -1) {
+            byte[] bs = new byte[byteBuffer.position()];
+            byteBuffer.flip();
+            byteBuffer.get(bs);
+            byteBuffer.clear();
+            int startNum = 0;
+            //判断是否出现了换行符，注意这要区分LF-\n,CR-\r,CRLF-\r\n,这里判断\n
+            boolean isNewLine = false;
+            for (int i = 0; i < bs.length; i++) {
+                if (bs[i] == 10) {
+                    isNewLine = true;
+                    startNum = i;
+                }
+            }
+
+            if (isNewLine) {
+                //如果出现了换行符，将temp中的内容与换行符之前的内容拼接
+                byte[] toTemp = new byte[temp.length + startNum];
+                System.arraycopy(temp, 0, toTemp, 0, temp.length);
+                System.arraycopy(bs, 0, toTemp, temp.length, startNum);
+                System.out.println(new String(toTemp));
+                list.add(new String(toTemp));
+                //将换行符之后的内容(去除换行符)存到temp中
+                temp = new byte[bs.length - startNum - 1];
+                System.arraycopy(bs, startNum + 1, temp, 0, bs.length - startNum - 1);
+                count++;
+                //尾页
+                if (count == lines - 1) {
+                    extracted(output, list, count);
+                }
+            } else {
+                //如果没出现换行符，则将内容保存到temp中
+                byte[] toTemp = new byte[temp.length + bs.length];
+                System.arraycopy(temp, 0, toTemp, 0, temp.length);
+                System.arraycopy(bs, 0, toTemp, temp.length, bs.length);
+                temp = toTemp;
+                if (list.size() > 0 && count > 0 && count % batch == 0) {
+                    System.out.println("split lines：" + count);
+                    extracted(output, list, count);
+                    list.clear();
+
+                }
+
+            }
+        }
+    }
+
+    /**
+     * 大文件拆分
+     *
+     * @param args
+     * @throws Exception
+     */
+    public static void main(String[] args) throws Exception {
+        RandomAccessFile raf = new RandomAccessFile("d:\\webshu_0_to_20221226.csv.4", "r");
+        long numSplits = 1801; //from user input, extract it from args
+        //文件大小
+        long sourceSize = raf.length();
+        //文件分块大小
+        long bytesPerSplit = sourceSize / numSplits;
+        //分块后剩余
+        long remainingBytes = sourceSize % numSplits;
+
+        //缓冲区
+        int maxReadBufferSize = 8 * 1024; //8KB
+        for (int destIx = 1; destIx <= numSplits; destIx++) {
+            BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("d:\\split\\" + destIx));
+            if (bytesPerSplit > maxReadBufferSize) {
+                //一共要读的次数
+                long numReads = bytesPerSplit / maxReadBufferSize;
+                //剩余未读的大小
+                long numRemainingRead = bytesPerSplit % maxReadBufferSize;
+                for (int i = 0; i < numReads; i++) {
+                    readWrite(raf, bw, maxReadBufferSize);
+                }
+                if (numRemainingRead > 0) {
+                    readWrite(raf, bw, numRemainingRead);
+                }
+            } else {
+                readWrite(raf, bw, bytesPerSplit);
+            }
+            bw.close();
+        }
+        if (remainingBytes > 0) {
+            BufferedOutputStream bw = new BufferedOutputStream(new FileOutputStream("d:\\split\\" + (numSplits + 1)));
+            readWrite(raf, bw, remainingBytes);
+            bw.close();
+        }
+        raf.close();
+    }
+
+    static void readWrite(RandomAccessFile raf, BufferedOutputStream bw, long numBytes) throws IOException {
+        byte[] buf = new byte[(int) numBytes];
+        int val = raf.read(buf);
+        if (val != -1) {
+            bw.write(buf);
+        }
+    }
+
+
 }
