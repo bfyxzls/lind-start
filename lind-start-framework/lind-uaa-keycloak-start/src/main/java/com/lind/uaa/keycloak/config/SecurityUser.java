@@ -14,70 +14,59 @@ import java.util.Objects;
  */
 public class SecurityUser {
 
-    /**
-     * 获取当前用户名
-     *
-     * @return
-     */
-    public static String getCurrentUserName() {
-        Object principal = getCurrentPrincipal();
-        if (principal instanceof KeycloakPrincipal) {
-            return ((KeycloakPrincipal) principal).getName();
-        }
-        return (String) principal;
-    }
+	/**
+	 * 获取当前用户名
+	 * @return
+	 */
+	public static String getCurrentUserName() {
+		Object principal = getCurrentPrincipal();
+		if (principal instanceof KeycloakPrincipal) {
+			return ((KeycloakPrincipal) principal).getName();
+		}
+		return (String) principal;
+	}
 
+	/**
+	 * 获取当前用户Id
+	 * @return
+	 */
+	public static String getCurrentUserId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
+				.getKeycloakSecurityContext().getToken().getSubject();
+	}
 
-    /**
-     * 获取当前用户Id
-     *
-     * @return
-     */
-    public static String getCurrentUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
-                .getKeycloakSecurityContext()
-                .getToken()
-                .getSubject();
-    }
+	/**
+	 * Principal.
+	 * @return
+	 */
+	public static Object getCurrentPrincipal() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (Objects.isNull(authentication)) {
+			throw new IllegalArgumentException("401");
+		}
+		return authentication.getPrincipal();
+	}
 
+	/**
+	 * 获取当前token，包含了用户信息.
+	 * @return
+	 */
+	public static AccessToken getCurrentToken() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
+				.getKeycloakSecurityContext().getToken();
+	}
 
-    /**
-     * Principal.
-     *
-     * @return
-     */
-    public static Object getCurrentPrincipal() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (Objects.isNull(authentication)) {
-            throw new IllegalArgumentException("401");
-        }
-        return authentication.getPrincipal();
-    }
+	/**
+	 * 返回当前token里包含的scope.
+	 * @return
+	 */
+	public static String[] getScope() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String scopeString = ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
+				.getKeycloakSecurityContext().getToken().getScope();
+		return scopeString.split(" ");
+	}
 
-    /**
-     * 获取当前token，包含了用户信息.
-     *
-     * @return
-     */
-    public static AccessToken getCurrentToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
-                .getKeycloakSecurityContext()
-                .getToken();
-    }
-
-    /**
-     * 返回当前token里包含的scope.
-     *
-     * @return
-     */
-    public static String[] getScope() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String scopeString = ((SimpleKeycloakAccount) ((KeycloakAuthenticationToken) authentication).getDetails())
-                .getKeycloakSecurityContext()
-                .getToken()
-                .getScope();
-        return scopeString.split(" ");
-    }
 }

@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
  * @since 1.0.0
  */
 @Component
-@AutoConfigureBefore(Father.class)//在我儿子之前，我先初始化
+@AutoConfigureBefore(Father.class) // 在我儿子之前，我先初始化
 public class GrandFather {
-    public GrandFather() {
-        System.out.println("配置類GrandFatherConfig構造器被執行...");
-    }
+
+	public GrandFather() {
+		System.out.println("配置類GrandFatherConfig構造器被執行...");
+	}
+
 }

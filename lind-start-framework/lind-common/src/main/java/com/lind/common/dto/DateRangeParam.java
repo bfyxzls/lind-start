@@ -1,11 +1,13 @@
 package com.lind.common.dto;
 
 public interface DateRangeParam {
-    java.time.LocalDate getFromDate();
 
-    java.time.LocalDate getToDate();
+	java.time.LocalDate getFromDate();
 
-    void setFromDate(java.time.LocalDate fromDate);
+	java.time.LocalDate getToDate();
 
-    void setToDate(java.time.LocalDate toDate);
+	void setFromDate(java.time.LocalDate fromDate);
+
+	void setToDate(java.time.LocalDate toDate);
+
 }

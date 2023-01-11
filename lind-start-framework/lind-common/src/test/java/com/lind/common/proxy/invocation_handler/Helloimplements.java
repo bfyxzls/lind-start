@@ -6,12 +6,15 @@ package com.lind.common.proxy.invocation_handler;
  * @since 1.0.0
  */
 public class Helloimplements implements IHello {
-    @Override
-    public void sayHello(String name) {
-        System.out.println("Hello " + name);
-    }
-    @Override
-    public void sayGoogBye(String name) {
-        System.out.println(name+" GoodBye!");
-    }
+
+	@Override
+	public void sayHello(String name) {
+		System.out.println("Hello " + name);
+	}
+
+	@Override
+	public void sayGoogBye(String name) {
+		System.out.println(name + " GoodBye!");
+	}
+
 }

@@ -14,24 +14,27 @@ import java.io.IOException;
  * DefaultSourcePermission反序列化工具
  */
 public class ResourcePermissionDeserializer extends JsonDeserializer<ResourcePermission> {
-    @Override
-    public ResourcePermission deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        ObjectCodec oc = jsonParser.getCodec();
-        JsonNode node = oc.readTree(jsonParser);
-        ResourcePermission defaultSourcePermission = new ResourcePermission() {
 
-            @Override
-            public String getTitle() {
-                return node.get("title").asText();
-            }
+	@Override
+	public ResourcePermission deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+			throws IOException, JsonProcessingException {
+		ObjectCodec oc = jsonParser.getCodec();
+		JsonNode node = oc.readTree(jsonParser);
+		ResourcePermission defaultSourcePermission = new ResourcePermission() {
 
-            @Override
-            public String getPath() {
-                return node.get("path").asText();
-            }
+			@Override
+			public String getTitle() {
+				return node.get("title").asText();
+			}
 
-        };
+			@Override
+			public String getPath() {
+				return node.get("path").asText();
+			}
 
-        return defaultSourcePermission;
-    }
+		};
+
+		return defaultSourcePermission;
+	}
+
 }

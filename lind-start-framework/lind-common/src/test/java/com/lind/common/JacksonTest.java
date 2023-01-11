@@ -31,158 +31,165 @@ import java.util.Map;
 @Slf4j
 public class JacksonTest extends AbstractTest {
 
-  private static final TypeReference<Map<String, String>> MAP_TYPE_REPRESENTATION = new TypeReference<Map<String, String>>() {
-  };
+	private static final TypeReference<Map<String, String>> MAP_TYPE_REPRESENTATION = new TypeReference<Map<String, String>>() {
+	};
 
-  @SneakyThrows
-  @Test
-  public void kcSerializer() {
-    Map<String, String> map = new HashMap<>();
-    map.put("name", "zzl");
-    map.put("address", "beijing");
-    String result = JsonSerialization.writeValueAsString(map);
-    log.info("result={}", result);
-    Map<String, String> mapResult = JsonSerialization.readValue(result, MAP_TYPE_REPRESENTATION);
-    log.info("mapResult={}", mapResult);
-  }
+	@SneakyThrows
+	@Test
+	public void kcSerializer() {
+		Map<String, String> map = new HashMap<>();
+		map.put("name", "zzl");
+		map.put("address", "beijing");
+		String result = JsonSerialization.writeValueAsString(map);
+		log.info("result={}", result);
+		Map<String, String> mapResult = JsonSerialization.readValue(result, MAP_TYPE_REPRESENTATION);
+		log.info("mapResult={}", mapResult);
+	}
 
-  /**
-   * 字符串序列化
-   */
-  @SneakyThrows
-  @Test
-  public void stringJackson() {
-    DefaultResourceUser user = fromJson("jack.json", DefaultResourceUser.class);
-    log.info("user:{}", user.getUsername());
-    for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
-      log.info("auth:{}", grantedAuthority.getAuthority());
-    }
+	/**
+	 * 字符串序列化
+	 */
+	@SneakyThrows
+	@Test
+	public void stringJackson() {
+		DefaultResourceUser user = fromJson("jack.json", DefaultResourceUser.class);
+		log.info("user:{}", user.getUsername());
+		for (GrantedAuthority grantedAuthority : user.getAuthorities()) {
+			log.info("auth:{}", grantedAuthority.getAuthority());
+		}
 
-  }
+	}
 
-  /**
-   * 具体类型序列化
-   */
-  @SneakyThrows
-  @Test
-  public void objectJackson() {
-    ObjectMapper om = new ObjectMapper();
-    om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-    om.activateDefaultTyping(
-        LaissezFaireSubTypeValidator.instance,
-        ObjectMapper.DefaultTyping.NON_FINAL,
-        JsonTypeInfo.As.WRAPPER_ARRAY);
-    User user = new User();
-    user.setUsername("lind");
-    user.setEmail("zzl@sina.com");
-    String msg = om.writeValueAsString(user);
-    log.info(msg);
-    /**
-     * ["com.lind.common.JacksonTest$User",{"username":"lind","email":"zzl@sina.com","authorities":null}]
-     */
-  }
+	/**
+	 * 具体类型序列化
+	 */
+	@SneakyThrows
+	@Test
+	public void objectJackson() {
+		ObjectMapper om = new ObjectMapper();
+		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+		om.activateDefaultTyping(LaissezFaireSubTypeValidator.instance, ObjectMapper.DefaultTyping.NON_FINAL,
+				JsonTypeInfo.As.WRAPPER_ARRAY);
+		User user = new User();
+		user.setUsername("lind");
+		user.setEmail("zzl@sina.com");
+		String msg = om.writeValueAsString(user);
+		log.info(msg);
+		/**
+		 * ["com.lind.common.JacksonTest$User",{"username":"lind","email":"zzl@sina.com","authorities":null}]
+		 */
+	}
 
-  /**
-   * 序列化为具体类型，`无法反序列化接口`，即你用什么类型序列化的，就用什么类型反序列化
-   */
-  @SneakyThrows
-  @Test
-  public void objectJacksonRead() {
-    User user = fromJsonType("redis.json", User.class);
-    log.info("user:{}", user.getUsername());
-  }
+	/**
+	 * 序列化为具体类型，`无法反序列化接口`，即你用什么类型序列化的，就用什么类型反序列化
+	 */
+	@SneakyThrows
+	@Test
+	public void objectJacksonRead() {
+		User user = fromJsonType("redis.json", User.class);
+		log.info("user:{}", user.getUsername());
+	}
 
-  @JsonDeserialize(using = DefaultResourceUserSerializer.class)
-  public interface DefaultResourceUser {
-    String getUsername();
+	@JsonDeserialize(using = DefaultResourceUserSerializer.class)
+	public interface DefaultResourceUser {
 
-    String getEmail();
+		String getUsername();
 
-    Collection<? extends GrantedAuthority> getAuthorities();
-  }
+		String getEmail();
 
-  public interface GrantedAuthority extends Serializable {
-    String getAuthority();
-  }
+		Collection<? extends GrantedAuthority> getAuthorities();
 
-  @Data
-  public static class User {
-    private String username;
+	}
 
-    private String email;
+	public interface GrantedAuthority extends Serializable {
 
-    private Collection<? extends GrantedAuthority> authorities;
-  }
+		String getAuthority();
 
-  public static class SimpleGrantedAuthority implements GrantedAuthority {
+	}
 
-    private final String role;
+	@Data
+	public static class User {
 
-    public SimpleGrantedAuthority(String role) {
-      Assert.hasText(role, "A granted authority textual representation is required");
-      this.role = role;
-    }
+		private String username;
 
-    @Override
-    public String getAuthority() {
-      return role;
-    }
+		private String email;
 
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj) {
-        return true;
-      }
+		private Collection<? extends GrantedAuthority> authorities;
 
-      if (obj instanceof SimpleGrantedAuthority) {
-        return role.equals(((SimpleGrantedAuthority) obj).role);
-      }
+	}
 
-      return false;
-    }
+	public static class SimpleGrantedAuthority implements GrantedAuthority {
 
-    @Override
-    public int hashCode() {
-      return this.role.hashCode();
-    }
+		private final String role;
 
-    @Override
-    public String toString() {
-      return this.role;
-    }
-  }
+		public SimpleGrantedAuthority(String role) {
+			Assert.hasText(role, "A granted authority textual representation is required");
+			this.role = role;
+		}
 
-  public static class DefaultResourceUserSerializer extends JsonDeserializer<DefaultResourceUser> {
+		@Override
+		public String getAuthority() {
+			return role;
+		}
 
-    @Override
-    public DefaultResourceUser deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
-        throws IOException {
-      ObjectCodec oc = jsonParser.getCodec();
-      JsonNode node = oc.readTree(jsonParser);
-      DefaultResourceUser userAccountAuthentication = new DefaultResourceUser() {
-        @Override
-        public String getUsername() {
-          return node.get("username").asText();
-        }
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
 
-        @Override
-        public String getEmail() {
-          return node.get("email").asText();
-        }
+			if (obj instanceof SimpleGrantedAuthority) {
+				return role.equals(((SimpleGrantedAuthority) obj).role);
+			}
 
-        @Override
-        public Collection<? extends GrantedAuthority> getAuthorities() {
-          List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
-          Iterator<JsonNode> elements = node.get("authorities").elements();
-          while (elements.hasNext()) {
-            JsonNode next = elements.next();
-            JsonNode authority = next.get("authority");
-            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.asText()));
-          }
-          return simpleGrantedAuthorities;
-        }
-      };
-      return userAccountAuthentication;
-    }
-  }
+			return false;
+		}
+
+		@Override
+		public int hashCode() {
+			return this.role.hashCode();
+		}
+
+		@Override
+		public String toString() {
+			return this.role;
+		}
+
+	}
+
+	public static class DefaultResourceUserSerializer extends JsonDeserializer<DefaultResourceUser> {
+
+		@Override
+		public DefaultResourceUser deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
+				throws IOException {
+			ObjectCodec oc = jsonParser.getCodec();
+			JsonNode node = oc.readTree(jsonParser);
+			DefaultResourceUser userAccountAuthentication = new DefaultResourceUser() {
+				@Override
+				public String getUsername() {
+					return node.get("username").asText();
+				}
+
+				@Override
+				public String getEmail() {
+					return node.get("email").asText();
+				}
+
+				@Override
+				public Collection<? extends GrantedAuthority> getAuthorities() {
+					List<GrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+					Iterator<JsonNode> elements = node.get("authorities").elements();
+					while (elements.hasNext()) {
+						JsonNode next = elements.next();
+						JsonNode authority = next.get("authority");
+						simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.asText()));
+					}
+					return simpleGrantedAuthorities;
+				}
+			};
+			return userAccountAuthentication;
+		}
+
+	}
+
 }

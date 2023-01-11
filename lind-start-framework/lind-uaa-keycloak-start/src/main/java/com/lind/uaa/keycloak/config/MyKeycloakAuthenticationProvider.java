@@ -36,95 +36,85 @@ import java.util.stream.Collectors;
 import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
 
 /**
- * 重写token与认证的适配.
- * 20210716添加token在线校验功能
+ * 重写token与认证的适配. 20210716添加token在线校验功能
  */
 @RequiredArgsConstructor
 public class MyKeycloakAuthenticationProvider implements AuthenticationProvider {
-  private final static Logger logger = LoggerFactory.getLogger(MyKeycloakAuthenticationProvider.class);
-  private final KeycloakSpringBootProperties keycloakSpringBootProperties;
-  private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
-  private HttpServletRequest request;
-  private HttpServletResponse response;
-  private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-  public void setGrantedAuthoritiesMapper(GrantedAuthoritiesMapper grantedAuthoritiesMapper) {
-    this.grantedAuthoritiesMapper = grantedAuthoritiesMapper;
-  }
+	private final static Logger logger = LoggerFactory.getLogger(MyKeycloakAuthenticationProvider.class);
 
-  @SneakyThrows
-  @Override
-  public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-    //在线token校验
-    KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) authentication;
-    String tokenString = token.getAccount().getKeycloakSecurityContext().getTokenString();
-    Map<String, Object> params = new HashMap<>();
-    params.put("client_id", keycloakSpringBootProperties.getResource());
-    params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
-    params.put("token", tokenString);
-    String verify=String.format(VERIFY_TOKEN,keycloakSpringBootProperties.getRealm());
-    String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl() + verify, params);
-    logger.info("token.verify:" + verifyResult);
-    JSONObject jsonObj = JSON.parseObject(verifyResult);
-    System.out.println("access_token:" + tokenString);
-    // 验证在线token，如果已退出，直接401，由业务方自己跳转
-    if (!jsonObj.getBoolean("active")) {
-      throw new AuthenticationCredentialsNotFoundException("access_token is invalid");
-    }
+	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
 
-    List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
-    // Extract roles from the `realm_access.roles`
-    Set<String> roles = token.getAccount().getRoles();
-    if (roles != null) {
-      grantedAuthorities.addAll(
-          roles.stream().map(
-              role -> new KeycloakRole(role)
-          ).collect(Collectors.toList())
-      );
-    }
+	private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
 
-    // Extract roles from the `realm_access.scopes`
-    if (token.getPrincipal() instanceof KeycloakPrincipal) {
-      KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) token.getPrincipal();
-      String scope = keycloakPrincipal.getKeycloakSecurityContext().getToken().getScope();
-      Set<String> scopes = new HashSet<>();
-      for (String item : StringUtils.split(scope, " ")) {
-        scopes.add(item);
-      }
-      grantedAuthorities.addAll(
-          scopes.stream().map(
-              role -> new KeycloakRole(role)
-          ).collect(Collectors.toList())
-      );
-    }
+	private HttpServletRequest request;
 
+	private HttpServletResponse response;
 
-    // Extract roles from the `resource_access.<client-id>.roles`
-    Map<String, AccessToken.Access> resourceAccess = token.getAccount().getKeycloakSecurityContext().getToken().getResourceAccess();
-    if (resourceAccess != null) {
-      grantedAuthorities.addAll(
-          resourceAccess.entrySet().stream().flatMap(
-              access -> access.getValue().getRoles().stream().map(
-                  role -> access.getKey() + "/" + role
-              )
-          ).map(
-              role -> new KeycloakRole(role)
-          ).collect(Collectors.toList())
-      );
-    }
+	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-    return new KeycloakAuthenticationToken(token.getAccount(), token.isInteractive(), mapAuthorities(grantedAuthorities));
-  }
+	public void setGrantedAuthoritiesMapper(GrantedAuthoritiesMapper grantedAuthoritiesMapper) {
+		this.grantedAuthoritiesMapper = grantedAuthoritiesMapper;
+	}
 
-  private Collection<? extends GrantedAuthority> mapAuthorities(
-      Collection<? extends GrantedAuthority> authorities) {
-    return grantedAuthoritiesMapper != null
-        ? grantedAuthoritiesMapper.mapAuthorities(authorities)
-        : authorities;
-  }
+	@SneakyThrows
+	@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		// 在线token校验
+		KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) authentication;
+		String tokenString = token.getAccount().getKeycloakSecurityContext().getTokenString();
+		Map<String, Object> params = new HashMap<>();
+		params.put("client_id", keycloakSpringBootProperties.getResource());
+		params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
+		params.put("token", tokenString);
+		String verify = String.format(VERIFY_TOKEN, keycloakSpringBootProperties.getRealm());
+		String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl() + verify, params);
+		logger.info("token.verify:" + verifyResult);
+		JSONObject jsonObj = JSON.parseObject(verifyResult);
+		System.out.println("access_token:" + tokenString);
+		// 验证在线token，如果已退出，直接401，由业务方自己跳转
+		if (!jsonObj.getBoolean("active")) {
+			throw new AuthenticationCredentialsNotFoundException("access_token is invalid");
+		}
 
-  @Override
-  public boolean supports(Class<?> aClass) {
-    return KeycloakAuthenticationToken.class.isAssignableFrom(aClass);
-  }
+		List<GrantedAuthority> grantedAuthorities = new ArrayList<GrantedAuthority>();
+		// Extract roles from the `realm_access.roles`
+		Set<String> roles = token.getAccount().getRoles();
+		if (roles != null) {
+			grantedAuthorities.addAll(roles.stream().map(role -> new KeycloakRole(role)).collect(Collectors.toList()));
+		}
+
+		// Extract roles from the `realm_access.scopes`
+		if (token.getPrincipal() instanceof KeycloakPrincipal) {
+			KeycloakPrincipal keycloakPrincipal = (KeycloakPrincipal) token.getPrincipal();
+			String scope = keycloakPrincipal.getKeycloakSecurityContext().getToken().getScope();
+			Set<String> scopes = new HashSet<>();
+			for (String item : StringUtils.split(scope, " ")) {
+				scopes.add(item);
+			}
+			grantedAuthorities.addAll(scopes.stream().map(role -> new KeycloakRole(role)).collect(Collectors.toList()));
+		}
+
+		// Extract roles from the `resource_access.<client-id>.roles`
+		Map<String, AccessToken.Access> resourceAccess = token.getAccount().getKeycloakSecurityContext().getToken()
+				.getResourceAccess();
+		if (resourceAccess != null) {
+			grantedAuthorities.addAll(resourceAccess.entrySet().stream()
+					.flatMap(access -> access.getValue().getRoles().stream().map(role -> access.getKey() + "/" + role))
+					.map(role -> new KeycloakRole(role)).collect(Collectors.toList()));
+		}
+
+		return new KeycloakAuthenticationToken(token.getAccount(), token.isInteractive(),
+				mapAuthorities(grantedAuthorities));
+	}
+
+	private Collection<? extends GrantedAuthority> mapAuthorities(Collection<? extends GrantedAuthority> authorities) {
+		return grantedAuthoritiesMapper != null ? grantedAuthoritiesMapper.mapAuthorities(authorities) : authorities;
+	}
+
+	@Override
+	public boolean supports(Class<?> aClass) {
+		return KeycloakAuthenticationToken.class.isAssignableFrom(aClass);
+	}
+
 }

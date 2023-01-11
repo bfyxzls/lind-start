@@ -13,11 +13,11 @@ import org.apache.hadoop.hbase.client.Result;
  * JThink@JThink
  *
  * @author JThink
- * @version 0.0.1
- * desc： copy from spring data hadoop hbase, modified by JThink, use the 1.0.0 api
- * date： 2016-11-15 15:42:46
+ * @version 0.0.1 desc： copy from spring data hadoop hbase, modified by JThink, use the
+ * 1.0.0 api date： 2016-11-15 15:42:46
  */
 public interface RowMapper<T> {
 
-    T mapRow(Result result, int rowNum) throws Exception;
+	T mapRow(Result result, int rowNum) throws Exception;
+
 }

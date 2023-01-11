@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class LindContext {
-    public void print(){
-        System.err.println("lind-context print.");
-    }
+
+	public void print() {
+		System.err.println("lind-context print.");
+	}
+
 }

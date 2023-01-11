@@ -12,28 +12,30 @@ import java.util.List;
  * @since 1.0.0
  */
 public class MapAndFlatMapTest {
-    @Test
-    public void map(){
-        List<List<Integer>> lists = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
-        list.add(4444);
-        list.add(33333);
-        list.add(444444);
-        lists.add(list);
-        lists.stream().map(Collection::stream).forEach(System.out::println);
-    }
 
-    /**
-     *  List<List<String>>这种嵌套的会用它
-     */
-    @Test
-    public void flatMap(){
-        List<List<Integer>> lists = new ArrayList<>();
-        List<Integer> list = new ArrayList<>();
-        list.add(4444);
-        list.add(33333);
-        list.add(444444);
-        lists.add(list);
-        lists.stream().flatMap(Collection::stream).forEach(System.out::println);
-    }
+	@Test
+	public void map() {
+		List<List<Integer>> lists = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
+		list.add(4444);
+		list.add(33333);
+		list.add(444444);
+		lists.add(list);
+		lists.stream().map(Collection::stream).forEach(System.out::println);
+	}
+
+	/**
+	 * List<List<String>>这种嵌套的会用它
+	 */
+	@Test
+	public void flatMap() {
+		List<List<Integer>> lists = new ArrayList<>();
+		List<Integer> list = new ArrayList<>();
+		list.add(4444);
+		list.add(33333);
+		list.add(444444);
+		lists.add(list);
+		lists.stream().flatMap(Collection::stream).forEach(System.out::println);
+	}
+
 }

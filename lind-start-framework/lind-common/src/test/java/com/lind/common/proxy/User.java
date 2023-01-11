@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
-  @DictionaryAdapterField
-  private String name;
+
+	@DictionaryAdapterField
+	private String name;
+
 }

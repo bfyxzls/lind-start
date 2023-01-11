@@ -29,102 +29,103 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * 装载目录下的bean，为MessageProvider注册动态代理.
- * 注册FactoryBean.
+ * 装载目录下的bean，为MessageProvider注册动态代理. 注册FactoryBean.
  **/
 @ConditionalOnClass(EnableMqKafka.class)
 public class MqProducerBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
-    private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
-    private MetadataReaderFactory metadataReaderFactory;
-    private ResourcePatternResolver resourcePatternResolver;
+	private static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
 
-    @Override
-    public void setResourceLoader(ResourceLoader resourceLoader) {
-        this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-        this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
-    }
+	private MetadataReaderFactory metadataReaderFactory;
 
-    /**
-     * 用"/"替换包路径中"."
-     *
-     * @param path
-     * @return
-     */
-    private String replaceDotByDelimiter(String path) {
-        return StringUtils.replace(path, ".", "/");
-    }
+	private ResourcePatternResolver resourcePatternResolver;
 
-    /**
-     * 根据包路径获取包及子包下的所有类
-     *
-     * @param basePackage basePackage
-     * @return Set<Class < ?>> Set<Class<?>>
-     */
-    private Set<Class<?>> scannerPackages(String basePackage) {
-        Set<Class<?>> set = new LinkedHashSet<>();
-        String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX +
-                replaceDotByDelimiter(basePackage) + '/' + DEFAULT_RESOURCE_PATTERN;
-        try {
-            Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
-            for (Resource resource : resources) {
-                if (resource.isReadable()) {
-                    MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
-                    String className = metadataReader.getClassMetadata().getClassName();
-                    Class<?> clazz;
-                    try {
-                        clazz = Class.forName(className);
-                        if (clazz.isAnnotationPresent(MqProducer.class)) {
-                            set.add(clazz);
-                        }
-                    } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return set;
-    }
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+		this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
+	}
 
-    @SneakyThrows
-    @Override
-    public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
-                                        BeanDefinitionRegistry beanDefinitionRegistry) {
-        //获取所有注解的属性和值
-        AnnotationAttributes annotationAttributes =
-                AnnotationAttributes.fromMap(annotationMetadata.getAnnotationAttributes(EnableMqKafka.class.getName()));
-        //获取到basePackages的值
-        String[] basePackages = annotationAttributes.getStringArray("basePackages");
-        //如果没有设置basePackages 扫描路径,就扫描对应包下面的值
-        if (basePackages.length == 0) {
-            if (!(annotationMetadata instanceof StandardAnnotationMetadata)) {
-                Class<?> aClass = null;
-                aClass = ClassUtils.forName(annotationMetadata.getClassName(), null);
-                annotationMetadata = new StandardAnnotationMetadata(aClass, true);
-            }
-            basePackages =
-                    new String[]{((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName()};
-        }
+	/**
+	 * 用"/"替换包路径中"."
+	 * @param path
+	 * @return
+	 */
+	private String replaceDotByDelimiter(String path) {
+		return StringUtils.replace(path, ".", "/");
+	}
 
-        Set<Class<?>> classes = new HashSet<>();
-        // 装截MessageProvider注解的对象
-        for (String basePackage : basePackages) {
-            classes.addAll(scannerPackages(basePackage));
-        }
-        for (Class beanClazz : classes) {
-            BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
-            GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+	/**
+	 * 根据包路径获取包及子包下的所有类
+	 * @param basePackage basePackage
+	 * @return Set<Class < ?>> Set<Class<?>>
+	 */
+	private Set<Class<?>> scannerPackages(String basePackage) {
+		Set<Class<?>> set = new LinkedHashSet<>();
+		String packageSearchPath = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + replaceDotByDelimiter(basePackage)
+				+ '/' + DEFAULT_RESOURCE_PATTERN;
+		try {
+			Resource[] resources = this.resourcePatternResolver.getResources(packageSearchPath);
+			for (Resource resource : resources) {
+				if (resource.isReadable()) {
+					MetadataReader metadataReader = this.metadataReaderFactory.getMetadataReader(resource);
+					String className = metadataReader.getClassMetadata().getClassName();
+					Class<?> clazz;
+					try {
+						clazz = Class.forName(className);
+						if (clazz.isAnnotationPresent(MqProducer.class)) {
+							set.add(clazz);
+						}
+					}
+					catch (ClassNotFoundException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		return set;
+	}
 
-            MutablePropertyValues propertyValues = definition.getPropertyValues();
-            propertyValues.add("interfaceType", beanClazz);
-            definition.setBeanClass(MqProducerFactoryBean.class);
-            definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-            beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+	@SneakyThrows
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata annotationMetadata,
+			BeanDefinitionRegistry beanDefinitionRegistry) {
+		// 获取所有注解的属性和值
+		AnnotationAttributes annotationAttributes = AnnotationAttributes
+				.fromMap(annotationMetadata.getAnnotationAttributes(EnableMqKafka.class.getName()));
+		// 获取到basePackages的值
+		String[] basePackages = annotationAttributes.getStringArray("basePackages");
+		// 如果没有设置basePackages 扫描路径,就扫描对应包下面的值
+		if (basePackages.length == 0) {
+			if (!(annotationMetadata instanceof StandardAnnotationMetadata)) {
+				Class<?> aClass = null;
+				aClass = ClassUtils.forName(annotationMetadata.getClassName(), null);
+				annotationMetadata = new StandardAnnotationMetadata(aClass, true);
+			}
+			basePackages = new String[] {
+					((StandardAnnotationMetadata) annotationMetadata).getIntrospectedClass().getPackage().getName() };
+		}
 
-        }
+		Set<Class<?>> classes = new HashSet<>();
+		// 装截MessageProvider注解的对象
+		for (String basePackage : basePackages) {
+			classes.addAll(scannerPackages(basePackage));
+		}
+		for (Class beanClazz : classes) {
+			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
+			GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
 
-    }
+			MutablePropertyValues propertyValues = definition.getPropertyValues();
+			propertyValues.add("interfaceType", beanClazz);
+			definition.setBeanClass(MqProducerFactoryBean.class);
+			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
+			beanDefinitionRegistry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+
+		}
+
+	}
 
 }

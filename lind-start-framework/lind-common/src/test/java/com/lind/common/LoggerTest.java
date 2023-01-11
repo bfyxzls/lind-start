@@ -11,10 +11,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 public class LoggerTest extends AbstractTest {
 
-    @Test
-    public void filter() {
-        log.debug("hello world!");
-        log.info("hello world!");
-        log.warn("end.");
-    }
+	@Test
+	public void filter() {
+		log.debug("hello world!");
+		log.info("hello world!");
+		log.warn("end.");
+	}
+
 }

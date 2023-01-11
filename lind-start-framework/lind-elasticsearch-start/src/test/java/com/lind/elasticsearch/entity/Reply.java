@@ -24,52 +24,54 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reply extends EsBaseEntity {
-    /**
-     * 文章标识
-     */
-    @Field(type = FieldType.Keyword)
-    private String articleId;
 
-    /**
-     * 段落标识,可以为空
-     */
-    @Field(type = FieldType.Keyword)
-    private String paragraphId;
+	/**
+	 * 文章标识
+	 */
+	@Field(type = FieldType.Keyword)
+	private String articleId;
 
-    /**
-     * 评论ID
-     */
-    @Field(type = FieldType.Keyword)
-    private String commentId;
+	/**
+	 * 段落标识,可以为空
+	 */
+	@Field(type = FieldType.Keyword)
+	private String paragraphId;
 
-    /**
-     * 发起人
-     */
-    @Field(type = FieldType.Keyword)
-    private String fromUserId;
+	/**
+	 * 评论ID
+	 */
+	@Field(type = FieldType.Keyword)
+	private String commentId;
 
-    /**
-     * 目标人
-     */
-    @Field(type = FieldType.Keyword)
-    private String toUserId;
+	/**
+	 * 发起人
+	 */
+	@Field(type = FieldType.Keyword)
+	private String fromUserId;
 
-    /**
-     * 内容
-     */
-    @Field(type = FieldType.Text)
-    private String content;
+	/**
+	 * 目标人
+	 */
+	@Field(type = FieldType.Keyword)
+	private String toUserId;
 
-    /**
-     * 时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
-    private Date replyTime;
+	/**
+	 * 内容
+	 */
+	@Field(type = FieldType.Text)
+	private String content;
 
-    /**
-     * 状态：0初始化，1正常
-     */
-    @Field(type = FieldType.Keyword)
-    private Status status;
+	/**
+	 * 时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
+	private Date replyTime;
+
+	/**
+	 * 状态：0初始化，1正常
+	 */
+	@Field(type = FieldType.Keyword)
+	private Status status;
+
 }

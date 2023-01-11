@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfo {
-    private String username;
-    private String img;
+
+	private String username;
+
+	private String img;
+
 }

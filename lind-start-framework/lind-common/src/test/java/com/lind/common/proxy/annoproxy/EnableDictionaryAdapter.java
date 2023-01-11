@@ -7,4 +7,5 @@ import org.springframework.context.annotation.Import;
  */
 @Import(DictionaryAdapterAspect.class)
 public @interface EnableDictionaryAdapter {
+
 }

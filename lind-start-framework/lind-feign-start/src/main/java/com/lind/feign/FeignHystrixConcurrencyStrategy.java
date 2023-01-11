@@ -29,101 +29,103 @@ import java.util.concurrent.TimeUnit;
  * 这样的话转发线程和请求线程实际上是一个线程，这并不是最好的解决方法，信号量模式也不是官方最为推荐的隔离策略；另一个解决方法就是自定义Hystrix的隔离策略，
  * 思路是将现有的并发策略作为新并发策略的成员变量,在新并发策略中，返回现有并发策略的线程池、Queue；将策略加到Spring容器即可；
  * ----------------------------------------------------------------------------------------------
- * 问题描述：
- * 微服务A通过feign调用微服务B
- * 使用了Hystrix并开启了线程隔离模式（默认模式），所以A调用B的请求会单独起一个子线程的方式去调用
+ * 问题描述： 微服务A通过feign调用微服务B 使用了Hystrix并开启了线程隔离模式（默认模式），所以A调用B的请求会单独起一个子线程的方式去调用
  * 现在需要将微服务A中ThreadLocal里的数据，放入feign请求B时的http header中（这里的http请求会在子线程中）
  * ----------------------------------------------------------------------------------------------
  */
 @Component
 public class FeignHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
-    private static final Logger log = LoggerFactory.getLogger(FeignHystrixConcurrencyStrategy.class);
-    private HystrixConcurrencyStrategy delegate;
+	private static final Logger log = LoggerFactory.getLogger(FeignHystrixConcurrencyStrategy.class);
 
-    public FeignHystrixConcurrencyStrategy() {
-        try {
-            this.delegate = HystrixPlugins.getInstance().getConcurrencyStrategy();
-            if (this.delegate instanceof FeignHystrixConcurrencyStrategy) {
-                // Welcome to singleton hell...
-                return;
-            }
-            HystrixCommandExecutionHook commandExecutionHook =
-                    HystrixPlugins.getInstance().getCommandExecutionHook();
-            HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance().getEventNotifier();
-            HystrixMetricsPublisher metricsPublisher = HystrixPlugins.getInstance().getMetricsPublisher();
-            HystrixPropertiesStrategy propertiesStrategy =
-                    HystrixPlugins.getInstance().getPropertiesStrategy();
-            this.logCurrentStateOfHystrixPlugins(eventNotifier, metricsPublisher, propertiesStrategy);
-            HystrixPlugins.reset();
-            HystrixPlugins.getInstance().registerConcurrencyStrategy(this);
-            HystrixPlugins.getInstance().registerCommandExecutionHook(commandExecutionHook);
-            HystrixPlugins.getInstance().registerEventNotifier(eventNotifier);
-            HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
-            HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
-        } catch (Exception e) {
-            log.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
-        }
-    }
+	private HystrixConcurrencyStrategy delegate;
 
-    private void logCurrentStateOfHystrixPlugins(HystrixEventNotifier eventNotifier,
-                                                 HystrixMetricsPublisher metricsPublisher, HystrixPropertiesStrategy propertiesStrategy) {
-        if (log.isDebugEnabled()) {
-            log.debug("Current Hystrix plugins configuration is [" + "concurrencyStrategy ["
-                    + this.delegate + "]," + "eventNotifier [" + eventNotifier + "]," + "metricPublisher ["
-                    + metricsPublisher + "]," + "propertiesStrategy [" + propertiesStrategy + "]," + "]");
-            log.debug("Registering Sleuth Hystrix Concurrency Strategy.");
-        }
-    }
+	public FeignHystrixConcurrencyStrategy() {
+		try {
+			this.delegate = HystrixPlugins.getInstance().getConcurrencyStrategy();
+			if (this.delegate instanceof FeignHystrixConcurrencyStrategy) {
+				// Welcome to singleton hell...
+				return;
+			}
+			HystrixCommandExecutionHook commandExecutionHook = HystrixPlugins.getInstance().getCommandExecutionHook();
+			HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance().getEventNotifier();
+			HystrixMetricsPublisher metricsPublisher = HystrixPlugins.getInstance().getMetricsPublisher();
+			HystrixPropertiesStrategy propertiesStrategy = HystrixPlugins.getInstance().getPropertiesStrategy();
+			this.logCurrentStateOfHystrixPlugins(eventNotifier, metricsPublisher, propertiesStrategy);
+			HystrixPlugins.reset();
+			HystrixPlugins.getInstance().registerConcurrencyStrategy(this);
+			HystrixPlugins.getInstance().registerCommandExecutionHook(commandExecutionHook);
+			HystrixPlugins.getInstance().registerEventNotifier(eventNotifier);
+			HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
+			HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
+		}
+		catch (Exception e) {
+			log.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
+		}
+	}
 
-    @Override
-    public <T> Callable<T> wrapCallable(Callable<T> callable) {
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        return new WrappedCallable<>(callable, requestAttributes);
-    }
+	private void logCurrentStateOfHystrixPlugins(HystrixEventNotifier eventNotifier,
+			HystrixMetricsPublisher metricsPublisher, HystrixPropertiesStrategy propertiesStrategy) {
+		if (log.isDebugEnabled()) {
+			log.debug("Current Hystrix plugins configuration is [" + "concurrencyStrategy [" + this.delegate + "],"
+					+ "eventNotifier [" + eventNotifier + "]," + "metricPublisher [" + metricsPublisher + "],"
+					+ "propertiesStrategy [" + propertiesStrategy + "]," + "]");
+			log.debug("Registering Sleuth Hystrix Concurrency Strategy.");
+		}
+	}
 
-    @Override
-    public ThreadPoolExecutor getThreadPool(HystrixThreadPoolKey threadPoolKey,
-                                            HystrixProperty<Integer> corePoolSize, HystrixProperty<Integer> maximumPoolSize,
-                                            HystrixProperty<Integer> keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue) {
-        return this.delegate.getThreadPool(threadPoolKey, corePoolSize, maximumPoolSize, keepAliveTime,
-                unit, workQueue);
-    }
+	@Override
+	public <T> Callable<T> wrapCallable(Callable<T> callable) {
+		RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+		return new WrappedCallable<>(callable, requestAttributes);
+	}
 
-    @Override
-    public ThreadPoolExecutor getThreadPool(HystrixThreadPoolKey threadPoolKey,
-                                            HystrixThreadPoolProperties threadPoolProperties) {
-        return this.delegate.getThreadPool(threadPoolKey, threadPoolProperties);
-    }
+	@Override
+	public ThreadPoolExecutor getThreadPool(HystrixThreadPoolKey threadPoolKey, HystrixProperty<Integer> corePoolSize,
+			HystrixProperty<Integer> maximumPoolSize, HystrixProperty<Integer> keepAliveTime, TimeUnit unit,
+			BlockingQueue<Runnable> workQueue) {
+		return this.delegate.getThreadPool(threadPoolKey, corePoolSize, maximumPoolSize, keepAliveTime, unit,
+				workQueue);
+	}
 
-    @Override
-    public BlockingQueue<Runnable> getBlockingQueue(int maxQueueSize) {
-        return this.delegate.getBlockingQueue(maxQueueSize);
-    }
+	@Override
+	public ThreadPoolExecutor getThreadPool(HystrixThreadPoolKey threadPoolKey,
+			HystrixThreadPoolProperties threadPoolProperties) {
+		return this.delegate.getThreadPool(threadPoolKey, threadPoolProperties);
+	}
 
-    @Override
-    public <T> HystrixRequestVariable<T> getRequestVariable(HystrixRequestVariableLifecycle<T> rv) {
-        return this.delegate.getRequestVariable(rv);
-    }
+	@Override
+	public BlockingQueue<Runnable> getBlockingQueue(int maxQueueSize) {
+		return this.delegate.getBlockingQueue(maxQueueSize);
+	}
 
-    static class WrappedCallable<T> implements Callable<T> {
-        private final Callable<T> target;
-        private final RequestAttributes requestAttributes;
+	@Override
+	public <T> HystrixRequestVariable<T> getRequestVariable(HystrixRequestVariableLifecycle<T> rv) {
+		return this.delegate.getRequestVariable(rv);
+	}
 
-        public WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
-            this.target = target;
-            this.requestAttributes = requestAttributes;
-        }
+	static class WrappedCallable<T> implements Callable<T> {
 
-        @Override
-        public T call() throws Exception {
-            try {
-                RequestContextHolder.setRequestAttributes(requestAttributes);
-                return target.call();
-            } finally {
-                RequestContextHolder.resetRequestAttributes();
-            }
-        }
-    }
+		private final Callable<T> target;
+
+		private final RequestAttributes requestAttributes;
+
+		public WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
+			this.target = target;
+			this.requestAttributes = requestAttributes;
+		}
+
+		@Override
+		public T call() throws Exception {
+			try {
+				RequestContextHolder.setRequestAttributes(requestAttributes);
+				return target.call();
+			}
+			finally {
+				RequestContextHolder.resetRequestAttributes();
+			}
+		}
+
+	}
+
 }
-

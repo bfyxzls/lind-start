@@ -10,19 +10,22 @@ import org.springframework.context.ApplicationContextAware;
  * @since 1.0.0
  */
 public class LindAware implements ApplicationContextAware {
-    ApplicationContext applicationContext;
-    LindContext lindContext;
 
-    public void contextPrint() {
-        this.lindContext.print();
-    }
+	ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-        if (this.applicationContext.getBeansOfType(LindContext.class).isEmpty()) {
-            throw new IllegalArgumentException("未加载或者未发现LindContext的bean，请保证它可以正常加载到Spring容器.");
-        }
-        this.lindContext = this.applicationContext.getBean(LindContext.class);
-    }
+	LindContext lindContext;
+
+	public void contextPrint() {
+		this.lindContext.print();
+	}
+
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.applicationContext = applicationContext;
+		if (this.applicationContext.getBeansOfType(LindContext.class).isEmpty()) {
+			throw new IllegalArgumentException("未加载或者未发现LindContext的bean，请保证它可以正常加载到Spring容器.");
+		}
+		this.lindContext = this.applicationContext.getBean(LindContext.class);
+	}
+
 }

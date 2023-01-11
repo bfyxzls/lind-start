@@ -12,17 +12,19 @@ import org.junit.Test;
  * @since 1.0.0
  */
 public class LindIDTest {
-    @Test
-    public void StrToByte() {
-        //类型char（2字节）-单词长度int(2字节）-具体单词-增量int(4字节)
-        String UID = "AB-7-battery-10";
-        LindID uid = new LindID("AB", "english", 1);
-        byte[] arr = uid.toByte();
-        System.out.printf("arr=" + uid);
-    }
 
-    @Test
-    public void validate() {
-        LindID.validate("1-1-2");
-    }
+	@Test
+	public void StrToByte() {
+		// 类型char（2字节）-单词长度int(2字节）-具体单词-增量int(4字节)
+		String UID = "AB-7-battery-10";
+		LindID uid = new LindID("AB", "english", 1);
+		byte[] arr = uid.toByte();
+		System.out.printf("arr=" + uid);
+	}
+
+	@Test
+	public void validate() {
+		LindID.validate("1-1-2");
+	}
+
 }

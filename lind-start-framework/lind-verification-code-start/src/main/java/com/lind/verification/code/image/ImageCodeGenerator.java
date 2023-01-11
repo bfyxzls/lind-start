@@ -26,13 +26,12 @@ import java.awt.image.BufferedImage;
 public class ImageCodeGenerator implements ValidateCodeGenerator {
 
 	private ImageCodeProperties imageCodeProperties;
+
 	private Producer captchaProducer;
 
 	/**
 	 * 生成图片验证码.
-	 *
 	 * @param request the request
-	 *
 	 * @return the image code
 	 */
 	@Override
@@ -44,7 +43,6 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
 
 	/**
 	 * Sets security properties.
-	 *
 	 * @param imageCodeProperties the security properties
 	 */
 	public void setSecurityProperties(ImageCodeProperties imageCodeProperties) {
@@ -53,12 +51,10 @@ public class ImageCodeGenerator implements ValidateCodeGenerator {
 
 	/**
 	 * Sets captcha producer.
-	 *
 	 * @param captchaProducer the captcha producer
 	 */
 	public void setCaptchaProducer(Producer captchaProducer) {
 		this.captchaProducer = captchaProducer;
 	}
-
 
 }

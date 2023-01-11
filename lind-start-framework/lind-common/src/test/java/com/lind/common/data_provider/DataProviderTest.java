@@ -12,23 +12,19 @@ import org.testng.annotations.Test;
  * @since 1.0.0
  */
 public class DataProviderTest {
-    @Test(dataProvider = "wxAddConditionalMenu")
-    public void testAddConditionalToJson(String json) throws JsonProcessingException {
-        Menu menu = new Menu();
-        menu.setLevel("click");
-        menu.setTitle("今日歌曲");
-        Assert.assertEquals(new ObjectMapper().writeValueAsString(menu), json);
-    }
 
-    @DataProvider(name = "wxAddConditionalMenu")
-    public Object[][] addConditionalMenuJson() {
-        String json =
-                "{"
-                        + "\"title\":\"今日歌曲\","
-                        + "\"level\":\"click\""
-                        + "}";
-        return new Object[][]{
-                new Object[]{json}
-        };
-    }
+	@Test(dataProvider = "wxAddConditionalMenu")
+	public void testAddConditionalToJson(String json) throws JsonProcessingException {
+		Menu menu = new Menu();
+		menu.setLevel("click");
+		menu.setTitle("今日歌曲");
+		Assert.assertEquals(new ObjectMapper().writeValueAsString(menu), json);
+	}
+
+	@DataProvider(name = "wxAddConditionalMenu")
+	public Object[][] addConditionalMenuJson() {
+		String json = "{" + "\"title\":\"今日歌曲\"," + "\"level\":\"click\"" + "}";
+		return new Object[][] { new Object[] { json } };
+	}
+
 }

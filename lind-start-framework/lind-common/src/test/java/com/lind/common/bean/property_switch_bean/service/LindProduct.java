@@ -7,8 +7,9 @@ package com.lind.common.bean.property_switch_bean.service;
  */
 public class LindProduct implements Lind {
 
-    @Override
-    public void print() {
-        System.out.println("lind product");
-    }
+	@Override
+	public void print() {
+		System.out.println("lind product");
+	}
+
 }

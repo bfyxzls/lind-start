@@ -12,14 +12,14 @@ import java.util.Date;
 
 public class DateDeserialize extends JsonDeserializer {
 
+	@Override
+	public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 
-    @Override
-    public Object deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		String str = p.getText().trim();
 
-        String str = p.getText().trim();
+		DateTime parse = DateUtil.parse(str);
 
-        DateTime parse = DateUtil.parse(str);
+		return new Date(parse.getTime());
+	}
 
-        return new Date(parse.getTime());
-    }
 }

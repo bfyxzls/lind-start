@@ -12,22 +12,20 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 @Inherited
 public @interface MessageSend {
 
-    /**
-     * 消息成功后的事件
-     *
-     * @return
-     */
-    Class<? extends SuccessSendHandler> successSendHandler() default DefaultSuccessSendHandler.class;
+	/**
+	 * 消息成功后的事件
+	 * @return
+	 */
+	Class<? extends SuccessSendHandler> successSendHandler() default DefaultSuccessSendHandler.class;
 
-    /**
-     * 消息发送者.
-     *
-     * @return
-     */
-    Class<? extends MessageProviderHandler> messageProviderHandler() default DefaultMessageProviderHandler.class;
+	/**
+	 * 消息发送者.
+	 * @return
+	 */
+	Class<? extends MessageProviderHandler> messageProviderHandler() default DefaultMessageProviderHandler.class;
 
 }

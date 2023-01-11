@@ -11,10 +11,10 @@
     <modules>
         <module>lind-start-framework</module>
 
-<!--        <module>demo/a-start-test</module>-->
-<!--        <module>demo/log4j-bug-rmi</module>-->
-<!--        <module>demo/java-agent-demo</module>-->
-<!--        <module>demo/a-start-activiti</module>-->
+        <!--        <module>demo/a-start-test</module>-->
+        <!--        <module>demo/log4j-bug-rmi</module>-->
+        <!--        <module>demo/java-agent-demo</module>-->
+        <!--        <module>demo/a-start-activiti</module>-->
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -23,7 +23,7 @@
         <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
         <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
         <version.infinispan>13.0.0.CR1</version.infinispan>
-
+        <spring.checkstyle.plugin>0.0.32</spring.checkstyle.plugin>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -97,6 +97,23 @@
     </distributionManagement>
 
     <build>
+        <plugins>
+            <!--代码格式插件，默认使用spring 规则 ./mvnw spring-javaformat:apply -->
+            <plugin>
+                <groupId>io.spring.javaformat</groupId>
+                <artifactId>spring-javaformat-maven-plugin</artifactId>
+                <version>${spring.checkstyle.plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <inherited>true</inherited>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
                 <plugin>

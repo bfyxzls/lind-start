@@ -10,75 +10,75 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 public class Demo {
-  @Autowired
-  FactoryBeanService factoryBeanService;
 
-  @Test
-  public void test() {
-    ApplicationContext context = new AnnotationConfigApplicationContext(FactoryBeanLearnConfig.class);
-    context.getBean(FactoryBeanService.class).testFactoryBean();
-  }
+	@Autowired
+	FactoryBeanService factoryBeanService;
 
-  @Test
-  public void proxyTest() {
-    CatProxy catProxy = new CatProxy();
-    ICat cat = catProxy.getProxy();
-    cat.run();
-  }
+	@Test
+	public void test() {
+		ApplicationContext context = new AnnotationConfigApplicationContext(FactoryBeanLearnConfig.class);
+		context.getBean(FactoryBeanService.class).testFactoryBean();
+	}
 
-  interface ICat {
-    void run();
-  }
+	@Test
+	public void proxyTest() {
+		CatProxy catProxy = new CatProxy();
+		ICat cat = catProxy.getProxy();
+		cat.run();
+	}
 
-  /**
-   * 装饰者模式,和代理模式很类似.
-   * 1.装饰者和被装饰者实现或继承相同的接口或类
-   * 2.装饰者持有被装饰者的引用
-   */
-  static class Decorate implements ICat {
+	interface ICat {
 
-    ICat mICat;
+		void run();
 
-    public Decorate(ICat ICat) {
-      this.mICat = ICat;
-    }
+	}
 
-    @Override
-    public void run() {
-      System.out.println("猫抓老鼠");
-      mICat.run();
-    }
-  }
+	/**
+	 * 装饰者模式,和代理模式很类似. 1.装饰者和被装饰者实现或继承相同的接口或类 2.装饰者持有被装饰者的引用
+	 */
+	static class Decorate implements ICat {
 
-  static class Cat implements ICat {
+		ICat mICat;
 
-    @Override
-    public void run() {
-      System.out.println("猫抓到了老鼠...");
-    }
-  }
+		public Decorate(ICat ICat) {
+			this.mICat = ICat;
+		}
 
-  //实现InvocationHandler接口,实现invoke方法
-  public class CatProxy implements InvocationHandler {
+		@Override
+		public void run() {
+			System.out.println("猫抓老鼠");
+			mICat.run();
+		}
 
-    final ICat cat = new Cat();
+	}
 
-    public ICat getProxy() {
-      return (ICat) Proxy.newProxyInstance(
-          getClass().getClassLoader(),
-          cat.getClass().getInterfaces(),
-          this);
-    }
+	static class Cat implements ICat {
 
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		@Override
+		public void run() {
+			System.out.println("猫抓到了老鼠...");
+		}
 
-      if (method.getName().equals("run")) {
-        System.out.println("代理cat");
-        return method.invoke(cat, args);
-      }
-      return null;
-    }
-  }
+	}
 
+	// 实现InvocationHandler接口,实现invoke方法
+	public class CatProxy implements InvocationHandler {
+
+		final ICat cat = new Cat();
+
+		public ICat getProxy() {
+			return (ICat) Proxy.newProxyInstance(getClass().getClassLoader(), cat.getClass().getInterfaces(), this);
+		}
+
+		public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+			if (method.getName().equals("run")) {
+				System.out.println("代理cat");
+				return method.invoke(cat, args);
+			}
+			return null;
+		}
+
+	}
 
 }

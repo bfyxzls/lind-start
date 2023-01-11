@@ -7,10 +7,12 @@ import com.lind.common.pattern.factorymethod.Userinfo;
 import org.junit.Test;
 
 public class FactoryTest {
-  @Test
-  public void userTest() {
-    Factory factory = new H2Factory();
-    UserRepository userRepository = factory.createUserRepository();
-    userRepository.insert(new Userinfo());
-  }
+
+	@Test
+	public void userTest() {
+		Factory factory = new H2Factory();
+		UserRepository userRepository = factory.createUserRepository();
+		userRepository.insert(new Userinfo());
+	}
+
 }

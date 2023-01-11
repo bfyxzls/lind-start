@@ -2,60 +2,65 @@ package com.lind.common.minibase;
 
 public class Config {
 
-  private long maxMemstoreSize = 16 * 1024 * 1024;
-  private int flushMaxRetries = 10;
-  private String dataDir = "MiniBase";
-  private int maxDiskFiles = 10;
-  private int maxThreadPoolSize = 5;
+	private long maxMemstoreSize = 16 * 1024 * 1024;
 
-  private static final Config DEFAULT = new Config();
+	private int flushMaxRetries = 10;
 
-  public Config setMaxMemstoreSize(long maxMemstoreSize) {
-    this.maxMemstoreSize = maxMemstoreSize;
-    return this;
-  }
+	private String dataDir = "MiniBase";
 
-  public long getMaxMemstoreSize() {
-    return this.maxMemstoreSize;
-  }
+	private int maxDiskFiles = 10;
 
-  public Config setFlushMaxRetries(int flushMaxRetries) {
-    this.flushMaxRetries = flushMaxRetries;
-    return this;
-  }
+	private int maxThreadPoolSize = 5;
 
-  public int getFlushMaxRetries() {
-    return this.flushMaxRetries;
-  }
+	private static final Config DEFAULT = new Config();
 
-  public Config setDataDir(String dataDir) {
-    this.dataDir = dataDir;
-    return this;
-  }
+	public Config setMaxMemstoreSize(long maxMemstoreSize) {
+		this.maxMemstoreSize = maxMemstoreSize;
+		return this;
+	}
 
-  public String getDataDir() {
-    return this.dataDir;
-  }
+	public long getMaxMemstoreSize() {
+		return this.maxMemstoreSize;
+	}
 
-  public Config setMaxDiskFiles(int maxDiskFiles) {
-    this.maxDiskFiles = maxDiskFiles;
-    return this;
-  }
+	public Config setFlushMaxRetries(int flushMaxRetries) {
+		this.flushMaxRetries = flushMaxRetries;
+		return this;
+	}
 
-  public int getMaxDiskFiles() {
-    return this.maxDiskFiles;
-  }
+	public int getFlushMaxRetries() {
+		return this.flushMaxRetries;
+	}
 
-  public Config setMaxThreadPoolSize(int maxThreadPoolSize) {
-    this.maxThreadPoolSize = maxThreadPoolSize;
-    return this;
-  }
+	public Config setDataDir(String dataDir) {
+		this.dataDir = dataDir;
+		return this;
+	}
 
-  public int getMaxThreadPoolSize() {
-    return this.maxThreadPoolSize;
-  }
+	public String getDataDir() {
+		return this.dataDir;
+	}
 
-  public static Config getDefault() {
-    return DEFAULT;
-  }
+	public Config setMaxDiskFiles(int maxDiskFiles) {
+		this.maxDiskFiles = maxDiskFiles;
+		return this;
+	}
+
+	public int getMaxDiskFiles() {
+		return this.maxDiskFiles;
+	}
+
+	public Config setMaxThreadPoolSize(int maxThreadPoolSize) {
+		this.maxThreadPoolSize = maxThreadPoolSize;
+		return this;
+	}
+
+	public int getMaxThreadPoolSize() {
+		return this.maxThreadPoolSize;
+	}
+
+	public static Config getDefault() {
+		return DEFAULT;
+	}
+
 }

@@ -5,8 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EmailMessageProviderHandler implements MessageProviderHandler {
-    @Override
-    public void send(String message) {
-        System.out.println("email send message:" + message);
-    }
+
+	@Override
+	public void send(String message) {
+		System.out.println("email send message:" + message);
+	}
+
 }

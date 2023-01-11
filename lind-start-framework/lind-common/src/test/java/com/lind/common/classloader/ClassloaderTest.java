@@ -8,8 +8,10 @@ import java.io.IOException;
 
 @Slf4j
 public class ClassloaderTest {
-  @Test
-  public void readOuter() throws IOException {
-    Assert.notNull(JarClassLoader.getSourceInputStream("/d:/pkulaw-upgrade-programt.jar", "resource.json"));
-  }
+
+	@Test
+	public void readOuter() throws IOException {
+		Assert.notNull(JarClassLoader.getSourceInputStream("/d:/pkulaw-upgrade-programt.jar", "resource.json"));
+	}
+
 }

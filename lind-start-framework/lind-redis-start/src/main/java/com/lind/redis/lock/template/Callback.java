@@ -5,13 +5,14 @@ package com.lind.redis.lock.template;
  */
 public interface Callback {
 
-    /**
-     * 成功获取锁后执行方法.
-     */
-    Object onGetLock() throws InterruptedException;
+	/**
+	 * 成功获取锁后执行方法.
+	 */
+	Object onGetLock() throws InterruptedException;
 
-    /**
-     * 获取锁超时回调.
-     */
-    Object onTimeout() throws InterruptedException;
+	/**
+	 * 获取锁超时回调.
+	 */
+	Object onTimeout() throws InterruptedException;
+
 }

@@ -7,6 +7,9 @@ import java.security.interfaces.RSAPublicKey;
 
 @Data
 public class RSA256Key {
-    private RSAPublicKey publicKey;
-    private RSAPrivateKey privateKey;
+
+	private RSAPublicKey publicKey;
+
+	private RSAPrivateKey privateKey;
+
 }

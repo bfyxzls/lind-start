@@ -7,20 +7,23 @@ import lombok.Getter;
  */
 @Getter
 public class LindException extends RuntimeException {
-    private final String msg;
-    private Throwable throwable;
 
-    public LindException(String msg) {
-        super(msg);
-        this.msg = msg;
-    }
+	private final String msg;
 
-    /**
-     * init.
-     */
-    public LindException(String msg, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-        this.throwable = e;
-    }
+	private Throwable throwable;
+
+	public LindException(String msg) {
+		super(msg);
+		this.msg = msg;
+	}
+
+	/**
+	 * init.
+	 */
+	public LindException(String msg, Throwable e) {
+		super(msg, e);
+		this.msg = msg;
+		this.throwable = e;
+	}
+
 }

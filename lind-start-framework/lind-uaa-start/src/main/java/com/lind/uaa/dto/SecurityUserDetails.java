@@ -20,98 +20,93 @@ import java.util.List;
 @Slf4j
 public class SecurityUserDetails implements UserDetails {
 
+	private ResourceUser user;
 
-    private ResourceUser user;
+	public SecurityUserDetails(ResourceUser user) {
+		if (user == null) {
+			throw new UAAException("请实现com.lind.uaa.entity.User接口");
+		}
+		this.user = user;
+	}
 
-    public SecurityUserDetails(ResourceUser user) {
-        if (user == null) {
-            throw new UAAException("请实现com.lind.uaa.entity.User接口");
-        }
-        this.user = user;
-    }
+	/**
+	 * 添加用户拥有的权限和角色
+	 * @return
+	 */
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
 
-    /**
-     * 添加用户拥有的权限和角色
-     *
-     * @return
-     */
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorityList = new ArrayList<>();
+		List<ResourcePermission> resourcePermissions = user.getResourcePermissions();
+		// 添加请求权限
+		if (resourcePermissions != null && resourcePermissions.size() > 0) {
+			for (ResourcePermission resourcePermission : resourcePermissions) {
+				if (StringUtils.isNotBlank(resourcePermission.getTitle())
+						&& StringUtils.isNotBlank(resourcePermission.getPath())) {
+					authorityList.add(new SimpleGrantedAuthority(resourcePermission.getTitle()));
+				}
+			}
+		}
+		// 添加角色
+		List<ResourceRole> resourceRoles = user.getResourceRoles();
+		if (resourceRoles != null && resourceRoles.size() > 0) {
+			// lambda表达式
+			resourceRoles.forEach(item -> {
+				if (StringUtils.isNotBlank(item.getName())) {
+					authorityList.add(new SimpleGrantedAuthority(item.getName()));
+				}
+			});
+		}
+		return authorityList;
+	}
 
-        List<GrantedAuthority> authorityList = new ArrayList<>();
-        List<ResourcePermission> resourcePermissions = user.getResourcePermissions();
-        // 添加请求权限
-        if (resourcePermissions != null && resourcePermissions.size() > 0) {
-            for (ResourcePermission resourcePermission : resourcePermissions) {
-                if (StringUtils.isNotBlank(resourcePermission.getTitle())
-                        && StringUtils.isNotBlank(resourcePermission.getPath())) {
-                    authorityList.add(new SimpleGrantedAuthority(resourcePermission.getTitle()));
-                }
-            }
-        }
-        // 添加角色
-        List<ResourceRole> resourceRoles = user.getResourceRoles();
-        if (resourceRoles != null && resourceRoles.size() > 0) {
-            // lambda表达式
-            resourceRoles.forEach(item -> {
-                if (StringUtils.isNotBlank(item.getName())) {
-                    authorityList.add(new SimpleGrantedAuthority(item.getName()));
-                }
-            });
-        }
-        return authorityList;
-    }
+	@Override
+	public String getPassword() {
+		return user.getPassword();
+	}
 
-    @Override
-    public String getPassword() {
-        return user.getPassword();
-    }
+	@Override
+	public String getUsername() {
+		return user.getUsername();
+	}
 
-    @Override
-    public String getUsername() {
-        return user.getUsername();
-    }
+	/**
+	 * 账户是否过期
+	 * @return
+	 */
+	@Override
+	public boolean isAccountNonExpired() {
 
-    /**
-     * 账户是否过期
-     *
-     * @return
-     */
-    @Override
-    public boolean isAccountNonExpired() {
+		return true;
+	}
 
-        return true;
-    }
+	/**
+	 * 是否禁用
+	 * @return
+	 */
+	@Override
+	public boolean isAccountNonLocked() {
 
-    /**
-     * 是否禁用
-     *
-     * @return
-     */
-    @Override
-    public boolean isAccountNonLocked() {
+		return true;
+	}
 
-        return true;
-    }
+	/**
+	 * 密码是否过期
+	 * @return
+	 */
+	@Override
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
 
-    /**
-     * 密码是否过期
-     *
-     * @return
-     */
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
+	/**
+	 * 是否启用
+	 * @return
+	 */
+	@Override
+	public boolean isEnabled() {
 
-    /**
-     * 是否启用
-     *
-     * @return
-     */
-    @Override
-    public boolean isEnabled() {
+		return true;
+	}
 
-        return true;
-    }
 }

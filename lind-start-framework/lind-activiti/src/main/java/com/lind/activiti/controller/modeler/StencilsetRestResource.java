@@ -30,21 +30,20 @@ import java.io.InputStream;
 @RestController
 public class StencilsetRestResource {
 
-  /**
-   * 配置.
-   */
-  @RequestMapping(
-      value = "/editor/stencilset",
-      method = RequestMethod.GET,
-      produces = "application/json;charset=utf-8")
-  @ResponseBody
-  public String getStencilset() {
-    InputStream stencilsetStream = this.getClass().getClassLoader()
-        .getResourceAsStream("static/stencilset.json");
-    try {
-      return IOUtils.toString(stencilsetStream, "utf-8");
-    } catch (Exception e) {
-      throw new ActivitiException("加载stencil配置出错", e);
-    }
-  }
+	/**
+	 * 配置.
+	 */
+	@RequestMapping(value = "/editor/stencilset", method = RequestMethod.GET,
+			produces = "application/json;charset=utf-8")
+	@ResponseBody
+	public String getStencilset() {
+		InputStream stencilsetStream = this.getClass().getClassLoader().getResourceAsStream("static/stencilset.json");
+		try {
+			return IOUtils.toString(stencilsetStream, "utf-8");
+		}
+		catch (Exception e) {
+			throw new ActivitiException("加载stencil配置出错", e);
+		}
+	}
+
 }

@@ -16,37 +16,37 @@ import java.util.Map;
 
 @SpringBootApplication
 @RestController
-//@EnableJacksonFormatting
+// @EnableJacksonFormatting
 public class CommonApplication {
 
+	@Autowired
+	ObjectMapper objectMapper;
 
-    @Autowired
-    ObjectMapper objectMapper;
+	public static void main(String[] args) {
+		SpringApplication.run(CommonApplication.class, args);
+	}
 
-    public static void main(String[] args) {
-        SpringApplication.run(CommonApplication.class, args);
-    }
+	public String print() {
+		System.out.println("print class loader1.1");
+		return "print class loader1.1";
+	}
 
-    public String print(){
-        System.out.println("print class loader1.1");
-        return "print class loader1.1";
-    }
-    @GetMapping("version")
-    public ResponseEntity version() {
-        return ResponseEntity.ok("1.0.0");
-    }
+	@GetMapping("version")
+	public ResponseEntity version() {
+		return ResponseEntity.ok("1.0.0");
+	}
 
-    @GetMapping("m")
-    public String m() {
-        return LocaleMessageUtils.getMessage("title");
-    }
+	@GetMapping("m")
+	public String m() {
+		return LocaleMessageUtils.getMessage("title");
+	}
 
-    @GetMapping("j")
-    public ResponseEntity j() throws JsonProcessingException {
-        Map<String, Object> map = new HashMap<>();
-        map.put("date", LocalDate.now());
-   //     String result = objectMapper.writeValueAsString(map);
-        return ResponseEntity.ok(map);
-    }
+	@GetMapping("j")
+	public ResponseEntity j() throws JsonProcessingException {
+		Map<String, Object> map = new HashMap<>();
+		map.put("date", LocalDate.now());
+		// String result = objectMapper.writeValueAsString(map);
+		return ResponseEntity.ok(map);
+	}
 
 }

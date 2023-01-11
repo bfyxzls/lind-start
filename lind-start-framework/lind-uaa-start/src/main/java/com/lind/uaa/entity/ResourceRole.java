@@ -7,7 +7,8 @@ import java.io.Serializable;
  */
 public interface ResourceRole extends Serializable {
 
-    String getId();
+	String getId();
 
-    String getName();
+	String getName();
+
 }

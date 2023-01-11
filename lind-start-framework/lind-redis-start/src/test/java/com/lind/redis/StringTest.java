@@ -14,19 +14,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @Slf4j
 @PropertySource(value = "classpath:application.yml", factory = YamlPropertySourceFactory.class)
-@SpringBootTest(classes = {LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class})
+@SpringBootTest(classes = { LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class })
 public class StringTest {
-    @Autowired
-    StringRedisTemplate redisService;
 
+	@Autowired
+	StringRedisTemplate redisService;
 
-    @Test
-    public void write() {
-        redisService.opsForValue().set("test4", "oktest");
-    }
+	@Test
+	public void write() {
+		redisService.opsForValue().set("test4", "oktest");
+	}
 
-    @Test
-    public void read() {
-        System.out.println(redisService.opsForValue().get("hello"));
-    }
+	@Test
+	public void read() {
+		System.out.println(redisService.opsForValue().get("hello"));
+	}
+
 }

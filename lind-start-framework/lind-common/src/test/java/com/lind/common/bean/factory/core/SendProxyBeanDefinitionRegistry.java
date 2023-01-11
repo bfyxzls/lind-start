@@ -23,36 +23,40 @@ import java.util.Set;
 @Data
 public class SendProxyBeanDefinitionRegistry implements ImportBeanDefinitionRegistrar, ResourceLoaderAware {
 
-  private MetadataReaderFactory metadataReaderFactory;
-  private ResourcePatternResolver resourcePatternResolver;
+	private MetadataReaderFactory metadataReaderFactory;
 
-  @SneakyThrows
-  @Override
-  public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry, BeanNameGenerator importBeanNameGenerator) {
-    String[] basePackages = new String[]{Class.forName(importingClassMetadata.getClassName()).getPackage().getName()};
+	private ResourcePatternResolver resourcePatternResolver;
 
+	@SneakyThrows
+	@Override
+	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry,
+			BeanNameGenerator importBeanNameGenerator) {
+		String[] basePackages = new String[] {
+				Class.forName(importingClassMetadata.getClassName()).getPackage().getName() };
 
-    // 使用自定义扫描器扫描
-    Set<Class<?>> classes = new HashSet<>();
-    for (String basePackage : basePackages) {
-      classes.addAll(ClassUtils.scannerPackages(basePackage, Send.class, metadataReaderFactory, resourcePatternResolver));
-    }
-    for (Class beanClazz : classes) {
-      BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
-      GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
+		// 使用自定义扫描器扫描
+		Set<Class<?>> classes = new HashSet<>();
+		for (String basePackage : basePackages) {
+			classes.addAll(ClassUtils.scannerPackages(basePackage, Send.class, metadataReaderFactory,
+					resourcePatternResolver));
+		}
+		for (Class beanClazz : classes) {
+			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(beanClazz);
+			GenericBeanDefinition definition = (GenericBeanDefinition) builder.getRawBeanDefinition();
 
-      MutablePropertyValues propertyValues = definition.getPropertyValues();
-      propertyValues.add("interfaceType", beanClazz);
-      definition.setBeanClass(SendFactoryBean.class);
-      definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
-      registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
+			MutablePropertyValues propertyValues = definition.getPropertyValues();
+			propertyValues.add("interfaceType", beanClazz);
+			definition.setBeanClass(SendFactoryBean.class);
+			definition.setAutowireMode(GenericBeanDefinition.AUTOWIRE_BY_TYPE);
+			registry.registerBeanDefinition(beanClazz.getSimpleName(), definition);
 
-    }
-  }
+		}
+	}
 
-  @Override
-  public void setResourceLoader(ResourceLoader resourceLoader) {
-    this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
-    this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
-  }
+	@Override
+	public void setResourceLoader(ResourceLoader resourceLoader) {
+		this.resourcePatternResolver = ResourcePatternUtils.getResourcePatternResolver(resourceLoader);
+		this.metadataReaderFactory = new CachingMetadataReaderFactory(resourceLoader);
+	}
+
 }

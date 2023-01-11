@@ -5,9 +5,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LindConfig {
-    @Bean
-    public LindFactory lindFactory() {
-        return new LindFactory();
-    }
+
+	@Bean
+	public LindFactory lindFactory() {
+		return new LindFactory();
+	}
 
 }

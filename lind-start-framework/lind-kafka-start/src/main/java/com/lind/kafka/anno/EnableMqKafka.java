@@ -11,25 +11,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Import({MqProducerBeanDefinitionRegistry.class, KafkaProviderConfig.class})
+@Import({ MqProducerBeanDefinitionRegistry.class, KafkaProviderConfig.class })
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.ANNOTATION_TYPE})
+@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 public @interface EnableMqKafka {
 
-    /**
-     * 扫描的基础包，默认为启动类所在包.
-     *
-     * @return
-     */
-    @AliasFor("basePackages")
-    String[] value() default {};
+	/**
+	 * 扫描的基础包，默认为启动类所在包.
+	 * @return
+	 */
+	@AliasFor("basePackages")
+	String[] value() default {};
 
-    /**
-     * 扫描的基础包，默认为启动类所在包
-     *
-     * @return
-     */
-    @AliasFor("value")
-    String[] basePackages() default {};
+	/**
+	 * 扫描的基础包，默认为启动类所在包
+	 * @return
+	 */
+	@AliasFor("value")
+	String[] basePackages() default {};
+
 }

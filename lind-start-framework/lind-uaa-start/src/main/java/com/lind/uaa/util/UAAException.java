@@ -7,17 +7,20 @@ import lombok.Getter;
  */
 @Getter
 public class UAAException extends RuntimeException {
-    private String msg;
-    private Throwable e;
 
-    public UAAException(String msg) {
-        super(msg);
-        this.msg = msg;
-    }
+	private String msg;
 
-    public UAAException(String msg, Throwable e) {
-        super(msg, e);
-        this.msg = msg;
-        this.e = e;
-    }
+	private Throwable e;
+
+	public UAAException(String msg) {
+		super(msg);
+		this.msg = msg;
+	}
+
+	public UAAException(String msg, Throwable e) {
+		super(msg, e);
+		this.msg = msg;
+		this.e = e;
+	}
+
 }

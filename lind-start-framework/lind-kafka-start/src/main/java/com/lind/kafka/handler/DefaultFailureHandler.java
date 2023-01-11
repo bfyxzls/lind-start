@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class DefaultFailureHandler implements FailureHandler {
 
+	@Override
+	public void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex) {
+		log.error("fail to send topic={}, data={}", topic, messageEntity, ex);
+	}
 
-    @Override
-    public void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex) {
-        log.error("fail to send topic={}, data={}", topic, messageEntity, ex);
-    }
 }

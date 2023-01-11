@@ -7,8 +7,9 @@ package com.lind.common.bean.property_switch_bean.service;
  */
 public class LindOrder implements Lind {
 
-    @Override
-    public void print() {
-        System.out.println("lind order");
-    }
+	@Override
+	public void print() {
+		System.out.println("lind order");
+	}
+
 }

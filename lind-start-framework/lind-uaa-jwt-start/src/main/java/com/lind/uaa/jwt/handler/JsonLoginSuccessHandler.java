@@ -33,58 +33,62 @@ import java.util.List;
  */
 public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    @Autowired
-    ApplicationEventPublisher applicationEventPublisher;
-    @Autowired
-    JwtConfig jwtConfig;
-    @Autowired
-    RedisService redisService;
-    @Autowired
-    ResourcePermissionService resourcePermissionService;
-    @Autowired
-    IpInfoUtil ipInfoUtil;
-    private JwtUserService jwtUserService;
+	@Autowired
+	ApplicationEventPublisher applicationEventPublisher;
 
-    public JsonLoginSuccessHandler(JwtUserService jwtUserService) {
-        this.jwtUserService = jwtUserService;
-    }
+	@Autowired
+	JwtConfig jwtConfig;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) throws IOException, ServletException {
-        String token = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
-        response.setHeader("Content-Type", "application/json;charset=utf-8");
-        DecodedJWT jwt = JWT.decode(token);
-        TokenResult tokenResult = new TokenResult();
-        tokenResult.setExpiresAt(jwt.getExpiresAt());
-        tokenResult.setSubject(jwt.getSubject());
-        tokenResult.setToken(token);
-        response.getWriter().write(JSON.toJSONString(tokenResult));
+	@Autowired
+	RedisService redisService;
 
-        //用户登录后的在线token
-        redisService.set(Constants.ONLINE_USER + jwt.getToken(), 1, jwtConfig.getExpiresAt() * 60);
+	@Autowired
+	ResourcePermissionService resourcePermissionService;
 
-        ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token, ResourceUser.class);
-        //角色权限缓存
-        if (!CollectionUtils.isEmpty(userDetails.getAuthorities())) {
-            for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
-                if (grantedAuthority instanceof RoleGrantedAuthority) {
-                    RoleGrantedAuthority roleGrantedAuthority = (RoleGrantedAuthority) grantedAuthority;
-                    String rolePermissionKey = Constants.ROLE_PERMISSION + roleGrantedAuthority.getId();
-                    if (!redisService.hasKey(rolePermissionKey)) {
-                        List<? extends ResourcePermission> rolePermissions =
-                                resourcePermissionService.getAllByRoleId(roleGrantedAuthority.getId());
-                        if (rolePermissions != null) {
-                            redisService.set(rolePermissionKey, rolePermissions);
-                        }
-                    }
-                }
-            }
-        }
+	@Autowired
+	IpInfoUtil ipInfoUtil;
 
-        // 登录成功后发布一个事件,外部可以订阅它.
-        applicationEventPublisher.publishEvent(new LoginSuccessEvent(tokenResult, ipInfoUtil.getIpAddr(request)));
-    }
+	private JwtUserService jwtUserService;
 
+	public JsonLoginSuccessHandler(JwtUserService jwtUserService) {
+		this.jwtUserService = jwtUserService;
+	}
+
+	@Override
+	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+			Authentication authentication) throws IOException, ServletException {
+		String token = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
+		response.setHeader("Content-Type", "application/json;charset=utf-8");
+		DecodedJWT jwt = JWT.decode(token);
+		TokenResult tokenResult = new TokenResult();
+		tokenResult.setExpiresAt(jwt.getExpiresAt());
+		tokenResult.setSubject(jwt.getSubject());
+		tokenResult.setToken(token);
+		response.getWriter().write(JSON.toJSONString(tokenResult));
+
+		// 用户登录后的在线token
+		redisService.set(Constants.ONLINE_USER + jwt.getToken(), 1, jwtConfig.getExpiresAt() * 60);
+
+		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token, ResourceUser.class);
+		// 角色权限缓存
+		if (!CollectionUtils.isEmpty(userDetails.getAuthorities())) {
+			for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {
+				if (grantedAuthority instanceof RoleGrantedAuthority) {
+					RoleGrantedAuthority roleGrantedAuthority = (RoleGrantedAuthority) grantedAuthority;
+					String rolePermissionKey = Constants.ROLE_PERMISSION + roleGrantedAuthority.getId();
+					if (!redisService.hasKey(rolePermissionKey)) {
+						List<? extends ResourcePermission> rolePermissions = resourcePermissionService
+								.getAllByRoleId(roleGrantedAuthority.getId());
+						if (rolePermissions != null) {
+							redisService.set(rolePermissionKey, rolePermissions);
+						}
+					}
+				}
+			}
+		}
+
+		// 登录成功后发布一个事件,外部可以订阅它.
+		applicationEventPublisher.publishEvent(new LoginSuccessEvent(tokenResult, ipInfoUtil.getIpAddr(request)));
+	}
 
 }

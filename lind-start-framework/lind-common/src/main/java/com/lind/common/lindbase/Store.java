@@ -22,149 +22,168 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 而磁盘如果希望快速被检索，我们可以借助LSM树，使用顺序写，提升写的性能
  */
 public class Store {
-  static final Long limitSize = 10000L;
-  // 块存储大小
-  private final AtomicLong dataSize = new AtomicLong();
-  // 正在持久化
-  private final AtomicBoolean isSnapshotFlushing = new AtomicBoolean(false);
 
-  private final ReentrantReadWriteLock updateLock = new ReentrantReadWriteLock();
-  Logger logger = LoggerFactory.getLogger(Store.class);
-  // 多线程场景下性能比较好的跳跃表
-  private volatile ConcurrentSkipListMap<Entity, Entity> kvMap;
-  private ExecutorService pool;
+	static final Long limitSize = 10000L;
 
-  public Store(ExecutorService pool) {
-    this.pool = pool;
-    dataSize.set(0);
-    this.kvMap = new ConcurrentSkipListMap<>();
-  }
+	// 块存储大小
+	private final AtomicLong dataSize = new AtomicLong();
 
-  @SneakyThrows
-  public void addTry(Entity kv) {
-    int i = 3;
-    while (i-- > 0) {
-      try {
-        add(kv);
-      } catch (IOException ex) {
-        Thread.sleep(10 * i);
-        logger.info("try..." + i);
-      }
-    }
-  }
+	// 正在持久化
+	private final AtomicBoolean isSnapshotFlushing = new AtomicBoolean(false);
 
-  public void add(Entity kv) throws IOException {
+	private final ReentrantReadWriteLock updateLock = new ReentrantReadWriteLock();
 
-    flushIfNeeded(true);
-    updateLock.readLock().lock();
-    try {
-      Entity prevKeyValue = kvMap.put(kv, kv);
-      if (prevKeyValue == null) {
-        dataSize.addAndGet(kv.getSerializeSize());
-      } else {
-        dataSize.addAndGet(kv.getSerializeSize() - prevKeyValue.getSerializeSize());
-      }
-    } finally {
-      updateLock.readLock().unlock();
-    }
-    flushIfNeeded(false);
-  }
+	Logger logger = LoggerFactory.getLogger(Store.class);
 
-  public SeekIter<Entity> createIterator() throws IOException {
-    return new IteratorWrapper(kvMap);
-  }
+	// 多线程场景下性能比较好的跳跃表
+	private volatile ConcurrentSkipListMap<Entity, Entity> kvMap;
 
-  private void flushIfNeeded(boolean shouldBlocking) throws IOException {
-    if (dataSize.get() > limitSize) {
-      if (isSnapshotFlushing.get() && shouldBlocking) {
-        throw new IOException(
-            "Memstore is full, currentDataSize=" + dataSize.get() + "B, maxMemstoreSize="
-                + limitSize + "B, please wait until the flushing is finished.");
-      } else if (isSnapshotFlushing.compareAndSet(false, true)) {
-        pool.submit(new FlusherTask());
-      }
-    }
-  }
+	private ExecutorService pool;
 
-  interface Iter<Entity> {
-    boolean hasNext() throws IOException;
+	public Store(ExecutorService pool) {
+		this.pool = pool;
+		dataSize.set(0);
+		this.kvMap = new ConcurrentSkipListMap<>();
+	}
 
-    Entity next() throws IOException;
-  }
+	@SneakyThrows
+	public void addTry(Entity kv) {
+		int i = 3;
+		while (i-- > 0) {
+			try {
+				add(kv);
+			}
+			catch (IOException ex) {
+				Thread.sleep(10 * i);
+				logger.info("try..." + i);
+			}
+		}
+	}
 
-  interface SeekIter<Entity> extends Iter<Entity> {
+	public void add(Entity kv) throws IOException {
 
-    /**
-     * Seek to the smallest key value which is greater than or equals to the given key value.
-     *
-     * @param kv
-     */
-    void seekTo(Entity kv) throws IOException;
-  }
+		flushIfNeeded(true);
+		updateLock.readLock().lock();
+		try {
+			Entity prevKeyValue = kvMap.put(kv, kv);
+			if (prevKeyValue == null) {
+				dataSize.addAndGet(kv.getSerializeSize());
+			}
+			else {
+				dataSize.addAndGet(kv.getSerializeSize() - prevKeyValue.getSerializeSize());
+			}
+		}
+		finally {
+			updateLock.readLock().unlock();
+		}
+		flushIfNeeded(false);
+	}
 
-  public static class IteratorWrapper implements SeekIter<Entity> {
+	public SeekIter<Entity> createIterator() throws IOException {
+		return new IteratorWrapper(kvMap);
+	}
 
-    private SortedMap<Entity, Entity> sortedMap;
-    private Iterator<Entity> it;
+	private void flushIfNeeded(boolean shouldBlocking) throws IOException {
+		if (dataSize.get() > limitSize) {
+			if (isSnapshotFlushing.get() && shouldBlocking) {
+				throw new IOException("Memstore is full, currentDataSize=" + dataSize.get() + "B, maxMemstoreSize="
+						+ limitSize + "B, please wait until the flushing is finished.");
+			}
+			else if (isSnapshotFlushing.compareAndSet(false, true)) {
+				pool.submit(new FlusherTask());
+			}
+		}
+	}
 
-    public IteratorWrapper(SortedMap<Entity, Entity> sortedMap) {
-      this.sortedMap = sortedMap;
-      this.it = sortedMap.values().iterator();
-    }
+	interface Iter<Entity> {
 
-    @Override
-    public boolean hasNext() throws IOException {
-      return it != null && it.hasNext();
-    }
+		boolean hasNext() throws IOException;
 
-    @Override
-    public Entity next() throws IOException {
-      return it.next();
-    }
+		Entity next() throws IOException;
 
-    /**
-     * tailMap与Entity的自定义比较器有关，在Entity里，如果key值相等，就比较feq的值，feq值返回大于等于它的元素。
-     * @param kv
-     * @throws IOException
-     */
-    @Override
-    public void seekTo(Entity kv) throws IOException {
-      it = sortedMap.tailMap(kv).values().iterator();
-    }
-  }
+	}
 
-  private class FlusherTask implements Runnable {
-    @SneakyThrows
-    @Override
-    public void run() {
-      // Step.1 memstore snpashot
-      updateLock.writeLock().lock();
-      try {
-        System.out.print("持久化");
-        File file = new File("d:\\zzlBase\\" + DateTime.now().getTime() + ".tmp");
-        if (!file.getParentFile().exists()) {//父路径不存在
-          file.getParentFile().mkdirs();//创建父路径
-        }
-        OutputStream output = new FileOutputStream(file, true);
-        kvMap.forEach((i, o) -> {
-          try {
-            output.write(o.toBytes());//输出数据
-          } catch (IOException ex) {
+	interface SeekIter<Entity> extends Iter<Entity> {
 
-          }
-        });
-        output.close();//关闭流
+		/**
+		 * Seek to the smallest key value which is greater than or equals to the given key
+		 * value.
+		 * @param kv
+		 */
+		void seekTo(Entity kv) throws IOException;
 
-        kvMap = new ConcurrentSkipListMap<>();
-        dataSize.set(0); //持久化之后清空它
+	}
 
-      } catch (IOException exception) {
+	public static class IteratorWrapper implements SeekIter<Entity> {
 
-      } finally {
-        updateLock.writeLock().unlock();
-        isSnapshotFlushing.compareAndSet(true, false);
-      }
-    }
-  }
+		private SortedMap<Entity, Entity> sortedMap;
+
+		private Iterator<Entity> it;
+
+		public IteratorWrapper(SortedMap<Entity, Entity> sortedMap) {
+			this.sortedMap = sortedMap;
+			this.it = sortedMap.values().iterator();
+		}
+
+		@Override
+		public boolean hasNext() throws IOException {
+			return it != null && it.hasNext();
+		}
+
+		@Override
+		public Entity next() throws IOException {
+			return it.next();
+		}
+
+		/**
+		 * tailMap与Entity的自定义比较器有关，在Entity里，如果key值相等，就比较feq的值，feq值返回大于等于它的元素。
+		 * @param kv
+		 * @throws IOException
+		 */
+		@Override
+		public void seekTo(Entity kv) throws IOException {
+			it = sortedMap.tailMap(kv).values().iterator();
+		}
+
+	}
+
+	private class FlusherTask implements Runnable {
+
+		@SneakyThrows
+		@Override
+		public void run() {
+			// Step.1 memstore snpashot
+			updateLock.writeLock().lock();
+			try {
+				System.out.print("持久化");
+				File file = new File("d:\\zzlBase\\" + DateTime.now().getTime() + ".tmp");
+				if (!file.getParentFile().exists()) {// 父路径不存在
+					file.getParentFile().mkdirs();// 创建父路径
+				}
+				OutputStream output = new FileOutputStream(file, true);
+				kvMap.forEach((i, o) -> {
+					try {
+						output.write(o.toBytes());// 输出数据
+					}
+					catch (IOException ex) {
+
+					}
+				});
+				output.close();// 关闭流
+
+				kvMap = new ConcurrentSkipListMap<>();
+				dataSize.set(0); // 持久化之后清空它
+
+			}
+			catch (IOException exception) {
+
+			}
+			finally {
+				updateLock.writeLock().unlock();
+				isSnapshotFlushing.compareAndSet(true, false);
+			}
+		}
+
+	}
 
 }

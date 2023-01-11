@@ -12,12 +12,15 @@ import java.io.IOException;
  * 自定义序列化器,对前端输出的JSON只包含名称即可，默认是一个k/v对象.
  */
 public class NameValueEnumSerializer extends JsonSerializer<NameValueEnum> {
-    @Override
-    public void serialize(NameValueEnum value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        String output = StringUtils.EMPTY;
-        if (value != null) {
-            output = value.getName();
-        }
-        jsonGenerator.writeString(output);
-    }
+
+	@Override
+	public void serialize(NameValueEnum value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider)
+			throws IOException {
+		String output = StringUtils.EMPTY;
+		if (value != null) {
+			output = value.getName();
+		}
+		jsonGenerator.writeString(output);
+	}
+
 }

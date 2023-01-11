@@ -6,6 +6,8 @@ import com.lind.common.proxy.provider.EmailMessageProviderHandler;
 
 @MessageProvider
 public interface OrderMessageProvider {
-    @MessageSend(messageProviderHandler = EmailMessageProviderHandler.class)
-    void send(String message);
+
+	@MessageSend(messageProviderHandler = EmailMessageProviderHandler.class)
+	void send(String message);
+
 }

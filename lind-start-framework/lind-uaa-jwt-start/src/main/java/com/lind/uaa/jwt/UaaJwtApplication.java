@@ -17,54 +17,56 @@ import java.util.Collection;
 @EnableCaching
 @RestController
 public class UaaJwtApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(UaaJwtApplication.class, args);
-    }
 
-    @SneakyThrows
-    @GetMapping("/test-verify")
-    public DecodedJWT verify(String token) {
-        return JwtUtils.verifierToken(token);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(UaaJwtApplication.class, args);
+	}
 
-    @GetMapping("/test")
-    @SneakyThrows
-    public String test() {
-        return JwtUtils.generTokenByRS256(new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return null;
-            }
+	@SneakyThrows
+	@GetMapping("/test-verify")
+	public DecodedJWT verify(String token) {
+		return JwtUtils.verifierToken(token);
+	}
 
-            @Override
-            public String getPassword() {
-                return null;
-            }
+	@GetMapping("/test")
+	@SneakyThrows
+	public String test() {
+		return JwtUtils.generTokenByRS256(new UserDetails() {
+			@Override
+			public Collection<? extends GrantedAuthority> getAuthorities() {
+				return null;
+			}
 
-            @Override
-            public String getUsername() {
-                return "lind";
-            }
+			@Override
+			public String getPassword() {
+				return null;
+			}
 
-            @Override
-            public boolean isAccountNonExpired() {
-                return false;
-            }
+			@Override
+			public String getUsername() {
+				return "lind";
+			}
 
-            @Override
-            public boolean isAccountNonLocked() {
-                return false;
-            }
+			@Override
+			public boolean isAccountNonExpired() {
+				return false;
+			}
 
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return false;
-            }
+			@Override
+			public boolean isAccountNonLocked() {
+				return false;
+			}
 
-            @Override
-            public boolean isEnabled() {
-                return false;
-            }
-        });
-    }
+			@Override
+			public boolean isCredentialsNonExpired() {
+				return false;
+			}
+
+			@Override
+			public boolean isEnabled() {
+				return false;
+			}
+		});
+	}
+
 }

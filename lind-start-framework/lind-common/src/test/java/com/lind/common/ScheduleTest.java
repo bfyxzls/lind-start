@@ -15,14 +15,16 @@ import java.util.Date;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ScheduleTest {
-    @SneakyThrows
-    @Test
-    public void hutoolSchedule() {
-        CronUtil.schedule("0/1 * * * * ?", (Task) () -> {
-            System.out.println(new Date() + "开始执行更新程序");
-        });
-        CronUtil.setMatchSecond(true);
-        CronUtil.start();
-        Thread.sleep(5000);
-    }
+
+	@SneakyThrows
+	@Test
+	public void hutoolSchedule() {
+		CronUtil.schedule("0/1 * * * * ?", (Task) () -> {
+			System.out.println(new Date() + "开始执行更新程序");
+		});
+		CronUtil.setMatchSecond(true);
+		CronUtil.start();
+		Thread.sleep(5000);
+	}
+
 }

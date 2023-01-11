@@ -9,8 +9,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DefaultLoggerService implements LoggerService {
-  @Override
-  public void insert(LoggerInfo loggerInfo) {
-    log.info("enter logger:{}", loggerInfo);
-  }
+
+	@Override
+	public void insert(LoggerInfo loggerInfo) {
+		log.info("enter logger:{}", loggerInfo);
+	}
+
 }

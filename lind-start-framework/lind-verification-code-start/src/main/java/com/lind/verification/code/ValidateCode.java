@@ -20,14 +20,12 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-
 /**
  * 验证码信息封装类
  *
  * @author paascloud.net @gmail.com
  */
 public class ValidateCode implements Serializable {
-
 
 	private static final long serialVersionUID = 1588203828504660915L;
 
@@ -47,8 +45,7 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Instantiates a new Validate code.
-	 *
-	 * @param code     the code
+	 * @param code the code
 	 * @param expireIn the expire in
 	 */
 	public ValidateCode(String code, int expireIn) {
@@ -58,8 +55,7 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Instantiates a new Validate code.
-	 *
-	 * @param code       the code
+	 * @param code the code
 	 * @param expireTime the expire time
 	 */
 	public ValidateCode(String code, LocalDateTime expireTime) {
@@ -69,7 +65,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Is expired boolean.
-	 *
 	 * @return the boolean
 	 */
 	@JsonIgnore
@@ -79,7 +74,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Gets code.
-	 *
 	 * @return the code
 	 */
 	public String getCode() {
@@ -88,7 +82,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Sets code.
-	 *
 	 * @param code the code
 	 */
 	public void setCode(String code) {
@@ -97,7 +90,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Gets expire time.
-	 *
 	 * @return the expire time
 	 */
 	public LocalDateTime getExpireTime() {
@@ -106,7 +98,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Sets expire time.
-	 *
 	 * @param expireTime the expire time
 	 */
 	public void setExpireTime(LocalDateTime expireTime) {
@@ -115,7 +106,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Gets type.
-	 *
 	 * @return the type
 	 */
 	public String getType() {
@@ -124,7 +114,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * Sets type.
-	 *
 	 * @param type the type
 	 */
 	public void setType(String type) {
@@ -133,7 +122,6 @@ public class ValidateCode implements Serializable {
 
 	/**
 	 * To string string.
-	 *
 	 * @return the string
 	 */
 	@Override
@@ -145,4 +133,5 @@ public class ValidateCode implements Serializable {
 		sb.append('}');
 		return sb.toString();
 	}
+
 }

@@ -5,8 +5,8 @@ package com.lind.redis.limit.execption;
  */
 public class RedisLimitException extends RuntimeException {
 
-    public RedisLimitException(String message) {
-        super(message);
-    }
+	public RedisLimitException(String message) {
+		super(message);
+	}
 
 }

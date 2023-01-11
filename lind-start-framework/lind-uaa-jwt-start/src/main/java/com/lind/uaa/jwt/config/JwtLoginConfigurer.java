@@ -17,32 +17,35 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
  * @param <B>
  */
 @RequiredArgsConstructor
-public class JwtLoginConfigurer<T extends JwtLoginConfigurer<T, B>, B extends HttpSecurityBuilder<B>> extends AbstractHttpConfigurer<T, B> {
+public class JwtLoginConfigurer<T extends JwtLoginConfigurer<T, B>, B extends HttpSecurityBuilder<B>>
+		extends AbstractHttpConfigurer<T, B> {
 
-  private final RedisService redisService;
-  private final JwtConfig jwtConfig;
-  private JwtAuthenticationFilter authFilter = new JwtAuthenticationFilter();
+	private final RedisService redisService;
 
-  @Override
-  public void configure(B http) throws Exception {
-    // 设置Filter使用的AuthenticationManager,这里取公共的即可
-    authFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
-    // 设置失败的Handler
-    authFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler(redisService, jwtConfig));
-    // 不将认证后的context放入session
-    JwtAuthenticationFilter filter = postProcess(authFilter);
-    // 指定Filter的位置
-    http.addFilterBefore(filter, LogoutFilter.class);
-  }
+	private final JwtConfig jwtConfig;
 
-  public JwtLoginConfigurer<T, B> permissiveRequestUrls(String... urls) {
-    authFilter.setPermissiveUrl(urls);
-    return this;
-  }
+	private JwtAuthenticationFilter authFilter = new JwtAuthenticationFilter();
 
-  public JwtLoginConfigurer<T, B> tokenValidSuccessHandler(AuthenticationSuccessHandler successHandler) {
-    authFilter.setAuthenticationSuccessHandler(successHandler);
-    return this;
-  }
+	@Override
+	public void configure(B http) throws Exception {
+		// 设置Filter使用的AuthenticationManager,这里取公共的即可
+		authFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+		// 设置失败的Handler
+		authFilter.setAuthenticationFailureHandler(new HttpStatusLoginFailureHandler(redisService, jwtConfig));
+		// 不将认证后的context放入session
+		JwtAuthenticationFilter filter = postProcess(authFilter);
+		// 指定Filter的位置
+		http.addFilterBefore(filter, LogoutFilter.class);
+	}
+
+	public JwtLoginConfigurer<T, B> permissiveRequestUrls(String... urls) {
+		authFilter.setPermissiveUrl(urls);
+		return this;
+	}
+
+	public JwtLoginConfigurer<T, B> tokenValidSuccessHandler(AuthenticationSuccessHandler successHandler) {
+		authFilter.setAuthenticationSuccessHandler(successHandler);
+		return this;
+	}
 
 }

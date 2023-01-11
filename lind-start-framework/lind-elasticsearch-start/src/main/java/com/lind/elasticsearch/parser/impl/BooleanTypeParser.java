@@ -8,23 +8,25 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import java.util.List;
 
-
 public class BooleanTypeParser extends BaseAbstractTypeParser implements FieldTypeParser<Object> {
-    @Override
-    public Object parser(Object source) {
-        if (ObjectUtils.isEmpty(source)) {
-            return null;
-        }
-        try {
-            String s = source.toString().trim();
-            if (ParserUtils.isArray(s)) {
-                List<Boolean> booleans = getObjectMapper().readValue(s, new TypeReference<List<Boolean>>() {
-                });
-                return booleans;
-            }
-            return Boolean.parseBoolean(source.toString());
-        } catch (Exception e) {
-            throw new FieldValidException(source, e);
-        }
-    }
+
+	@Override
+	public Object parser(Object source) {
+		if (ObjectUtils.isEmpty(source)) {
+			return null;
+		}
+		try {
+			String s = source.toString().trim();
+			if (ParserUtils.isArray(s)) {
+				List<Boolean> booleans = getObjectMapper().readValue(s, new TypeReference<List<Boolean>>() {
+				});
+				return booleans;
+			}
+			return Boolean.parseBoolean(source.toString());
+		}
+		catch (Exception e) {
+			throw new FieldValidException(source, e);
+		}
+	}
+
 }

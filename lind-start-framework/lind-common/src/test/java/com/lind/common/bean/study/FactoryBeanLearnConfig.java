@@ -8,9 +8,11 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class FactoryBeanLearnConfig {
-  @Bean
-  public FactoryBeanLearn factoryBeanLearn() {//这里的方法名称是Department类Bean的ID
-    FactoryBeanLearn factoryBeanLearn = new FactoryBeanLearn();
-    return factoryBeanLearn;
-  }
+
+	@Bean
+	public FactoryBeanLearn factoryBeanLearn() {// 这里的方法名称是Department类Bean的ID
+		FactoryBeanLearn factoryBeanLearn = new FactoryBeanLearn();
+		return factoryBeanLearn;
+	}
+
 }

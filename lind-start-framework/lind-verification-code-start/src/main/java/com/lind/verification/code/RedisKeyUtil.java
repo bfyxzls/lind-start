@@ -28,18 +28,22 @@ public class RedisKeyUtil {
 	 * The constant RESET_PWD_TOKEN_KEY.
 	 */
 	private static final String RESET_PWD_TOKEN_KEY = "paascloud:restPwd";
+
 	private static final String ACTIVE_USER = "paascloud:activeUser";
+
 	private static final String SEND_SMS_COUNT = "paascloud:sms:count";
+
 	private static final String SEND_EMAIL_CODE = "paascloud:email:code";
+
 	private static final String ACCESS_TOKEN = "paascloud:token:accessToken";
+
 	private static final String UPLOAD_FILE_SIZE = "paascloud:file:upload_file_size";
+
 	private static final int REF_NO_MAX_LENGTH = 100;
 
 	/**
 	 * Gets reset pwd token key.
-	 *
 	 * @param resetPwdKey the com.lind.common.rest pwd key
-	 *
 	 * @return the reset pwd token key
 	 */
 	public static String getResetPwdTokenKey(String resetPwdKey) {
@@ -57,9 +61,7 @@ public class RedisKeyUtil {
 
 	/**
 	 * Gets active user key.
-	 *
 	 * @param activeToken the active token
-	 *
 	 * @return the active user key
 	 */
 	public static String getActiveUserKey(String activeToken) {
@@ -70,10 +72,8 @@ public class RedisKeyUtil {
 
 	/**
 	 * Gets send sms count key.
-	 *
 	 * @param ipAddr the ip addr
-	 * @param type   mobile;ip;total
-	 *
+	 * @param type mobile;ip;total
 	 * @return the send sms count key
 	 */
 	public static String getSendSmsCountKey(String ipAddr, String type) {
@@ -82,12 +82,9 @@ public class RedisKeyUtil {
 
 	}
 
-
 	/**
 	 * Gets send sms rate key.
-	 *
 	 * @param ipAddr the ip addr
-	 *
 	 * @return the send sms rate key
 	 */
 	public static String getSendSmsRateKey(String ipAddr) {
@@ -117,4 +114,5 @@ public class RedisKeyUtil {
 	public static String getFileSizeKey() {
 		return UPLOAD_FILE_SIZE;
 	}
+
 }

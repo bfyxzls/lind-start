@@ -11,4 +11,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource(value = "classpath:test.yml", factory = YamlPropertySourceFactory.class)
 @Configuration
 public class AutoConfig {
+
 }

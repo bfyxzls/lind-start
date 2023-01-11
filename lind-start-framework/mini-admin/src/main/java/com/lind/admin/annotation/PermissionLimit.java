@@ -1,6 +1,5 @@
 package com.lind.admin.annotation;
 
-
 import javax.xml.bind.annotation.XmlType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -24,7 +23,6 @@ public @interface PermissionLimit {
 
 	/**
 	 * 要求管理员权限
-	 *
 	 * @return
 	 */
 	boolean adminuser() default false;

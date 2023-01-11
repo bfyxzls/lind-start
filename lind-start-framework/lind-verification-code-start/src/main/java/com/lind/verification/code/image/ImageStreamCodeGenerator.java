@@ -17,4 +17,5 @@ package com.lind.verification.code.image;
  * @author paascloud.net @gmail.com
  */
 public class ImageStreamCodeGenerator extends ImageCodeGenerator {
+
 }

@@ -20,20 +20,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 @Component
 public class ExceptionFilter extends AbstractRestExceptionHandler {
-  @ExceptionHandler(AccessDeniedException.class)
-  @ResponseStatus(HttpStatus.FORBIDDEN)
-  public CommonResult<String> accessDeniedException(AccessDeniedException e) {
-    String message = e.getMessage();
-    log.error(message);
-    return CommonResult.failure(403, message);
-  }
 
-  @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public CommonResult<String> accessDeniedException(AuthenticationCredentialsNotFoundException e) {
-    String message = e.getMessage();
-    log.error(message);
-    return CommonResult.failure(401, message);
-  }
+	@ExceptionHandler(AccessDeniedException.class)
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	public CommonResult<String> accessDeniedException(AccessDeniedException e) {
+		String message = e.getMessage();
+		log.error(message);
+		return CommonResult.failure(403, message);
+	}
+
+	@ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	public CommonResult<String> accessDeniedException(AuthenticationCredentialsNotFoundException e) {
+		String message = e.getMessage();
+		log.error(message);
+		return CommonResult.failure(401, message);
+	}
 
 }

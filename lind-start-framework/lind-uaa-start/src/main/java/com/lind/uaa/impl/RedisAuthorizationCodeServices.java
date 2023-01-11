@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCodeServices {
 
 	public static final String DEFAULT_ENCODE = "UTF-8";
+
 	@Autowired
 	private RedisTemplate<Object, Object> redisTemplate;
 
@@ -72,10 +73,10 @@ public class RedisAuthorizationCodeServices extends RandomValueAuthorizationCode
 
 	/**
 	 * 拼装redis中key的前缀
-	 * 
 	 * @param code
 	 */
 	private String codeKey(String code) {
 		return "oauth2:codes:" + code;
 	}
+
 }

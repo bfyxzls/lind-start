@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class A1EventListener {
-    @EventListener(A1Event.class)
-    public void saveFlagInfo(A1Event flagSaveEvent) {
-        System.out.println("A1:" + flagSaveEvent.getSource());
-    }
+
+	@EventListener(A1Event.class)
+	public void saveFlagInfo(A1Event flagSaveEvent) {
+		System.out.println("A1:" + flagSaveEvent.getSource());
+	}
+
 }

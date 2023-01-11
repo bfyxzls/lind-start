@@ -12,15 +12,17 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class LoginSuccessListener {
-    @Autowired
-    JwtUserService jwtUserService;
 
-    @EventListener
-    public void onApplicationEvent(LoginSuccessEvent event) {
-        TokenResult tokenResult = event.getTokenResult();
-        System.out.println("login success:" + tokenResult.getSubject() + ",token:" + tokenResult.getToken());
-        log.info("login success\nname:{}\ntoken:{}\n", tokenResult.getSubject(), tokenResult.getToken());
-        ResourceUser userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken(), ResourceUser.class);
-        log.info("user:{}", userDetails);
-    }
+	@Autowired
+	JwtUserService jwtUserService;
+
+	@EventListener
+	public void onApplicationEvent(LoginSuccessEvent event) {
+		TokenResult tokenResult = event.getTokenResult();
+		System.out.println("login success:" + tokenResult.getSubject() + ",token:" + tokenResult.getToken());
+		log.info("login success\nname:{}\ntoken:{}\n", tokenResult.getSubject(), tokenResult.getToken());
+		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken(), ResourceUser.class);
+		log.info("user:{}", userDetails);
+	}
+
 }

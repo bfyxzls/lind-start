@@ -39,20 +39,18 @@ public class EmailCodeProcessor extends AbstractValidateCodeProcessor<ValidateCo
 
 	/**
 	 * Instantiates a new Abstract validate code processor.
-	 *
 	 * @param validateCodeGenerators the validate code generators
 	 * @param validateCodeRepository the validate code repository
 	 */
-	public EmailCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators, ValidateCodeRepository validateCodeRepository) {
+	public EmailCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators,
+			ValidateCodeRepository validateCodeRepository) {
 		super(validateCodeGenerators, validateCodeRepository);
 	}
 
 	/**
 	 * Send.
-	 *
-	 * @param request      the request
+	 * @param request the request
 	 * @param validateCode the validate code
-	 *
 	 * @throws Exception the exception
 	 */
 	@Override
@@ -61,4 +59,5 @@ public class EmailCodeProcessor extends AbstractValidateCodeProcessor<ValidateCo
 		String email = ServletRequestUtils.getRequiredStringParameter(request.getRequest(), paramName);
 		emailCodeSender.send(email, validateCode.getCode());
 	}
+
 }

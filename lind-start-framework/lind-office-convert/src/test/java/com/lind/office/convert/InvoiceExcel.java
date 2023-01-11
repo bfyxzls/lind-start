@@ -13,12 +13,13 @@ import java.util.List;
 
 public class InvoiceExcel {
 
-    @ExcelRow
-    private int rowIndex;
+	@ExcelRow
+	private int rowIndex;
 
-    @ExcelCellName("name")
-    private String name;
+	@ExcelCellName("name")
+	private String name;
 
-    @ExcelCellName("CaseGrade")
-    private List<String> CaseGrade;
+	@ExcelCellName("CaseGrade")
+	private List<String> CaseGrade;
+
 }

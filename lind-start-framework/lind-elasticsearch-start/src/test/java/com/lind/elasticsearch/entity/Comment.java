@@ -26,51 +26,59 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends EsBaseEntity {
-    /**
-     * 文章标识
-     */
-    @Field(type = FieldType.Keyword)
-    private String articleId;
-    /**
-     * 段落标识,可以为空
-     */
-    @Field(type = FieldType.Keyword)
-    private String paragraphId;
-    /**
-     * 类型：article,paragraph
-     */
-    @Field(type = FieldType.Keyword)
-    private CommentType commentType;
-    /**
-     * 评论内容
-     */
-    @Field(type = FieldType.Text)
-    private String content;
-    /**
-     * 发表评论的用户id
-     */
-    @Field(type = FieldType.Keyword)
-    private String fromUserId;
-    /**
-     * 评论时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
-    private Date commentTime;
 
-    /**
-     * 状态：0初始化，1正常
-     */
-    @Field(type = FieldType.Keyword)
-    private Status status;
-    /**
-     * 评论分数
-     */
-    private Integer star;
+	/**
+	 * 文章标识
+	 */
+	@Field(type = FieldType.Keyword)
+	private String articleId;
 
-    @Field(type = FieldType.Nested)
-    private List<CommentLabel> replies;
+	/**
+	 * 段落标识,可以为空
+	 */
+	@Field(type = FieldType.Keyword)
+	private String paragraphId;
 
-    @Field(type = FieldType.Nested)
-    private UserInfo userInfo;
+	/**
+	 * 类型：article,paragraph
+	 */
+	@Field(type = FieldType.Keyword)
+	private CommentType commentType;
+
+	/**
+	 * 评论内容
+	 */
+	@Field(type = FieldType.Text)
+	private String content;
+
+	/**
+	 * 发表评论的用户id
+	 */
+	@Field(type = FieldType.Keyword)
+	private String fromUserId;
+
+	/**
+	 * 评论时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	@Field(type = FieldType.Date, format = DateFormat.custom, pattern = dateTimeFormat)
+	private Date commentTime;
+
+	/**
+	 * 状态：0初始化，1正常
+	 */
+	@Field(type = FieldType.Keyword)
+	private Status status;
+
+	/**
+	 * 评论分数
+	 */
+	private Integer star;
+
+	@Field(type = FieldType.Nested)
+	private List<CommentLabel> replies;
+
+	@Field(type = FieldType.Nested)
+	private UserInfo userInfo;
+
 }

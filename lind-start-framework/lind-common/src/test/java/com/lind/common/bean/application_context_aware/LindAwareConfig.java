@@ -10,8 +10,10 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class LindAwareConfig {
-    @Bean
-    public LindAware testAware() {
-        return new LindAware();
-    }
+
+	@Bean
+	public LindAware testAware() {
+		return new LindAware();
+	}
+
 }

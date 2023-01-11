@@ -1,5 +1,7 @@
 package com.lind.common.test;
 
 public interface Eat {
-  void drink();
+
+	void drink();
+
 }

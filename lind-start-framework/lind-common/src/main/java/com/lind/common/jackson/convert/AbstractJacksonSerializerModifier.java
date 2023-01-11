@@ -13,26 +13,27 @@ import java.util.Set;
  */
 @Slf4j
 public abstract class AbstractJacksonSerializerModifier {
-    @Autowired
-    private Set<BeanSerializerModifier> beanSerializerModifiers;
 
-    /**
-     * 将自己的转换器添加到转换器列表里.
-     *
-     * @param beanSerializerModifier
-     * @return
-     */
-    protected MappingJackson2HttpMessageConverter callSelfSerializerModifier(
-            BeanSerializerModifier beanSerializerModifier) {
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        ObjectMapper mapper = converter.getObjectMapper();
-        mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(beanSerializerModifier));
+	@Autowired
+	private Set<BeanSerializerModifier> beanSerializerModifiers;
 
-        // 修改器的累加,否则会进行对之前修改器的复盖
-        beanSerializerModifiers.forEach((o) -> {
-            mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(o));
-            log.info("list o:{}", o);
-        });
-        return converter;
-    }
+	/**
+	 * 将自己的转换器添加到转换器列表里.
+	 * @param beanSerializerModifier
+	 * @return
+	 */
+	protected MappingJackson2HttpMessageConverter callSelfSerializerModifier(
+			BeanSerializerModifier beanSerializerModifier) {
+		MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+		ObjectMapper mapper = converter.getObjectMapper();
+		mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(beanSerializerModifier));
+
+		// 修改器的累加,否则会进行对之前修改器的复盖
+		beanSerializerModifiers.forEach((o) -> {
+			mapper.setSerializerFactory(mapper.getSerializerFactory().withSerializerModifier(o));
+			log.info("list o:{}", o);
+		});
+		return converter;
+	}
+
 }

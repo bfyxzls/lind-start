@@ -9,18 +9,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableMessage(basePackages = {"com.lind.common.proxy"})
+@EnableMessage(basePackages = { "com.lind.common.proxy" })
 public class ProxyTest {
-    @Autowired
-    PeopleMessageProvider peopleMessageProvider;
-    @Autowired
-    OrderMessageProvider orderMessageProvider;
 
-    @Test
-    public void test() {
-        peopleMessageProvider.send("lind");
-        orderMessageProvider.send("lind");
-    }
+	@Autowired
+	PeopleMessageProvider peopleMessageProvider;
 
+	@Autowired
+	OrderMessageProvider orderMessageProvider;
+
+	@Test
+	public void test() {
+		peopleMessageProvider.send("lind");
+		orderMessageProvider.send("lind");
+	}
 
 }

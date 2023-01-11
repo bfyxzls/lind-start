@@ -12,21 +12,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MessageConfig {
-    @Bean
-    @ConditionalOnMissingBean
-    public MessageService messageService() {
-        return new DefaultMessageService();
-    }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SuccessSendHandler successSendHandler() {
-        return new DefaultSuccessSendHandler();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public MessageService messageService() {
+		return new DefaultMessageService();
+	}
 
-    @Bean
-    public MessageProviderHandler consoleMessageProviderHandler() {
-        return new DefaultMessageProviderHandler();
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public SuccessSendHandler successSendHandler() {
+		return new DefaultSuccessSendHandler();
+	}
+
+	@Bean
+	public MessageProviderHandler consoleMessageProviderHandler() {
+		return new DefaultMessageProviderHandler();
+	}
 
 }

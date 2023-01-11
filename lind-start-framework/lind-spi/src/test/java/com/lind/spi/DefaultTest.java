@@ -14,24 +14,26 @@ import java.util.ServiceLoader;
  */
 @Slf4j
 public class DefaultTest {
-    @Test
-    public void serviceLoader() {
-        ServiceLoader<ProviderFactory> s = ServiceLoader.load(ProviderFactory.class);
-        Iterator<ProviderFactory> iterable = s.iterator();
-        while (iterable.hasNext()) {
-            Provider provider = iterable.next().create();
-            log.info("hello:{}", provider.login());
-        }
-    }
 
-    @Test
-    public void spi() {
-        SpiFactory.initClassLoader("d:\\jar");
-        List<DefaultProviderFactory> s = SpiFactory.getProviderFactory(DefaultProviderFactory.class);
-        Iterator<DefaultProviderFactory> iterable = s.iterator();
-        while (iterable.hasNext()) {
-            Provider provider = iterable.next().create();
-            log.info("spi hello:{}", provider.login());
-        }
-    }
+	@Test
+	public void serviceLoader() {
+		ServiceLoader<ProviderFactory> s = ServiceLoader.load(ProviderFactory.class);
+		Iterator<ProviderFactory> iterable = s.iterator();
+		while (iterable.hasNext()) {
+			Provider provider = iterable.next().create();
+			log.info("hello:{}", provider.login());
+		}
+	}
+
+	@Test
+	public void spi() {
+		SpiFactory.initClassLoader("d:\\jar");
+		List<DefaultProviderFactory> s = SpiFactory.getProviderFactory(DefaultProviderFactory.class);
+		Iterator<DefaultProviderFactory> iterable = s.iterator();
+		while (iterable.hasNext()) {
+			Provider provider = iterable.next().create();
+			log.info("spi hello:{}", provider.login());
+		}
+	}
+
 }

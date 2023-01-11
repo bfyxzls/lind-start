@@ -6,4 +6,5 @@ package com.lind.redis;
  * @since 1.0.0
  */
 public class LimitTest {
+
 }

@@ -12,32 +12,32 @@ import java.util.Date;
  */
 @Data
 public class MessageEntity<T> implements Serializable, MessageEntityAware {
-  private static final long serialVersionUID = 3377490669064560046L;
 
-  /**
-   * 消费者需要做的操作
-   */
-  private String operator;
+	private static final long serialVersionUID = 3377490669064560046L;
 
-  /**
-   * 消息体
-   */
-  private T data;
+	/**
+	 * 消费者需要做的操作
+	 */
+	private String operator;
 
-  /**
-   * 发送消息的用户名
-   */
-  private String sendUser;
+	/**
+	 * 消息体
+	 */
+	private T data;
 
-  /**
-   * 发送消息的用户名
-   */
-  private String sendUserId;
+	/**
+	 * 发送消息的用户名
+	 */
+	private String sendUser;
 
-  /**
-   * 发送时间
-   */
-  private Date sendTime;
+	/**
+	 * 发送消息的用户名
+	 */
+	private String sendUserId;
 
+	/**
+	 * 发送时间
+	 */
+	private Date sendTime;
 
 }

@@ -11,26 +11,28 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.util.Date;
 import java.util.List;
 
-
 public class DateTypeParser extends BaseAbstractTypeParser implements FieldTypeParser<Object> {
-    @Override
-    public Object parser(Object source) {
 
-        if (ObjectUtils.isEmpty(source)) {
-            return null;
-        }
+	@Override
+	public Object parser(Object source) {
 
-        try {
-            String trim = source.toString().trim();
-            if (ParserUtils.isArray(trim)) {
-                return getObjectMapper().readValue(trim, new TypeReference<List<Date>>() {
-                });
-            }
-            DateTime parse = DateUtil.parse(source.toString());
-            long time = parse.getTime();
-            return new Date(time);
-        } catch (Exception e) {
-            throw new FieldValidException(source, e);
-        }
-    }
+		if (ObjectUtils.isEmpty(source)) {
+			return null;
+		}
+
+		try {
+			String trim = source.toString().trim();
+			if (ParserUtils.isArray(trim)) {
+				return getObjectMapper().readValue(trim, new TypeReference<List<Date>>() {
+				});
+			}
+			DateTime parse = DateUtil.parse(source.toString());
+			long time = parse.getTime();
+			return new Date(time);
+		}
+		catch (Exception e) {
+			throw new FieldValidException(source, e);
+		}
+	}
+
 }

@@ -28,16 +28,16 @@ import java.util.TimeZone;
 @Configuration
 public class JacksonConfiguration {
 
-    @Bean
-    @ConditionalOnMissingBean
-    public Jackson2ObjectMapperBuilderCustomizer customizer() {
-        return builder -> {
-            builder.locale(Locale.CHINA);
-            builder.timeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
-            builder.simpleDateFormat(DatePattern.NORM_DATETIME_PATTERN);
-            builder.serializerByType(Long.class, ToStringSerializer.instance);
-            builder.modules(new JavaTimeModule());
-        };
-    }
+	@Bean
+	@ConditionalOnMissingBean
+	public Jackson2ObjectMapperBuilderCustomizer customizer() {
+		return builder -> {
+			builder.locale(Locale.CHINA);
+			builder.timeZone(TimeZone.getTimeZone(ZoneId.systemDefault()));
+			builder.simpleDateFormat(DatePattern.NORM_DATETIME_PATTERN);
+			builder.serializerByType(Long.class, ToStringSerializer.instance);
+			builder.modules(new JavaTimeModule());
+		};
+	}
 
 }

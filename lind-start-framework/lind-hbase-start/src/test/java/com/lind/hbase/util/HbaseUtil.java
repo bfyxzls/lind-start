@@ -1,6 +1,5 @@
 package com.lind.hbase.util;
 
-
 import cn.hutool.json.JSONObject;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -30,112 +29,119 @@ import java.util.Properties;
  * @description
  */
 public class HbaseUtil {
-    private static Configuration hconf_373839 = HBaseConfiguration.create();
-    private static Properties hbaseProperties = new Properties();
-    private static Connection conn = null;
-    private static String FAMILY_NAME = "info";
 
-    static {
-        InputStream in = HbaseUtil.class.getClassLoader().getResourceAsStream("hbase.properties");
-        try {
-            hbaseProperties.load(in);
-            Iterator keys = hbaseProperties.keySet().iterator();
-            while (keys.hasNext()) {
-                String key = (String) keys.next();
-                String value = (String) hbaseProperties.get(key);
-                hconf_373839.set(key, value);
-            }
-            conn = ConnectionFactory.createConnection(hconf_373839);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+	private static Configuration hconf_373839 = HBaseConfiguration.create();
 
-    /**
-     * 单条查找
-     *
-     * @param rowKey
-     * @param tableName
-     * @return
-     * @throws IOException
-     */
-    public static JSONObject queryByRowkey(String rowKey, String tableName) throws IOException {
-        Table table = conn.getTable(TableName.valueOf(tableName));
-        Get get = new Get(Bytes.toBytes(rowKey));
-        Result result = table.get(get);
-        NavigableMap<byte[], byte[]> map = result.getFamilyMap(Bytes.toBytes(FAMILY_NAME));
-        Iterator<byte[]> keys = map.keySet().iterator();
-        JSONObject obj = new JSONObject();
-        while (keys.hasNext()) {
-            byte[] key = keys.next();
-            byte[] value = map.get(key);
-            obj.put(Bytes.toString(key), Bytes.toString(value));
-        }
-        return obj;
-    }
+	private static Properties hbaseProperties = new Properties();
 
-    /**
-     * 单条查找
-     *
-     * @param rowKey
-     * @param tableName
-     * @return
-     * @throws IOException
-     */
-    public static JSONObject queryByRowkeySerialize(String rowKey, String tableName) throws IOException {
-        Table table = conn.getTable(TableName.valueOf(tableName));
-        Get get = new Get(Bytes.toBytes(rowKey));
-        Result result = table.get(get);
-        NavigableMap<byte[], byte[]> map = result.getFamilyMap(Bytes.toBytes(FAMILY_NAME));
-        Iterator<byte[]> keys = map.keySet().iterator();
-        JSONObject obj = new JSONObject();
-        while (keys.hasNext()) {
-            byte[] key = keys.next();
-            byte[] value = map.get(key);
-            obj.put(Bytes.toString(key), SerializationUtils.deserialize(value));
-        }
-        return obj;
-    }
+	private static Connection conn = null;
 
-    /**
-     * 是否存在
-     *
-     * @param rowKey
-     * @param tableName
-     * @return
-     * @throws IOException
-     */
-    public static boolean checkByRowKey(String rowKey, String tableName) throws IOException {
-        Table table = conn.getTable(TableName.valueOf(tableName));
-        Get get = new Get(Bytes.toBytes(rowKey));
-        return table.exists(get);
-    }
+	private static String FAMILY_NAME = "info";
 
-    public static ResultScanner queryBySingleColumnFilter(String columnName, String value, String tableName) throws IOException {
-        Table table = conn.getTable(TableName.valueOf(tableName));
-        Scan scan = new Scan();
-        SingleColumnValueFilter filter = new SingleColumnValueFilter(Bytes.toBytes(FAMILY_NAME), Bytes.toBytes(columnName), CompareFilter.CompareOp.EQUAL, Bytes.toBytes(value));
-        FilterList filterList = new FilterList();
-        filterList.addFilter(filter);
-        scan.setFilter(filterList);
-        ResultScanner scanner = table.getScanner(scan);
-        return scanner;
-    }
+	static {
+		InputStream in = HbaseUtil.class.getClassLoader().getResourceAsStream("hbase.properties");
+		try {
+			hbaseProperties.load(in);
+			Iterator keys = hbaseProperties.keySet().iterator();
+			while (keys.hasNext()) {
+				String key = (String) keys.next();
+				String value = (String) hbaseProperties.get(key);
+				hconf_373839.set(key, value);
+			}
+			conn = ConnectionFactory.createConnection(hconf_373839);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    public static boolean checkQueryBySingleColumnFilter(String columnName, String value, String tableName) throws IOException {
-        ResultScanner scanner = queryBySingleColumnFilter(columnName, value, tableName);
-        Result rs = scanner.next();
-        if (rs == null) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+	/**
+	 * 单条查找
+	 * @param rowKey
+	 * @param tableName
+	 * @return
+	 * @throws IOException
+	 */
+	public static JSONObject queryByRowkey(String rowKey, String tableName) throws IOException {
+		Table table = conn.getTable(TableName.valueOf(tableName));
+		Get get = new Get(Bytes.toBytes(rowKey));
+		Result result = table.get(get);
+		NavigableMap<byte[], byte[]> map = result.getFamilyMap(Bytes.toBytes(FAMILY_NAME));
+		Iterator<byte[]> keys = map.keySet().iterator();
+		JSONObject obj = new JSONObject();
+		while (keys.hasNext()) {
+			byte[] key = keys.next();
+			byte[] value = map.get(key);
+			obj.put(Bytes.toString(key), Bytes.toString(value));
+		}
+		return obj;
+	}
 
-    public static void addDataSerialize(String rowKey, String tableName) throws IOException {
-        Table table = conn.getTable(TableName.valueOf(tableName));
-        Put put = new Put(Bytes.toBytes(rowKey));
-        put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("fieldName1"), SerializationUtils.serialize("1"));
-        table.put(put);
-    }
+	/**
+	 * 单条查找
+	 * @param rowKey
+	 * @param tableName
+	 * @return
+	 * @throws IOException
+	 */
+	public static JSONObject queryByRowkeySerialize(String rowKey, String tableName) throws IOException {
+		Table table = conn.getTable(TableName.valueOf(tableName));
+		Get get = new Get(Bytes.toBytes(rowKey));
+		Result result = table.get(get);
+		NavigableMap<byte[], byte[]> map = result.getFamilyMap(Bytes.toBytes(FAMILY_NAME));
+		Iterator<byte[]> keys = map.keySet().iterator();
+		JSONObject obj = new JSONObject();
+		while (keys.hasNext()) {
+			byte[] key = keys.next();
+			byte[] value = map.get(key);
+			obj.put(Bytes.toString(key), SerializationUtils.deserialize(value));
+		}
+		return obj;
+	}
+
+	/**
+	 * 是否存在
+	 * @param rowKey
+	 * @param tableName
+	 * @return
+	 * @throws IOException
+	 */
+	public static boolean checkByRowKey(String rowKey, String tableName) throws IOException {
+		Table table = conn.getTable(TableName.valueOf(tableName));
+		Get get = new Get(Bytes.toBytes(rowKey));
+		return table.exists(get);
+	}
+
+	public static ResultScanner queryBySingleColumnFilter(String columnName, String value, String tableName)
+			throws IOException {
+		Table table = conn.getTable(TableName.valueOf(tableName));
+		Scan scan = new Scan();
+		SingleColumnValueFilter filter = new SingleColumnValueFilter(Bytes.toBytes(FAMILY_NAME),
+				Bytes.toBytes(columnName), CompareFilter.CompareOp.EQUAL, Bytes.toBytes(value));
+		FilterList filterList = new FilterList();
+		filterList.addFilter(filter);
+		scan.setFilter(filterList);
+		ResultScanner scanner = table.getScanner(scan);
+		return scanner;
+	}
+
+	public static boolean checkQueryBySingleColumnFilter(String columnName, String value, String tableName)
+			throws IOException {
+		ResultScanner scanner = queryBySingleColumnFilter(columnName, value, tableName);
+		Result rs = scanner.next();
+		if (rs == null) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+
+	public static void addDataSerialize(String rowKey, String tableName) throws IOException {
+		Table table = conn.getTable(TableName.valueOf(tableName));
+		Put put = new Put(Bytes.toBytes(rowKey));
+		put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("fieldName1"), SerializationUtils.serialize("1"));
+		table.put(put);
+	}
+
 }

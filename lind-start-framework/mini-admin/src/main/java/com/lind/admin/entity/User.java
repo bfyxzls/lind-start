@@ -13,35 +13,42 @@ import java.util.Arrays;
 @TableName("user_info")
 public class User {
 
-    private int id;
-    private String username;        // 账号
-    private String password;        // 密码
-    private int role;                // 角色：0-普通用户、1-管理员
-    private String permission;    // 权限：操作权限列表，每个操作可能是一个字符串，如：read,del,update，多个逗号分割
+	private int id;
 
-    private String email;
-    private String phone;
-    private String realName;
+	private String username; // 账号
 
-    // plugin
-    public boolean validPermission(String... permissions) {
-        if (this.role == 1) {
-            return true;
-        } else {
-            if (permissions == null) {
-                return true;
-            }
-            if (StringUtils.hasText(this.permission)) {
-                String[] havePermissions = this.permission.split(",");
-                for (String param : permissions) {
-                    if (Arrays.stream(havePermissions).anyMatch(o -> o.equals(param))) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
+	private String password; // 密码
 
-    }
+	private int role; // 角色：0-普通用户、1-管理员
+
+	private String permission; // 权限：操作权限列表，每个操作可能是一个字符串，如：read,del,update，多个逗号分割
+
+	private String email;
+
+	private String phone;
+
+	private String realName;
+
+	// plugin
+	public boolean validPermission(String... permissions) {
+		if (this.role == 1) {
+			return true;
+		}
+		else {
+			if (permissions == null) {
+				return true;
+			}
+			if (StringUtils.hasText(this.permission)) {
+				String[] havePermissions = this.permission.split(",");
+				for (String param : permissions) {
+					if (Arrays.stream(havePermissions).anyMatch(o -> o.equals(param))) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+	}
 
 }

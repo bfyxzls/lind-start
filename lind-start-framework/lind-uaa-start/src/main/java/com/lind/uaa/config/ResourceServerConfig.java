@@ -24,36 +24,39 @@ import javax.servlet.http.HttpServletRequest;
 @Configuration
 @EnableResourceServer
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
-    @Value("${permitAll}")
-    private String[] permitAll;
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http.requestMatcher(new OAuth2RequestedMatcher()).authorizeRequests()
-                .antMatchers(PermitAllUrl.permitAllUrl(permitAll)).permitAll() // 放开权限的url
-                .anyRequest().authenticated();
-    }
+	@Value("${permitAll}")
+	private String[] permitAll;
 
-    /**
-     * 判断来源请求是否包含oauth2授权信息<br>
-     * url参数中含有access_token,或者header里有Authorization
-     */
-    private static class OAuth2RequestedMatcher implements RequestMatcher {
-        @Override
-        public boolean matches(HttpServletRequest request) {
-            // 请求参数中包含access_token参数
-            if (request.getParameter(OAuth2AccessToken.ACCESS_TOKEN) != null) {
-                return true;
-            }
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+		http.requestMatcher(new OAuth2RequestedMatcher()).authorizeRequests()
+				.antMatchers(PermitAllUrl.permitAllUrl(permitAll)).permitAll() // 放开权限的url
+				.anyRequest().authenticated();
+	}
 
-            // 头部的Authorization值以Bearer开头
-            String auth = request.getHeader("Authorization");
-            if (auth != null) {
-                return auth.startsWith(OAuth2AccessToken.BEARER_TYPE);
-            }
+	/**
+	 * 判断来源请求是否包含oauth2授权信息<br>
+	 * url参数中含有access_token,或者header里有Authorization
+	 */
+	private static class OAuth2RequestedMatcher implements RequestMatcher {
 
-            return false;
-        }
-    }
+		@Override
+		public boolean matches(HttpServletRequest request) {
+			// 请求参数中包含access_token参数
+			if (request.getParameter(OAuth2AccessToken.ACCESS_TOKEN) != null) {
+				return true;
+			}
+
+			// 头部的Authorization值以Bearer开头
+			String auth = request.getHeader("Authorization");
+			if (auth != null) {
+				return auth.startsWith(OAuth2AccessToken.BEARER_TYPE);
+			}
+
+			return false;
+		}
+
+	}
 
 }

@@ -19,47 +19,49 @@ import java.util.stream.Collectors;
  */
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserDao userDao;
 
-    @NotNull
-    private static QueryWrapper<User> getUserQueryWrapper(String username) {
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (StrUtil.isNotBlank(username)) {
-            queryWrapper.lambda().eq(User::getUsername, username);
-        }
-        return queryWrapper;
-    }
+	@Autowired
+	UserDao userDao;
 
-    @Override
-    public List<User> pageList(int offset, int pagesize, String username, int role) {
-        QueryWrapper<User> queryWrapper = getUserQueryWrapper(username);
-        return userDao.selectList(queryWrapper).stream().skip(offset).limit(pagesize).collect(Collectors.toList());
-    }
+	@NotNull
+	private static QueryWrapper<User> getUserQueryWrapper(String username) {
+		QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+		if (StrUtil.isNotBlank(username)) {
+			queryWrapper.lambda().eq(User::getUsername, username);
+		}
+		return queryWrapper;
+	}
 
-    @Override
-    public long pageListCount(int offset, int pagesize, String username, int role) {
-        QueryWrapper<User> queryWrapper = getUserQueryWrapper(username);
-        return userDao.selectCount(queryWrapper);
-    }
+	@Override
+	public List<User> pageList(int offset, int pagesize, String username, int role) {
+		QueryWrapper<User> queryWrapper = getUserQueryWrapper(username);
+		return userDao.selectList(queryWrapper).stream().skip(offset).limit(pagesize).collect(Collectors.toList());
+	}
 
-    @Override
-    public User loadByUserName(String username) {
-        return userDao.selectOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
-    }
+	@Override
+	public long pageListCount(int offset, int pagesize, String username, int role) {
+		QueryWrapper<User> queryWrapper = getUserQueryWrapper(username);
+		return userDao.selectCount(queryWrapper);
+	}
 
-    @Override
-    public int save(User user) {
-        return userDao.insert(user);
-    }
+	@Override
+	public User loadByUserName(String username) {
+		return userDao.selectOne(new QueryWrapper<User>().lambda().eq(User::getUsername, username));
+	}
 
-    @Override
-    public int update(User user) {
-        return userDao.updateById(user);
-    }
+	@Override
+	public int save(User user) {
+		return userDao.insert(user);
+	}
 
-    @Override
-    public int delete(int id) {
-        return userDao.deleteById(id);
-    }
+	@Override
+	public int update(User user) {
+		return userDao.updateById(user);
+	}
+
+	@Override
+	public int delete(int id) {
+		return userDao.deleteById(id);
+	}
+
 }

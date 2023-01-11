@@ -10,21 +10,17 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface UserService {
-    List<User> pageList(int offset,
-                        int pagesize,
-                        String username,
-                        int role);
 
-    long pageListCount(int offset,
-                      int pagesize,
-                      String username,
-                      int role);
+	List<User> pageList(int offset, int pagesize, String username, int role);
 
-    User loadByUserName(String username);
+	long pageListCount(int offset, int pagesize, String username, int role);
 
-    int save(User user);
+	User loadByUserName(String username);
 
-    int update(User user);
+	int save(User user);
 
-    int delete(int id);
+	int update(User user);
+
+	int delete(int id);
+
 }

@@ -6,5 +6,7 @@ package com.lind.common.bean.property_switch_bean.service;
  * @since 1.0.0
  */
 public interface Lind {
-    void print();
+
+	void print();
+
 }

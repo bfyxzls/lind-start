@@ -11,22 +11,22 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-@Import(value = {MessageProviderBeanDefinitionRegistry.class, MessageConfig.class})
+@Target({ ElementType.TYPE })
+@Import(value = { MessageProviderBeanDefinitionRegistry.class, MessageConfig.class })
 public @interface EnableMessage {
-    /**
-     * 扫描的基础包，默认为启动类所在包.
-     *
-     * @return
-     */
-    @AliasFor("basePackages")
-    String[] value() default {};
 
-    /**
-     * 扫描的基础包，默认为启动类所在包
-     *
-     * @return
-     */
-    @AliasFor("value")
-    String[] basePackages() default {};
+	/**
+	 * 扫描的基础包，默认为启动类所在包.
+	 * @return
+	 */
+	@AliasFor("basePackages")
+	String[] value() default {};
+
+	/**
+	 * 扫描的基础包，默认为启动类所在包
+	 * @return
+	 */
+	@AliasFor("value")
+	String[] basePackages() default {};
+
 }

@@ -1,6 +1,5 @@
 package com.lind.admin.interceptor;
 
-
 import com.lind.admin.annotation.PermissionLimit;
 import com.lind.admin.entity.User;
 import com.lind.admin.exception.PermissionLimitException;
@@ -22,46 +21,47 @@ import javax.servlet.http.HttpServletResponse;
 @Component
 public class PermissionInterceptor implements AsyncHandlerInterceptor {
 
-    @Resource
-    private LoginService loginService;
+	@Resource
+	private LoginService loginService;
 
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+	@Override
+	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+			throws Exception {
 
-        if (!(handler instanceof HandlerMethod)) {
-            return true;    // proceed with the next interceptor
-        }
+		if (!(handler instanceof HandlerMethod)) {
+			return true; // proceed with the next interceptor
+		}
 
-        // if need login
-        boolean needLogin = true;
-        boolean needAdminuser = false;
-        String[] permissions = null;
-        HandlerMethod method = (HandlerMethod) handler;
-        PermissionLimit permission = method.getMethodAnnotation(PermissionLimit.class);
-        if (permission != null) {
-            needLogin = permission.limit();
-            needAdminuser = permission.adminuser();
-            permissions = permission.permissions();
-        }
+		// if need login
+		boolean needLogin = true;
+		boolean needAdminuser = false;
+		String[] permissions = null;
+		HandlerMethod method = (HandlerMethod) handler;
+		PermissionLimit permission = method.getMethodAnnotation(PermissionLimit.class);
+		if (permission != null) {
+			needLogin = permission.limit();
+			needAdminuser = permission.adminuser();
+			permissions = permission.permissions();
+		}
 
-        if (needLogin) {
-            User loginUser = loginService.ifLogin(request, response);
-            if (loginUser == null) {
-                response.setStatus(302);
-                response.setHeader("location", request.getContextPath() + "/toLogin");
-                return false;
-            }
-            if (needAdminuser && loginUser.getRole() != 1) {
-                throw new PermissionLimitException(I18nUtil.getString("system_permission_limit"));
-            }
-            if (!loginUser.validPermission(permissions)) {
-                throw new PermissionLimitException(I18nUtil.getString("system_permission_limit"));
-            }
+		if (needLogin) {
+			User loginUser = loginService.ifLogin(request, response);
+			if (loginUser == null) {
+				response.setStatus(302);
+				response.setHeader("location", request.getContextPath() + "/toLogin");
+				return false;
+			}
+			if (needAdminuser && loginUser.getRole() != 1) {
+				throw new PermissionLimitException(I18nUtil.getString("system_permission_limit"));
+			}
+			if (!loginUser.validPermission(permissions)) {
+				throw new PermissionLimitException(I18nUtil.getString("system_permission_limit"));
+			}
 
-            request.setAttribute(LoginService.LOGIN_IDENTITY_KEY, loginUser);
-        }
+			request.setAttribute(LoginService.LOGIN_IDENTITY_KEY, loginUser);
+		}
 
-        return true;    // proceed with the next interceptor
-    }
+		return true; // proceed with the next interceptor
+	}
 
 }

@@ -19,63 +19,57 @@ import java.util.Properties;
 @Configuration
 public class QuartzConfig {
 
-    /**
-     * 读取quartz.properties 文件
-     * 将值初始化
-     *
-     * @return
-     */
-    @Bean
-    public Properties quartzProperties() throws IOException {
-        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
-        propertiesFactoryBean.afterPropertiesSet();
-        return propertiesFactoryBean.getObject();
-    }
+	/**
+	 * 读取quartz.properties 文件 将值初始化
+	 * @return
+	 */
+	@Bean
+	public Properties quartzProperties() throws IOException {
+		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+		propertiesFactoryBean.setLocation(new ClassPathResource("/quartz.properties"));
+		propertiesFactoryBean.afterPropertiesSet();
+		return propertiesFactoryBean.getObject();
+	}
 
-    /**
-     * 将配置文件的数据加载到SchedulerFactoryBean中
-     *
-     * @return
-     * @throws IOException
-     */
-    @Bean
-    public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
-        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-        schedulerFactoryBean.setQuartzProperties(quartzProperties());
-        return schedulerFactoryBean;
-    }
+	/**
+	 * 将配置文件的数据加载到SchedulerFactoryBean中
+	 * @return
+	 * @throws IOException
+	 */
+	@Bean
+	public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
+		SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
+		schedulerFactoryBean.setQuartzProperties(quartzProperties());
+		return schedulerFactoryBean;
+	}
 
-    /**
-     * 初始化监听器
-     *
-     * @return
-     */
-    @Bean
-    public QuartzInitializerListener executorListener() {
-        return new QuartzInitializerListener();
-    }
+	/**
+	 * 初始化监听器
+	 * @return
+	 */
+	@Bean
+	public QuartzInitializerListener executorListener() {
+		return new QuartzInitializerListener();
+	}
 
-    /**
-     * 获得Scheduler 对象
-     *
-     * @return
-     * @throws IOException
-     */
-    @Bean
-    public Scheduler scheduler() throws IOException {
-        return schedulerFactoryBean().getScheduler();
-    }
+	/**
+	 * 获得Scheduler 对象
+	 * @return
+	 * @throws IOException
+	 */
+	@Bean
+	public Scheduler scheduler() throws IOException {
+		return schedulerFactoryBean().getScheduler();
+	}
 
-    /**
-     * 初始化业务逻辑
-     *
-     * @param scheduler
-     * @return
-     */
-    @Bean
-    public QuartzService quartzService(Scheduler scheduler) {
-        return new QuartzServiceImpl(scheduler);
-    }
+	/**
+	 * 初始化业务逻辑
+	 * @param scheduler
+	 * @return
+	 */
+	@Bean
+	public QuartzService quartzService(Scheduler scheduler) {
+		return new QuartzServiceImpl(scheduler);
+	}
 
 }

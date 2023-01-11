@@ -19,28 +19,28 @@ import java.time.Duration;
 @Configuration
 public class JsonRedisCacheConfiguration {
 
-    /**
-     * 有效期30分钟的缓存.
-     *
-     * @return
-     */
-    @Bean
-    public RedisCacheConfiguration redisCacheConfiguration() {
-        Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-        om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
+	/**
+	 * 有效期30分钟的缓存.
+	 * @return
+	 */
+	@Bean
+	public RedisCacheConfiguration redisCacheConfiguration() {
+		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
+				Object.class);
+		ObjectMapper om = new ObjectMapper();
+		om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+		om.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+		om.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+		om.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+		jackson2JsonRedisSerializer.setObjectMapper(om);
 
-        RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
-        redisCacheConfiguration = redisCacheConfiguration.serializeValuesWith(
-                RedisSerializationContext
-                        .SerializationPair
-                        .fromSerializer(jackson2JsonRedisSerializer)
-        ).entryTtl(Duration.ofMinutes(30));
+		RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig();
+		redisCacheConfiguration = redisCacheConfiguration
+				.serializeValuesWith(
+						RedisSerializationContext.SerializationPair.fromSerializer(jackson2JsonRedisSerializer))
+				.entryTtl(Duration.ofMinutes(30));
 
-        return redisCacheConfiguration;
-    }
+		return redisCacheConfiguration;
+	}
+
 }

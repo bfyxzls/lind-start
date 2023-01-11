@@ -7,9 +7,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DefaultMessageService implements MessageService<String> {
 
-    @Override
-    public void send(String message, MessageProviderHandler messageProviderHandler, SuccessSendHandler successSendHandler) {
-        messageProviderHandler.send(message);
-        successSendHandler.successSend(message);
-    }
+	@Override
+	public void send(String message, MessageProviderHandler messageProviderHandler,
+			SuccessSendHandler successSendHandler) {
+		messageProviderHandler.send(message);
+		successSendHandler.successSend(message);
+	}
+
 }

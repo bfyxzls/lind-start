@@ -10,13 +10,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest()
-@Import(value = {SendProxyBeanDefinitionRegistry.class})
+@Import(value = { SendProxyBeanDefinitionRegistry.class })
 public class TestBean {
-  @Autowired
-  SendService sendService;
 
-  @Test
-  public void proxyTest() {
-    sendService.insert(new User());
-  }
+	@Autowired
+	SendService sendService;
+
+	@Test
+	public void proxyTest() {
+		sendService.insert(new User());
+	}
+
 }

@@ -9,19 +9,21 @@ import org.slf4j.LoggerFactory;
  * @since 1.0.0
  */
 public class MaskUtilsTest {
-    org.slf4j.Logger logger = LoggerFactory.getLogger(MaskUtilsTest.class);
 
-    @Test
-    public void inc() {
-        MaskUtils maskUtils = new MaskUtils(32L);
-        maskUtils.toRangeInc(2L);
-        logger.info("range={}", maskUtils.toRangeInc(2L));
-        logger.info("inc={}", maskUtils.toInc(maskUtils.toRangeInc(2L)));
-    }
+	org.slf4j.Logger logger = LoggerFactory.getLogger(MaskUtilsTest.class);
 
-    @Test(expected = IllegalArgumentException.class)
-    public void incExpected() {
-        MaskUtils maskUtils = new MaskUtils(32L);
-        maskUtils.toRangeInc(32L);
-    }
+	@Test
+	public void inc() {
+		MaskUtils maskUtils = new MaskUtils(32L);
+		maskUtils.toRangeInc(2L);
+		logger.info("range={}", maskUtils.toRangeInc(2L));
+		logger.info("inc={}", maskUtils.toInc(maskUtils.toRangeInc(2L)));
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void incExpected() {
+		MaskUtils maskUtils = new MaskUtils(32L);
+		maskUtils.toRangeInc(32L);
+	}
+
 }

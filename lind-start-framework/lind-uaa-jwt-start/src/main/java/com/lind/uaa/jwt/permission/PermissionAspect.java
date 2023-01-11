@@ -41,52 +41,54 @@ import java.util.stream.Collectors;
 @Slf4j
 public class PermissionAspect {
 
-    @Autowired
-    ResourcePermissionService resourcePermissionService;
+	@Autowired
+	ResourcePermissionService resourcePermissionService;
 
-    @Pointcut("@annotation(com.lind.uaa.jwt.anno.RequiresPermissions)")
-    public void logPointCut() {
+	@Pointcut("@annotation(com.lind.uaa.jwt.anno.RequiresPermissions)")
+	public void logPointCut() {
 
-    }
+	}
 
-    @Around("logPointCut()")
-    public Object around(ProceedingJoinPoint point) throws Throwable {
-        MethodSignature signature = (MethodSignature) point.getSignature();
-        Method method = point.getTarget().getClass().getDeclaredMethod(signature.getName(), signature.getParameterTypes());
-        if (method.isAnnotationPresent(RequiresPermissions.class)) {
-            RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
-            ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
-            if (userDetails.isAdmin().equals(1))
-                return point.proceed();
-            Boolean flag = requiresPermissions.logical().equals(Logical.AND) ? true : false;
+	@Around("logPointCut()")
+	public Object around(ProceedingJoinPoint point) throws Throwable {
+		MethodSignature signature = (MethodSignature) point.getSignature();
+		Method method = point.getTarget().getClass().getDeclaredMethod(signature.getName(),
+				signature.getParameterTypes());
+		if (method.isAnnotationPresent(RequiresPermissions.class)) {
+			RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
+			ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
+			if (userDetails.isAdmin().equals(1))
+				return point.proceed();
+			Boolean flag = requiresPermissions.logical().equals(Logical.AND) ? true : false;
 
-            for (String needPerm : requiresPermissions.value()) {
-                for (GrantedAuthority authority : userDetails.getAuthorities()) {
-                    log.info(authority.getAuthority());
-                    RoleGrantedAuthority userAuth = (RoleGrantedAuthority) authority;
+			for (String needPerm : requiresPermissions.value()) {
+				for (GrantedAuthority authority : userDetails.getAuthorities()) {
+					log.info(authority.getAuthority());
+					RoleGrantedAuthority userAuth = (RoleGrantedAuthority) authority;
 
-                    //通过角色取它的权限列表
-                    List<? extends ResourcePermission> permissionList = resourcePermissionService.getAllByRoleId(userAuth.getId());
-                    if (!CollectionUtils.isEmpty(permissionList)) {
-                        List<String> authPermissions = permissionList.stream().map(permission -> permission.getPermissions()).collect(Collectors.toList());
-                        if (requiresPermissions.logical() == Logical.OR) {
-                            flag = flag || authPermissions.contains(needPerm);//默认值为假;全假才假
-                        } else {
-                            flag = flag && authPermissions.contains(needPerm);//默认值为真;全真才真
-                        }
-                    }
+					// 通过角色取它的权限列表
+					List<? extends ResourcePermission> permissionList = resourcePermissionService
+							.getAllByRoleId(userAuth.getId());
+					if (!CollectionUtils.isEmpty(permissionList)) {
+						List<String> authPermissions = permissionList.stream()
+								.map(permission -> permission.getPermissions()).collect(Collectors.toList());
+						if (requiresPermissions.logical() == Logical.OR) {
+							flag = flag || authPermissions.contains(needPerm);// 默认值为假;全假才假
+						}
+						else {
+							flag = flag && authPermissions.contains(needPerm);// 默认值为真;全真才真
+						}
+					}
 
-
-                }
-            }
-            //触发AccessDeniedHandler的实现类
-            if (flag) {
-                return point.proceed();
-            }
-            throw new AccessDeniedException("access denied");
-        }
-        return point.proceed();
-    }
-
+				}
+			}
+			// 触发AccessDeniedHandler的实现类
+			if (flag) {
+				return point.proceed();
+			}
+			throw new AccessDeniedException("access denied");
+		}
+		return point.proceed();
+	}
 
 }

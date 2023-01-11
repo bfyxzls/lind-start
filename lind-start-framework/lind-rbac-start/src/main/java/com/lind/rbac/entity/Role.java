@@ -21,9 +21,12 @@ import lombok.ToString;
 @JsonDeserialize(as = Role.class)
 @ApiModel("角色表")
 @TableName("sys_role")
-public class Role  extends BaseEntity implements ResourceRole {
-  @ApiModelProperty("名称")
-  private String name;
-  @ApiModelProperty("备注")
-  private String remark;
+public class Role extends BaseEntity implements ResourceRole {
+
+	@ApiModelProperty("名称")
+	private String name;
+
+	@ApiModelProperty("备注")
+	private String remark;
+
 }

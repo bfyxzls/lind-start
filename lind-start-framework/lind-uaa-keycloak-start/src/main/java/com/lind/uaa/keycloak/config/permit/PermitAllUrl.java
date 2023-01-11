@@ -14,39 +14,30 @@ import java.util.Set;
  */
 public final class PermitAllUrl {
 
-  static final Logger logger = LoggerFactory.getLogger(PermitAllUrl.class);
+	static final Logger logger = LoggerFactory.getLogger(PermitAllUrl.class);
 
-  /**
-   * 监控中心和swagger需要访问的url
-   */
-  static final List<String> ENDPOINTS = ImmutableList.of("/sso/**",
-      "/actuator/**",
-      "/v2/api-docs/**",
-      "/doc.html",
-      "/swagger-ui.html",
-      "/swagger-resources/**",
-      "/webjars/**",
-      "/oauth/token",
-      "/oauth/test",
-      "/token/**",
-      "/favicon.ico");
+	/**
+	 * 监控中心和swagger需要访问的url
+	 */
+	static final List<String> ENDPOINTS = ImmutableList.of("/sso/**", "/actuator/**", "/v2/api-docs/**", "/doc.html",
+			"/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/oauth/token", "/oauth/test", "/token/**",
+			"/favicon.ico");
 
-  /**
-   * 需要放开权限的url
-   *
-   * @param urls 自定义的url
-   * @return 自定义的url和监控中心需要访问的url集合
-   */
-  public static String[] permitAllUrl(String... urls) {
-    if (urls == null || urls.length == 0) {
-      return ENDPOINTS.toArray(new String[ENDPOINTS.size()]);
-    }
+	/**
+	 * 需要放开权限的url
+	 * @param urls 自定义的url
+	 * @return 自定义的url和监控中心需要访问的url集合
+	 */
+	public static String[] permitAllUrl(String... urls) {
+		if (urls == null || urls.length == 0) {
+			return ENDPOINTS.toArray(new String[ENDPOINTS.size()]);
+		}
 
-    Set<String> set = new HashSet<>();
-    set.addAll(ENDPOINTS);
-    Collections.addAll(set, urls);
-    logger.info("permit urls:{}", set);
-    return set.toArray(new String[set.size()]);
-  }
+		Set<String> set = new HashSet<>();
+		set.addAll(ENDPOINTS);
+		Collections.addAll(set, urls);
+		logger.info("permit urls:{}", set);
+		return set.toArray(new String[set.size()]);
+	}
 
 }

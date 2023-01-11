@@ -13,26 +13,28 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LoggerConfig {
-  @Bean
-  public LogRecordAspect logRecordAspect() {
-    return new LogRecordAspect();
-  }
 
-  @Bean
-  @ConditionalOnMissingBean(LoggerService.class)
-  public LoggerService defaultLoggerService() {
-    return new DefaultLoggerService();
-  }
+	@Bean
+	public LogRecordAspect logRecordAspect() {
+		return new LogRecordAspect();
+	}
 
-  @Bean
-  @ConditionalOnMissingBean(CurrentUserAware.class)
-  public CurrentUserAware defaultCurrentUserAware() {
-    return new DefaultCurrentUserAware();
-  }
+	@Bean
+	@ConditionalOnMissingBean(LoggerService.class)
+	public LoggerService defaultLoggerService() {
+		return new DefaultLoggerService();
+	}
 
-  @Bean
-  @ConditionalOnMissingBean(CurrentIpAware.class)
-  public CurrentIpAware defaultCurrentIpAware() {
-    return new DefaultCurrentIpAware();
-  }
+	@Bean
+	@ConditionalOnMissingBean(CurrentUserAware.class)
+	public CurrentUserAware defaultCurrentUserAware() {
+		return new DefaultCurrentUserAware();
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(CurrentIpAware.class)
+	public CurrentIpAware defaultCurrentIpAware() {
+		return new DefaultCurrentIpAware();
+	}
+
 }

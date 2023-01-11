@@ -5,10 +5,10 @@ package com.lind.common.enums;
  */
 public interface ValueEnum {
 
-    /**
-     * 获取枚举值
-     *
-     * @return 枚举值
-     */
-    Integer getValue();
+	/**
+	 * 获取枚举值
+	 * @return 枚举值
+	 */
+	Integer getValue();
+
 }

@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AvtivitiApplication {
 
-    public static void main(String[] args) {
-        SpringApplication.run(AvtivitiApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(AvtivitiApplication.class, args);
+	}
 
 }

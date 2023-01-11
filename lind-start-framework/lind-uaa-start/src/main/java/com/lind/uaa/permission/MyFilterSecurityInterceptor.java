@@ -12,56 +12,59 @@ import javax.servlet.*;
 import java.io.IOException;
 
 /**
- * 权限管理过滤器
- * 监控用户行为
+ * 权限管理过滤器 监控用户行为
+ *
  * @author Exrickx
  */
 @Slf4j
 @Component
 public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
-    @Autowired
-    private FilterInvocationSecurityMetadataSource securityMetadataSource;
+	@Autowired
+	private FilterInvocationSecurityMetadataSource securityMetadataSource;
 
-    @Autowired
-    public void setMyAccessDecisionManager(MyAccessDecisionManager myAccessDecisionManager) {
-        super.setAccessDecisionManager(myAccessDecisionManager);
-    }
+	@Autowired
+	public void setMyAccessDecisionManager(MyAccessDecisionManager myAccessDecisionManager) {
+		super.setAccessDecisionManager(myAccessDecisionManager);
+	}
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 
-    }
+	}
 
-    @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+	@Override
+	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+			throws IOException, ServletException {
 
-        FilterInvocation fi = new FilterInvocation(request, response, chain);
-        invoke(fi);
-    }
+		FilterInvocation fi = new FilterInvocation(request, response, chain);
+		invoke(fi);
+	}
 
-    public void invoke(FilterInvocation fi) throws IOException, ServletException {
+	public void invoke(FilterInvocation fi) throws IOException, ServletException {
 
-        InterceptorStatusToken token = super.beforeInvocation(fi);
-        try {
-            fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
-        } finally {
-            super.afterInvocation(token, null);
-        }
-    }
+		InterceptorStatusToken token = super.beforeInvocation(fi);
+		try {
+			fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
+		}
+		finally {
+			super.afterInvocation(token, null);
+		}
+	}
 
-    @Override
-    public void destroy() {
+	@Override
+	public void destroy() {
 
-    }
+	}
 
-    @Override
-    public Class<?> getSecureObjectClass() {
-        return FilterInvocation.class;
-    }
+	@Override
+	public Class<?> getSecureObjectClass() {
+		return FilterInvocation.class;
+	}
 
-    @Override
-    public SecurityMetadataSource obtainSecurityMetadataSource() {
-        return this.securityMetadataSource;
-    }
+	@Override
+	public SecurityMetadataSource obtainSecurityMetadataSource() {
+		return this.securityMetadataSource;
+	}
+
 }

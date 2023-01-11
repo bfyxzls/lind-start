@@ -15,12 +15,13 @@ import java.lang.annotation.Target;
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE})
-public @interface  MqProducer {
+@Target({ ElementType.TYPE })
+public @interface MqProducer {
 
-    @AliasFor("value")
-    String name() default "";
+	@AliasFor("value")
+	String name() default "";
 
-    @AliasFor("name")
-    String value() default "";
+	@AliasFor("name")
+	String value() default "";
+
 }

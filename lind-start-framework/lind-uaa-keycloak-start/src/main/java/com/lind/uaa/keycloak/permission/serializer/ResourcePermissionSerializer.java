@@ -9,13 +9,15 @@ import java.io.IOException;
 
 public class ResourcePermissionSerializer extends JsonSerializer<ResourcePermission> {
 
-  @Override
-  public void serialize(ResourcePermission resourcePermission, JsonGenerator jsonGenerator, SerializerProvider serializers) throws IOException {
-    if (resourcePermission != null) {
-      jsonGenerator.writeStartObject();
-      jsonGenerator.writeStringField("title", resourcePermission.getTitle());
-      jsonGenerator.writeStringField("path", resourcePermission.getPath());
-      jsonGenerator.writeEndObject();
-    }
-  }
+	@Override
+	public void serialize(ResourcePermission resourcePermission, JsonGenerator jsonGenerator,
+			SerializerProvider serializers) throws IOException {
+		if (resourcePermission != null) {
+			jsonGenerator.writeStartObject();
+			jsonGenerator.writeStringField("title", resourcePermission.getTitle());
+			jsonGenerator.writeStringField("path", resourcePermission.getPath());
+			jsonGenerator.writeEndObject();
+		}
+	}
+
 }

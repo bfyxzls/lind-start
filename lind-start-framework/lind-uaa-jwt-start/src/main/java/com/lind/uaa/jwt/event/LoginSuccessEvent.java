@@ -10,7 +10,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class LoginSuccessEvent {
-    private TokenResult tokenResult;
-    private String ipAddress;
-}
 
+	private TokenResult tokenResult;
+
+	private String ipAddress;
+
+}

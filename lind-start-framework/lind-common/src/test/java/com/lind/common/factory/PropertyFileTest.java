@@ -16,11 +16,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class PropertyFileTest {
-    @Value("${author}")
-    String author;
 
-    @Test
-    public void read() {
-        log.info("author={}", author);
-    }
+	@Value("${author}")
+	String author;
+
+	@Test
+	public void read() {
+		log.info("author={}", author);
+	}
+
 }

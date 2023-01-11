@@ -27,7 +27,6 @@ import java.util.Set;
 
 import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
 
-
 /**
  * 白名单过滤器，完成将header中的Authorization删除.
  */
@@ -36,79 +35,77 @@ import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
 @Slf4j
 public class PermitAuthenticationFilter extends OncePerRequestFilter {
 
-    private final UaaProperties uaaProperties;
-    private final KeycloakSpringBootProperties keycloakSpringBootProperties;
+	private final UaaProperties uaaProperties;
 
+	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
 
+	/**
+	 * token是否在线. 如果是白名单，token没有在线，就直接跳过，如果在线，就带着token
+	 */
+	private boolean isTokenOnline(String authorization) {
+		String tokenString = TokenUtil.resolveFromAuthorizationHeader(authorization);
+		Map<String, Object> params = new HashMap<>();
+		params.put("client_id", keycloakSpringBootProperties.getResource());
+		params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
+		params.put("token", tokenString);
+		String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl()
+				+ String.format(VERIFY_TOKEN, keycloakSpringBootProperties.getRealm()), params);
+		logger.info("token.verify:" + verifyResult);
+		JSONObject jsonObj = JSON.parseObject(verifyResult);
+		return jsonObj.getBoolean("active");
+	}
 
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+			throws ServletException, IOException {
+		Set<String> set = new HashSet<>();
+		String[] urls = uaaProperties.getPermitAll();
+		if (urls != null && urls.length > 0) {
+			Collections.addAll(set, urls);
+		}
+		if (set.contains(request.getRequestURI()) || set.contains(request.getServletPath())) {
 
-    /**
-     * token是否在线.
-     * 如果是白名单，token没有在线，就直接跳过，如果在线，就带着token
-     */
-    private boolean isTokenOnline(String authorization) {
-        String tokenString = TokenUtil.resolveFromAuthorizationHeader(authorization);
-        Map<String, Object> params = new HashMap<>();
-        params.put("client_id", keycloakSpringBootProperties.getResource());
-        params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
-        params.put("token", tokenString);
-        String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl()
-                + String.format(VERIFY_TOKEN, keycloakSpringBootProperties.getRealm()), params);
-        logger.info("token.verify:" + verifyResult);
-        JSONObject jsonObj = JSON.parseObject(verifyResult);
-        return jsonObj.getBoolean("active");
-    }
+			request = new HttpServletRequestWrapper(request) {
+				private Set<String> headerNameSet;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        Set<String> set = new HashSet<>();
-        String[] urls = uaaProperties.getPermitAll();
-        if (urls != null && urls.length > 0) {
-            Collections.addAll(set, urls);
-        }
-        if (set.contains(request.getRequestURI()) || set.contains(request.getServletPath())) {
+				@Override
+				public Enumeration<String> getHeaderNames() {
+					if (headerNameSet == null) {
+						headerNameSet = new HashSet<>();
+						Enumeration<String> wrappedHeaderNames = super.getHeaderNames();
+						while (wrappedHeaderNames.hasMoreElements()) {
+							String headerName = wrappedHeaderNames.nextElement();
+							if (!HttpHeaders.AUTHORIZATION.equalsIgnoreCase(headerName)) {
+								headerNameSet.add(headerName);
+							}
+						}
+					}
+					return Collections.enumeration(headerNameSet);
+				}
 
-            request = new HttpServletRequestWrapper(request) {
-                private Set<String> headerNameSet;
+				@Override
+				public Enumeration<String> getHeaders(String name) {
+					if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
+						if (!isTokenOnline(super.getHeader(name)))
+							return Collections.<String>emptyEnumeration();
+					}
+					return super.getHeaders(name);
+				}
 
-                @Override
-                public Enumeration<String> getHeaderNames() {
-                    if (headerNameSet == null) {
-                        headerNameSet = new HashSet<>();
-                        Enumeration<String> wrappedHeaderNames = super.getHeaderNames();
-                        while (wrappedHeaderNames.hasMoreElements()) {
-                            String headerName = wrappedHeaderNames.nextElement();
-                            if (!HttpHeaders.AUTHORIZATION.equalsIgnoreCase(headerName)) {
-                                headerNameSet.add(headerName);
-                            }
-                        }
-                    }
-                    return Collections.enumeration(headerNameSet);
-                }
+				@Override
+				public String getHeader(String name) {
+					if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
+						if (!isTokenOnline(super.getHeader(name))) {
+							return null;
+						}
+					}
+					return super.getHeader(name);
+				}
+			};
 
-                @Override
-                public Enumeration<String> getHeaders(String name) {
-                    if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
-                        if (!isTokenOnline(super.getHeader(name)))
-                            return Collections.<String>emptyEnumeration();
-                    }
-                    return super.getHeaders(name);
-                }
+		}
+		filterChain.doFilter(request, response);
 
-                @Override
-                public String getHeader(String name) {
-                    if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
-                        if (!isTokenOnline(super.getHeader(name))) {
-                            return null;
-                        }
-                    }
-                    return super.getHeader(name);
-                }
-            };
+	}
 
-        }
-        filterChain.doFilter(request, response);
-
-    }
 }

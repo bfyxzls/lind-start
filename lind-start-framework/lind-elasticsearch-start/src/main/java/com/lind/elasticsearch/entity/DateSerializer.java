@@ -10,23 +10,22 @@ import java.util.Date;
 
 public class DateSerializer extends JsonSerializer<Date> {
 
+	private String pattern;
 
-    private String pattern;
+	public DateSerializer(String pattern) {
+		this.pattern = pattern;
+	}
 
-    public DateSerializer(String pattern) {
-        this.pattern = pattern;
-    }
+	public DateSerializer() {
+		this.pattern = "yyyy-MM-dd HH:mm:ss";
+	}
 
-    public DateSerializer() {
-        this.pattern = "yyyy-MM-dd HH:mm:ss";
-    }
+	@Override
+	public void serialize(Date value, JsonGenerator gen, SerializerProvider provider) throws IOException {
 
+		String format = DateUtil.format(value, pattern);
 
-    @Override
-    public void serialize(Date value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		gen.writeString(format);
+	}
 
-        String format = DateUtil.format(value, pattern);
-
-        gen.writeString(format);
-    }
 }

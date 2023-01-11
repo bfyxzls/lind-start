@@ -8,5 +8,7 @@ import java.util.Optional;
  * @param <T> 类型
  */
 public interface EsAuditorAware<T> {
-    Optional<T> getCurrentAuditor();
+
+	Optional<T> getCurrentAuditor();
+
 }

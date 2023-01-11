@@ -18,20 +18,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Map;
 
-@ComponentScan(basePackages = {"com.lind.common.registrar"})
+@ComponentScan(basePackages = { "com.lind.common.registrar" })
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Import(PeoImportBeanDefinitionRegistrar.class)
 public class ImportBeanDefinitionRegistrarTest {
 
-    @Autowired
-    HelloService helloService;
+	@Autowired
+	HelloService helloService;
 
-    @Test
-    public void test() {
-        helloService.print();
-    }
-
-
+	@Test
+	public void test() {
+		helloService.print();
+	}
 
 }

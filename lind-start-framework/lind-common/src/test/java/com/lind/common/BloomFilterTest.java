@@ -20,51 +20,54 @@ import static com.lind.common.minibase.DiskFile.BLOOM_FILTER_HASH_COUNT;
  * 布隆过滤器本身是基于位图的，是对位图的一种改进，位图在java中的实现就是BitSet。
  */
 public class BloomFilterTest {
-  @Test
-  public void main() {
-    int size = 1_000;
-    BloomFilter<Integer> bloomFilter = BloomFilter.create(Funnels.integerFunnel(), size);
-    for (int i = 0; i < size; i++) {
-      bloomFilter.put(i);
-    }
 
-    // 一定不存在
-    for (int i = 0; i < size; i++) {
-      if (!bloomFilter.mightContain(i)) {
-        System.out.println("有坏人逃脱了");
-      }
-    }
-    // 可能存在
-    List<Integer> list = new ArrayList<>(1000);
-    for (int i = size + 1000; i < size + 2000; i++) {
-      if (bloomFilter.mightContain(i)) {
-        list.add(i);
-      }
-    }
-    System.out.println("有误伤的数量：" + list.size());
-  }
+	@Test
+	public void main() {
+		int size = 1_000;
+		BloomFilter<Integer> bloomFilter = BloomFilter.create(Funnels.integerFunnel(), size);
+		for (int i = 0; i < size; i++) {
+			bloomFilter.put(i);
+		}
 
-  @Test
-  public void miniBaseBloom() {
-    com.lind.common.minibase.BloomFilter bloomFilter = new com.lind.common.minibase.BloomFilter(BLOOM_FILTER_HASH_COUNT, BLOOM_FILTER_BITS_PER_KEY);
-    byte[][] bytes = new byte[26][];
+		// 一定不存在
+		for (int i = 0; i < size; i++) {
+			if (!bloomFilter.mightContain(i)) {
+				System.out.println("有坏人逃脱了");
+			}
+		}
+		// 可能存在
+		List<Integer> list = new ArrayList<>(1000);
+		for (int i = size + 1000; i < size + 2000; i++) {
+			if (bloomFilter.mightContain(i)) {
+				list.add(i);
+			}
+		}
+		System.out.println("有误伤的数量：" + list.size());
+	}
 
-    for (int i = 0; i < 26; i++) {
-      bytes[i] = Bytes.toBytes(i + 10);
-    }
-    bloomFilter.generate(bytes);
+	@Test
+	public void miniBaseBloom() {
+		com.lind.common.minibase.BloomFilter bloomFilter = new com.lind.common.minibase.BloomFilter(
+				BLOOM_FILTER_HASH_COUNT, BLOOM_FILTER_BITS_PER_KEY);
+		byte[][] bytes = new byte[26][];
 
-    Assert.assertTrue(bloomFilter.contains(Bytes.toBytes(15)));
-    Assert.assertFalse(bloomFilter.contains(Bytes.toBytes(45)));
-  }
+		for (int i = 0; i < 26; i++) {
+			bytes[i] = Bytes.toBytes(i + 10);
+		}
+		bloomFilter.generate(bytes);
 
-  @Test
-  public void testStr() {
-    BloomFilter<String> bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), 10);
-    // A~Z  65~90
-    for (int i = 65; i < 75; i++) {
-      bloomFilter.put(new String(new char[]{(char) i}));
-    }
-    System.out.println("is contaions B:" + bloomFilter.mightContain("B"));
-  }
+		Assert.assertTrue(bloomFilter.contains(Bytes.toBytes(15)));
+		Assert.assertFalse(bloomFilter.contains(Bytes.toBytes(45)));
+	}
+
+	@Test
+	public void testStr() {
+		BloomFilter<String> bloomFilter = BloomFilter.create(Funnels.stringFunnel(Charset.defaultCharset()), 10);
+		// A~Z 65~90
+		for (int i = 65; i < 75; i++) {
+			bloomFilter.put(new String(new char[] { (char) i }));
+		}
+		System.out.println("is contaions B:" + bloomFilter.mightContain("B"));
+	}
+
 }

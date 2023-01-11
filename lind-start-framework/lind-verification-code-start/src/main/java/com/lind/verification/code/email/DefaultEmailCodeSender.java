@@ -21,15 +21,15 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class DefaultEmailCodeSender implements EmailCodeSender {
+
 	/**
 	 * Send.
-	 *
 	 * @param email the mobile
-	 * @param code  the code
+	 * @param code the code
 	 */
 	@Override
 	public void send(String email, String code) {
-	//	log.info("向邮件" + email + "发送短信验证码" + code);
+		// log.info("向邮件" + email + "发送短信验证码" + code);
 	}
 
 }

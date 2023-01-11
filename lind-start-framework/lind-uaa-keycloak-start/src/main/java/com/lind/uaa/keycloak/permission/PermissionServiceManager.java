@@ -19,49 +19,52 @@ import static com.lind.uaa.keycloak.config.Constant.KC_ROLE_PERMISSION;
  */
 @RequiredArgsConstructor
 public class PermissionServiceManager {
-    private final RedisTemplate<String, Object> template;
-    private final PermissionService permissionService;
-    private final KeycloakSpringBootProperties keycloakSpringBootProperties;
 
-    @SneakyThrows
-    public List<? extends ResourcePermission> getPermissionByRoleFromCache() {
-        String key = KC_PERMISSION.concat(keycloakSpringBootProperties.getResource());
+	private final RedisTemplate<String, Object> template;
 
-        if (template.hasKey(key)) {
-            ObjectMapper om = new ObjectMapper();
-            JsonParser jsonParser = om.getFactory().createParser(om.writeValueAsBytes(template.opsForValue().get(key)));
-            return jsonParser.readValueAs(new TypeReference<List<ResourcePermission>>() {
-            });
-        }
-        List<? extends ResourcePermission> resourcePermissions = permissionService.getAll();
-        if (resourcePermissions != null) {
-            template.opsForValue().set(key, resourcePermissions);
-            return resourcePermissions;
-        }
-        return Collections.emptyList();
-    }
+	private final PermissionService permissionService;
 
-    /**
-     * get data by roleId from cache
-     *
-     * @param roleId
-     * @return
-     */
-    @SneakyThrows
-    public List<? extends ResourcePermission> getPermissionByRoleFromCache(String roleId) {
-        String key = KC_ROLE_PERMISSION.concat(keycloakSpringBootProperties.getResource()).concat("::").concat(roleId);
+	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
 
-        if (template.hasKey(key)) {
-            ObjectMapper om = new ObjectMapper();
-            JsonParser jsonParser = om.getFactory().createParser(om.writeValueAsBytes(template.opsForValue().get(key)));
-            return jsonParser.readValueAs(new TypeReference<List<ResourcePermission>>() {
-            });
-        }
-        List<? extends ResourcePermission> resourcePermissions = permissionService.getByRoleId(roleId);
-        if (resourcePermissions != null) {
-            template.opsForValue().set(key, resourcePermissions);
-            return resourcePermissions;
-        }
-        return Collections.emptyList();
-    }
+	@SneakyThrows
+	public List<? extends ResourcePermission> getPermissionByRoleFromCache() {
+		String key = KC_PERMISSION.concat(keycloakSpringBootProperties.getResource());
+
+		if (template.hasKey(key)) {
+			ObjectMapper om = new ObjectMapper();
+			JsonParser jsonParser = om.getFactory().createParser(om.writeValueAsBytes(template.opsForValue().get(key)));
+			return jsonParser.readValueAs(new TypeReference<List<ResourcePermission>>() {
+			});
+		}
+		List<? extends ResourcePermission> resourcePermissions = permissionService.getAll();
+		if (resourcePermissions != null) {
+			template.opsForValue().set(key, resourcePermissions);
+			return resourcePermissions;
+		}
+		return Collections.emptyList();
+	}
+
+	/**
+	 * get data by roleId from cache
+	 * @param roleId
+	 * @return
+	 */
+	@SneakyThrows
+	public List<? extends ResourcePermission> getPermissionByRoleFromCache(String roleId) {
+		String key = KC_ROLE_PERMISSION.concat(keycloakSpringBootProperties.getResource()).concat("::").concat(roleId);
+
+		if (template.hasKey(key)) {
+			ObjectMapper om = new ObjectMapper();
+			JsonParser jsonParser = om.getFactory().createParser(om.writeValueAsBytes(template.opsForValue().get(key)));
+			return jsonParser.readValueAs(new TypeReference<List<ResourcePermission>>() {
+			});
+		}
+		List<? extends ResourcePermission> resourcePermissions = permissionService.getByRoleId(roleId);
+		if (resourcePermissions != null) {
+			template.opsForValue().set(key, resourcePermissions);
+			return resourcePermissions;
+		}
+		return Collections.emptyList();
+	}
+
 }

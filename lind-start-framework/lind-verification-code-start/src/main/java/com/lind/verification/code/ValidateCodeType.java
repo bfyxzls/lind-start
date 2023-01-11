@@ -43,9 +43,9 @@ public enum ValidateCodeType {
 			return CodeConstants.DEFAULT_PARAMETER_NAME_CODE_IMAGE_STREAM;
 		}
 	};
+
 	/**
 	 * 校验时从请求中获取的参数的名字
-	 *
 	 * @return param name on validate
 	 */
 	public abstract String getParamNameOnValidate();

@@ -10,8 +10,10 @@ import java.util.Optional;
  */
 @Component
 public class UserAuditAware implements AuditorAware {
-    @Override
-    public Optional getCurrentAuditor() {
-        return Optional.of("1");
-    }
+
+	@Override
+	public Optional getCurrentAuditor() {
+		return Optional.of("1");
+	}
+
 }

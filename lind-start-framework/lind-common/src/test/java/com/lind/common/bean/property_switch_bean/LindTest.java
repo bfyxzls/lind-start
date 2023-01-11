@@ -15,11 +15,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class LindTest {
-    @Autowired
-    Lind lind;
 
-    @Test
-    public void productInit() {
-        lind.print();
-    }
+	@Autowired
+	Lind lind;
+
+	@Test
+	public void productInit() {
+		lind.print();
+	}
+
 }

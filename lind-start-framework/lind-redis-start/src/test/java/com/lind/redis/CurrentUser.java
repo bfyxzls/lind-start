@@ -11,8 +11,9 @@ import java.util.Optional;
  */
 public class CurrentUser implements UserIdAuditorAware {
 
-    @Override
-    public Optional<String> getCurrentAuditor() {
-        return Optional.empty();
-    }
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.empty();
+	}
+
 }

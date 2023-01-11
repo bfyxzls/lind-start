@@ -19,46 +19,48 @@ import java.util.Set;
  */
 @Slf4j
 public class RedisResourcePermissionService implements ResourcePermissionService {
-    @Autowired
-    RedisService redisService;
-    @Autowired
-    SecurityUtil securityUtil;
 
-    @Override
-    public Set<? extends ResourcePermission> getUserAll() {
-        String key = Constants.USER_PERMISSION.concat(securityUtil.getCurrUser().getId());
-        if (redisService.hasKey(key)) {
-            return (Set<? extends ResourcePermission>) redisService.get(key);
-        }
-        return null;
-    }
+	@Autowired
+	RedisService redisService;
 
-    @SneakyThrows
-    @Override
-    public List<? extends ResourcePermission> getAll() {
-        if (redisService.hasKey(Constants.PERMISSION_ALL)) {
-            List<? extends ResourcePermission> resourcePermissions =
-                    new ObjectMapper().readValue(redisService.get(Constants.PERMISSION_ALL).toString(),
-                            new TypeReference<List<ResourcePermission>>() {
-                            });
+	@Autowired
+	SecurityUtil securityUtil;
 
-            return resourcePermissions;
-        }
-        return null;
-    }
+	@Override
+	public Set<? extends ResourcePermission> getUserAll() {
+		String key = Constants.USER_PERMISSION.concat(securityUtil.getCurrUser().getId());
+		if (redisService.hasKey(key)) {
+			return (Set<? extends ResourcePermission>) redisService.get(key);
+		}
+		return null;
+	}
 
-    @SneakyThrows
-    @Override
-    public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
-        String rolePermissionKey = Constants.ROLE_PERMISSION.concat(roleId);
-        if (redisService.hasKey(rolePermissionKey)) {
-            List<? extends ResourcePermission> permissionList =
-                    new ObjectMapper().readValue(
-                            redisService.get(Constants.ROLE_PERMISSION + roleId).toString(),
-                            new TypeReference<List<ResourcePermission>>() {
-                            });
-            return permissionList;
-        }
-        return null;
-    }
+	@SneakyThrows
+	@Override
+	public List<? extends ResourcePermission> getAll() {
+		if (redisService.hasKey(Constants.PERMISSION_ALL)) {
+			List<? extends ResourcePermission> resourcePermissions = new ObjectMapper().readValue(
+					redisService.get(Constants.PERMISSION_ALL).toString(),
+					new TypeReference<List<ResourcePermission>>() {
+					});
+
+			return resourcePermissions;
+		}
+		return null;
+	}
+
+	@SneakyThrows
+	@Override
+	public List<? extends ResourcePermission> getAllByRoleId(String roleId) {
+		String rolePermissionKey = Constants.ROLE_PERMISSION.concat(roleId);
+		if (redisService.hasKey(rolePermissionKey)) {
+			List<? extends ResourcePermission> permissionList = new ObjectMapper().readValue(
+					redisService.get(Constants.ROLE_PERMISSION + roleId).toString(),
+					new TypeReference<List<ResourcePermission>>() {
+					});
+			return permissionList;
+		}
+		return null;
+	}
+
 }

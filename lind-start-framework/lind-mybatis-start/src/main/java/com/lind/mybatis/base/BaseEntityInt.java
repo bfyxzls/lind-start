@@ -9,6 +9,8 @@ import lombok.Data;
  */
 @Data
 public abstract class BaseEntityInt extends BaseEntityGeneric {
-    @TableId(type = IdType.AUTO)
-    private Integer id;
+
+	@TableId(type = IdType.AUTO)
+	private Integer id;
+
 }

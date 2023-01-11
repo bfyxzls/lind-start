@@ -11,21 +11,20 @@ import java.util.List;
  */
 public class EsPageUtils {
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
+	private static final int DEFAULT_PAGE_SIZE = 10;
 
-    public static Pageable getPageable(int pageNumber, int pageSize) {
-        if (pageSize == 0) {
-            pageSize = DEFAULT_PAGE_SIZE;
-        }
-        return PageRequest.of(pageNumber, pageSize);
-    }
+	public static Pageable getPageable(int pageNumber, int pageSize) {
+		if (pageSize == 0) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+		return PageRequest.of(pageNumber, pageSize);
+	}
 
-
-    public static Pageable getPageable(int pageNumber, int pageSize, List<Sort.Order> orders) {
-        if (pageSize == 0) {
-            pageSize = DEFAULT_PAGE_SIZE;
-        }
-        return PageRequest.of(pageNumber, pageSize, Sort.by(orders));
-    }
+	public static Pageable getPageable(int pageNumber, int pageSize, List<Sort.Order> orders) {
+		if (pageSize == 0) {
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+		return PageRequest.of(pageNumber, pageSize, Sort.by(orders));
+	}
 
 }

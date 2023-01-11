@@ -9,5 +9,7 @@ import lombok.ToString;
 @ToString(callSuper = true)
 @TableName("t_user")
 public class TUser extends BaseEntity {
-    private String username;
+
+	private String username;
+
 }

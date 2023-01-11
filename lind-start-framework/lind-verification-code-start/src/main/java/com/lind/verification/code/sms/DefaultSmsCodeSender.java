@@ -13,10 +13,9 @@ public class DefaultSmsCodeSender implements SmsCodeSender {
 
 	/**
 	 * Send.
-	 *
 	 * @param mobile the mobile
-	 * @param code   the code
-	 * @param ip     the ip
+	 * @param code the code
+	 * @param ip the ip
 	 */
 	@Override
 	public void send(String mobile, String code, String ip) {

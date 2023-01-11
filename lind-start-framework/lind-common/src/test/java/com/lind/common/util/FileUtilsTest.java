@@ -13,64 +13,64 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class FileUtilsTest {
-    private static final Logger logger = LoggerFactory.getLogger(FileUtilsTest.class);
-    static String path = "D:\\tools\\jdk8-windowsx64.zip";
-    static String pathObj = "D:\\jar.zip";
-    private final AtomicLong maxFileId = new AtomicLong();
 
+	private static final Logger logger = LoggerFactory.getLogger(FileUtilsTest.class);
+	static String path = "D:\\tools\\jdk8-windowsx64.zip";
+	static String pathObj = "D:\\jar.zip";
 
-    @SneakyThrows
-    @Test
-    public void bio() {
-        StopWatch stopwatch = StopWatch.createStarted();
-        byte[] buffer = FileUtils.readResourceByteArray(path);
-        FileUtils.writeResourceFromByteArrayNIO(pathObj, buffer);
-        stopwatch.stop();
-        System.out.println(stopwatch.getTime(TimeUnit.MILLISECONDS) + "ms");
-    }
+	private final AtomicLong maxFileId = new AtomicLong();
 
-    @SneakyThrows
-    @Test
-    public void nio() {
-        StopWatch stopwatch = StopWatch.createStarted();
-        byte[] buffer = FileUtils.readResourceByteArrayNIO(path);
-        FileUtils.writeResourceFromByteArrayNIO(pathObj, buffer);
-        System.out.println("NIO:" + stopwatch.getTime(TimeUnit.MILLISECONDS) + "ms");
-    }
+	@SneakyThrows
+	@Test
+	public void bio() {
+		StopWatch stopwatch = StopWatch.createStarted();
+		byte[] buffer = FileUtils.readResourceByteArray(path);
+		FileUtils.writeResourceFromByteArrayNIO(pathObj, buffer);
+		stopwatch.stop();
+		System.out.println(stopwatch.getTime(TimeUnit.MILLISECONDS) + "ms");
+	}
 
-    public synchronized long nextDiskFileId() {
-        return maxFileId.incrementAndGet();
-    }
+	@SneakyThrows
+	@Test
+	public void nio() {
+		StopWatch stopwatch = StopWatch.createStarted();
+		byte[] buffer = FileUtils.readResourceByteArrayNIO(path);
+		FileUtils.writeResourceFromByteArrayNIO(pathObj, buffer);
+		System.out.println("NIO:" + stopwatch.getTime(TimeUnit.MILLISECONDS) + "ms");
+	}
 
-    @Test
-    public void generateId() {
-        for (int i = 0; i < 10; i++) {
-            System.out.printf("data.%020d%n", nextDiskFileId());
-        }
-    }
+	public synchronized long nextDiskFileId() {
+		return maxFileId.incrementAndGet();
+	}
 
-    /**
-     * 读取资源文件
-     */
-    @Test
-    public void readResourceStream() throws IOException {
+	@Test
+	public void generateId() {
+		for (int i = 0; i < 10; i++) {
+			System.out.printf("data.%020d%n", nextDiskFileId());
+		}
+	}
 
-        InputStream resource = FileUtilsTest.class.getClassLoader().getResourceAsStream("zzl.html");
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	/**
+	 * 读取资源文件
+	 */
+	@Test
+	public void readResourceStream() throws IOException {
 
-        int bufSize = 1024;
-        byte[] buffer = new byte[bufSize];
-        int len = 0;
-        while (-1 != (len = resource.read(buffer, 0, bufSize))) {
-            bos.write(buffer, 0, len);
-        }
-        logger.info(bos.toString());
-    }
+		InputStream resource = FileUtilsTest.class.getClassLoader().getResourceAsStream("zzl.html");
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-    @Test
-    public void readBigFile() throws IOException {
-        FileUtils.splitBigFile();
-    }
+		int bufSize = 1024;
+		byte[] buffer = new byte[bufSize];
+		int len = 0;
+		while (-1 != (len = resource.read(buffer, 0, bufSize))) {
+			bos.write(buffer, 0, len);
+		}
+		logger.info(bos.toString());
+	}
 
+	@Test
+	public void readBigFile() throws IOException {
+		FileUtils.splitBigFile();
+	}
 
 }

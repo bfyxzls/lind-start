@@ -16,7 +16,6 @@ import com.lind.verification.code.ValidateCode;
 import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 
-
 /**
  * 图片验证码
  *
@@ -24,16 +23,14 @@ import java.time.LocalDateTime;
  */
 public class ImageCode extends ValidateCode {
 
-
 	private static final long serialVersionUID = -6020470039852318468L;
 
 	private BufferedImage image;
 
 	/**
 	 * Instantiates a new Image code.
-	 *
-	 * @param image    the image
-	 * @param code     the code
+	 * @param image the image
+	 * @param code the code
 	 * @param expireIn the expire in
 	 */
 	ImageCode(BufferedImage image, String code, int expireIn) {
@@ -43,9 +40,8 @@ public class ImageCode extends ValidateCode {
 
 	/**
 	 * Instantiates a new Image code.
-	 *
-	 * @param image      the image
-	 * @param code       the code
+	 * @param image the image
+	 * @param code the code
 	 * @param expireTime the expire time
 	 */
 	public ImageCode(BufferedImage image, String code, LocalDateTime expireTime) {
@@ -55,7 +51,6 @@ public class ImageCode extends ValidateCode {
 
 	/**
 	 * Gets image.
-	 *
 	 * @return the image
 	 */
 	public BufferedImage getImage() {
@@ -64,7 +59,6 @@ public class ImageCode extends ValidateCode {
 
 	/**
 	 * Sets image.
-	 *
 	 * @param image the image
 	 */
 	public void setImage(BufferedImage image) {

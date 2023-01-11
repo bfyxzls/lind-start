@@ -33,79 +33,76 @@ import java.util.Properties;
  * 验证码自动装配
  **/
 @Configuration
-@EnableConfigurationProperties({ValidateCodeProperties.class})
+@EnableConfigurationProperties({ ValidateCodeProperties.class })
 public class ValidateCodeBeanConfig {
 
-    @Autowired
-    private ValidateCodeProperties validateCodeProperties;
-    @Autowired
-    private Producer captchaProducer;
+	@Autowired
+	private ValidateCodeProperties validateCodeProperties;
 
-    @Bean(name = "captchaProducer")
-    public DefaultKaptcha getKaptchaBean() {
-        DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
-        Properties properties = new Properties();
-        properties.setProperty("kaptcha.border", "yes");
-        properties.setProperty("kaptcha.border.color", "105,179,90");
-        properties.setProperty("kaptcha.textproducer.font.color", "blue");
-        properties.setProperty("kaptcha.image.width", "125");
-        properties.setProperty("kaptcha.image.height", "45");
-        properties.setProperty("kaptcha.session.key", "code");
-        properties.setProperty("kaptcha.textproducer.char.length", "4");
-        properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
-        Config config = new Config(properties);
-        defaultKaptcha.setConfig(config);
-        return defaultKaptcha;
-    }
+	@Autowired
+	private Producer captchaProducer;
 
-    /**
-     * 图片验证码图片生成器
-     *
-     * @return validate code generator
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
-    public ValidateCodeGenerator imageValidateCodeGenerator() {
-        ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
-        codeGenerator.setSecurityProperties(validateCodeProperties.getImage());
-        codeGenerator.setCaptchaProducer(captchaProducer);
-        return codeGenerator;
-    }
+	@Bean(name = "captchaProducer")
+	public DefaultKaptcha getKaptchaBean() {
+		DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
+		Properties properties = new Properties();
+		properties.setProperty("kaptcha.border", "yes");
+		properties.setProperty("kaptcha.border.color", "105,179,90");
+		properties.setProperty("kaptcha.textproducer.font.color", "blue");
+		properties.setProperty("kaptcha.image.width", "125");
+		properties.setProperty("kaptcha.image.height", "45");
+		properties.setProperty("kaptcha.session.key", "code");
+		properties.setProperty("kaptcha.textproducer.char.length", "4");
+		properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
+		Config config = new Config(properties);
+		defaultKaptcha.setConfig(config);
+		return defaultKaptcha;
+	}
 
-    /**
-     * 图片验证码图片生成器
-     *
-     * @return validate code generator
-     */
-    @Bean("imagestreamValidateCodeGenerator")
-    @ConditionalOnMissingBean(name = "imagestreamValidateCodeGenerator")
-    public ValidateCodeGenerator imageStreamValidateCodeGenerator() {
-        ImageStreamCodeGenerator codeGenerator = new ImageStreamCodeGenerator();
-        codeGenerator.setSecurityProperties(validateCodeProperties.getImage());
-        codeGenerator.setCaptchaProducer(captchaProducer);
-        return codeGenerator;
-    }
+	/**
+	 * 图片验证码图片生成器
+	 * @return validate code generator
+	 */
+	@Bean
+	@ConditionalOnMissingBean(name = "imageValidateCodeGenerator")
+	public ValidateCodeGenerator imageValidateCodeGenerator() {
+		ImageCodeGenerator codeGenerator = new ImageCodeGenerator();
+		codeGenerator.setSecurityProperties(validateCodeProperties.getImage());
+		codeGenerator.setCaptchaProducer(captchaProducer);
+		return codeGenerator;
+	}
 
-    /**
-     * 短信验证码发送器
-     *
-     * @return sms code sender
-     */
-    @Bean
-    @ConditionalOnMissingBean(SmsCodeSender.class)
-    public SmsCodeSender smsCodeSender() {
-        return new DefaultSmsCodeSender();
-    }
+	/**
+	 * 图片验证码图片生成器
+	 * @return validate code generator
+	 */
+	@Bean("imagestreamValidateCodeGenerator")
+	@ConditionalOnMissingBean(name = "imagestreamValidateCodeGenerator")
+	public ValidateCodeGenerator imageStreamValidateCodeGenerator() {
+		ImageStreamCodeGenerator codeGenerator = new ImageStreamCodeGenerator();
+		codeGenerator.setSecurityProperties(validateCodeProperties.getImage());
+		codeGenerator.setCaptchaProducer(captchaProducer);
+		return codeGenerator;
+	}
 
-    /**
-     * 邮箱验证码发送器
-     *
-     * @return sms code sender
-     */
-    @Bean
-    @ConditionalOnMissingBean(EmailCodeSender.class)
-    public EmailCodeSender emailCodeSender() {
-        return new DefaultEmailCodeSender();
-    }
+	/**
+	 * 短信验证码发送器
+	 * @return sms code sender
+	 */
+	@Bean
+	@ConditionalOnMissingBean(SmsCodeSender.class)
+	public SmsCodeSender smsCodeSender() {
+		return new DefaultSmsCodeSender();
+	}
+
+	/**
+	 * 邮箱验证码发送器
+	 * @return sms code sender
+	 */
+	@Bean
+	@ConditionalOnMissingBean(EmailCodeSender.class)
+	public EmailCodeSender emailCodeSender() {
+		return new DefaultEmailCodeSender();
+	}
 
 }

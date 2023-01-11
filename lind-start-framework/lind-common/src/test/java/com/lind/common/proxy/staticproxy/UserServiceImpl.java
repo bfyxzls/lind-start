@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableDictionaryAdapter
 public class UserServiceImpl implements UserService {
-    public void select() {
-        System.out.println("查询 selectById");
-    }
-    @DictionaryAdapterMethod
-    public void update(User user) {
-        System.out.println("更新 update");
-        log.info("user:{}", user);
-    }
+
+	public void select() {
+		System.out.println("查询 selectById");
+	}
+
+	@DictionaryAdapterMethod
+	public void update(User user) {
+		System.out.println("更新 update");
+		log.info("user:{}", user);
+	}
+
 }

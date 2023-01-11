@@ -9,7 +9,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Father {
-    public Father() {
-        System.out.println("配置類FatherConfig構造器被執行...");
-    }
+
+	public Father() {
+		System.out.println("配置類FatherConfig構造器被執行...");
+	}
+
 }

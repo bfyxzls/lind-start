@@ -8,9 +8,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MyObject {
-    private String title;
-    public MyObject print(){
-        System.out.println("hello world!");
-        return this;
-    }
+
+	private String title;
+
+	public MyObject print() {
+		System.out.println("hello world!");
+		return this;
+	}
+
 }

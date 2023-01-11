@@ -7,28 +7,28 @@ import java.util.List;
  * 用户.
  */
 public interface ResourceUser extends Serializable {
-    String getId();
 
-    /**
-     * 用户名.
-     */
-    String getUsername();
+	String getId();
 
-    /**
-     * 密码.
-     *
-     * @return
-     */
-    String getPassword();
+	/**
+	 * 用户名.
+	 */
+	String getUsername();
 
-    /**
-     * 用户拥有角色.
-     */
-    List<ResourceRole> getResourceRoles();
+	/**
+	 * 密码.
+	 * @return
+	 */
+	String getPassword();
 
-    /**
-     * 用户拥有的权限.
-     */
-    List<ResourcePermission> getResourcePermissions();
+	/**
+	 * 用户拥有角色.
+	 */
+	List<ResourceRole> getResourceRoles();
+
+	/**
+	 * 用户拥有的权限.
+	 */
+	List<ResourcePermission> getResourcePermissions();
 
 }

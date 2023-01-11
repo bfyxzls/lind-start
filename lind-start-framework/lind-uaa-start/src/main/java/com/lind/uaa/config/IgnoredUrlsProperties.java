@@ -15,5 +15,6 @@ import java.util.List;
 @ConfigurationProperties(prefix = "ignored")
 public class IgnoredUrlsProperties {
 
-    private List<String> urls = new ArrayList<>();
+	private List<String> urls = new ArrayList<>();
+
 }

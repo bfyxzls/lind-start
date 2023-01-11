@@ -8,33 +8,34 @@ import lombok.Data;
 @Data
 public class PageDTO implements PageParam {
 
-  /**
-   * 页号.
-   */
-  private int pageNumber = 0;
+	/**
+	 * 页号.
+	 */
+	private int pageNumber = 0;
 
-  /**
-   * 页面记录数.
-   */
-  private int pageSize = 10;
+	/**
+	 * 页面记录数.
+	 */
+	private int pageSize = 10;
 
-  /**
-   * 排序字段.
-   */
-  private String sort;
+	/**
+	 * 排序字段.
+	 */
+	private String sort;
 
-  /**
-   * 排序方式 asc/desc.
-   */
-  private String order;
+	/**
+	 * 排序方式 asc/desc.
+	 */
+	private String order;
 
-  @Override
-  public int getPageNumber() {
-    return pageNumber < 1 ? 1 : pageNumber;
-  }
+	@Override
+	public int getPageNumber() {
+		return pageNumber < 1 ? 1 : pageNumber;
+	}
 
-  @Override
-  public int getPageSize() {
-    return pageSize;
-  }
+	@Override
+	public int getPageSize() {
+		return pageSize;
+	}
+
 }

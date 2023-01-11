@@ -12,31 +12,28 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @Slf4j
 public class HBaseExceptionHandler {
 
+	/**
+	 * hbase重复建表
+	 * @param e TableExistsException
+	 * @return
+	 */
+	@ExceptionHandler(TableExistsException.class)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> handleTableExistsException(TableExistsException e) {
+		log.error("创建hbase表格错误：", e);
+		return ResponseEntity.ok(ExceptionUtils.getMessage(e));
+	}
 
-    /**
-     * hbase重复建表
-     *
-     * @param e TableExistsException
-     * @return
-     */
-    @ExceptionHandler(TableExistsException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> handleTableExistsException(TableExistsException e) {
-        log.error("创建hbase表格错误：", e);
-        return ResponseEntity.ok(ExceptionUtils.getMessage(e));
-    }
-
-    /**
-     * hbase操作错误
-     *
-     * @param e TableExistsException
-     * @return
-     */
-    @ExceptionHandler(HbaseSystemException.class)
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> handleHbaseSystemException(HbaseSystemException e) {
-        log.error("操作hbase数据库错误：", e);
-        return ResponseEntity.ok(ExceptionUtils.getMessage(e));
-    }
+	/**
+	 * hbase操作错误
+	 * @param e TableExistsException
+	 * @return
+	 */
+	@ExceptionHandler(HbaseSystemException.class)
+	@ResponseStatus(HttpStatus.OK)
+	public ResponseEntity<String> handleHbaseSystemException(HbaseSystemException e) {
+		log.error("操作hbase数据库错误：", e);
+		return ResponseEntity.ok(ExceptionUtils.getMessage(e));
+	}
 
 }

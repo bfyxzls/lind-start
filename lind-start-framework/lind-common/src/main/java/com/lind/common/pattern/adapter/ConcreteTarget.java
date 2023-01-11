@@ -8,11 +8,11 @@ import org.slf4j.LoggerFactory;
  */
 public class ConcreteTarget implements Target {
 
-  private static Logger LOG = LoggerFactory.getLogger(ConcreteTarget.class);
+	private static Logger LOG = LoggerFactory.getLogger(ConcreteTarget.class);
 
-  @Override
-  public void request() {
-    LOG.info("ConcreteTarget.request()");
-  }
+	@Override
+	public void request() {
+		LOG.info("ConcreteTarget.request()");
+	}
 
 }

@@ -7,19 +7,21 @@ import com.lind.common.pattern.command.bll.SellStock;
 import org.junit.Test;
 
 public class CommandTest {
-    @Test
-    public void commandOrder() {
-        Stock abcStock = new Stock();
 
-        BuyStock buyStockOrder = new BuyStock(abcStock);
-        SellStock sellStockOrder = new SellStock(abcStock);
-        ClearStock clearStock=new ClearStock(abcStock);
+	@Test
+	public void commandOrder() {
+		Stock abcStock = new Stock();
 
-        CommandManager commandManager = new CommandManager();
-        commandManager.add(buyStockOrder);
-        commandManager.add(sellStockOrder);
-        commandManager.add(clearStock);
+		BuyStock buyStockOrder = new BuyStock(abcStock);
+		SellStock sellStockOrder = new SellStock(abcStock);
+		ClearStock clearStock = new ClearStock(abcStock);
 
-        commandManager.run();
-    }
+		CommandManager commandManager = new CommandManager();
+		commandManager.add(buyStockOrder);
+		commandManager.add(sellStockOrder);
+		commandManager.add(clearStock);
+
+		commandManager.run();
+	}
+
 }

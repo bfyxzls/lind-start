@@ -1,6 +1,5 @@
 package com.lind.uaa.jwt.config;
 
-
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.filter.OptionsRequestFilter;
 import com.lind.uaa.jwt.handler.CustomAccessDeineHandler;
@@ -36,113 +35,103 @@ import java.util.Arrays;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-  @Autowired
-  UserDetailsService userDetailsService;
-  @Autowired
-  JwtUserService jwtUserService;
-  @Autowired
-  JwtConfig jwtConfig;
-  @Autowired
-  RedisService redisService;
+	@Autowired
+	UserDetailsService userDetailsService;
 
-  protected void configure(HttpSecurity http) throws Exception {
-    String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
-    http.authorizeRequests()
-        .antMatchers(urls).permitAll()
-        .and()
-        .csrf().disable()
-        .formLogin().disable()
-        .sessionManagement().disable()
-        .cors()
-        .and()
-        .headers().addHeaderWriter(new StaticHeadersWriter(Arrays.asList(
-        new Header("Access-control-Allow-Origin", "*"),
-        new Header("Access-Control-Expose-Headers", "Authorization"))))
-        .and()
-        .addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
-        .apply(new JsonLoginConfigurer<>(redisService, jwtConfig)).loginSuccessHandler(jsonLoginSuccessHandler())
-        .and()
-        .apply(new JwtLoginConfigurer<>(redisService, jwtConfig)).tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout")
-        .and()
-        .logout()
-        .logoutUrl("/logout")   //默认就是"/logout"
-        .addLogoutHandler(tokenClearLogoutHandler())
-        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-        .and()
-        .sessionManagement().disable();
+	@Autowired
+	JwtUserService jwtUserService;
 
-    // 401和403自定义
-    http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-        .accessDeniedHandler(new CustomAccessDeineHandler());
-  }
+	@Autowired
+	JwtConfig jwtConfig;
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.authenticationProvider(daoAuthenticationProvider())
-        .authenticationProvider(jwtAuthenticationProvider());
-  }
+	@Autowired
+	RedisService redisService;
 
-  @Bean
-  @ConditionalOnMissingBean(PasswordEncoder.class)
-  public PasswordEncoder passwordEncoder() {
-    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-  }
+	protected void configure(HttpSecurity http) throws Exception {
+		String[] urls = PermitAllUrl.permitAllUrl(jwtConfig.getPermitAll());
+		http.authorizeRequests().antMatchers(urls).permitAll().and().csrf().disable().formLogin().disable()
+				.sessionManagement().disable().cors().and().headers()
+				.addHeaderWriter(new StaticHeadersWriter(Arrays.asList(new Header("Access-control-Allow-Origin", "*"),
+						new Header("Access-Control-Expose-Headers", "Authorization"))))
+				.and().addFilterAfter(new OptionsRequestFilter(), CorsFilter.class)
+				.apply(new JsonLoginConfigurer<>(redisService, jwtConfig))
+				.loginSuccessHandler(jsonLoginSuccessHandler()).and()
+				.apply(new JwtLoginConfigurer<>(redisService, jwtConfig))
+				.tokenValidSuccessHandler(jwtRefreshSuccessHandler()).permissiveRequestUrls("/logout").and().logout()
+				.logoutUrl("/logout") // 默认就是"/logout"
+				.addLogoutHandler(tokenClearLogoutHandler())
+				.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()).and().sessionManagement()
+				.disable();
 
-  @Bean
-  public AuthenticationManager authenticationManagerBean() throws Exception {
-    return super.authenticationManagerBean();
-  }
+		// 401和403自定义
+		http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+				.accessDeniedHandler(new CustomAccessDeineHandler());
+	}
 
-  @Bean("jwtAuthenticationProvider")
-  protected AuthenticationProvider jwtAuthenticationProvider() {
-    return new JwtAuthenticationProvider(jwtUserService);
-  }
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(daoAuthenticationProvider()).authenticationProvider(jwtAuthenticationProvider());
+	}
 
-  @Bean("daoAuthenticationProvider")
-  protected AuthenticationProvider daoAuthenticationProvider() throws Exception {
-    //这里会默认使用BCryptPasswordEncoder比对加密后的密码，注意要跟createUser时保持一致
-    DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
-    daoProvider.setUserDetailsService(userDetailsService());
-    daoProvider.setPasswordEncoder(passwordEncoder());
-    return daoProvider;
-  }
+	@Bean
+	@ConditionalOnMissingBean(PasswordEncoder.class)
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+	}
 
-  @Override
-  protected UserDetailsService userDetailsService() {
-    return userDetailsService;
-  }
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
 
-  @Bean
-  protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
-    return new JsonLoginSuccessHandler(jwtUserService);
-  }
+	@Bean("jwtAuthenticationProvider")
+	protected AuthenticationProvider jwtAuthenticationProvider() {
+		return new JwtAuthenticationProvider(jwtUserService);
+	}
 
-  @Bean
-  protected JwtRefreshSuccessHandler jwtRefreshSuccessHandler() {
-    return new JwtRefreshSuccessHandler(jwtUserService);
-  }
+	@Bean("daoAuthenticationProvider")
+	protected AuthenticationProvider daoAuthenticationProvider() throws Exception {
+		// 这里会默认使用BCryptPasswordEncoder比对加密后的密码，注意要跟createUser时保持一致
+		DaoAuthenticationProvider daoProvider = new DaoAuthenticationProvider();
+		daoProvider.setUserDetailsService(userDetailsService());
+		daoProvider.setPasswordEncoder(passwordEncoder());
+		return daoProvider;
+	}
 
-  @Bean
-  protected TokenClearLogoutHandler tokenClearLogoutHandler() {
-    return new TokenClearLogoutHandler(jwtUserService);
-  }
+	@Override
+	protected UserDetailsService userDetailsService() {
+		return userDetailsService;
+	}
 
+	@Bean
+	protected JsonLoginSuccessHandler jsonLoginSuccessHandler() {
+		return new JsonLoginSuccessHandler(jwtUserService);
+	}
 
-  /**
-   * 跨域支持,SpringBoot默认跨域方法只支持HEAD,GET,POST.
-   *
-   * @return
-   */
-  @Bean
-  protected CorsConfigurationSource corsConfigurationSource() {
-    CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(Arrays.asList("*"));
-    configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "PUT","DELETE","OPTION"));
-    configuration.setAllowedHeaders(Arrays.asList("*"));
-    configuration.addExposedHeader("Authorization");
-    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-    source.registerCorsConfiguration("/**", configuration);
-    return source;
-  }
+	@Bean
+	protected JwtRefreshSuccessHandler jwtRefreshSuccessHandler() {
+		return new JwtRefreshSuccessHandler(jwtUserService);
+	}
+
+	@Bean
+	protected TokenClearLogoutHandler tokenClearLogoutHandler() {
+		return new TokenClearLogoutHandler(jwtUserService);
+	}
+
+	/**
+	 * 跨域支持,SpringBoot默认跨域方法只支持HEAD,GET,POST.
+	 * @return
+	 */
+	@Bean
+	protected CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("*"));
+		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "HEAD", "PUT", "DELETE", "OPTION"));
+		configuration.setAllowedHeaders(Arrays.asList("*"));
+		configuration.addExposedHeader("Authorization");
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 
 }

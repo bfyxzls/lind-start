@@ -15,8 +15,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class LocaleMessageUtilsTest {
-    @Test
-    public void messageSource() {
-        //log.info(LocaleMessageUtils.getMessage("sys.user.update.passwordError"));
-    }
+
+	@Test
+	public void messageSource() {
+		// log.info(LocaleMessageUtils.getMessage("sys.user.update.passwordError"));
+	}
+
 }

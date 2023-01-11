@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class RepeatSubmitController {
-    @RepeatSubmit(expireTime = 1)
-    @GetMapping("get")
-    public String get() {
-        return "success";
-    }
+
+	@RepeatSubmit(expireTime = 1)
+	@GetMapping("get")
+	public String get() {
+		return "success";
+	}
+
 }

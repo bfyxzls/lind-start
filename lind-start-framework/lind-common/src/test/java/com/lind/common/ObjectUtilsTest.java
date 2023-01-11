@@ -11,14 +11,15 @@ import org.springframework.util.ObjectUtils;
  * @since 1.0.0
  */
 public class ObjectUtilsTest {
-    private static Logger logger = LoggerFactory.getLogger(ObjectUtilsTest.class);
 
-    @Test
-    public void getIdentityHexString() {
+	private static Logger logger = LoggerFactory.getLogger(ObjectUtilsTest.class);
 
-        String futureId = ObjectUtils.getIdentityHexString(this);
-        logger.info("类对象的16进制hashcode:{}", futureId); //16进制字段串 6aaa5eb0
-        logger.info("类对象的10进制hashcode:{}", this.hashCode()); //10进制数 1789550256
-    }
+	@Test
+	public void getIdentityHexString() {
+
+		String futureId = ObjectUtils.getIdentityHexString(this);
+		logger.info("类对象的16进制hashcode:{}", futureId); // 16进制字段串 6aaa5eb0
+		logger.info("类对象的10进制hashcode:{}", this.hashCode()); // 10进制数 1789550256
+	}
 
 }

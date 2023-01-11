@@ -10,12 +10,10 @@ import org.springframework.kafka.support.SendResult;
 @FunctionalInterface
 public interface SuccessHandler {
 
-
-    /**
-     * 发送成功
-     *
-     * @param result kafka返回结果
-     */
-    void onSuccess(SendResult<String, String> result);
+	/**
+	 * 发送成功
+	 * @param result kafka返回结果
+	 */
+	void onSuccess(SendResult<String, String> result);
 
 }

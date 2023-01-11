@@ -8,11 +8,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TestJob implements Job {
-    @Override
-    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+	@Override
+	public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
 
-        System.out.println("CRON ----> schedule " + jobExecutionContext.getJobDetail().getKey().getName() + " is running ... + " + dateFormat.format(new Date()));
-    }
+		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+
+		System.out.println("CRON ----> schedule " + jobExecutionContext.getJobDetail().getKey().getName()
+				+ " is running ... + " + dateFormat.format(new Date()));
+	}
+
 }

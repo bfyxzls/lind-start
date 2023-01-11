@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class CustomAccessDeineHandler implements AccessDeniedHandler {
 
-  @Override
-  public void handle(HttpServletRequest request, HttpServletResponse response,
-                     AccessDeniedException accessDeniedException) throws IOException, ServletException {
-    response.setCharacterEncoding("utf-8");
-    response.setContentType("application/json;charset=utf-8");
-    response.getWriter().print(JSONObject.toJSONString(CommonResult.forbiddenFailure("没有访问权限!")));
-  }
+	@Override
+	public void handle(HttpServletRequest request, HttpServletResponse response,
+			AccessDeniedException accessDeniedException) throws IOException, ServletException {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().print(JSONObject.toJSONString(CommonResult.forbiddenFailure("没有访问权限!")));
+	}
 
 }

@@ -13,12 +13,11 @@ import java.lang.annotation.Target;
 /**
  * 开启json格式化.
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Import({NameValueEnumSerializer.class,
-        JacksonDateSerializerModifier.class,
-        JacksonNullValueSerializerModifier.class,
-        JacksonConfiguration.class})
+@Import({ NameValueEnumSerializer.class, JacksonDateSerializerModifier.class, JacksonNullValueSerializerModifier.class,
+		JacksonConfiguration.class })
 public @interface EnableJacksonFormatting {
+
 }

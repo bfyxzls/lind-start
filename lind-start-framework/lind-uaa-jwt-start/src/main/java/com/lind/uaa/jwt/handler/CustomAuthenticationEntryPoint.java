@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-  @Override
-  public void commence(HttpServletRequest request, HttpServletResponse response,
-                       AuthenticationException authException) throws IOException, ServletException {
-    response.setCharacterEncoding("utf-8");
-    response.setContentType("application/json;charset=utf-8");
-    response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("未认证或者token不合法!")));
-  }
+	@Override
+	public void commence(HttpServletRequest request, HttpServletResponse response,
+			AuthenticationException authException) throws IOException, ServletException {
+		response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json;charset=utf-8");
+		response.getWriter().print(JSONObject.toJSONString(CommonResult.unauthorizedFailure("未认证或者token不合法!")));
+	}
 
 }

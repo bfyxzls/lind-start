@@ -1,6 +1,5 @@
 package com.lind.admin.controller;
 
-
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.lind.admin.annotation.PermissionLimit;
 import com.lind.admin.dao.PermissionDao;
@@ -31,148 +30,151 @@ import java.util.Map;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private PermissionDao permissionDao;
+	@Autowired
+	private UserService userService;
 
-    @RequestMapping
-    @PermissionLimit(adminuser = true)
-    public String index(Model model) {
-        List<Permission> permissions = permissionDao.selectList(new QueryWrapper<>());
-        model.addAttribute("permissions", permissions);
-        return "user/user.index";
-    }
+	@Autowired
+	private PermissionDao permissionDao;
 
-    @RequestMapping("/pageList")
-    @ResponseBody
-    @PermissionLimit(adminuser = true)
-    public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
-                                        @RequestParam(required = false, defaultValue = "10") int length,
-                                        String username, int role) {
+	@RequestMapping
+	@PermissionLimit(adminuser = true)
+	public String index(Model model) {
+		List<Permission> permissions = permissionDao.selectList(new QueryWrapper<>());
+		model.addAttribute("permissions", permissions);
+		return "user/user.index";
+	}
 
-        // page list
-        List<User> list = userService.pageList(start, length, username, role);
-        long list_count = userService.pageListCount(start, length, username, role);
+	@RequestMapping("/pageList")
+	@ResponseBody
+	@PermissionLimit(adminuser = true)
+	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
+			@RequestParam(required = false, defaultValue = "10") int length, String username, int role) {
 
-        // filter
-        if (list != null && list.size() > 0) {
-            for (User item : list) {
-                item.setPassword(null);
-            }
-        }
+		// page list
+		List<User> list = userService.pageList(start, length, username, role);
+		long list_count = userService.pageListCount(start, length, username, role);
 
-        // package result
-        Map<String, Object> maps = new HashMap<String, Object>();
-        maps.put("recordsTotal", list_count);        // 总记录数
-        maps.put("recordsFiltered", list_count);    // 过滤后的总记录数
-        maps.put("data", list);                    // 分页列表
-        return maps;
-    }
+		// filter
+		if (list != null && list.size() > 0) {
+			for (User item : list) {
+				item.setPassword(null);
+			}
+		}
 
-    @RequestMapping("/add")
-    @ResponseBody
-    @PermissionLimit(adminuser = true)
-    public ReturnT<String> add(User xxlJobUser) {
+		// package result
+		Map<String, Object> maps = new HashMap<String, Object>();
+		maps.put("recordsTotal", list_count); // 总记录数
+		maps.put("recordsFiltered", list_count); // 过滤后的总记录数
+		maps.put("data", list); // 分页列表
+		return maps;
+	}
 
-        // valid username
-        if (!StringUtils.hasText(xxlJobUser.getUsername())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
-        }
-        xxlJobUser.setUsername(xxlJobUser.getUsername().trim());
-        if (!(xxlJobUser.getUsername().length() >= 4 && xxlJobUser.getUsername().length() <= 20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
-        }
-        // valid password
-        if (!StringUtils.hasText(xxlJobUser.getPassword())) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"));
-        }
-        xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
-        if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
-        }
-        // md5 password
-        xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
+	@RequestMapping("/add")
+	@ResponseBody
+	@PermissionLimit(adminuser = true)
+	public ReturnT<String> add(User xxlJobUser) {
 
-        // check repeat
-        User existUser = userService.loadByUserName(xxlJobUser.getUsername());
-        if (existUser != null) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
-        }
+		// valid username
+		if (!StringUtils.hasText(xxlJobUser.getUsername())) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE,
+					I18nUtil.getString("system_please_input") + I18nUtil.getString("user_username"));
+		}
+		xxlJobUser.setUsername(xxlJobUser.getUsername().trim());
+		if (!(xxlJobUser.getUsername().length() >= 4 && xxlJobUser.getUsername().length() <= 20)) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+		}
+		// valid password
+		if (!StringUtils.hasText(xxlJobUser.getPassword())) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE,
+					I18nUtil.getString("system_please_input") + I18nUtil.getString("user_password"));
+		}
+		xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
+		if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+		}
+		// md5 password
+		xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
 
-        // write
-        userService.save(xxlJobUser);
-        return ReturnT.SUCCESS;
-    }
+		// check repeat
+		User existUser = userService.loadByUserName(xxlJobUser.getUsername());
+		if (existUser != null) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
+		}
 
-    @RequestMapping("/update")
-    @ResponseBody
-    @PermissionLimit(adminuser = true)
-    public ReturnT<String> update(HttpServletRequest request, User xxlJobUser) {
+		// write
+		userService.save(xxlJobUser);
+		return ReturnT.SUCCESS;
+	}
 
-        // avoid opt login seft
-        User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getUsername().equals(xxlJobUser.getUsername())) {
-            return new ReturnT<String>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
-        }
+	@RequestMapping("/update")
+	@ResponseBody
+	@PermissionLimit(adminuser = true)
+	public ReturnT<String> update(HttpServletRequest request, User xxlJobUser) {
 
-        // valid password
-        if (StringUtils.hasText(xxlJobUser.getPassword())) {
-            xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
-            if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
-                return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
-            }
-            // md5 password
-            xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
-        } else {
-            xxlJobUser.setPassword(null);
-        }
+		// avoid opt login seft
+		User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+		if (loginUser.getUsername().equals(xxlJobUser.getUsername())) {
+			return new ReturnT<String>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
+		}
 
-        // write
-        userService.update(xxlJobUser);
-        return ReturnT.SUCCESS;
-    }
+		// valid password
+		if (StringUtils.hasText(xxlJobUser.getPassword())) {
+			xxlJobUser.setPassword(xxlJobUser.getPassword().trim());
+			if (!(xxlJobUser.getPassword().length() >= 4 && xxlJobUser.getPassword().length() <= 20)) {
+				return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+			}
+			// md5 password
+			xxlJobUser.setPassword(DigestUtils.md5DigestAsHex(xxlJobUser.getPassword().getBytes()));
+		}
+		else {
+			xxlJobUser.setPassword(null);
+		}
 
-    @RequestMapping("/remove")
-    @ResponseBody
-    @PermissionLimit(adminuser = true)
-    public ReturnT<String> remove(HttpServletRequest request, int id) {
+		// write
+		userService.update(xxlJobUser);
+		return ReturnT.SUCCESS;
+	}
 
-        // avoid opt login seft
-        User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
-        if (loginUser.getId() == id) {
-            return new ReturnT<String>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
-        }
+	@RequestMapping("/remove")
+	@ResponseBody
+	@PermissionLimit(adminuser = true)
+	public ReturnT<String> remove(HttpServletRequest request, int id) {
 
-        userService.delete(id);
-        return ReturnT.SUCCESS;
-    }
+		// avoid opt login seft
+		User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+		if (loginUser.getId() == id) {
+			return new ReturnT<String>(ReturnT.FAIL.getCode(), I18nUtil.getString("user_update_loginuser_limit"));
+		}
 
-    @RequestMapping("/updatePwd")
-    @ResponseBody
-    public ReturnT<String> updatePwd(HttpServletRequest request, String password) {
+		userService.delete(id);
+		return ReturnT.SUCCESS;
+	}
 
-        // valid password
-        if (password == null || password.trim().length() == 0) {
-            return new ReturnT<String>(ReturnT.FAIL.getCode(), "密码不可为空");
-        }
-        password = password.trim();
-        if (!(password.length() >= 4 && password.length() <= 20)) {
-            return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
-        }
+	@RequestMapping("/updatePwd")
+	@ResponseBody
+	public ReturnT<String> updatePwd(HttpServletRequest request, String password) {
 
-        // md5 password
-        String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
+		// valid password
+		if (password == null || password.trim().length() == 0) {
+			return new ReturnT<String>(ReturnT.FAIL.getCode(), "密码不可为空");
+		}
+		password = password.trim();
+		if (!(password.length() >= 4 && password.length() <= 20)) {
+			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("system_lengh_limit") + "[4-20]");
+		}
 
-        // update pwd
-        User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
+		// md5 password
+		String md5Password = DigestUtils.md5DigestAsHex(password.getBytes());
 
-        // do write
-        User existUser = userService.loadByUserName(loginUser.getUsername());
-        existUser.setPassword(md5Password);
-        userService.update(existUser);
+		// update pwd
+		User loginUser = (User) request.getAttribute(LoginService.LOGIN_IDENTITY_KEY);
 
-        return ReturnT.SUCCESS;
-    }
+		// do write
+		User existUser = userService.loadByUserName(loginUser.getUsername());
+		existUser.setPassword(md5Password);
+		userService.update(existUser);
+
+		return ReturnT.SUCCESS;
+	}
 
 }

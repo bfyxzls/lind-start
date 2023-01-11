@@ -19,64 +19,65 @@ import java.util.List;
  */
 public class Html2DocxService {
 
-    public static String closeHTML(String str) {
-        List arrTags = new ArrayList();
-        arrTags.add("br");
-        arrTags.add("hr");
-        arrTags.add("img");
-        arrTags.add("input");
-        for (int i = 0; i < arrTags.size(); i++) {
-            for (int j = 0; j < str.length(); ) {
-                int tagStart = str.indexOf("<" + arrTags.get(i), j);
-                if (tagStart >= 0) {
-                    int tagEnd = str.indexOf(">", tagStart);
-                    j = tagEnd;
-                    String preCloseTag = str.substring(tagEnd - 1, tagEnd);
-                    if (!"/".equals(preCloseTag)) {
-                        String preStr = str.substring(0, tagEnd);
-                        String afterStr = str.substring(tagEnd);
-                        str = preStr + "/" + afterStr;
-                    }
-                } else {
-                    break;
-                }
-            }
-        }
-        return str;
-    }
+	public static String closeHTML(String str) {
+		List arrTags = new ArrayList();
+		arrTags.add("br");
+		arrTags.add("hr");
+		arrTags.add("img");
+		arrTags.add("input");
+		for (int i = 0; i < arrTags.size(); i++) {
+			for (int j = 0; j < str.length();) {
+				int tagStart = str.indexOf("<" + arrTags.get(i), j);
+				if (tagStart >= 0) {
+					int tagEnd = str.indexOf(">", tagStart);
+					j = tagEnd;
+					String preCloseTag = str.substring(tagEnd - 1, tagEnd);
+					if (!"/".equals(preCloseTag)) {
+						String preStr = str.substring(0, tagEnd);
+						String afterStr = str.substring(tagEnd);
+						str = preStr + "/" + afterStr;
+					}
+				}
+				else {
+					break;
+				}
+			}
+		}
+		return str;
+	}
 
-    public static void convert(File inputFile, File outputFile) throws Exception {
+	public static void convert(File inputFile, File outputFile) throws Exception {
 
+		String stringFromFile = FileUtils.readFileToString(inputFile, "UTF-8");
 
-        String stringFromFile = FileUtils.readFileToString(inputFile, "UTF-8");
+		String unescaped = stringFromFile;
+		unescaped = Jsoup.parse(unescaped).html();
 
-        String unescaped = stringFromFile;
-        unescaped = Jsoup.parse(unescaped).html();
+		unescaped = unescaped.replace("&nbsp;", "\u00A0");
+		unescaped = closeHTML(unescaped);
 
-        unescaped = unescaped.replace("&nbsp;", "\u00A0");
-        unescaped = closeHTML(unescaped);
+		System.out.println("Unescaped: " + unescaped);
 
-        System.out.println("Unescaped: " + unescaped);
+		// Setup font mapping
+		RFonts rfonts = Context.getWmlObjectFactory().createRFonts();
+		rfonts.setAscii("Century Gothic");
+		XHTMLImporterImpl.addFontMapping("Century Gothic", rfonts);
 
-        // Setup font mapping
-        RFonts rfonts = Context.getWmlObjectFactory().createRFonts();
-        rfonts.setAscii("Century Gothic");
-        XHTMLImporterImpl.addFontMapping("Century Gothic", rfonts);
+		// Create an empty docx package
+		WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
 
-        // Create an empty docx package
-        WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.createPackage();
+		NumberingDefinitionsPart ndp = new NumberingDefinitionsPart();
+		wordMLPackage.getMainDocumentPart().addTargetPart(ndp);
+		ndp.unmarshalDefaultNumbering();
 
-        NumberingDefinitionsPart ndp = new NumberingDefinitionsPart();
-        wordMLPackage.getMainDocumentPart().addTargetPart(ndp);
-        ndp.unmarshalDefaultNumbering();
+		// Convert the XHTML, and add it into the empty docx we made
+		XHTMLImporter XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
+		XHTMLImporter.setHyperlinkStyle("Hyperlink");
 
-        // Convert the XHTML, and add it into the empty docx we made
-        XHTMLImporter XHTMLImporter = new XHTMLImporterImpl(wordMLPackage);
-        XHTMLImporter.setHyperlinkStyle("Hyperlink");
+		List<Object> convert = XHTMLImporter.convert(unescaped, null);
+		wordMLPackage.getMainDocumentPart().addAltChunk(AltChunkType.Xhtml, unescaped.getBytes());
 
-        List<Object> convert = XHTMLImporter.convert(unescaped, null);
-        wordMLPackage.getMainDocumentPart().addAltChunk(AltChunkType.Xhtml, unescaped.getBytes());
+		wordMLPackage.save(outputFile);
+	}
 
-        wordMLPackage.save(outputFile);
-    }
 }

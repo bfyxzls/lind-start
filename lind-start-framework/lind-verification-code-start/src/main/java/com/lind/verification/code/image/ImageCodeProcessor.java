@@ -31,36 +31,36 @@ import java.util.Map;
 @Component("imageValidateCodeProcessor")
 public class ImageCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
 
-    @Resource
-    private ObjectMapper objectMapper;
+	@Resource
+	private ObjectMapper objectMapper;
 
-    /**
-     * Instantiates a new Abstract validate code processor.
-     *
-     * @param validateCodeGenerators the validate code generators
-     * @param validateCodeRepository the validate code repository
-     */
-    public ImageCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators, ValidateCodeRepository validateCodeRepository) {
-        super(validateCodeGenerators, validateCodeRepository);
-    }
+	/**
+	 * Instantiates a new Abstract validate code processor.
+	 * @param validateCodeGenerators the validate code generators
+	 * @param validateCodeRepository the validate code repository
+	 */
+	public ImageCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators,
+			ValidateCodeRepository validateCodeRepository) {
+		super(validateCodeGenerators, validateCodeRepository);
+	}
 
-    /**
-     * 发送图形验证码，将其写到响应中
-     *
-     * @param request   the request
-     * @param imageCode the image code
-     * @throws Exception the exception
-     */
-    @Override
-    protected void send(ServletWebRequest request, ImageCode imageCode) throws Exception {
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ImageIO.write(imageCode.getImage(), "JPEG", bos);
+	/**
+	 * 发送图形验证码，将其写到响应中
+	 * @param request the request
+	 * @param imageCode the image code
+	 * @throws Exception the exception
+	 */
+	@Override
+	protected void send(ServletWebRequest request, ImageCode imageCode) throws Exception {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ImageIO.write(imageCode.getImage(), "JPEG", bos);
 
-        CommonResult result = CommonResult.ok(bos.toByteArray());
+		CommonResult result = CommonResult.ok(bos.toByteArray());
 
-        String json = objectMapper.writeValueAsString(result);
-        HttpServletResponse response = request.getResponse();
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
-    }
+		String json = objectMapper.writeValueAsString(result);
+		HttpServletResponse response = request.getResponse();
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
+	}
+
 }

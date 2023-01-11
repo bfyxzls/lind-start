@@ -34,42 +34,45 @@ import java.util.Properties;
  */
 public class SystemPropertiesJsonParserFactory extends MappingJsonFactory {
 
-    private static final Properties properties = new SystemEnvProperties();
+	private static final Properties properties = new SystemEnvProperties();
 
-    @Override
-    protected JsonParser _createParser(InputStream in, IOContext ctxt) throws IOException {
-        JsonParser delegate =  super._createParser(in, ctxt);
-        return new SystemPropertiesAwareJsonParser(delegate);
-    }
+	@Override
+	protected JsonParser _createParser(InputStream in, IOContext ctxt) throws IOException {
+		JsonParser delegate = super._createParser(in, ctxt);
+		return new SystemPropertiesAwareJsonParser(delegate);
+	}
 
-    @Override
-    protected JsonParser _createParser(Reader r, IOContext ctxt) throws IOException {
-        JsonParser delegate =  super._createParser(r, ctxt);
-        return new SystemPropertiesAwareJsonParser(delegate);
-    }
+	@Override
+	protected JsonParser _createParser(Reader r, IOContext ctxt) throws IOException {
+		JsonParser delegate = super._createParser(r, ctxt);
+		return new SystemPropertiesAwareJsonParser(delegate);
+	}
 
-    @Override
-    protected JsonParser _createParser(char[] data, int offset, int len, IOContext ctxt, boolean recyclable) throws IOException {
-        JsonParser delegate =  super._createParser(data, offset, len, ctxt, recyclable);
-        return new SystemPropertiesAwareJsonParser(delegate);
-    }
+	@Override
+	protected JsonParser _createParser(char[] data, int offset, int len, IOContext ctxt, boolean recyclable)
+			throws IOException {
+		JsonParser delegate = super._createParser(data, offset, len, ctxt, recyclable);
+		return new SystemPropertiesAwareJsonParser(delegate);
+	}
 
-    @Override
-    protected JsonParser _createParser(byte[] data, int offset, int len, IOContext ctxt) throws IOException {
-        JsonParser delegate =  super._createParser(data, offset, len, ctxt);
-        return new SystemPropertiesAwareJsonParser(delegate);
-    }
+	@Override
+	protected JsonParser _createParser(byte[] data, int offset, int len, IOContext ctxt) throws IOException {
+		JsonParser delegate = super._createParser(data, offset, len, ctxt);
+		return new SystemPropertiesAwareJsonParser(delegate);
+	}
 
-    public static class SystemPropertiesAwareJsonParser extends JsonParserDelegate {
+	public static class SystemPropertiesAwareJsonParser extends JsonParserDelegate {
 
-        public SystemPropertiesAwareJsonParser(JsonParser d) {
-            super(d);
-        }
+		public SystemPropertiesAwareJsonParser(JsonParser d) {
+			super(d);
+		}
 
-        @Override
-        public String getText() throws IOException {
-            String orig = super.getText();
-            return StringPropertyReplacer.replaceProperties(orig, properties);
-        }
-    }
+		@Override
+		public String getText() throws IOException {
+			String orig = super.getText();
+			return StringPropertyReplacer.replaceProperties(orig, properties);
+		}
+
+	}
+
 }

@@ -7,8 +7,11 @@ import java.time.LocalDate;
 
 @Data
 public class DateRangeDTO implements DateRangeParam {
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate fromDate;
-  @DateTimeFormat(pattern = "yyyy-MM-dd")
-  private LocalDate toDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate fromDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private LocalDate toDate;
+
 }

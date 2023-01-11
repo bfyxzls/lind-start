@@ -8,20 +8,22 @@ import org.junit.Test;
 
 @Slf4j
 public class UtilTest {
-    @Test
-    public void readFileText() {
-        log.info(FilesUtils.readAll(PathUtils.getClassRootPath("/test.txt")));
-    }
 
-    @Test
-    public void readFiles() {
-        for (String fileName : FilesUtils.getAllFileNames("D://")) {
-            log.info(fileName);
-        }
-    }
+	@Test
+	public void readFileText() {
+		log.info(FilesUtils.readAll(PathUtils.getClassRootPath("/test.txt")));
+	}
 
-    @Test
-    public void downUrl(){
-        log.info(DownloadUtils.getContentFromUrl("https://home.firefoxchina.cn/"));
-    }
+	@Test
+	public void readFiles() {
+		for (String fileName : FilesUtils.getAllFileNames("D://")) {
+			log.info(fileName);
+		}
+	}
+
+	@Test
+	public void downUrl() {
+		log.info(DownloadUtils.getContentFromUrl("https://home.firefoxchina.cn/"));
+	}
+
 }

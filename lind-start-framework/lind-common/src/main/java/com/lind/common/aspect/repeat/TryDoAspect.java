@@ -18,34 +18,35 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TryDoAspect {
 
-  /**
-   * 重试
-   *
-   * @param point
-   * @param tryDo
-   * @return
-   * @throws Throwable
-   */
-  @Around("@annotation(tryDo)")
-  public Object around(ProceedingJoinPoint point, TryDo tryDo) throws Throwable {
+	/**
+	 * 重试
+	 * @param point
+	 * @param tryDo
+	 * @return
+	 * @throws Throwable
+	 */
+	@Around("@annotation(tryDo)")
+	public Object around(ProceedingJoinPoint point, TryDo tryDo) throws Throwable {
 
-    int retry = 0;
-    while (retry++ < tryDo.limit()) {
-      try {
-        System.out.println("try do " + retry + new Date());
-        return point.proceed();
-      } catch (Exception ex) {
-        if (retry >= tryDo.limit()) {
-          throw ex;
-        }
-        try {
-          Thread.sleep(tryDo.frequency() * retry);
-        } catch (InterruptedException interruptedException) {
-        }
-      }
+		int retry = 0;
+		while (retry++ < tryDo.limit()) {
+			try {
+				System.out.println("try do " + retry + new Date());
+				return point.proceed();
+			}
+			catch (Exception ex) {
+				if (retry >= tryDo.limit()) {
+					throw ex;
+				}
+				try {
+					Thread.sleep(tryDo.frequency() * retry);
+				}
+				catch (InterruptedException interruptedException) {
+				}
+			}
 
-    }
-    return null;
-  }
+		}
+		return null;
+	}
 
 }

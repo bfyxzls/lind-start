@@ -6,11 +6,12 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EatConfig {
-  @Bean
-  @ConditionalOnMissingBean(Eat.class)
-  public Eat test() {
-    return new DefaultEat();
 
-  }
+	@Bean
+	@ConditionalOnMissingBean(Eat.class)
+	public Eat test() {
+		return new DefaultEat();
+
+	}
 
 }

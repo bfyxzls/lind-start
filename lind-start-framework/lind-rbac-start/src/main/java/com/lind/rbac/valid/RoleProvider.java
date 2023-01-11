@@ -11,15 +11,15 @@ import java.util.List;
  */
 public class RoleProvider implements DefaultGroupSequenceProvider<RoleDTO> {
 
+	@Override
+	public List<Class<?>> getValidationGroups(RoleDTO object) {
+		List<Class<?>> defaultGroupSequence = new ArrayList<>();
 
-    @Override
-    public List<Class<?>> getValidationGroups(RoleDTO object) {
-        List<Class<?>> defaultGroupSequence = new ArrayList<>();
+		defaultGroupSequence.add(RoleDTO.class); // 注意这里不要写错
+		if (object != null && object.isManager()) {
+			defaultGroupSequence.add(RoleDTO.CheckManagerGroup.class);
+		}
+		return defaultGroupSequence;
+	}
 
-        defaultGroupSequence.add(RoleDTO.class); //注意这里不要写错
-        if (object != null && object.isManager()) {
-            defaultGroupSequence.add(RoleDTO.CheckManagerGroup.class);
-        }
-        return defaultGroupSequence;
-    }
 }

@@ -8,35 +8,39 @@ import java.util.Date;
  * token返回实体.
  */
 public class TokenResult {
-  private String token;
-  /**
-   * 这个最后返回了一个时间戳.
-   */
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-  private Date expiresAt;
-  private String subject;
 
-  public String getToken() {
-    return token;
-  }
+	private String token;
 
-  public void setToken(String token) {
-    this.token = token;
-  }
+	/**
+	 * 这个最后返回了一个时间戳.
+	 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+	private Date expiresAt;
 
-  public Date getExpiresAt() {
-    return expiresAt;
-  }
+	private String subject;
 
-  public void setExpiresAt(Date expiresAt) {
-    this.expiresAt = expiresAt;
-  }
+	public String getToken() {
+		return token;
+	}
 
-  public String getSubject() {
-    return subject;
-  }
+	public void setToken(String token) {
+		this.token = token;
+	}
 
-  public void setSubject(String subject) {
-    this.subject = subject;
-  }
+	public Date getExpiresAt() {
+		return expiresAt;
+	}
+
+	public void setExpiresAt(Date expiresAt) {
+		this.expiresAt = expiresAt;
+	}
+
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+
 }

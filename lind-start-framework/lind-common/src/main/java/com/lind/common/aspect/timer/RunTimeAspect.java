@@ -14,33 +14,31 @@ import org.springframework.core.annotation.Order;
 @Slf4j
 @Order(1)
 public class RunTimeAspect {
-    /**
-     * 目前只做简单的时间打印
-     *
-     * @param point
-     * @param runTime
-     * @return
-     * @throws Throwable
-     */
-    @Around("@annotation(runTime)")
-    public Object around(ProceedingJoinPoint point, RunTime runTime) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(point.getSignature().getDeclaringType().getTypeName())
-                .append(".")
-                .append(point.getSignature().getName())
-                .append("()");
-        String method = stringBuilder.toString();
-        return StopWatchUtils.returnTimer(method, () -> {
-            Object proceed = null;
-            try {
-                proceed = point.proceed();
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-            return proceed;
 
-        });
-    }
+	/**
+	 * 目前只做简单的时间打印
+	 * @param point
+	 * @param runTime
+	 * @return
+	 * @throws Throwable
+	 */
+	@Around("@annotation(runTime)")
+	public Object around(ProceedingJoinPoint point, RunTime runTime) {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(point.getSignature().getDeclaringType().getTypeName()).append(".")
+				.append(point.getSignature().getName()).append("()");
+		String method = stringBuilder.toString();
+		return StopWatchUtils.returnTimer(method, () -> {
+			Object proceed = null;
+			try {
+				proceed = point.proceed();
+			}
+			catch (Throwable throwable) {
+				throwable.printStackTrace();
+			}
+			return proceed;
 
+		});
+	}
 
 }

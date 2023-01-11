@@ -16,25 +16,26 @@ import java.lang.reflect.Proxy;
 @Slf4j
 @Data
 public class MessageProviderProxyFactoryBean<T> implements FactoryBean<T> {
-    private Class<T> interfaceType;
-    private BeanFactory beanFactory;
 
-    @Override
-    public T getObject() throws Exception {
-         //这里主要是创建接口对应的实例，便于注入到spring容器中
-        InvocationHandler handler = new MessageProviderProxy(beanFactory);
-        return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(),
-                new Class[]{interfaceType}, handler);
-    }
+	private Class<T> interfaceType;
 
-    @Override
-    public Class<?> getObjectType() {
-        return interfaceType;
-    }
+	private BeanFactory beanFactory;
 
-    @Override
-    public boolean isSingleton() {
-        return true;
-    }
+	@Override
+	public T getObject() throws Exception {
+		// 这里主要是创建接口对应的实例，便于注入到spring容器中
+		InvocationHandler handler = new MessageProviderProxy(beanFactory);
+		return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(), new Class[] { interfaceType }, handler);
+	}
+
+	@Override
+	public Class<?> getObjectType() {
+		return interfaceType;
+	}
+
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
 }

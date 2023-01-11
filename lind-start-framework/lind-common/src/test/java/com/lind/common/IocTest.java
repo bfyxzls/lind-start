@@ -15,55 +15,63 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class IocTest {
-    @Autowired
-    ARepository aRepository;
-    // 属性注入
-    @Autowired
-    People people;
 
-    @Test
-    public void setTest() {
-        System.out.println(keyCloak.context);
-        aRepository.printa();
-    }
+	@Autowired
+	ARepository aRepository;
+
+	// 属性注入
+	@Autowired
+	People people;
+
+	@Test
+	public void setTest() {
+		System.out.println(keyCloak.context);
+		aRepository.printa();
+	}
+
 }
 
 @Component
 class People {
-    /**
-     * 注入后，把值赋值其它属性或者方法，不用在外面定义一个ApplicationContext了.
-     *
-     * @param context
-     */
-    @Autowired
-    public void setApplicationContext(ApplicationContext context) {
-        keyCloak.setLindContext(context);
-    }
 
-    public void print() {
-        System.out.println("print People");
-    }
+	/**
+	 * 注入后，把值赋值其它属性或者方法，不用在外面定义一个ApplicationContext了.
+	 * @param context
+	 */
+	@Autowired
+	public void setApplicationContext(ApplicationContext context) {
+		keyCloak.setLindContext(context);
+	}
 
-    public void init() {
+	public void print() {
+		System.out.println("print People");
+	}
 
-    }
+	public void init() {
+
+	}
+
 }
 
 @Component
 @RequiredArgsConstructor
 class ARepository {
-    // 通过@RequiredArgsConstructor完成构造方法注入
-    private final People people;
 
-    public void printa() {
-        people.print();
-    }
+	// 通过@RequiredArgsConstructor完成构造方法注入
+	private final People people;
+
+	public void printa() {
+		people.print();
+	}
+
 }
 
 class keyCloak {
-    public static ApplicationContext context;
 
-    public static void setLindContext(ApplicationContext context) {
-        keyCloak.context = context;
-    }
+	public static ApplicationContext context;
+
+	public static void setLindContext(ApplicationContext context) {
+		keyCloak.context = context;
+	}
+
 }

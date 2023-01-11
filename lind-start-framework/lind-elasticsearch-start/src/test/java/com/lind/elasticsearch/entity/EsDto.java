@@ -19,34 +19,44 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(indexName = "esdto")
-@Setting(settingPath = "mapping/es-setting.json")//@Setting里的配置会覆盖@Document里的配置
+@Setting(settingPath = "mapping/es-setting.json") // @Setting里的配置会覆盖@Document里的配置
 public class EsDto extends EsBaseEntity implements Serializable {
 
-    /**
-     * keyword类型不自动分词；text类型会自动分词.
-     */
-    @Field(type = FieldType.Keyword)
-    private String name;
-    @Field(type = FieldType.Integer)
-    private Integer age;
-    @Field(type = FieldType.Integer)
-    private Integer sex;
-    @Field(type = FieldType.Text, analyzer = "standard")
-    private String desc;
-    @Field(type = FieldType.Text, analyzer = "standard")
-    private String memo;
-    @Field(type = FieldType.Nested, fielddata = true)
-    private Address address;
+	/**
+	 * keyword类型不自动分词；text类型会自动分词.
+	 */
+	@Field(type = FieldType.Keyword)
+	private String name;
 
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class Address {
-        @Field(type = FieldType.Keyword)
-        private String province;
-        @Field(type = FieldType.Keyword)
-        private String city;
-        @Field(type = FieldType.Keyword)
-        private String district;
-    }
+	@Field(type = FieldType.Integer)
+	private Integer age;
+
+	@Field(type = FieldType.Integer)
+	private Integer sex;
+
+	@Field(type = FieldType.Text, analyzer = "standard")
+	private String desc;
+
+	@Field(type = FieldType.Text, analyzer = "standard")
+	private String memo;
+
+	@Field(type = FieldType.Nested, fielddata = true)
+	private Address address;
+
+	@Data
+	@AllArgsConstructor
+	@NoArgsConstructor
+	public static class Address {
+
+		@Field(type = FieldType.Keyword)
+		private String province;
+
+		@Field(type = FieldType.Keyword)
+		private String city;
+
+		@Field(type = FieldType.Keyword)
+		private String district;
+
+	}
+
 }

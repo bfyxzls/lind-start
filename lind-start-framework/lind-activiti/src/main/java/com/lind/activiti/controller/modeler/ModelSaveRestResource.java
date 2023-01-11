@@ -48,55 +48,53 @@ import java.io.InputStream;
 @Transactional
 public class ModelSaveRestResource implements ModelDataJsonConstants {
 
-  @Autowired
-  private RepositoryService repositoryService;
+	@Autowired
+	private RepositoryService repositoryService;
 
-  @Autowired
-  private ObjectMapper objectMapper;
+	@Autowired
+	private ObjectMapper objectMapper;
 
-  /**
-   * 保存流程.
-   */
-  @RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT, produces = {
-      "application/json"})
-  @ResponseStatus(value = HttpStatus.OK)
-  public void saveModel(@PathVariable String modelId,
-      @RequestParam("name") String name,
-      @RequestParam("description") String description,
-      @RequestParam("json_xml") String jsonXml,
-      @RequestParam("svg_xml") String svgXml) {
+	/**
+	 * 保存流程.
+	 */
+	@RequestMapping(value = "/model/{modelId}/save", method = RequestMethod.PUT, produces = { "application/json" })
+	@ResponseStatus(value = HttpStatus.OK)
+	public void saveModel(@PathVariable String modelId, @RequestParam("name") String name,
+			@RequestParam("description") String description, @RequestParam("json_xml") String jsonXml,
+			@RequestParam("svg_xml") String svgXml) {
 
-    try {
-      Model model = repositoryService.getModel(modelId);
-      ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
-      int newVersion = model.getVersion() + 1;
-      modelJson.put(MODEL_NAME, name);
-      modelJson.put(MODEL_DESCRIPTION, description);
-      modelJson.put(MODEL_REVISION, newVersion);
-      String key = StringUtils.substringBetween(jsonXml, "\"process_id\":\"", "\",\"name\"");
-      model.setKey(key);
-      model.setMetaInfo(modelJson.toString());
-      model.setName(name);
-      model.setVersion(newVersion);
-      repositoryService.saveModel(model);
-      repositoryService.addModelEditorSource(model.getId(), jsonXml.getBytes("utf-8"));
+		try {
+			Model model = repositoryService.getModel(modelId);
+			ObjectNode modelJson = (ObjectNode) objectMapper.readTree(model.getMetaInfo());
+			int newVersion = model.getVersion() + 1;
+			modelJson.put(MODEL_NAME, name);
+			modelJson.put(MODEL_DESCRIPTION, description);
+			modelJson.put(MODEL_REVISION, newVersion);
+			String key = StringUtils.substringBetween(jsonXml, "\"process_id\":\"", "\",\"name\"");
+			model.setKey(key);
+			model.setMetaInfo(modelJson.toString());
+			model.setName(name);
+			model.setVersion(newVersion);
+			repositoryService.saveModel(model);
+			repositoryService.addModelEditorSource(model.getId(), jsonXml.getBytes("utf-8"));
 
-      InputStream svgStream = new ByteArrayInputStream(svgXml.getBytes("utf-8"));
-      TranscoderInput input = new TranscoderInput(svgStream);
-      PNGTranscoder transcoder = new PNGTranscoder();
-      // Setup output
-      ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-      TranscoderOutput output = new TranscoderOutput(outStream);
-      // Do the transformation
-      transcoder.transcode(input, output);
-      final byte[] result = outStream.toByteArray();
-      repositoryService.addModelEditorSourceExtra(model.getId(), result);
-      outStream.close();
+			InputStream svgStream = new ByteArrayInputStream(svgXml.getBytes("utf-8"));
+			TranscoderInput input = new TranscoderInput(svgStream);
+			PNGTranscoder transcoder = new PNGTranscoder();
+			// Setup output
+			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+			TranscoderOutput output = new TranscoderOutput(outStream);
+			// Do the transformation
+			transcoder.transcode(input, output);
+			final byte[] result = outStream.toByteArray();
+			repositoryService.addModelEditorSourceExtra(model.getId(), result);
+			outStream.close();
 
+		}
+		catch (Exception e) {
+			log.error("保存模型出错", e);
+			throw new ActivitiException("保存模型出错", e);
+		}
+	}
 
-    } catch (Exception e) {
-      log.error("保存模型出错", e);
-      throw new ActivitiException("保存模型出错", e);
-    }
-  }
 }

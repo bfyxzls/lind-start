@@ -13,19 +13,19 @@ import java.lang.reflect.Proxy;
 @Slf4j
 public class FactoryBeanLearn implements FactoryBean {
 
+	@Override
+	public Object getObject() throws Exception {
+		return new FactoryBeanServiceImpl();
+	}
 
-  @Override
-  public Object getObject() throws Exception {
-    return new FactoryBeanServiceImpl();
-  }
+	@Override
+	public Class<?> getObjectType() {
+		return FactoryBeanService.class;
+	}
 
-  @Override
-  public Class<?> getObjectType() {
-    return FactoryBeanService.class;
-  }
+	@Override
+	public boolean isSingleton() {
+		return true;
+	}
 
-  @Override
-  public boolean isSingleton() {
-    return true;
-  }
 }

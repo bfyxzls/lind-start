@@ -14,13 +14,14 @@ import java.util.List;
 @Slf4j
 public class DefaultPermissionServiceImpl implements PermissionService {
 
-    @Override
-    public List<? extends ResourcePermission> getAll() {
-        return null;
-    }
+	@Override
+	public List<? extends ResourcePermission> getAll() {
+		return null;
+	}
 
-    @Override
-    public List<? extends ResourcePermission> getByRoleId(String roleKey) {
-        return null;
-    }
+	@Override
+	public List<? extends ResourcePermission> getByRoleId(String roleKey) {
+		return null;
+	}
+
 }

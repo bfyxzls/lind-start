@@ -26,35 +26,39 @@ import static org.springframework.util.Assert.notNull;
 @Aspect
 @RequiredArgsConstructor
 public class RepeatSubmitAspect {
-    /**
-     * 拦截器执行顺序.
-     *
-     * @around before
-     * @before
-     * @around after
-     * @after
-     */
-    private final RedisTemplate<String, String> redisTemplate;
-    private final UserIdAuditorAware userIdAuditorAware;
 
-    @Around("@annotation(repeatSubmit)")
-    public Object around(ProceedingJoinPoint proceedingJoinPoint, RepeatSubmit repeatSubmit) throws Throwable {
-        ServletRequestAttributes attributes =
-                (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        notNull(attributes, "attributes is null");
-        HttpServletRequest request = attributes.getRequest();
-        String key = repeatSubmit.redisKey() + ":" + userIdAuditorAware.getCurrentAuditor().orElse("system") + ":" + DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
-        // 如果缓存中有这个url视为重复提交
-        Object hasSubmit = redisTemplate.opsForValue().get(key);
-        if (Objects.isNull(hasSubmit)) {
-            redisTemplate.opsForValue().set(key, request.getServletPath());
-            redisTemplate.expire(key, repeatSubmit.expireTime(), TimeUnit.SECONDS);
-            Object o = proceedingJoinPoint.proceed();
-            return o;
-        } else {
-            String message = String.format("重复提交url:%s", request.getServletPath());
-            log.warn(message);
-            throw new RepeatSubmitException(message);
-        }
-    }
+	/**
+	 * 拦截器执行顺序.
+	 *
+	 * @around before
+	 * @before
+	 * @around after
+	 * @after
+	 */
+	private final RedisTemplate<String, String> redisTemplate;
+
+	private final UserIdAuditorAware userIdAuditorAware;
+
+	@Around("@annotation(repeatSubmit)")
+	public Object around(ProceedingJoinPoint proceedingJoinPoint, RepeatSubmit repeatSubmit) throws Throwable {
+		ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+		notNull(attributes, "attributes is null");
+		HttpServletRequest request = attributes.getRequest();
+		String key = repeatSubmit.redisKey() + ":" + userIdAuditorAware.getCurrentAuditor().orElse("system") + ":"
+				+ DigestUtils.md5DigestAsHex(request.getServletPath().getBytes("UTF-8"));
+		// 如果缓存中有这个url视为重复提交
+		Object hasSubmit = redisTemplate.opsForValue().get(key);
+		if (Objects.isNull(hasSubmit)) {
+			redisTemplate.opsForValue().set(key, request.getServletPath());
+			redisTemplate.expire(key, repeatSubmit.expireTime(), TimeUnit.SECONDS);
+			Object o = proceedingJoinPoint.proceed();
+			return o;
+		}
+		else {
+			String message = String.format("重复提交url:%s", request.getServletPath());
+			log.warn(message);
+			throw new RepeatSubmitException(message);
+		}
+	}
+
 }

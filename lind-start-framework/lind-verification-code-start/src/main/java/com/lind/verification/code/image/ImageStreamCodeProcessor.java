@@ -27,30 +27,31 @@ import java.util.Map;
 @Component("imagestreamValidateCodeProcessor")
 public class ImageStreamCodeProcessor extends AbstractValidateCodeProcessor<ImageCode> {
 
-    /**
-     * Instantiates a new Abstract validate code processor.
-     *
-     * @param validateCodeGenerators the validate code generators
-     * @param validateCodeRepository the validate code repository
-     */
-    public ImageStreamCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators, ValidateCodeRepository validateCodeRepository) {
-        super(validateCodeGenerators, validateCodeRepository);
-    }
+	/**
+	 * Instantiates a new Abstract validate code processor.
+	 * @param validateCodeGenerators the validate code generators
+	 * @param validateCodeRepository the validate code repository
+	 */
+	public ImageStreamCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators,
+			ValidateCodeRepository validateCodeRepository) {
+		super(validateCodeGenerators, validateCodeRepository);
+	}
 
-    /**
-     * 发送图形验证码，将其写到响应中
-     *
-     * @param request   the request
-     * @param imageCode the image code
-     * @throws Exception the exception
-     */
-    @Override
-    protected void send(ServletWebRequest request, ImageCode imageCode) throws Exception {
-        HttpServletResponse response = request.getResponse();
-        response.setContentType("image/jpeg");//等同于response.setHeader("Content-Type", "image/jpeg");
-        response.setDateHeader("expries", -1);
-        response.setHeader("Cache-Control", "no-cache");
-        response.setHeader("Pragma", "no-cache");
-        ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
-    }
+	/**
+	 * 发送图形验证码，将其写到响应中
+	 * @param request the request
+	 * @param imageCode the image code
+	 * @throws Exception the exception
+	 */
+	@Override
+	protected void send(ServletWebRequest request, ImageCode imageCode) throws Exception {
+		HttpServletResponse response = request.getResponse();
+		response.setContentType("image/jpeg");// 等同于response.setHeader("Content-Type",
+												// "image/jpeg");
+		response.setDateHeader("expries", -1);
+		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("Pragma", "no-cache");
+		ImageIO.write(imageCode.getImage(), "JPEG", response.getOutputStream());
+	}
+
 }

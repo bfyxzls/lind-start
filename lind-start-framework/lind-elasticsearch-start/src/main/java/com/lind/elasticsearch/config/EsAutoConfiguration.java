@@ -7,8 +7,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EsAutoConfiguration {
-  @Bean
-  public FieldTypeParserFactory fieldTypeParserFactory() {
-    return new DefaultFieldTypeParserFactory();
-  }
+
+	@Bean
+	public FieldTypeParserFactory fieldTypeParserFactory() {
+		return new DefaultFieldTypeParserFactory();
+	}
+
 }

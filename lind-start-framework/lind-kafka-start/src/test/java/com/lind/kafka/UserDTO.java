@@ -11,5 +11,7 @@ import lombok.ToString;
 @Setter
 @ToString
 public class UserDTO implements MessageEntityAware {
-    private String title;
+
+	private String title;
+
 }

@@ -5,8 +5,8 @@ import com.lind.elasticsearch.util.JacksonUtils;
 
 public abstract class BaseAbstractTypeParser {
 
+	public ObjectMapper getObjectMapper() {
+		return JacksonUtils.getObjectMapper();
+	}
 
-    public ObjectMapper getObjectMapper() {
-        return JacksonUtils.getObjectMapper();
-    }
 }

@@ -8,26 +8,28 @@ import com.lind.common.enums.NameValueEnum;
  * 权限类型.
  */
 public enum PermissionType implements NameValueEnum {
-    MENU("菜单", 0), BUTTON("按钮", 1),TREE("目录",2);
-    @JsonValue
-    private String name;
-    @EnumValue
-    private Integer value;
 
-    PermissionType(String name, Integer value) {
-        this.name = name;
-        this.value = value;
-    }
+	MENU("菜单", 0), BUTTON("按钮", 1), TREE("目录", 2);
 
-    @Override
-    public String getName() {
-        return name;
-    }
+	@JsonValue
+	private String name;
 
-    @Override
-    public Integer getValue() {
-        return value;
-    }
+	@EnumValue
+	private Integer value;
 
+	PermissionType(String name, Integer value) {
+		this.name = name;
+		this.value = value;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public Integer getValue() {
+		return value;
+	}
 
 }

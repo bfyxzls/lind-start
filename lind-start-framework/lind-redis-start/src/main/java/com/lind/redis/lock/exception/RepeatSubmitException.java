@@ -5,8 +5,8 @@ package com.lind.redis.lock.exception;
  */
 public class RepeatSubmitException extends IllegalArgumentException {
 
-    public RepeatSubmitException(String message) {
-        super(message);
-    }
+	public RepeatSubmitException(String message) {
+		super(message);
+	}
 
 }

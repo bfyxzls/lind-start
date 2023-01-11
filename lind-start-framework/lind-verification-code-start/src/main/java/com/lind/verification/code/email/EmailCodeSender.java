@@ -20,9 +20,8 @@ public interface EmailCodeSender {
 
 	/**
 	 * Send.
-	 *
 	 * @param email the email
-	 * @param code  the code
+	 * @param code the code
 	 */
 	void send(String email, String code);
 

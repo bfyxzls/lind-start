@@ -14,17 +14,16 @@ import java.io.Serializable;
 @JsonSerialize(using = ResourceRoleSerializer.class)
 public interface ResourceRole extends Serializable {
 
-    /**
-     * 角色ID.
-     *
-     * @return
-     */
-    String getId();
+	/**
+	 * 角色ID.
+	 * @return
+	 */
+	String getId();
 
-    /**
-     * 角色名称.
-     *
-     * @return
-     */
-    String getName();
+	/**
+	 * 角色名称.
+	 * @return
+	 */
+	String getName();
+
 }

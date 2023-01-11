@@ -9,56 +9,61 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimeTask {
-    private static final Logger logger = Logger.getLogger(AsyncUserRoleExpireTask.class);
 
-    private final List<Runnable> queue = new ArrayList();
+	private static final Logger logger = Logger.getLogger(AsyncUserRoleExpireTask.class);
 
-    private void sched(TimerTask task, long time, long period) {
-        if (time < 0)
-            throw new IllegalArgumentException("Illegal execution time.");
-        if (Math.abs(period) > (Long.MAX_VALUE >> 1))
-            period >>= 1;
+	private final List<Runnable> queue = new ArrayList();
 
-        synchronized (queue) {
-            queue.add(task);
-        }
-    }
+	private void sched(TimerTask task, long time, long period) {
+		if (time < 0)
+			throw new IllegalArgumentException("Illegal execution time.");
+		if (Math.abs(period) > (Long.MAX_VALUE >> 1))
+			period >>= 1;
 
-    @Test
-    public void andSymbol() {
-        int i = 16;
-        System.err.println(i >>= 1); //右移数据相当于除以2
-        System.err.println(i);
-        int c = 10;
-        System.err.println(c >>= 1); //右移数据相当于除以2
-    }
+		synchronized (queue) {
+			queue.add(task);
+		}
+	}
 
-    @Test
-    public void timerTask() throws InterruptedException {
+	@Test
+	public void andSymbol() {
+		int i = 16;
+		System.err.println(i >>= 1); // 右移数据相当于除以2
+		System.err.println(i);
+		int c = 10;
+		System.err.println(c >>= 1); // 右移数据相当于除以2
+	}
 
-        logger.info("timetask");
-        Timer timer = new Timer();
-        AsyncUserRoleExpireTask myTimerTask = new AsyncUserRoleExpireTask("user-role-expire-task");
-        //每1秒执行一次
-        timer.schedule(myTimerTask, 2000L, 1000L);
-        Thread.sleep(10000);
-    }
+	@Test
+	public void timerTask() throws InterruptedException {
 
-    public static class AsyncUserRoleExpireTask extends TimerTask {
-        private static final Logger logger = Logger.getLogger(AsyncUserRoleExpireTask.class);
-        private String taskName;
+		logger.info("timetask");
+		Timer timer = new Timer();
+		AsyncUserRoleExpireTask myTimerTask = new AsyncUserRoleExpireTask("user-role-expire-task");
+		// 每1秒执行一次
+		timer.schedule(myTimerTask, 2000L, 1000L);
+		Thread.sleep(10000);
+	}
 
-        public AsyncUserRoleExpireTask(String taskName) {
-            this.taskName = taskName;
-        }
+	public static class AsyncUserRoleExpireTask extends TimerTask {
 
-        @Override
-        public void run() {
-            try {
-                logger.info(taskName + ":task doing");
-            } catch (Throwable t) {
-            }
-        }
-    }
+		private static final Logger logger = Logger.getLogger(AsyncUserRoleExpireTask.class);
+
+		private String taskName;
+
+		public AsyncUserRoleExpireTask(String taskName) {
+			this.taskName = taskName;
+		}
+
+		@Override
+		public void run() {
+			try {
+				logger.info(taskName + ":task doing");
+			}
+			catch (Throwable t) {
+			}
+		}
+
+	}
 
 }

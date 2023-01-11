@@ -16,18 +16,18 @@ import org.springframework.web.context.request.ServletWebRequest;
 @Component("smsValidateCodeGenerator")
 public class SmsCodeGenerator implements ValidateCodeGenerator {
 
-    @Autowired
-    private ValidateCodeProperties validateCodeProperties;
+	@Autowired
+	private ValidateCodeProperties validateCodeProperties;
 
-    /**
-     * Generate validate code.
-     *
-     * @param request the request
-     * @return the validate code
-     */
-    @Override
-    public ValidateCode generate(ServletWebRequest request) {
-        String code = RandomStringUtils.randomNumeric(validateCodeProperties.getSms().getLength());
-        return new ValidateCode(code, validateCodeProperties.getSms().getExpireIn());
-    }
+	/**
+	 * Generate validate code.
+	 * @param request the request
+	 * @return the validate code
+	 */
+	@Override
+	public ValidateCode generate(ServletWebRequest request) {
+		String code = RandomStringUtils.randomNumeric(validateCodeProperties.getSms().getLength());
+		return new ValidateCode(code, validateCodeProperties.getSms().getExpireIn());
+	}
+
 }

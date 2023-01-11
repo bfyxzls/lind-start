@@ -13,18 +13,18 @@ import org.springframework.core.env.Environment;
 @MapperScan("com.lind.rbac.dao")
 @EnableJacksonFormatting
 public class RbacApplication {
-  public static void main(String[] args) {
 
-    ConfigurableApplicationContext application = SpringApplication.run(RbacApplication.class, args);
-    Environment env = application.getEnvironment();
-    log.info("\n----------------------------------------------------------\n\t" +
-            "Application '{}' is running! Access URLs:\n\t" +
-            "Local: \t\thttp://localhost:{}/login\n\t" +
-            "Doc: \thttp://localhost:{}/doc.html\n" +
-            "----------------------------------------------------------",
-        env.getProperty("spring.application.name"),
-        env.getProperty("server.port"),
-        env.getProperty("server.port"));
-  }
+	public static void main(String[] args) {
+
+		ConfigurableApplicationContext application = SpringApplication.run(RbacApplication.class, args);
+		Environment env = application.getEnvironment();
+		log.info(
+				"\n----------------------------------------------------------\n\t"
+						+ "Application '{}' is running! Access URLs:\n\t" + "Local: \t\thttp://localhost:{}/login\n\t"
+						+ "Doc: \thttp://localhost:{}/doc.html\n"
+						+ "----------------------------------------------------------",
+				env.getProperty("spring.application.name"), env.getProperty("server.port"),
+				env.getProperty("server.port"));
+	}
 
 }

@@ -12,16 +12,19 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class LoggerEventListener implements org.activiti.engine.delegate.event.ActivitiEventListener {
-    @Autowired
-    RepositoryService repositoryService;
 
-    @Override
-    public void onEvent(ActivitiEvent event) {
-        log.info("Task Complete[processDefinitionId:{},processInstanceId:{}]", event.getProcessDefinitionId(), event.getProcessInstanceId());
-    }
+	@Autowired
+	RepositoryService repositoryService;
 
-    @Override
-    public boolean isFailOnException() {
-        return false;
-    }
+	@Override
+	public void onEvent(ActivitiEvent event) {
+		log.info("Task Complete[processDefinitionId:{},processInstanceId:{}]", event.getProcessDefinitionId(),
+				event.getProcessInstanceId());
+	}
+
+	@Override
+	public boolean isFailOnException() {
+		return false;
+	}
+
 }

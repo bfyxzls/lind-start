@@ -17,50 +17,51 @@ import java.lang.reflect.Method;
 @Slf4j
 @Data
 public class MessageProviderProxy implements InvocationHandler {
-    private BeanFactory applicationContext;
-    private MessageService messageService;
 
-    public MessageProviderProxy(BeanFactory applicationContext) {
-        this.applicationContext = applicationContext;
-        messageService = applicationContext.getBean(MessageService.class);
-    }
+	private BeanFactory applicationContext;
 
-    /**
-     * 首字母转小写
-     *
-     * @param s
-     * @return
-     */
-    public static String toLowerCaseFirstOne(String s) {
-        if (Character.isLowerCase(s.charAt(0)))
-            return s;
-        else
-            return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
-    }
+	private MessageService messageService;
 
-    @Override
-    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if (args.length != 1) {
-            throw new IllegalArgumentException("方法只能有一个参数");
-        }
-        Object arg = args[0];
-        if (method.isAnnotationPresent(MessageSend.class)) {
-            MessageSend annotation = method.getAnnotation(MessageSend.class);
+	public MessageProviderProxy(BeanFactory applicationContext) {
+		this.applicationContext = applicationContext;
+		messageService = applicationContext.getBean(MessageService.class);
+	}
 
-            // 获取SuccessSendHandler的实例
-            Class<? extends SuccessSendHandler> sccessHandlerType = annotation.successSendHandler();
-            SuccessSendHandler successHandler = applicationContext.getBean(sccessHandlerType);
+	/**
+	 * 首字母转小写
+	 * @param s
+	 * @return
+	 */
+	public static String toLowerCaseFirstOne(String s) {
+		if (Character.isLowerCase(s.charAt(0)))
+			return s;
+		else
+			return (new StringBuilder()).append(Character.toLowerCase(s.charAt(0))).append(s.substring(1)).toString();
+	}
 
-            // 获取MessageProviderHandler的实例
-            Class<? extends MessageProviderHandler> messageProviderHandlerType = annotation.messageProviderHandler();
-            // bean的名称默认使用小驼峰的简单类名
-            String beanName = messageProviderHandlerType.getSimpleName();
-            MessageProviderHandler messageProviderHandler = applicationContext.getBean(toLowerCaseFirstOne(beanName), MessageProviderHandler.class);
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		if (args.length != 1) {
+			throw new IllegalArgumentException("方法只能有一个参数");
+		}
+		Object arg = args[0];
+		if (method.isAnnotationPresent(MessageSend.class)) {
+			MessageSend annotation = method.getAnnotation(MessageSend.class);
 
-            messageService.send(arg, messageProviderHandler, successHandler);
-        }
-        return null;
-    }
+			// 获取SuccessSendHandler的实例
+			Class<? extends SuccessSendHandler> sccessHandlerType = annotation.successSendHandler();
+			SuccessSendHandler successHandler = applicationContext.getBean(sccessHandlerType);
 
+			// 获取MessageProviderHandler的实例
+			Class<? extends MessageProviderHandler> messageProviderHandlerType = annotation.messageProviderHandler();
+			// bean的名称默认使用小驼峰的简单类名
+			String beanName = messageProviderHandlerType.getSimpleName();
+			MessageProviderHandler messageProviderHandler = applicationContext.getBean(toLowerCaseFirstOne(beanName),
+					MessageProviderHandler.class);
+
+			messageService.send(arg, messageProviderHandler, successHandler);
+		}
+		return null;
+	}
 
 }

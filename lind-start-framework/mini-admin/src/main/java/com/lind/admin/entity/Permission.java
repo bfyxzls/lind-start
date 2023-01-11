@@ -9,10 +9,17 @@ import lombok.Data;
  */
 @Data
 public class Permission {
-    private Integer id;
-    private String name;
-    private Integer parentId;
-    private Integer type;
-    private String path;
-    private String permissionCode;
+
+	private Integer id;
+
+	private String name;
+
+	private Integer parentId;
+
+	private Integer type;
+
+	private String path;
+
+	private String permissionCode;
+
 }

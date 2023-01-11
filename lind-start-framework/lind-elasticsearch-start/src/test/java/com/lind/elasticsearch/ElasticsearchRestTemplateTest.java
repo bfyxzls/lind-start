@@ -19,24 +19,24 @@ import java.util.List;
 import java.util.Map;
 
 @SpringBootTest()
-@RunWith(SpringRunner.class) //让测试在Spring容器环境下执行
+@RunWith(SpringRunner.class) // 让测试在Spring容器环境下执行
 @Slf4j
 public class ElasticsearchRestTemplateTest {
-    @Autowired
-    ElasticsearchRestTemplate elasticsearchTemplate;
 
-    @Test
-    public void simpleQuery() {
-        BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
-        queryBuilder.must(QueryBuilders.termsQuery("id", Arrays.asList("554401577478131712", "554401577478131716")));
-        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-                .withQuery(queryBuilder)
-                .withSourceFilter(new FetchSourceFilter(new String[]{"id"}, null))
-                .build();
+	@Autowired
+	ElasticsearchRestTemplate elasticsearchTemplate;
 
-        List<Map> content = elasticsearchTemplate.queryForList(searchQuery, Map.class, IndexCoordinates.of("esdto"));
-        for (Map esDto : content) {
-            System.out.println(esDto);
-        }
-    }
+	@Test
+	public void simpleQuery() {
+		BoolQueryBuilder queryBuilder = QueryBuilders.boolQuery();
+		queryBuilder.must(QueryBuilders.termsQuery("id", Arrays.asList("554401577478131712", "554401577478131716")));
+		NativeSearchQuery searchQuery = new NativeSearchQueryBuilder().withQuery(queryBuilder)
+				.withSourceFilter(new FetchSourceFilter(new String[] { "id" }, null)).build();
+
+		List<Map> content = elasticsearchTemplate.queryForList(searchQuery, Map.class, IndexCoordinates.of("esdto"));
+		for (Map esDto : content) {
+			System.out.println(esDto);
+		}
+	}
+
 }

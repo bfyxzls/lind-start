@@ -10,7 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @AllArgsConstructor
 public class LogoutSuccessEvent {
-    private UserDetails userDetails;
-    private String ipAddress;
-}
 
+	private UserDetails userDetails;
+
+	private String ipAddress;
+
+}

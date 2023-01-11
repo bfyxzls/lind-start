@@ -6,6 +6,8 @@ import com.lind.common.proxy.provider.SmsMessageProviderHandler;
 
 @MessageProvider
 public interface PeopleMessageProvider {
-    @MessageSend(messageProviderHandler = SmsMessageProviderHandler.class)
-    void send(String message);
+
+	@MessageSend(messageProviderHandler = SmsMessageProviderHandler.class)
+	void send(String message);
+
 }

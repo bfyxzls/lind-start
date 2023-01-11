@@ -8,19 +8,21 @@ import com.lind.common.pattern.strategy.StrategyContext;
 import org.junit.Test;
 
 public class StrategyTest {
-  @Test
-  public void test() {
 
-    Animal dog = new Dog();
-    StrategyContext strategyContext = new StrategyContext(dog);
-    strategyContext.fly();
+	@Test
+	public void test() {
 
-    Animal bird = new Bird();
-    strategyContext = new StrategyContext(bird);
-    strategyContext.fly();
+		Animal dog = new Dog();
+		StrategyContext strategyContext = new StrategyContext(dog);
+		strategyContext.fly();
 
-    Animal eagle = new Eagle();
-    strategyContext = new StrategyContext(eagle);
-    strategyContext.fly();
-  }
+		Animal bird = new Bird();
+		strategyContext = new StrategyContext(bird);
+		strategyContext.fly();
+
+		Animal eagle = new Eagle();
+		strategyContext = new StrategyContext(eagle);
+		strategyContext.fly();
+	}
+
 }

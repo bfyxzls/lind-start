@@ -13,276 +13,265 @@ import java.util.Properties;
  * @author <a href="mailto:dimitris@jboss.org">Dimitris Andreadis</a>
  * @version <tt>$Revision: 2898 $</tt>
  */
-public final class StringPropertyReplacer
-{
-  /** New line string constant */
-  public static final String NEWLINE = System.getProperty("line.separator", "\n");
+public final class StringPropertyReplacer {
 
-  /** File separator value */
-  private static final String FILE_SEPARATOR = File.separator;
+	/** New line string constant */
+	public static final String NEWLINE = System.getProperty("line.separator", "\n");
 
-  /** Path separator value */
-  private static final String PATH_SEPARATOR = File.pathSeparator;
+	/** File separator value */
+	private static final String FILE_SEPARATOR = File.separator;
 
-  /** File separator alias */
-  private static final String FILE_SEPARATOR_ALIAS = "/";
+	/** Path separator value */
+	private static final String PATH_SEPARATOR = File.pathSeparator;
 
-  /** Path separator alias */
-  private static final String PATH_SEPARATOR_ALIAS = ":";
+	/** File separator alias */
+	private static final String FILE_SEPARATOR_ALIAS = "/";
 
-  // States used in property parsing
-  private static final int NORMAL = 0;
-  private static final int SEEN_DOLLAR = 1;
-  private static final int IN_BRACKET = 2;
+	/** Path separator alias */
+	private static final String PATH_SEPARATOR_ALIAS = ":";
 
-  /**
-   * Go through the input string and replace any occurance of ${p} with
-   * the System.getProperty(p) value. If there is no such property p defined,
-   * then the ${p} reference will remain unchanged.
-   *
-   * If the property reference is of the form ${p:v} and there is no such property p,
-   * then the default value v will be returned.
-   *
-   * If the property reference is of the form ${p1,p2} or ${p1,p2:v} then
-   * the primary and the secondary properties will be tried in turn, before
-   * returning either the unchanged input, or the default value.
-   *
-   * The property ${/} is replaced with System.getProperty("file.separator")
-   * value and the property ${:} is replaced with System.getProperty("path.separator").
-   *
-   * @param string - the string with possible ${} references
-   * @return the input string with all property references replaced if any.
-   *    If there are no valid references the input string will be returned.
-   */
-  public static String replaceProperties(final String string)
-  {
-    return replaceProperties(string, (Properties) null);
-  }
+	// States used in property parsing
+	private static final int NORMAL = 0;
 
-  /**
-   * Go through the input string and replace any occurance of ${p} with
-   * the props.getProperty(p) value. If there is no such property p defined,
-   * then the ${p} reference will remain unchanged.
-   *
-   * If the property reference is of the form ${p:v} and there is no such property p,
-   * then the default value v will be returned.
-   *
-   * If the property reference is of the form ${p1,p2} or ${p1,p2:v} then
-   * the primary and the secondary properties will be tried in turn, before
-   * returning either the unchanged input, or the default value.
-   *
-   * The property ${/} is replaced with System.getProperty("file.separator")
-   * value and the property ${:} is replaced with System.getProperty("path.separator").
-   *
-   * @param string - the string with possible ${} references
-   * @param props - the source for ${x} property ref values, null means use System.getProperty()
-   * @return the input string with all property references replaced if any.
-   *    If there are no valid references the input string will be returned.
-   */
-  public static String replaceProperties(final String string, final Properties props) {
-    if (props == null) {
-      return replaceProperties(string, (PropertyResolver) null);
-    }
-    return replaceProperties(string, new PropertyResolver() {
-      @Override
-      public String resolve(String property) {
-        return props.getProperty(property);
-      }
-    });
-  }
+	private static final int SEEN_DOLLAR = 1;
 
-  public static String replaceProperties(final String string, PropertyResolver resolver)
-  {
-    if(string == null) {
-      return null;
-    }
-    final char[] chars = string.toCharArray();
-    StringBuilder buffer = new StringBuilder();
-    boolean properties = false;
-    int state = NORMAL;
-    int start = 0;
-    int openBracketsCount = 0;
-    for (int i = 0; i < chars.length; ++i)
-    {
-      char c = chars[i];
+	private static final int IN_BRACKET = 2;
 
-      // Dollar sign outside brackets
-      if (c == '$' && state != IN_BRACKET)
-        state = SEEN_DOLLAR;
+	/**
+	 * Go through the input string and replace any occurance of ${p} with the
+	 * System.getProperty(p) value. If there is no such property p defined, then the ${p}
+	 * reference will remain unchanged.
+	 *
+	 * If the property reference is of the form ${p:v} and there is no such property p,
+	 * then the default value v will be returned.
+	 *
+	 * If the property reference is of the form ${p1,p2} or ${p1,p2:v} then the primary
+	 * and the secondary properties will be tried in turn, before returning either the
+	 * unchanged input, or the default value.
+	 *
+	 * The property ${/} is replaced with System.getProperty("file.separator") value and
+	 * the property ${:} is replaced with System.getProperty("path.separator").
+	 * @param string - the string with possible ${} references
+	 * @return the input string with all property references replaced if any. If there are
+	 * no valid references the input string will be returned.
+	 */
+	public static String replaceProperties(final String string) {
+		return replaceProperties(string, (Properties) null);
+	}
 
-        // Open bracket immediately after dollar
-      else if (c == '{' && state == SEEN_DOLLAR)
-      {
-        buffer.append(string.substring(start, i - 1));
-        state = IN_BRACKET;
-        start = i - 1;
-        openBracketsCount = 1;
-      }
+	/**
+	 * Go through the input string and replace any occurance of ${p} with the
+	 * props.getProperty(p) value. If there is no such property p defined, then the ${p}
+	 * reference will remain unchanged.
+	 *
+	 * If the property reference is of the form ${p:v} and there is no such property p,
+	 * then the default value v will be returned.
+	 *
+	 * If the property reference is of the form ${p1,p2} or ${p1,p2:v} then the primary
+	 * and the secondary properties will be tried in turn, before returning either the
+	 * unchanged input, or the default value.
+	 *
+	 * The property ${/} is replaced with System.getProperty("file.separator") value and
+	 * the property ${:} is replaced with System.getProperty("path.separator").
+	 * @param string - the string with possible ${} references
+	 * @param props - the source for ${x} property ref values, null means use
+	 * System.getProperty()
+	 * @return the input string with all property references replaced if any. If there are
+	 * no valid references the input string will be returned.
+	 */
+	public static String replaceProperties(final String string, final Properties props) {
+		if (props == null) {
+			return replaceProperties(string, (PropertyResolver) null);
+		}
+		return replaceProperties(string, new PropertyResolver() {
+			@Override
+			public String resolve(String property) {
+				return props.getProperty(property);
+			}
+		});
+	}
 
-      // Seeing open bracket after we already saw some open bracket without corresponding closed bracket. This causes "nested" expressions. For example ${foo:${bar}}
-      else if (c == '{' && state == IN_BRACKET)
-        openBracketsCount++;
+	public static String replaceProperties(final String string, PropertyResolver resolver) {
+		if (string == null) {
+			return null;
+		}
+		final char[] chars = string.toCharArray();
+		StringBuilder buffer = new StringBuilder();
+		boolean properties = false;
+		int state = NORMAL;
+		int start = 0;
+		int openBracketsCount = 0;
+		for (int i = 0; i < chars.length; ++i) {
+			char c = chars[i];
 
-        // No open bracket after dollar
-      else if (state == SEEN_DOLLAR)
-        state = NORMAL;
+			// Dollar sign outside brackets
+			if (c == '$' && state != IN_BRACKET)
+				state = SEEN_DOLLAR;
 
-        // Seeing closed bracket, but we already saw more than one open bracket before. Hence "nested" expression is still not fully closed.
-        // For example expression ${foo:${bar}} is closed after the second closed bracket, not after the first closed bracket.
-      else if (c == '}' && state == IN_BRACKET && openBracketsCount > 1)
-        openBracketsCount--;
+			// Open bracket immediately after dollar
+			else if (c == '{' && state == SEEN_DOLLAR) {
+				buffer.append(string.substring(start, i - 1));
+				state = IN_BRACKET;
+				start = i - 1;
+				openBracketsCount = 1;
+			}
 
-        // Closed bracket after open bracket
-      else if (c == '}' && state == IN_BRACKET)
-      {
-        // No content
-        if (start + 2 == i)
-        {
-          buffer.append("${}"); // REVIEW: Correct?
-        }
-        else // Collect the system property
-        {
-          String value = null;
+			// Seeing open bracket after we already saw some open bracket without
+			// corresponding closed bracket. This causes "nested" expressions. For example
+			// ${foo:${bar}}
+			else if (c == '{' && state == IN_BRACKET)
+				openBracketsCount++;
 
-          String key = string.substring(start + 2, i);
+			// No open bracket after dollar
+			else if (state == SEEN_DOLLAR)
+				state = NORMAL;
 
-          // check for alias
-          if (FILE_SEPARATOR_ALIAS.equals(key))
-          {
-            value = FILE_SEPARATOR;
-          }
-          else if (PATH_SEPARATOR_ALIAS.equals(key))
-          {
-            value = PATH_SEPARATOR;
-          }
-          else
-          {
-            // check from the properties
-            if (resolver != null)
-              value = resolver.resolve(key);
-            else
-              value = System.getProperty(key);
+			// Seeing closed bracket, but we already saw more than one open bracket
+			// before. Hence "nested" expression is still not fully closed.
+			// For example expression ${foo:${bar}} is closed after the second closed
+			// bracket, not after the first closed bracket.
+			else if (c == '}' && state == IN_BRACKET && openBracketsCount > 1)
+				openBracketsCount--;
 
-            if (value == null)
-            {
-              // Check for a default value ${key:default}
-              int colon = key.indexOf(':');
-              if (colon > 0)
-              {
-                String realKey = key.substring(0, colon);
-                if (resolver != null)
-                  value = resolver.resolve(realKey);
-                else
-                  value = System.getProperty(realKey);
+			// Closed bracket after open bracket
+			else if (c == '}' && state == IN_BRACKET) {
+				// No content
+				if (start + 2 == i) {
+					buffer.append("${}"); // REVIEW: Correct?
+				}
+				else // Collect the system property
+				{
+					String value = null;
 
-                if (value == null)
-                {
-                  // Check for a composite key, "key1,key2"
-                  value = resolveCompositeKey(realKey, resolver);
+					String key = string.substring(start + 2, i);
 
-                  // Not a composite key either, use the specified default
-                  if (value == null)
-                    value = key.substring(colon+1);
-                }
-              }
-              else
-              {
-                // No default, check for a composite key, "key1,key2"
-                value = resolveCompositeKey(key, resolver);
-              }
-            }
-          }
+					// check for alias
+					if (FILE_SEPARATOR_ALIAS.equals(key)) {
+						value = FILE_SEPARATOR;
+					}
+					else if (PATH_SEPARATOR_ALIAS.equals(key)) {
+						value = PATH_SEPARATOR;
+					}
+					else {
+						// check from the properties
+						if (resolver != null)
+							value = resolver.resolve(key);
+						else
+							value = System.getProperty(key);
 
-          if (value != null)
-          {
-            properties = true;
-            buffer.append(value);
-          }
-          else
-          {
-            buffer.append("${");
-            buffer.append(key);
-            buffer.append('}');
-          }
+						if (value == null) {
+							// Check for a default value ${key:default}
+							int colon = key.indexOf(':');
+							if (colon > 0) {
+								String realKey = key.substring(0, colon);
+								if (resolver != null)
+									value = resolver.resolve(realKey);
+								else
+									value = System.getProperty(realKey);
 
-        }
-        start = i + 1;
-        state = NORMAL;
-      }
-    }
+								if (value == null) {
+									// Check for a composite key, "key1,key2"
+									value = resolveCompositeKey(realKey, resolver);
 
-    // No properties
-    if (!properties)
-      return string;
+									// Not a composite key either, use the specified
+									// default
+									if (value == null)
+										value = key.substring(colon + 1);
+								}
+							}
+							else {
+								// No default, check for a composite key, "key1,key2"
+								value = resolveCompositeKey(key, resolver);
+							}
+						}
+					}
 
-    // Collect the trailing characters
-    if (start != chars.length)
-      buffer.append(string.substring(start, chars.length));
+					if (value != null) {
+						properties = true;
+						buffer.append(value);
+					}
+					else {
+						buffer.append("${");
+						buffer.append(key);
+						buffer.append('}');
+					}
 
-    if (buffer.indexOf("${") != -1) {
-      return replaceProperties(buffer.toString(), resolver);
-    }
+				}
+				start = i + 1;
+				state = NORMAL;
+			}
+		}
 
-    // Done
-    return buffer.toString();
-  }
+		// No properties
+		if (!properties)
+			return string;
 
-  /**
-   * Try to resolve a "key" from the provided properties by
-   * checking if it is actually a "key1,key2", in which case
-   * try first "key1", then "key2". If all fails, return null.
-   *
-   * It also accepts "key1," and ",key2".
-   *
-   * @param key the key to resolve
-   * @param props the properties to use
-   * @return the resolved key or null
-   */
-  private static String resolveCompositeKey(String key, final Properties props) {
-    if (props == null) {
-      return resolveCompositeKey(key, (PropertyResolver) null);
-    }
-    return resolveCompositeKey(key, new PropertyResolver() {
-      @Override
-      public String resolve(String property) {
-        return props.getProperty(property);
-      }
-    });
-  }
+		// Collect the trailing characters
+		if (start != chars.length)
+			buffer.append(string.substring(start, chars.length));
 
-  private static String resolveCompositeKey(String key, PropertyResolver resolver)
-  {
-    String value = null;
+		if (buffer.indexOf("${") != -1) {
+			return replaceProperties(buffer.toString(), resolver);
+		}
 
-    // Look for the comma
-    int comma = key.indexOf(',');
-    if (comma > -1)
-    {
-      // If we have a first part, try resolve it
-      if (comma > 0)
-      {
-        // Check the first part
-        String key1 = key.substring(0, comma);
-        if (resolver != null)
-          value = resolver.resolve(key1);
-        else
-          value = System.getProperty(key1);
-      }
-      // Check the second part, if there is one and first lookup failed
-      if (value == null && comma < key.length() - 1)
-      {
-        String key2 = key.substring(comma + 1);
-        if (resolver != null)
-          value = resolver.resolve(key2);
-        else
-          value = System.getProperty(key2);
-      }
-    }
-    // Return whatever we've found or null
-    return value;
-  }
+		// Done
+		return buffer.toString();
+	}
 
-  public interface PropertyResolver {
-    String resolve(String property);
-  }
+	/**
+	 * Try to resolve a "key" from the provided properties by checking if it is actually a
+	 * "key1,key2", in which case try first "key1", then "key2". If all fails, return
+	 * null.
+	 *
+	 * It also accepts "key1," and ",key2".
+	 * @param key the key to resolve
+	 * @param props the properties to use
+	 * @return the resolved key or null
+	 */
+	private static String resolveCompositeKey(String key, final Properties props) {
+		if (props == null) {
+			return resolveCompositeKey(key, (PropertyResolver) null);
+		}
+		return resolveCompositeKey(key, new PropertyResolver() {
+			@Override
+			public String resolve(String property) {
+				return props.getProperty(property);
+			}
+		});
+	}
+
+	private static String resolveCompositeKey(String key, PropertyResolver resolver) {
+		String value = null;
+
+		// Look for the comma
+		int comma = key.indexOf(',');
+		if (comma > -1) {
+			// If we have a first part, try resolve it
+			if (comma > 0) {
+				// Check the first part
+				String key1 = key.substring(0, comma);
+				if (resolver != null)
+					value = resolver.resolve(key1);
+				else
+					value = System.getProperty(key1);
+			}
+			// Check the second part, if there is one and first lookup failed
+			if (value == null && comma < key.length() - 1) {
+				String key2 = key.substring(comma + 1);
+				if (resolver != null)
+					value = resolver.resolve(key2);
+				else
+					value = System.getProperty(key2);
+			}
+		}
+		// Return whatever we've found or null
+		return value;
+	}
+
+	public interface PropertyResolver {
+
+		String resolve(String property);
+
+	}
+
 }

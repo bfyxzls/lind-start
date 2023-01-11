@@ -15,8 +15,13 @@ import lombok.NoArgsConstructor;
 @Builder
 @TableName("sys_user_role")
 public class UserRole {
-    private String id;
-    private String userId;
-    private String roleId;
-    private transient String roleName;
+
+	private String id;
+
+	private String userId;
+
+	private String roleId;
+
+	private transient String roleName;
+
 }

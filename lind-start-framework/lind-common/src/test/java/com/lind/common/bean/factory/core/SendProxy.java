@@ -8,23 +8,25 @@ import java.lang.reflect.Method;
 
 @Data
 public class SendProxy implements InvocationHandler {
-  private BeanFactory applicationContext;
 
-  public SendProxy(BeanFactory applicationContext) {
-    this.applicationContext = applicationContext;
-  }
+	private BeanFactory applicationContext;
 
-  @Override
-  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    System.out.println("SendProxy...");
-    if(method.getName().equals("insert")){
-      System.out.println("insert...");
+	public SendProxy(BeanFactory applicationContext) {
+		this.applicationContext = applicationContext;
+	}
 
-    }
-    if(method.getName().equals("delete")){
-      System.out.println("delete...");
+	@Override
+	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+		System.out.println("SendProxy...");
+		if (method.getName().equals("insert")) {
+			System.out.println("insert...");
 
-    }
-    return null;
-  }
+		}
+		if (method.getName().equals("delete")) {
+			System.out.println("delete...");
+
+		}
+		return null;
+	}
+
 }

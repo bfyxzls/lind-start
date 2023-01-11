@@ -1,19 +1,21 @@
 package com.lind.common.dto;
 
 public interface PageParam {
-    int getPageNumber();
 
-    int getPageSize();
+	int getPageNumber();
 
-    String getSort();
+	int getPageSize();
 
-    String getOrder();
+	String getSort();
 
-    void setPageNumber(int pageNumber);
+	String getOrder();
 
-    void setPageSize(int pageSize);
+	void setPageNumber(int pageNumber);
 
-    void setSort(String sort);
+	void setPageSize(int pageSize);
 
-    void setOrder(String order);
+	void setSort(String sort);
+
+	void setOrder(String order);
+
 }

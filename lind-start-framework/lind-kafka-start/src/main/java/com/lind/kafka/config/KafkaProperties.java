@@ -5,165 +5,185 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("spring.kafka")
 public class KafkaProperties {
-    /**
-     * kafka生产者ack机制
-     */
-    private String acks = "1";
-    /**
-     * kafka并发数量
-     */
-    private String concurrency = "12";
-    private String bootstrapServers;
-    private String groupID;
-    private int retries = 3;
-    private int bufferMemory = 1024 * 1024 * 32;
-    private int lingerMS = 5;
-    private boolean enableAutoCommit = true;
-    private int batchSize = 1024 * 16;
-    /**
-     * Key序列化
-     */
-    private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
-    /**
-     * Value序列化
-     */
-    private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
-    /**
-     * Key反序列化
-     */
-    private String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
-    /**
-     * Value反序列化
-     */
-    private String valueDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
-    /**
-     * 消费者配置
-     */
-    private Consumer consumer = new Consumer();
 
-    public String getAcks() {
-        return acks;
-    }
+	/**
+	 * kafka生产者ack机制
+	 */
+	private String acks = "1";
 
-    public void setAcks(String acks) {
-        this.acks = acks;
-    }
+	/**
+	 * kafka并发数量
+	 */
+	private String concurrency = "12";
 
-    public String getConcurrency() {
-        return concurrency;
-    }
+	private String bootstrapServers;
 
-    public void setConcurrency(String concurrency) {
-        this.concurrency = concurrency;
-    }
+	private String groupID;
 
-    public String getBootstrapServers() {
-        return bootstrapServers;
-    }
+	private int retries = 3;
 
-    public void setBootstrapServers(String bootstrapServers) {
-        this.bootstrapServers = bootstrapServers;
-    }
+	private int bufferMemory = 1024 * 1024 * 32;
 
-    public Consumer getConsumer() {
-        return consumer;
-    }
+	private int lingerMS = 5;
 
-    public void setConsumer(Consumer consumer) {
-        this.consumer = consumer;
-    }
+	private boolean enableAutoCommit = true;
 
-    public int getRetries() {
-        return retries;
-    }
+	private int batchSize = 1024 * 16;
 
-    public void setRetries(int retries) {
-        this.retries = retries;
-    }
+	/**
+	 * Key序列化
+	 */
+	private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
 
-    public int getBufferMemory() {
-        return bufferMemory;
-    }
+	/**
+	 * Value序列化
+	 */
+	private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
 
-    public void setBufferMemory(int bufferMemory) {
-        this.bufferMemory = bufferMemory;
-    }
+	/**
+	 * Key反序列化
+	 */
+	private String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
 
-    public int getLingerMS() {
-        return lingerMS;
-    }
+	/**
+	 * Value反序列化
+	 */
+	private String valueDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
 
-    public void setLingerMS(int lingerMS) {
-        this.lingerMS = lingerMS;
-    }
+	/**
+	 * 消费者配置
+	 */
+	private Consumer consumer = new Consumer();
 
-    public boolean getEnableAutoCommit() {
-        return enableAutoCommit;
-    }
+	public String getAcks() {
+		return acks;
+	}
 
-    public void setEnableAutoCommit(boolean enableAutoCommit) {
-        this.enableAutoCommit = enableAutoCommit;
-    }
+	public void setAcks(String acks) {
+		this.acks = acks;
+	}
 
-    public int getBatchSize() {
-        return batchSize;
-    }
+	public String getConcurrency() {
+		return concurrency;
+	}
 
-    public void setBatchSize(int batchSize) {
-        this.batchSize = batchSize;
-    }
+	public void setConcurrency(String concurrency) {
+		this.concurrency = concurrency;
+	}
 
-    public String getKeySerializer() {
-        return keySerializer;
-    }
+	public String getBootstrapServers() {
+		return bootstrapServers;
+	}
 
-    public void setKeySerializer(String keySerializer) {
-        this.keySerializer = keySerializer;
-    }
+	public void setBootstrapServers(String bootstrapServers) {
+		this.bootstrapServers = bootstrapServers;
+	}
 
-    public String getValueSerializer() {
-        return valueSerializer;
-    }
+	public Consumer getConsumer() {
+		return consumer;
+	}
 
-    public void setValueSerializer(String valueSerializer) {
-        this.valueSerializer = valueSerializer;
-    }
+	public void setConsumer(Consumer consumer) {
+		this.consumer = consumer;
+	}
 
-    public String getKeyDeserializer() {
-        return keyDeserializer;
-    }
+	public int getRetries() {
+		return retries;
+	}
 
-    public void setKeyDeserializer(String keyDeserializer) {
-        this.keyDeserializer = keyDeserializer;
-    }
+	public void setRetries(int retries) {
+		this.retries = retries;
+	}
 
-    public String getValueDeserializer() {
-        return valueDeserializer;
-    }
+	public int getBufferMemory() {
+		return bufferMemory;
+	}
 
-    public void setValueDeserializer(String valueDeserializer) {
-        this.valueDeserializer = valueDeserializer;
-    }
+	public void setBufferMemory(int bufferMemory) {
+		this.bufferMemory = bufferMemory;
+	}
 
-    @Data
-    public class Consumer {
-        /**
-         * 消费者的组id，默认是default
-         */
-        private String groupId = "default";
+	public int getLingerMS() {
+		return lingerMS;
+	}
 
-        /**
-         * 发生消费错误时重试次数，超过这个次数后会提交offset，需自行处理
-         */
-        private int errorRetry = 3;
+	public void setLingerMS(int lingerMS) {
+		this.lingerMS = lingerMS;
+	}
 
-        private String autoOffsetReset = "latest";
-        private int requestTimeoutMsConfig = 60000;
-        private int maxPollIntervalMsConfig = 300000;
-        private int maxPollRecordsConfig = 3;
-        private int sessionTimeoutMsConfig = 10000;
-        private int autoCommitIntervalMsConfig = 100;
+	public boolean getEnableAutoCommit() {
+		return enableAutoCommit;
+	}
 
-    }
+	public void setEnableAutoCommit(boolean enableAutoCommit) {
+		this.enableAutoCommit = enableAutoCommit;
+	}
+
+	public int getBatchSize() {
+		return batchSize;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
+	}
+
+	public String getKeySerializer() {
+		return keySerializer;
+	}
+
+	public void setKeySerializer(String keySerializer) {
+		this.keySerializer = keySerializer;
+	}
+
+	public String getValueSerializer() {
+		return valueSerializer;
+	}
+
+	public void setValueSerializer(String valueSerializer) {
+		this.valueSerializer = valueSerializer;
+	}
+
+	public String getKeyDeserializer() {
+		return keyDeserializer;
+	}
+
+	public void setKeyDeserializer(String keyDeserializer) {
+		this.keyDeserializer = keyDeserializer;
+	}
+
+	public String getValueDeserializer() {
+		return valueDeserializer;
+	}
+
+	public void setValueDeserializer(String valueDeserializer) {
+		this.valueDeserializer = valueDeserializer;
+	}
+
+	@Data
+	public class Consumer {
+
+		/**
+		 * 消费者的组id，默认是default
+		 */
+		private String groupId = "default";
+
+		/**
+		 * 发生消费错误时重试次数，超过这个次数后会提交offset，需自行处理
+		 */
+		private int errorRetry = 3;
+
+		private String autoOffsetReset = "latest";
+
+		private int requestTimeoutMsConfig = 60000;
+
+		private int maxPollIntervalMsConfig = 300000;
+
+		private int maxPollRecordsConfig = 3;
+
+		private int sessionTimeoutMsConfig = 10000;
+
+		private int autoCommitIntervalMsConfig = 100;
+
+	}
 
 }

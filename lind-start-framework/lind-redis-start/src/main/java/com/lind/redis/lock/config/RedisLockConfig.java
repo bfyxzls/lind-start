@@ -23,49 +23,47 @@ import org.springframework.integration.support.locks.LockRegistry;
  */
 @EnableConfigurationProperties(RedisLockProperty.class)
 @RequiredArgsConstructor
-@ConditionalOnBean(LettuceRedisAutoConfigure.class)//依赖注入
+@ConditionalOnBean(LettuceRedisAutoConfigure.class) // 依赖注入
 @ConditionalOnProperty(value = "lind.redis.lock.enable", havingValue = "true", matchIfMissing = true)
 public class RedisLockConfig {
-    private final RedisLockProperty redisLockProperty;
 
-    /**
-     * 没有其它LockRegistry类型的bean，就注册这个bean.
-     *
-     * @param redisConnectionFactory
-     * @return
-     */
-    @Bean
-    @ConditionalOnMissingBean(LockRegistry.class)
-    public RedisLockRegistry redisLockRegistry(LettuceConnectionFactory redisConnectionFactory) {
-        return new RedisLockRegistry(redisConnectionFactory, redisLockProperty.getRegistryKey());
-    }
+	private final RedisLockProperty redisLockProperty;
 
-    @Bean
-    @ConditionalOnBean(name = "redisTemplateString")
-    public RepeatSubmitAspect repeatSubmitAspect(RedisTemplate redisTemplate, UserIdAuditorAware userIdAuditorAware) {
-        return new RepeatSubmitAspect(redisTemplate, userIdAuditorAware);
-    }
+	/**
+	 * 没有其它LockRegistry类型的bean，就注册这个bean.
+	 * @param redisConnectionFactory
+	 * @return
+	 */
+	@Bean
+	@ConditionalOnMissingBean(LockRegistry.class)
+	public RedisLockRegistry redisLockRegistry(LettuceConnectionFactory redisConnectionFactory) {
+		return new RedisLockRegistry(redisConnectionFactory, redisLockProperty.getRegistryKey());
+	}
 
-    @Bean
-    @ConditionalOnBean(name = "redisTemplateString")
-    public RedisLockTemplate redisLockTemplate(
-            RedisLockRegistry redisLockRegistry,
-            RedisLockProperty redisLockProperty) {
-        return new RedisLockTemplate(redisLockRegistry, redisLockProperty);
-    }
+	@Bean
+	@ConditionalOnBean(name = "redisTemplateString")
+	public RepeatSubmitAspect repeatSubmitAspect(RedisTemplate redisTemplate, UserIdAuditorAware userIdAuditorAware) {
+		return new RepeatSubmitAspect(redisTemplate, userIdAuditorAware);
+	}
 
-    @Bean
-    @ConditionalOnBean(RedisLockTemplate.class)
-    public RedisUserManualLockTemplate redisUserManualLockTemplate(
-            RedisTemplate<String, String> redisTemplate,
-            RedisLockProperty redisLockProperty,
-            RedisLockTemplate redisLockTemplate) {
-        return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate);
-    }
+	@Bean
+	@ConditionalOnBean(name = "redisTemplateString")
+	public RedisLockTemplate redisLockTemplate(RedisLockRegistry redisLockRegistry,
+			RedisLockProperty redisLockProperty) {
+		return new RedisLockTemplate(redisLockRegistry, redisLockProperty);
+	}
 
-    @Bean
-    @ConditionalOnMissingBean(UserIdAuditorAware.class)
-    public UserIdAuditorAware userIdAuditorAware() {
-        return new DefaultUserIdAuditorAwareImpl();
-    }
+	@Bean
+	@ConditionalOnBean(RedisLockTemplate.class)
+	public RedisUserManualLockTemplate redisUserManualLockTemplate(RedisTemplate<String, String> redisTemplate,
+			RedisLockProperty redisLockProperty, RedisLockTemplate redisLockTemplate) {
+		return new RedisUserManualLockTemplate(redisTemplate, redisLockProperty, redisLockTemplate);
+	}
+
+	@Bean
+	@ConditionalOnMissingBean(UserIdAuditorAware.class)
+	public UserIdAuditorAware userIdAuditorAware() {
+		return new DefaultUserIdAuditorAwareImpl();
+	}
+
 }

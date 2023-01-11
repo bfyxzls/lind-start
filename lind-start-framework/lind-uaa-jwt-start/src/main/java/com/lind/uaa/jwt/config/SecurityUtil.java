@@ -12,14 +12,15 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 public class SecurityUtil {
-    /**
-     * 获取当前登录用户
-     *
-     * @return
-     */
-    @SneakyThrows
-    public ResourceUser getCurrUser() {
-        Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return (ResourceUser) obj;
-    }
+
+	/**
+	 * 获取当前登录用户
+	 * @return
+	 */
+	@SneakyThrows
+	public ResourceUser getCurrUser() {
+		Object obj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return (ResourceUser) obj;
+	}
+
 }

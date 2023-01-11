@@ -13,19 +13,24 @@ import java.io.IOException;
  * 重写，解决mac word引起的错误
  */
 public class XHTMLConverterAdapter extends XHTMLConverter {
-    private static final IXWPFConverter<XHTMLOptions> INSTANCE = new XHTMLConverterAdapter();
 
-    public static IXWPFConverter<XHTMLOptions> getInstance() {
-        return INSTANCE;
-    }
-    @Override
-    public void convert(XWPFDocument document, ContentHandler contentHandler, XHTMLOptions options) throws XWPFConverterException, IOException {
-        try {
-            options = options != null ? options : XHTMLOptions.getDefault();
-            XHTMLMapperAdapter mapper = new XHTMLMapperAdapter(document, contentHandler, options);
-            mapper.start();
-        } catch (Exception var5) {
-            throw new XWPFConverterException(var5);
-        }
-    }
+	private static final IXWPFConverter<XHTMLOptions> INSTANCE = new XHTMLConverterAdapter();
+
+	public static IXWPFConverter<XHTMLOptions> getInstance() {
+		return INSTANCE;
+	}
+
+	@Override
+	public void convert(XWPFDocument document, ContentHandler contentHandler, XHTMLOptions options)
+			throws XWPFConverterException, IOException {
+		try {
+			options = options != null ? options : XHTMLOptions.getDefault();
+			XHTMLMapperAdapter mapper = new XHTMLMapperAdapter(document, contentHandler, options);
+			mapper.start();
+		}
+		catch (Exception var5) {
+			throw new XWPFConverterException(var5);
+		}
+	}
+
 }

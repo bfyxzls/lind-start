@@ -15,23 +15,25 @@ import org.springframework.kafka.support.SendResult;
 @RequiredArgsConstructor
 public class DefaultSuccessHandler implements SuccessHandler {
 
-    private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-    @Override
-    public void onSuccess(SendResult<String, String> result) {
-        String topic = result.getProducerRecord().topic();
-        try {
-            MessageEntityAware value = objectMapper.readValue(result.getProducerRecord().value(), MessageEntityAware.class);
+	@Override
+	public void onSuccess(SendResult<String, String> result) {
+		String topic = result.getProducerRecord().topic();
+		try {
+			MessageEntityAware value = objectMapper.readValue(result.getProducerRecord().value(),
+					MessageEntityAware.class);
 
-            RecordMetadata recordMetadata = result.getRecordMetadata();
-            int partition = recordMetadata.partition();
-            long offset = recordMetadata.offset();
+			RecordMetadata recordMetadata = result.getRecordMetadata();
+			int partition = recordMetadata.partition();
+			long offset = recordMetadata.offset();
 
-            log.info("success sent topic={} data={} with offset={} partition={}", topic, value,
-                    offset, partition);
-        } catch (JsonProcessingException e) {
-            log.error("json反序列化失败", e);
-        }
+			log.info("success sent topic={} data={} with offset={} partition={}", topic, value, offset, partition);
+		}
+		catch (JsonProcessingException e) {
+			log.error("json反序列化失败", e);
+		}
 
-    }
+	}
+
 }

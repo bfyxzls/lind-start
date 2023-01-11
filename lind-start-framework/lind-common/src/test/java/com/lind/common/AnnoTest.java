@@ -16,13 +16,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class AnnoTest {
-    @Test
-    public void classAnno() {
-        AutoConfigureAfter component = AnnotationUtils.findAnnotation(Son.class, AutoConfigureAfter.class);
-    }
 
-    @Test
-    public void methodAnno() {
+	@Test
+	public void classAnno() {
+		AutoConfigureAfter component = AnnotationUtils.findAnnotation(Son.class, AutoConfigureAfter.class);
+	}
 
-    }
+	@Test
+	public void methodAnno() {
+
+	}
+
 }

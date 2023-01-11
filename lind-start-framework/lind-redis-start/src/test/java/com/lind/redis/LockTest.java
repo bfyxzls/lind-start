@@ -29,53 +29,56 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @Slf4j
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class, RedisLockConfig.class, RepeatSubmitController.class, CurrentUser.class})
+@SpringBootTest(classes = { LettuceConnectionFactory.class, LettuceRedisAutoConfigure.class, RedisLockConfig.class,
+		RepeatSubmitController.class, CurrentUser.class })
 public class LockTest {
-    protected MockMvc mockMvc;
-    @Autowired
-    DistributedLockTemplate distributedLockTemplate;
-    @Autowired
-    private WebApplicationContext webApplicationContext;
 
-    void lock5Second() {
-        distributedLockTemplate.execute("订单流水号", 2, TimeUnit.SECONDS, new Callback() {
-            @Override
-            public Object onGetLock() throws InterruptedException {
-                // 获得锁后要做的事
-                log.info("{} 拿到锁，需要5秒钟，这时有请求打入应该被阻塞或者拒绝", Thread.currentThread().getName());
-                TimeUnit.SECONDS.sleep(5L);
-                return null;
-            }
+	protected MockMvc mockMvc;
 
-            @Override
-            public Object onTimeout() throws InterruptedException {
-                // 获取到锁（获取锁超时）后要做的事
-                log.info("{} 没拿到锁", Thread.currentThread().getName());
-                return null;
-            }
-        });
-    }
+	@Autowired
+	DistributedLockTemplate distributedLockTemplate;
 
-    @Test
-    public void lock() throws InterruptedException {
-        Thread thread1 = new Thread(() -> lock5Second());
-        Thread thread2 = new Thread(() -> lock5Second());
-        thread1.start();
-        thread2.start();
-        TimeUnit.SECONDS.sleep(5L);
-    }
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
+	void lock5Second() {
+		distributedLockTemplate.execute("订单流水号", 2, TimeUnit.SECONDS, new Callback() {
+			@Override
+			public Object onGetLock() throws InterruptedException {
+				// 获得锁后要做的事
+				log.info("{} 拿到锁，需要5秒钟，这时有请求打入应该被阻塞或者拒绝", Thread.currentThread().getName());
+				TimeUnit.SECONDS.sleep(5L);
+				return null;
+			}
 
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
+			@Override
+			public Object onTimeout() throws InterruptedException {
+				// 获取到锁（获取锁超时）后要做的事
+				log.info("{} 没拿到锁", Thread.currentThread().getName());
+				return null;
+			}
+		});
+	}
 
-    @Test
-    public void tokenIndex() throws Exception {
-        for (int i = 1; i < 3; i++)
-            mockMvc.perform(get("/get")).andDo(print()).andExpect(status().isOk());
+	@Test
+	public void lock() throws InterruptedException {
+		Thread thread1 = new Thread(() -> lock5Second());
+		Thread thread2 = new Thread(() -> lock5Second());
+		thread1.start();
+		thread2.start();
+		TimeUnit.SECONDS.sleep(5L);
+	}
 
-    }
+	@Before
+	public void setUp() {
+		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+	}
+
+	@Test
+	public void tokenIndex() throws Exception {
+		for (int i = 1; i < 3; i++)
+			mockMvc.perform(get("/get")).andDo(print()).andExpect(status().isOk());
+
+	}
 
 }

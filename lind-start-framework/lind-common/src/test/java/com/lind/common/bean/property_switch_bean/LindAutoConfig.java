@@ -17,22 +17,23 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(LindProperty.class) // 开启@ConfigurationProperties
 public class LindAutoConfig {
 
-    @Bean
-    @ConditionalOnMissingBean // lind的Bean的默认实现行为
-    public Lind lind(LindProperty lindProperty) {
-        LindProperty.Type type = lindProperty.getType();
-        Lind lind;
-        switch (type) {
-            case ORDER:
-                lind = new LindOrder();
-                break;
-            case PRODUCT:
-                lind = new LindProduct();
-                break;
-            default:
-                throw new IllegalArgumentException("not support type");
+	@Bean
+	@ConditionalOnMissingBean // lind的Bean的默认实现行为
+	public Lind lind(LindProperty lindProperty) {
+		LindProperty.Type type = lindProperty.getType();
+		Lind lind;
+		switch (type) {
+		case ORDER:
+			lind = new LindOrder();
+			break;
+		case PRODUCT:
+			lind = new LindProduct();
+			break;
+		default:
+			throw new IllegalArgumentException("not support type");
 
-        }
-        return lind;
-    }
+		}
+		return lind;
+	}
+
 }

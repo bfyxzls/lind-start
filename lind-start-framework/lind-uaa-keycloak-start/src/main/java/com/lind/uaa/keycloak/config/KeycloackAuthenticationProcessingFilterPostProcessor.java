@@ -26,42 +26,45 @@ import static com.lind.uaa.keycloak.config.Constant.getCurrentHost;
  */
 public class KeycloackAuthenticationProcessingFilterPostProcessor implements BeanPostProcessor {
 
-  private static final Logger logger = LoggerFactory.getLogger(KeycloackAuthenticationProcessingFilterPostProcessor.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(KeycloackAuthenticationProcessingFilterPostProcessor.class);
 
+	@Autowired
+	UaaProperties uaaProperties;
 
-  @Autowired
-  UaaProperties uaaProperties;
+	private void process(KeycloakAuthenticationProcessingFilter filter) {
+		System.out.println("KeycloakAuthenticationProcessingFilter authenticate");
 
-  private void process(KeycloakAuthenticationProcessingFilter filter) {
-    System.out.println("KeycloakAuthenticationProcessingFilter authenticate");
+		filter.setRequestAuthenticatorFactory(new SpringSecurityRequestAuthenticatorFactory() {
+			@Override
+			public RequestAuthenticator createRequestAuthenticator(HttpFacade facade, HttpServletRequest request,
+					KeycloakDeployment deployment, AdapterTokenStore tokenStore, int sslRedirectPort) {
+				return new SpringSecurityRequestAuthenticator(facade, request, deployment, tokenStore,
+						sslRedirectPort) {
 
-    filter.setRequestAuthenticatorFactory(new SpringSecurityRequestAuthenticatorFactory() {
-      @Override
-      public RequestAuthenticator createRequestAuthenticator(HttpFacade facade, HttpServletRequest request, KeycloakDeployment deployment, AdapterTokenStore tokenStore, int sslRedirectPort) {
-        return new SpringSecurityRequestAuthenticator(facade, request, deployment, tokenStore, sslRedirectPort) {
+					@Override
+					protected OAuthRequestAuthenticator createOAuthAuthenticator() {
+						return new OAuthRequestAuthenticator(this, facade, deployment, sslRedirectPort, tokenStore) {
+							@Override
+							protected String getRequestUrl() {
+								return StringUtils.isNotBlank(uaaProperties.getRedirectUri())
+										? getCurrentHost(request) + TOKEN_AUTHORIZATION_CODE_REDIRECT
+										: getCurrentHost(request) + TOKEN_AUTHORIZATION_CODE_RESPONSE;
+							}
+						};
+					}
 
-          @Override
-          protected OAuthRequestAuthenticator createOAuthAuthenticator() {
-            return new OAuthRequestAuthenticator(this, facade, deployment, sslRedirectPort, tokenStore) {
-              @Override
-              protected String getRequestUrl() {
-                return StringUtils.isNotBlank(uaaProperties.getRedirectUri())
-                    ? getCurrentHost(request) + TOKEN_AUTHORIZATION_CODE_REDIRECT
-                    : getCurrentHost(request) + TOKEN_AUTHORIZATION_CODE_RESPONSE;
-              }
-            };
-          }
+				};
+			}
+		});
+	}
 
-        };
-      }
-    });
-  }
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		if (bean instanceof KeycloakAuthenticationProcessingFilter) {
+			logger.info("Injecting core KeycloakAuthenticationProcessingFilter handler...");
+			process(((KeycloakAuthenticationProcessingFilter) bean));
+		}
+		return bean;
+	}
 
-  public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-    if (bean instanceof KeycloakAuthenticationProcessingFilter) {
-      logger.info("Injecting core KeycloakAuthenticationProcessingFilter handler...");
-      process(((KeycloakAuthenticationProcessingFilter) bean));
-    }
-    return bean;
-  }
 }

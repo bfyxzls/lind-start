@@ -15,14 +15,24 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobDto {
-    private String jobClassName;
-    private String jobName;
-    private String groupName;
-    private String triggerName;
-    private String triggerGroupName;
-    private String cronExpression;
-    // 下面是只有返回时的字段
-    private String desc;
-    private String time;
-    private String status;
+
+	private String jobClassName;
+
+	private String jobName;
+
+	private String groupName;
+
+	private String triggerName;
+
+	private String triggerGroupName;
+
+	private String cronExpression;
+
+	// 下面是只有返回时的字段
+	private String desc;
+
+	private String time;
+
+	private String status;
+
 }

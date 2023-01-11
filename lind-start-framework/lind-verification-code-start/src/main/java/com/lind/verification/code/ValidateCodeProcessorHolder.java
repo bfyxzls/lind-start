@@ -24,41 +24,38 @@ import java.util.Map;
 @Component
 public class ValidateCodeProcessorHolder {
 
-    private final Map<String, ValidateCodeProcessor> validateCodeProcessors;
+	private final Map<String, ValidateCodeProcessor> validateCodeProcessors;
 
-    /**
-     * Instantiates a new Validate code processor holder.
-     *
-     * @param validateCodeProcessors the validate code processors
-     */
-    @Autowired
-    public ValidateCodeProcessorHolder(Map<String, ValidateCodeProcessor> validateCodeProcessors) {
-        this.validateCodeProcessors = validateCodeProcessors;
-    }
+	/**
+	 * Instantiates a new Validate code processor holder.
+	 * @param validateCodeProcessors the validate code processors
+	 */
+	@Autowired
+	public ValidateCodeProcessorHolder(Map<String, ValidateCodeProcessor> validateCodeProcessors) {
+		this.validateCodeProcessors = validateCodeProcessors;
+	}
 
-    /**
-     * Find validate code processor validate code processor.
-     *
-     * @param type the type
-     * @return validate code processor
-     */
-    public ValidateCodeProcessor findValidateCodeProcessor(ValidateCodeType type) {
-        return findValidateCodeProcessor(type.toString().toLowerCase());
-    }
+	/**
+	 * Find validate code processor validate code processor.
+	 * @param type the type
+	 * @return validate code processor
+	 */
+	public ValidateCodeProcessor findValidateCodeProcessor(ValidateCodeType type) {
+		return findValidateCodeProcessor(type.toString().toLowerCase());
+	}
 
-    /**
-     * Find validate code processor validate code processor.
-     *
-     * @param type the type
-     * @return validate code processor
-     */
-    public ValidateCodeProcessor findValidateCodeProcessor(String type) {
-        String name = type + ValidateCodeProcessor.class.getSimpleName();
-        ValidateCodeProcessor processor = validateCodeProcessors.get(name);
-        if (processor == null) {
-            throw new ValidateCodeException("验证码处理器" + name + "不存在");
-        }
-        return processor;
-    }
+	/**
+	 * Find validate code processor validate code processor.
+	 * @param type the type
+	 * @return validate code processor
+	 */
+	public ValidateCodeProcessor findValidateCodeProcessor(String type) {
+		String name = type + ValidateCodeProcessor.class.getSimpleName();
+		ValidateCodeProcessor processor = validateCodeProcessors.get(name);
+		if (processor == null) {
+			throw new ValidateCodeException("验证码处理器" + name + "不存在");
+		}
+		return processor;
+	}
 
 }

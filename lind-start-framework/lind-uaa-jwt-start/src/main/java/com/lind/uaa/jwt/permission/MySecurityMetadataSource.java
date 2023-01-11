@@ -19,8 +19,7 @@ import org.springframework.util.PathMatcher;
 import java.util.*;
 
 /**
- * 权限资源管理器
- * 为权限决断器提供支持
+ * 权限资源管理器 为权限决断器提供支持
  *
  * @author lind
  */
@@ -28,80 +27,81 @@ import java.util.*;
 @Component
 public class MySecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    @Autowired
-    RedisService redisService;
-    @Autowired
-    private ResourcePermissionService resourcePermissionService;
-    private Map<String, Collection<ConfigAttribute>> map = null;
+	@Autowired
+	RedisService redisService;
 
-    /**
-     * 加载权限表中所有操作请求权限
-     */
-    @SneakyThrows
-    public void loadResourceDefine() {
+	@Autowired
+	private ResourcePermissionService resourcePermissionService;
 
-        map = new HashMap<>(16);
-        Collection<ConfigAttribute> configAttributes;
-        ConfigAttribute cfg;
-        // 获取启用的权限操作请求，授权服务登陆后会写到redis，其它服务直接从redis里读数据
-        List<? extends ResourcePermission> resourcePermissions;
-        if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
-            //授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
-            resourcePermissions = resourcePermissionService.getAll();
-            if (resourcePermissions != null) {
-                redisService.set(Constants.PERMISSION_ALL,resourcePermissions);
-            }
-        } else {
-            resourcePermissions = resourcePermissionService.getAll();
-        }
-        if (resourcePermissions != null) {
-            for (ResourcePermission resourcePermission : resourcePermissions) {
-                if (StringUtils.isNotBlank(resourcePermission.getTitle())
-                        && StringUtils.isNotBlank(resourcePermission.getUrl())) {
-                    configAttributes = new ArrayList<>();
-                    cfg = new SecurityConfig(resourcePermission.getTitle());//权限名称就是权限表里的title字段
-                    configAttributes.add(cfg);
-                    map.put(resourcePermission.getUrl(), configAttributes);
-                }
-            }
-        }
-    }
+	private Map<String, Collection<ConfigAttribute>> map = null;
 
-    /**
-     * 判定用户请求的url是否在权限表中
-     * 如果在权限表中，则返回给decide方法，用来判定用户是否有此URL对应的权限
-     * 如果不在权限表中则放行
-     *
-     * @param o
-     * @return
-     * @throws IllegalArgumentException
-     */
-    @Override
-    public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
+	/**
+	 * 加载权限表中所有操作请求权限
+	 */
+	@SneakyThrows
+	public void loadResourceDefine() {
 
-        if (map == null) {
-            loadResourceDefine();
-        }
-        //Object中包含用户请求request
-        String url = ((FilterInvocation) o).getRequestUrl();
-        PathMatcher pathMatcher = new AntPathMatcher();
-        for (Map.Entry<String, Collection<ConfigAttribute>> item : map.entrySet()) {
-            String resURL = item.getKey();
-            if (StringUtils.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
-                return item.getValue();
-            }
-        }
+		map = new HashMap<>(16);
+		Collection<ConfigAttribute> configAttributes;
+		ConfigAttribute cfg;
+		// 获取启用的权限操作请求，授权服务登陆后会写到redis，其它服务直接从redis里读数据
+		List<? extends ResourcePermission> resourcePermissions;
+		if (!redisService.hasKey(Constants.PERMISSION_ALL)) {
+			// 授权服务在实现了ResourcePermissionService之后,将数据返回，并写到redis
+			resourcePermissions = resourcePermissionService.getAll();
+			if (resourcePermissions != null) {
+				redisService.set(Constants.PERMISSION_ALL, resourcePermissions);
+			}
+		}
+		else {
+			resourcePermissions = resourcePermissionService.getAll();
+		}
+		if (resourcePermissions != null) {
+			for (ResourcePermission resourcePermission : resourcePermissions) {
+				if (StringUtils.isNotBlank(resourcePermission.getTitle())
+						&& StringUtils.isNotBlank(resourcePermission.getUrl())) {
+					configAttributes = new ArrayList<>();
+					cfg = new SecurityConfig(resourcePermission.getTitle());// 权限名称就是权限表里的title字段
+					configAttributes.add(cfg);
+					map.put(resourcePermission.getUrl(), configAttributes);
+				}
+			}
+		}
+	}
 
-        return null;
-    }
+	/**
+	 * 判定用户请求的url是否在权限表中 如果在权限表中，则返回给decide方法，用来判定用户是否有此URL对应的权限 如果不在权限表中则放行
+	 * @param o
+	 * @return
+	 * @throws IllegalArgumentException
+	 */
+	@Override
+	public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
 
-    @Override
-    public Collection<ConfigAttribute> getAllConfigAttributes() {
-        return null;
-    }
+		if (map == null) {
+			loadResourceDefine();
+		}
+		// Object中包含用户请求request
+		String url = ((FilterInvocation) o).getRequestUrl();
+		PathMatcher pathMatcher = new AntPathMatcher();
+		for (Map.Entry<String, Collection<ConfigAttribute>> item : map.entrySet()) {
+			String resURL = item.getKey();
+			if (StringUtils.isNotBlank(resURL) && pathMatcher.match(resURL, url)) {
+				return item.getValue();
+			}
+		}
 
-    @Override
-    public boolean supports(Class<?> aClass) {
-        return true;
-    }
+		return null;
+	}
+
+	@Override
+	public Collection<ConfigAttribute> getAllConfigAttributes() {
+		return null;
+	}
+
+	@Override
+	public boolean supports(Class<?> aClass) {
+		return true;
+	}
+
 }

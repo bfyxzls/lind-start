@@ -12,11 +12,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 @EnableDictionaryAdapter
 public class AnnoTest {
-    @Autowired
-    UserService userService;
 
-    @Test
-    public void update() {
-        userService.update(new User());
-    }
+	@Autowired
+	UserService userService;
+
+	@Test
+	public void update() {
+		userService.update(new User());
+	}
+
 }

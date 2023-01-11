@@ -11,7 +11,6 @@
 
 package com.lind.verification.code.email;
 
-
 import com.lind.verification.code.ValidateCode;
 import com.lind.verification.code.ValidateCodeGenerator;
 import com.lind.verification.code.properties.ValidateCodeProperties;
@@ -32,21 +31,21 @@ import java.util.Map;
 @Component("emailValidateCodeGenerator")
 public class EmailCodeGenerator implements ValidateCodeGenerator {
 
-    @Autowired
-    private ValidateCodeProperties validateCodeProperties;
+	@Autowired
+	private ValidateCodeProperties validateCodeProperties;
 
-    /**
-     * Generate validate code.
-     *
-     * @param request the request
-     * @return the validate code
-     */
-    @Override
-    public ValidateCode generate(ServletWebRequest request) {
-        Map<String, String[]> parameterMap = request.getParameterMap();
-        String[] emails = parameterMap.get("email");
-        log.info(Arrays.toString(emails));
-        String code = Arrays.toString(emails);
-        return new ValidateCode(code, validateCodeProperties.getEmail().getExpireIn());
-    }
+	/**
+	 * Generate validate code.
+	 * @param request the request
+	 * @return the validate code
+	 */
+	@Override
+	public ValidateCode generate(ServletWebRequest request) {
+		Map<String, String[]> parameterMap = request.getParameterMap();
+		String[] emails = parameterMap.get("email");
+		log.info(Arrays.toString(emails));
+		String code = Arrays.toString(emails);
+		return new ValidateCode(code, validateCodeProperties.getEmail().getExpireIn());
+	}
+
 }

@@ -29,7 +29,6 @@ import java.util.Map;
  * 抽象的图片验证码处理器
  *
  * @param <C> the type parameter @author paascloud.net@gmail.com
- *
  * @author paascloud.net @gmail.com
  */
 public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> implements ValidateCodeProcessor {
@@ -43,22 +42,19 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
 	/**
 	 * Instantiates a new Abstract validate code processor.
-	 *
 	 * @param validateCodeGenerators the validate code generators
 	 * @param validateCodeRepository the validate code repository
 	 */
 	@Autowired
-	public AbstractValidateCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators, ValidateCodeRepository validateCodeRepository) {
+	public AbstractValidateCodeProcessor(Map<String, ValidateCodeGenerator> validateCodeGenerators,
+			ValidateCodeRepository validateCodeRepository) {
 		this.validateCodeGenerators = validateCodeGenerators;
 		this.validateCodeRepository = validateCodeRepository;
 	}
 
-
 	/**
 	 * Create.
-	 *
 	 * @param request the request
-	 *
 	 * @throws Exception the exception
 	 */
 	@Override
@@ -92,10 +88,8 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
 	/**
 	 * 发送校验码，由子类实现
-	 *
-	 * @param request      the request
+	 * @param request the request
 	 * @param validateCode the validate code
-	 *
 	 * @throws Exception the exception
 	 */
 	protected abstract void send(ServletWebRequest request, C validateCode) throws Exception;
@@ -110,7 +104,6 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
 	/**
 	 * Validate.
-	 *
 	 * @param request the request
 	 */
 	@SuppressWarnings("unchecked")
@@ -125,7 +118,6 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
 	/**
 	 * Check.
-	 *
 	 * @param request the request
 	 */
 	@SuppressWarnings("unchecked")
@@ -137,8 +129,10 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 
 		String codeInRequest;
 		try {
-			codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(), codeType.getParamNameOnValidate());
-		} catch (ServletRequestBindingException e) {
+			codeInRequest = ServletRequestUtils.getStringParameter(request.getRequest(),
+					codeType.getParamNameOnValidate());
+		}
+		catch (ServletRequestBindingException e) {
 			throw new ValidateCodeException("获取验证码的值失败");
 		}
 
@@ -155,4 +149,5 @@ public abstract class AbstractValidateCodeProcessor<C extends ValidateCode> impl
 			throw new ValidateCodeException(codeType + "验证码不匹配");
 		}
 	}
+
 }

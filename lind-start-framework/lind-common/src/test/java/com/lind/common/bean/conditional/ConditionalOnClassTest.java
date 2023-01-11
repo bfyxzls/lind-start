@@ -13,31 +13,34 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest()
 public class ConditionalOnClassTest {
 
-  @Autowired
-  MissingBean missingBean;
-  @Autowired
-  FishFood fishFood;
-  @Autowired
-  Eat eat;
+	@Autowired
+	MissingBean missingBean;
 
-  /**
-   * @ConditionalOnMissingBean.
-   */
-  @Test
-  public void onMissingBean() {
-    missingBean.hello();
-  }
+	@Autowired
+	FishFood fishFood;
 
-  /**
-   * @ConditionalOnBean.
-   */
-  @Test
-  public void dependOnClass() {
-    fishFood.hello();
-  }
+	@Autowired
+	Eat eat;
 
-  @Test
-  public void eatTest() {
-    eat.drink();
-  }
+	/**
+	 * @ConditionalOnMissingBean.
+	 */
+	@Test
+	public void onMissingBean() {
+		missingBean.hello();
+	}
+
+	/**
+	 * @ConditionalOnBean.
+	 */
+	@Test
+	public void dependOnClass() {
+		fishFood.hello();
+	}
+
+	@Test
+	public void eatTest() {
+		eat.drink();
+	}
+
 }

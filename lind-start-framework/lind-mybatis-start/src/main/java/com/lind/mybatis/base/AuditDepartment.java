@@ -5,9 +5,11 @@ import lombok.Data;
 
 @Data
 public abstract class AuditDepartment extends BaseEntity {
-    /**
-     * 建立部门.
-     */
-    @TableField("create_department_id")
-    private String createDepartmentId;
+
+	/**
+	 * 建立部门.
+	 */
+	@TableField("create_department_id")
+	private String createDepartmentId;
+
 }

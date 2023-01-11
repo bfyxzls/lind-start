@@ -5,8 +5,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DogEat implements Eat {
-  @Override
-  public void drink() {
-    System.out.println("DogEat");
-  }
+
+	@Override
+	public void drink() {
+		System.out.println("DogEat");
+	}
+
 }

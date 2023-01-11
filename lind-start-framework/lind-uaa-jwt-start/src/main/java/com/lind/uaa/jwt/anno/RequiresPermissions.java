@@ -13,12 +13,14 @@ import java.lang.annotation.Target;
  * @author ruoyi
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 public @interface RequiresPermissions {
-    /**
-     * 需要校验的权限码
-     */
-    String[] value() default {};
 
-    Logical logical() default Logical.AND;
+	/**
+	 * 需要校验的权限码
+	 */
+	String[] value() default {};
+
+	Logical logical() default Logical.AND;
+
 }

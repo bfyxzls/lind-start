@@ -9,18 +9,20 @@ import java.lang.reflect.Proxy;
 
 @Data
 public class SendFactoryBean<T> implements FactoryBean<T> {
-  private Class<T> interfaceType;
-  private BeanFactory beanFactory;
 
-  @Override
-  public T getObject() throws Exception {
-    InvocationHandler handler = new SendProxy(beanFactory);
-    return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(),
-        new Class[]{interfaceType}, handler);
-  }
+	private Class<T> interfaceType;
 
-  @Override
-  public Class<?> getObjectType() {
-    return interfaceType;
-  }
+	private BeanFactory beanFactory;
+
+	@Override
+	public T getObject() throws Exception {
+		InvocationHandler handler = new SendProxy(beanFactory);
+		return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(), new Class[] { interfaceType }, handler);
+	}
+
+	@Override
+	public Class<?> getObjectType() {
+		return interfaceType;
+	}
+
 }

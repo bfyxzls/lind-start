@@ -15,19 +15,26 @@ import java.util.List;
 @GroupSequenceProvider(RoleProvider.class)
 @ApiModel("角色DTO")
 public class RoleDTO {
-    @ApiModelProperty("主键")
-    @TableField("id")
-    private String id;
-    @ApiModelProperty("名称")
-    @TableField("name")
-    @PrefixAdmin(groups = CheckManagerGroup.class)
-    private String name;
-    private boolean manager;
-    @ApiModelProperty("菜单ID列表")
-    private List<String> permissionIdList;
-    @ApiModelProperty("菜单列表")
-    private List<? extends ResourcePermission> permissionList;
 
-    public interface CheckManagerGroup {
-    }
+	@ApiModelProperty("主键")
+	@TableField("id")
+	private String id;
+
+	@ApiModelProperty("名称")
+	@TableField("name")
+	@PrefixAdmin(groups = CheckManagerGroup.class)
+	private String name;
+
+	private boolean manager;
+
+	@ApiModelProperty("菜单ID列表")
+	private List<String> permissionIdList;
+
+	@ApiModelProperty("菜单列表")
+	private List<? extends ResourcePermission> permissionList;
+
+	public interface CheckManagerGroup {
+
+	}
+
 }

@@ -10,14 +10,17 @@ import java.io.InputStream;
 
 @Slf4j
 public class JsonSerializationTest {
-  public static final String KEYCLOAK_THEMES_JSON = "META-INF/keycloak-themes.json";
 
-  @Test
-  public void readJson() throws IOException {
-    InputStream themesInputStream = this.getClass().getClassLoader().getResourceAsStream(KEYCLOAK_THEMES_JSON);
-    ThemesRepresentation themesRepresentation = JsonSerialization.readValue(themesInputStream, ThemesRepresentation.class);
-    for (ThemesRepresentation.ThemeRepresentation item : themesRepresentation.getThemes()) {
-      log.info("ThemeRepresentation.name:{},types:{}", item.getName(), item.getTypes());
-    }
-  }
+	public static final String KEYCLOAK_THEMES_JSON = "META-INF/keycloak-themes.json";
+
+	@Test
+	public void readJson() throws IOException {
+		InputStream themesInputStream = this.getClass().getClassLoader().getResourceAsStream(KEYCLOAK_THEMES_JSON);
+		ThemesRepresentation themesRepresentation = JsonSerialization.readValue(themesInputStream,
+				ThemesRepresentation.class);
+		for (ThemesRepresentation.ThemeRepresentation item : themesRepresentation.getThemes()) {
+			log.info("ThemeRepresentation.name:{},types:{}", item.getName(), item.getTypes());
+		}
+	}
+
 }

@@ -7,8 +7,8 @@ package com.lind.common.proxy.invocation_handler;
  */
 public interface IHello {
 
-    void sayHello(String name);
+	void sayHello(String name);
 
-    void sayGoogBye(String name);
+	void sayGoogBye(String name);
 
 }

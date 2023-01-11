@@ -7,7 +7,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class Fishing {
-  public void hello() {
-    System.out.println("Fishing它决定了是否注入FishFood");
-  }
+
+	public void hello() {
+		System.out.println("Fishing它决定了是否注入FishFood");
+	}
+
 }

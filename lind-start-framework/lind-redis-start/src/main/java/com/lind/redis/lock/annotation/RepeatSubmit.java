@@ -11,15 +11,17 @@ import java.lang.annotation.Target;
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ ElementType.METHOD })
 public @interface RepeatSubmit {
-    /**
-     * 间隔多长时间提交,默认1秒.
-     */
-    int expireTime() default 1;
 
-    /**
-     * redis里存储的重复提交的key.
-     */
-    String redisKey() default "submit-repeat";
+	/**
+	 * 间隔多长时间提交,默认1秒.
+	 */
+	int expireTime() default 1;
+
+	/**
+	 * redis里存储的重复提交的key.
+	 */
+	String redisKey() default "submit-repeat";
+
 }

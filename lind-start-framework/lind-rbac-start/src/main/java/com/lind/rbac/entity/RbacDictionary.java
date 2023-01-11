@@ -7,14 +7,20 @@ import lombok.Data;
 @Data
 @TableName("dictionary")
 public class RbacDictionary {
-    @ApiModelProperty(value = "id")
-    private Integer id;
-    @ApiModelProperty(value = "code")
-    private String code;
-    @ApiModelProperty(value = "名称")
-    private String name;
-    @ApiModelProperty(value = "类型")
-    private String type;
-    @ApiModelProperty(value = "父id")
-    private Integer pId;
+
+	@ApiModelProperty(value = "id")
+	private Integer id;
+
+	@ApiModelProperty(value = "code")
+	private String code;
+
+	@ApiModelProperty(value = "名称")
+	private String name;
+
+	@ApiModelProperty(value = "类型")
+	private String type;
+
+	@ApiModelProperty(value = "父id")
+	private Integer pId;
+
 }

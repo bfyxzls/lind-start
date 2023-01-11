@@ -5,5 +5,7 @@ package com.lind.common.proxy.handler;
  */
 @FunctionalInterface
 public interface MessageProviderHandler {
-    void send(String message);
+
+	void send(String message);
+
 }

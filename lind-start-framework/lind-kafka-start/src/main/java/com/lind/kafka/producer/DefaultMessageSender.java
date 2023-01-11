@@ -18,112 +18,107 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @RequiredArgsConstructor
 public class DefaultMessageSender implements MessageSender<MessageEntityAware> {
 
-  private final SuccessHandler successHandler;
+	private final SuccessHandler successHandler;
 
-  private final FailureHandler failureHandler;
+	private final FailureHandler failureHandler;
 
-  private final KafkaTemplate<String, String> template;
+	private final KafkaTemplate<String, String> template;
 
-  private final ObjectMapper objectMapper;
+	private final ObjectMapper objectMapper;
 
-  @Override
-  public void send(String topic, MessageEntityAware message) throws JsonProcessingException {
-    sendMessage(topic, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, MessageEntityAware message) throws JsonProcessingException {
+		sendMessage(topic, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, MessageEntityAware message, SuccessHandler successHandler) throws JsonProcessingException {
-    sendMessage(topic, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, MessageEntityAware message, SuccessHandler successHandler)
+			throws JsonProcessingException {
+		sendMessage(topic, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, MessageEntityAware message, FailureHandler failureHandler) throws JsonProcessingException {
-    sendMessage(topic, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, MessageEntityAware message, FailureHandler failureHandler)
+			throws JsonProcessingException {
+		sendMessage(topic, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, MessageEntityAware message, SuccessHandler successHandler,
-                   FailureHandler failureHandler) throws JsonProcessingException {
-    sendMessage(topic, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, MessageEntityAware message, SuccessHandler successHandler,
+			FailureHandler failureHandler) throws JsonProcessingException {
+		sendMessage(topic, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, String key, MessageEntityAware message) throws JsonProcessingException {
-    sendMessage(topic, key, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, String key, MessageEntityAware message) throws JsonProcessingException {
+		sendMessage(topic, key, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler) throws JsonProcessingException {
-    sendMessage(topic, key, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler)
+			throws JsonProcessingException {
+		sendMessage(topic, key, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, String key, MessageEntityAware message, FailureHandler failureHandler) throws JsonProcessingException {
-    sendMessage(topic, key, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, String key, MessageEntityAware message, FailureHandler failureHandler)
+			throws JsonProcessingException {
+		sendMessage(topic, key, message, successHandler, failureHandler);
+	}
 
-  @Override
-  public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler, FailureHandler failureHandler) throws JsonProcessingException {
-    sendMessage(topic, key, message, successHandler, failureHandler);
-  }
+	@Override
+	public void send(String topic, String key, MessageEntityAware message, SuccessHandler successHandler,
+			FailureHandler failureHandler) throws JsonProcessingException {
+		sendMessage(topic, key, message, successHandler, failureHandler);
+	}
 
-  /**
-   * 发送消息到kafka
-   *
-   * @param topic
-   * @param message
-   * @param successHandler
-   * @param failureHandler
-   * @throws JsonProcessingException
-   */
-  private void sendMessage(String topic,
-                           MessageEntityAware message,
-                           SuccessHandler successHandler,
-                           FailureHandler failureHandler) throws JsonProcessingException {
-    sendMessage(topic, null, message, successHandler, failureHandler);
-  }
+	/**
+	 * 发送消息到kafka
+	 * @param topic
+	 * @param message
+	 * @param successHandler
+	 * @param failureHandler
+	 * @throws JsonProcessingException
+	 */
+	private void sendMessage(String topic, MessageEntityAware message, SuccessHandler successHandler,
+			FailureHandler failureHandler) throws JsonProcessingException {
+		sendMessage(topic, null, message, successHandler, failureHandler);
+	}
 
-  /**
-   * 发送消息到kafka
-   *
-   * @param topic
-   * @param message
-   * @param successHandler
-   * @param failureHandler
-   */
-  private void sendMessage(String topic,
-                           String key,
-                           MessageEntityAware message,
-                           SuccessHandler successHandler,
-                           FailureHandler failureHandler) throws JsonProcessingException {
-    String s = objectMapper.writeValueAsString(message);
-    ListenableFuture<SendResult<String, String>> send;
-    if (StringUtils.isEmpty(key)) {
-      send = template.send(topic, s);
-    } else {
-      send = template.send(topic, key, s);
-    }
-    send.addCallback(
-        new ListenableFutureCallback<SendResult<String, String>>() {
+	/**
+	 * 发送消息到kafka
+	 * @param topic
+	 * @param message
+	 * @param successHandler
+	 * @param failureHandler
+	 */
+	private void sendMessage(String topic, String key, MessageEntityAware message, SuccessHandler successHandler,
+			FailureHandler failureHandler) throws JsonProcessingException {
+		String s = objectMapper.writeValueAsString(message);
+		ListenableFuture<SendResult<String, String>> send;
+		if (StringUtils.isEmpty(key)) {
+			send = template.send(topic, s);
+		}
+		else {
+			send = template.send(topic, key, s);
+		}
+		send.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
 
-          @Override
-          public void onFailure(Throwable ex) {
-            if (failureHandler != null) {
-              failureHandler.onFailure(topic, message, ex);
-            }
-          }
+			@Override
+			public void onFailure(Throwable ex) {
+				if (failureHandler != null) {
+					failureHandler.onFailure(topic, message, ex);
+				}
+			}
 
-          @Override
-          public void onSuccess(SendResult<String, String> result) {
-            if (successHandler != null) {
-              successHandler.onSuccess(result);
-            }
-          }
-        }
-    );
+			@Override
+			public void onSuccess(SendResult<String, String> result) {
+				if (successHandler != null) {
+					successHandler.onSuccess(result);
+				}
+			}
+		});
 
-
-  }
-
+	}
 
 }

@@ -5,13 +5,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD,ElementType.METHOD})
+@Target({ ElementType.FIELD, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ScopeSet {
-    /**
-     * 授权范围.
-     *
-     * @return
-     */
-    String value() default "";
+
+	/**
+	 * 授权范围.
+	 * @return
+	 */
+	String value() default "";
+
 }

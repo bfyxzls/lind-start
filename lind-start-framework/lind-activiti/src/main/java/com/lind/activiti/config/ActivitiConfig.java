@@ -15,45 +15,46 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Slf4j
 @Configuration
 @EnableConfigurationProperties(ActivitiConfig.ActivitiExtendProperties.class)
-@EnableJpaRepositories(basePackages = {"com.lind.activiti.repository"})
+@EnableJpaRepositories(basePackages = { "com.lind.activiti.repository" })
 @EntityScan("com.lind.activiti.entity")
-public class  ActivitiConfig {
+public class ActivitiConfig {
 
-  @Autowired
-  private ActivitiExtendProperties properties;
+	@Autowired
+	private ActivitiExtendProperties properties;
 
-  /**
-   * init.
-   */
-  @Bean
-  public ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer() {
+	/**
+	 * init.
+	 */
+	@Bean
+	public ProcessEngineConfigurationConfigurer processEngineConfigurationConfigurer() {
 
-    ProcessEngineConfigurationConfigurer configurer = new ProcessEngineConfigurationConfigurer() {
-      @Override
-      public void configure(SpringProcessEngineConfiguration processEngineConfiguration) {
+		ProcessEngineConfigurationConfigurer configurer = new ProcessEngineConfigurationConfigurer() {
+			@Override
+			public void configure(SpringProcessEngineConfiguration processEngineConfiguration) {
 
-        processEngineConfiguration.setActivityFontName(properties.getActivityFontName());
-        processEngineConfiguration.setAnnotationFontName(properties.getActivityFontName());
-        processEngineConfiguration.setLabelFontName(properties.getLabelFontName());
-      }
-    };
+				processEngineConfiguration.setActivityFontName(properties.getActivityFontName());
+				processEngineConfiguration.setAnnotationFontName(properties.getActivityFontName());
+				processEngineConfiguration.setLabelFontName(properties.getLabelFontName());
+			}
+		};
 
-    return configurer;
-  }
+		return configurer;
+	}
 
-  @Data
-  @ConfigurationProperties(prefix = "spring.activiti.font")
-  public static class ActivitiExtendProperties {
+	@Data
+	@ConfigurationProperties(prefix = "spring.activiti.font")
+	public static class ActivitiExtendProperties {
 
-    /**
-     * 流程图字体配置.
-     */
-    private String activityFontName = "宋体";
+		/**
+		 * 流程图字体配置.
+		 */
+		private String activityFontName = "宋体";
 
-    /**
-     * 流程图字体配置.
-     */
-    private String labelFontName = "宋体";
-  }
+		/**
+		 * 流程图字体配置.
+		 */
+		private String labelFontName = "宋体";
+
+	}
+
 }
-

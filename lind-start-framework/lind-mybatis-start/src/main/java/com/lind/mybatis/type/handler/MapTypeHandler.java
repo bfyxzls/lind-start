@@ -21,57 +21,56 @@ import java.util.Optional;
 @MappedTypes(Map.class)
 public class MapTypeHandler extends BaseTypeHandler<Map> {
 
-    ObjectMapper objectMapper = new ObjectMapper();
+	ObjectMapper objectMapper = new ObjectMapper();
 
-    @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, Map parameter, JdbcType jdbcType) throws SQLException {
-        try {
-            ps.setString(i, objectMapper.writeValueAsString(parameter));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+	@Override
+	public void setNonNullParameter(PreparedStatement ps, int i, Map parameter, JdbcType jdbcType) throws SQLException {
+		try {
+			ps.setString(i, objectMapper.writeValueAsString(parameter));
+		}
+		catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
 
-    }
+	}
 
-    @Override
-    public Map getNullableResult(ResultSet rs, String columnName) throws SQLException {
-        return Optional.ofNullable(rs.getString(columnName))
-                .map(o -> {
-                    try {
-                        return objectMapper.readValue(o, Map.class);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .orElse(null);
-    }
+	@Override
+	public Map getNullableResult(ResultSet rs, String columnName) throws SQLException {
+		return Optional.ofNullable(rs.getString(columnName)).map(o -> {
+			try {
+				return objectMapper.readValue(o, Map.class);
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}).orElse(null);
+	}
 
-    @Override
-    public Map getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-        return Optional.ofNullable(rs.getString(columnIndex))
-                .map(o -> {
-                    try {
-                        return objectMapper.readValue(o, Map.class);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .orElse(null);
-    }
+	@Override
+	public Map getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
+		return Optional.ofNullable(rs.getString(columnIndex)).map(o -> {
+			try {
+				return objectMapper.readValue(o, Map.class);
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}).orElse(null);
+	}
 
-    @Override
-    public Map getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-        return Optional.ofNullable(cs.getString(columnIndex))
-                .map(o -> {
-                    try {
-                        return objectMapper.readValue(o, Map.class);
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .orElse(null);
-    }
+	@Override
+	public Map getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
+		return Optional.ofNullable(cs.getString(columnIndex)).map(o -> {
+			try {
+				return objectMapper.readValue(o, Map.class);
+			}
+			catch (JsonProcessingException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}).orElse(null);
+	}
+
 }

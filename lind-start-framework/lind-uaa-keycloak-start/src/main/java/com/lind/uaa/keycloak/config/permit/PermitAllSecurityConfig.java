@@ -15,11 +15,12 @@ import javax.servlet.Filter;
 @Component("permitAllSecurityConfig")
 public class PermitAllSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-  @Autowired
-  private Filter permitAuthenticationFilter;
+	@Autowired
+	private Filter permitAuthenticationFilter;
 
-  @Override
-  public void configure(HttpSecurity http) {
-    http.addFilterBefore(permitAuthenticationFilter, KeycloakAuthenticationProcessingFilter.class);
-  }
+	@Override
+	public void configure(HttpSecurity http) {
+		http.addFilterBefore(permitAuthenticationFilter, KeycloakAuthenticationProcessingFilter.class);
+	}
+
 }

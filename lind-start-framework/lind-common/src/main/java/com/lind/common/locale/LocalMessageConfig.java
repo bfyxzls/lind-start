@@ -12,15 +12,17 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  */
 @Configuration
 public class LocalMessageConfig {
-    /**
-     * 系统国际化文件配置
-     * @return MessageSource
-     */
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/message");
-        messageSource.setDefaultEncoding("UTF-8");
-        return messageSource;
-    }
+
+	/**
+	 * 系统国际化文件配置
+	 * @return MessageSource
+	 */
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:i18n/message");
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
+
 }

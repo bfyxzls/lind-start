@@ -11,14 +11,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @ConfigurationProperties("lind.cfg") // 配置属性在配置文件中的前缀
 public class LindProperty {
-    /**
-     * 设置微信公众号的appid.
-     * 配置项：lind.cfg.appId
-     */
-    private String appId;
-    private Type Type;
 
-    public enum Type{
-        ORDER,PRODUCT
-    }
+	/**
+	 * 设置微信公众号的appid. 配置项：lind.cfg.appId
+	 */
+	private String appId;
+
+	private Type Type;
+
+	public enum Type {
+
+		ORDER, PRODUCT
+
+	}
+
 }

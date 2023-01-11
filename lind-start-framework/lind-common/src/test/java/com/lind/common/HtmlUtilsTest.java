@@ -7,20 +7,20 @@ import org.junit.Test;
 
 @Slf4j
 public class HtmlUtilsTest {
-    @Test
-    public void getFiledDescByType() {
-        HtmlUtils.getFiledDescByType(DateRangeDTO.class).forEach(o -> {
-            log.info(o);
-        });
-    }
 
-    @Test
-    public void getFiledNameByType() {
-        HtmlUtils.getFiledNameByType(DateRangeDTO.class).forEach(o -> {
-            log.info(o);
-            log.info("desc:{}", HtmlUtils.getFieldDescByName(o, DateRangeDTO.class));
-        });
-    }
+	@Test
+	public void getFiledDescByType() {
+		HtmlUtils.getFiledDescByType(DateRangeDTO.class).forEach(o -> {
+			log.info(o);
+		});
+	}
 
+	@Test
+	public void getFiledNameByType() {
+		HtmlUtils.getFiledNameByType(DateRangeDTO.class).forEach(o -> {
+			log.info(o);
+			log.info("desc:{}", HtmlUtils.getFieldDescByName(o, DateRangeDTO.class));
+		});
+	}
 
 }

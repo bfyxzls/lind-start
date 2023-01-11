@@ -10,13 +10,12 @@ import com.lind.kafka.entity.MessageEntityAware;
 @FunctionalInterface
 public interface FailureHandler {
 
+	/**
+	 * 失败回调函数
+	 * @param topic
+	 * @param messageEntity
+	 * @param ex
+	 */
+	void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex);
 
-    /**
-     * 失败回调函数
-     *
-     * @param topic
-     * @param messageEntity
-     * @param ex
-     */
-    void onFailure(String topic, MessageEntityAware messageEntity, Throwable ex);
 }

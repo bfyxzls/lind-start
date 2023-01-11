@@ -29,58 +29,61 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
-    @Resource
-    private LoginService loginService;
+	@Resource
+	private LoginService loginService;
 
-    @RequestMapping("/")
-    public String index(Model model) {
-        Map<String, Object> dashboardMap = loginService.dashboardInfo();
-        model.addAllAttributes(dashboardMap);
+	@RequestMapping("/")
+	public String index(Model model) {
+		Map<String, Object> dashboardMap = loginService.dashboardInfo();
+		model.addAllAttributes(dashboardMap);
 
-        return "index";
-    }
-    @RequestMapping("/chartInfo")
-    @ResponseBody
-    public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
-        ReturnT<Map<String, Object>> chartInfo = loginService.chartInfo(startDate, endDate);
-        return chartInfo;
-    }
+		return "index";
+	}
 
-    @RequestMapping("/toLogin")
-    @PermissionLimit(limit = false)
-    public ModelAndView toLogin(HttpServletRequest request, HttpServletResponse response, ModelAndView modelAndView) {
-        if (loginService.ifLogin(request, response) != null) {
-            modelAndView.setView(new RedirectView("/", true, false));
-            return modelAndView;
-        }
-        return new ModelAndView("login");
-    }
+	@RequestMapping("/chartInfo")
+	@ResponseBody
+	public ReturnT<Map<String, Object>> chartInfo(Date startDate, Date endDate) {
+		ReturnT<Map<String, Object>> chartInfo = loginService.chartInfo(startDate, endDate);
+		return chartInfo;
+	}
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    @ResponseBody
-    @PermissionLimit(limit = false)
-    public ReturnT<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName, String password, String ifRemember) {
-        boolean ifRem = (ifRemember != null && ifRemember.trim().length() > 0 && "on".equals(ifRemember)) ? true : false;
-        return loginService.login(request, response, userName, password, ifRem);
-    }
+	@RequestMapping("/toLogin")
+	@PermissionLimit(limit = false)
+	public ModelAndView toLogin(HttpServletRequest request, HttpServletResponse response, ModelAndView modelAndView) {
+		if (loginService.ifLogin(request, response) != null) {
+			modelAndView.setView(new RedirectView("/", true, false));
+			return modelAndView;
+		}
+		return new ModelAndView("login");
+	}
 
-    @RequestMapping(value = "logout", method = RequestMethod.POST)
-    @ResponseBody
-    @PermissionLimit(limit = false)
-    public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        return loginService.logout(request, response);
-    }
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@ResponseBody
+	@PermissionLimit(limit = false)
+	public ReturnT<String> loginDo(HttpServletRequest request, HttpServletResponse response, String userName,
+			String password, String ifRemember) {
+		boolean ifRem = (ifRemember != null && ifRemember.trim().length() > 0 && "on".equals(ifRemember)) ? true
+				: false;
+		return loginService.login(request, response, userName, password, ifRem);
+	}
 
-    @RequestMapping("/help")
-    public String help() {
-        return "help";
-    }
+	@RequestMapping(value = "logout", method = RequestMethod.POST)
+	@ResponseBody
+	@PermissionLimit(limit = false)
+	public ReturnT<String> logout(HttpServletRequest request, HttpServletResponse response) {
+		return loginService.logout(request, response);
+	}
 
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        dateFormat.setLenient(false);
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
-    }
+	@RequestMapping("/help")
+	public String help() {
+		return "help";
+	}
+
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+	}
 
 }

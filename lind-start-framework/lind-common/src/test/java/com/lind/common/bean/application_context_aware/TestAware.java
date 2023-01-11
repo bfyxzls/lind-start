@@ -14,11 +14,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 @RunWith(SpringRunner.class)
 @SpringBootTest()
 public class TestAware {
-    @Autowired
-    LindAware lindAware;
 
-    @Test
-    public void print() {
-        lindAware.contextPrint();
-    }
+	@Autowired
+	LindAware lindAware;
+
+	@Test
+	public void print() {
+		lindAware.contextPrint();
+	}
+
 }

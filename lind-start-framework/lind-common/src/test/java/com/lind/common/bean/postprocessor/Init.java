@@ -6,14 +6,16 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.lang.Nullable;
 
 public class Init implements BeanPostProcessor {
-    @Autowired
-    Context context;
 
-    @Nullable
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (bean instanceof AbstractSend) {
-            context.dic.put(bean.toString(), (AbstractSend) bean);
-        }
-        return bean;
-    }
+	@Autowired
+	Context context;
+
+	@Nullable
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		if (bean instanceof AbstractSend) {
+			context.dic.put(bean.toString(), (AbstractSend) bean);
+		}
+		return bean;
+	}
+
 }

@@ -23,65 +23,59 @@ import java.util.Map;
  * 批量操作
  */
 @SpringBootTest()
-@RunWith(SpringRunner.class) //让测试在Spring容器环境下执行
+@RunWith(SpringRunner.class) // 让测试在Spring容器环境下执行
 @Slf4j
 public class BulkUpdateTest {
-    @Autowired
-    ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-    /**
-     * 批量替换，不存在就建立，存在就替换，原字段会删除，新字段会添加
-     *
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void bulkIndex() throws JsonProcessingException {
-        List<IndexQuery> queries = new ArrayList<>();
+	@Autowired
+	ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-        IndexQuery indexQuery = new IndexQuery();
-        indexQuery.setId("552625903956398080");
-        Map<String, Object> sourceMap = new HashMap<>();
-        sourceMap.put("name", "占岭1");
-        indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
-        queries.add(indexQuery);
+	/**
+	 * 批量替换，不存在就建立，存在就替换，原字段会删除，新字段会添加
+	 * @throws JsonProcessingException
+	 */
+	@Test
+	public void bulkIndex() throws JsonProcessingException {
+		List<IndexQuery> queries = new ArrayList<>();
 
-        indexQuery = new IndexQuery();
-        indexQuery.setId("552306605039816704");
-        sourceMap = new HashMap<>();
-        sourceMap.put("name", "占岭2");
-        indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
-        queries.add(indexQuery);
+		IndexQuery indexQuery = new IndexQuery();
+		indexQuery.setId("552625903956398080");
+		Map<String, Object> sourceMap = new HashMap<>();
+		sourceMap.put("name", "占岭1");
+		indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
+		queries.add(indexQuery);
 
-        elasticsearchRestTemplate.bulkIndex(queries, IndexCoordinates.of("esdto"));
-    }
+		indexQuery = new IndexQuery();
+		indexQuery.setId("552306605039816704");
+		sourceMap = new HashMap<>();
+		sourceMap.put("name", "占岭2");
+		indexQuery.setSource(new ObjectMapper().writeValueAsString(sourceMap));
+		queries.add(indexQuery);
 
-    /**
-     * 批量更新某些字段.
-     *
-     * @throws JsonProcessingException
-     */
-    @Test
-    public void bulkUpdate() throws JsonProcessingException {
-        List<UpdateQuery> updateQueries = new ArrayList<>();
+		elasticsearchRestTemplate.bulkIndex(queries, IndexCoordinates.of("esdto"));
+	}
 
-        Map<String, Object> sourceMap = new HashMap<>();
-        sourceMap.put("name", "占岭3");
-        Document document = Document.from(sourceMap);
-        UpdateQuery updateQuery = UpdateQuery.builder("552629576220545024")
-                .withDocument(document)
-                .build();
-        updateQueries.add(updateQuery);
+	/**
+	 * 批量更新某些字段.
+	 * @throws JsonProcessingException
+	 */
+	@Test
+	public void bulkUpdate() throws JsonProcessingException {
+		List<UpdateQuery> updateQueries = new ArrayList<>();
 
+		Map<String, Object> sourceMap = new HashMap<>();
+		sourceMap.put("name", "占岭3");
+		Document document = Document.from(sourceMap);
+		UpdateQuery updateQuery = UpdateQuery.builder("552629576220545024").withDocument(document).build();
+		updateQueries.add(updateQuery);
 
-        sourceMap = new HashMap<>();
-        sourceMap.put("name", "占岭4");
-        document = Document.from(sourceMap);
-        updateQuery = UpdateQuery.builder("552629636035514368")
-                .withDocument(document)
-                .build();
-        updateQueries.add(updateQuery);
+		sourceMap = new HashMap<>();
+		sourceMap.put("name", "占岭4");
+		document = Document.from(sourceMap);
+		updateQuery = UpdateQuery.builder("552629636035514368").withDocument(document).build();
+		updateQueries.add(updateQuery);
 
-        elasticsearchRestTemplate.bulkUpdate(updateQueries, IndexCoordinates.of("esdto"));
-    }
+		elasticsearchRestTemplate.bulkUpdate(updateQueries, IndexCoordinates.of("esdto"));
+	}
 
 }

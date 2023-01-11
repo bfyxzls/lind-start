@@ -10,8 +10,10 @@ import java.util.Optional;
  */
 @Component
 public class UserAuditorAware implements EsAuditorAware<String> {
-    @Override
-    public Optional<String> getCurrentAuditor() {
-        return Optional.of("1");
-    }
+
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		return Optional.of("1");
+	}
+
 }

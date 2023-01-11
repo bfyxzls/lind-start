@@ -9,6 +9,9 @@ import lombok.Data;
  */
 @Data
 public class Menu {
-    private String title;
-    private String level;
+
+	private String title;
+
+	private String level;
+
 }

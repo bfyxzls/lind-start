@@ -8,16 +8,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "micro-product", fallbackFactory = StoreClient.HystrixClientFallbackFactory.class)
 public interface StoreClient {
-  @RequestMapping(method = RequestMethod.GET, value = "/product")
-  String getStores();
 
-  @Component
-  class HystrixClientFallbackFactory implements FallbackFactory<StoreClient> {
+	@RequestMapping(method = RequestMethod.GET, value = "/product")
+	String getStores();
 
-    @Override
-    public StoreClient create(Throwable cause) {
-      System.err.println("fall error product");
-      return () -> "fall error product";
-    }
-  }
+	@Component
+	class HystrixClientFallbackFactory implements FallbackFactory<StoreClient> {
+
+		@Override
+		public StoreClient create(Throwable cause) {
+			System.err.println("fall error product");
+			return () -> "fall error product";
+		}
+
+	}
+
 }

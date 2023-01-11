@@ -21,168 +21,183 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class MemStore implements Closeable {
 
-  private static final Logger LOG = LoggerFactory.getLogger(MemStore.class);
+	private static final Logger LOG = LoggerFactory.getLogger(MemStore.class);
 
-  private final AtomicLong dataSize = new AtomicLong();
+	private final AtomicLong dataSize = new AtomicLong();
 
-  private volatile ConcurrentSkipListMap<KeyValue, KeyValue> kvMap;
-  private volatile ConcurrentSkipListMap<KeyValue, KeyValue> snapshot;
+	private volatile ConcurrentSkipListMap<KeyValue, KeyValue> kvMap;
 
-  private final ReentrantReadWriteLock updateLock = new ReentrantReadWriteLock();
-  private final AtomicBoolean isSnapshotFlushing = new AtomicBoolean(false);
-  private ExecutorService pool;
+	private volatile ConcurrentSkipListMap<KeyValue, KeyValue> snapshot;
 
-  private Config conf;
-  private Flusher flusher;
+	private final ReentrantReadWriteLock updateLock = new ReentrantReadWriteLock();
 
-  public MemStore(Config conf, Flusher flusher, ExecutorService pool) {
-    this.conf = conf;
-    this.flusher = flusher;
-    this.pool = pool;
+	private final AtomicBoolean isSnapshotFlushing = new AtomicBoolean(false);
 
-    dataSize.set(0);
-    this.kvMap = new ConcurrentSkipListMap<>();
-    this.snapshot = null;
-  }
+	private ExecutorService pool;
 
-  public void add(KeyValue kv) throws IOException {
-    flushIfNeeded(true);
-    updateLock.readLock().lock();
-    try {
-      KeyValue prevKeyValue;
-      if ((prevKeyValue = kvMap.put(kv, kv)) == null) {
-        dataSize.addAndGet(kv.getSerializeSize());
-      } else {
-        dataSize.addAndGet(kv.getSerializeSize() - prevKeyValue.getSerializeSize());
-      }
-    } finally {
-      updateLock.readLock().unlock();
-    }
-    flushIfNeeded(false);
-  }
+	private Config conf;
 
-  private void flushIfNeeded(boolean shouldBlocking) throws IOException {
-    if (getDataSize() > conf.getMaxMemstoreSize()) {
-      if (isSnapshotFlushing.get() && shouldBlocking) {
-        throw new IOException(
-                "Memstore is full, currentDataSize=" + dataSize.get() + "B, maxMemstoreSize="
-                + conf.getMaxMemstoreSize() + "B, please wait until the flushing is finished.");
-      } else if (isSnapshotFlushing.compareAndSet(false, true)) {
-        pool.submit(new FlusherTask());
-      }
-    }
-  }
+	private Flusher flusher;
 
-  public long getDataSize() {
-    return dataSize.get();
-  }
+	public MemStore(Config conf, Flusher flusher, ExecutorService pool) {
+		this.conf = conf;
+		this.flusher = flusher;
+		this.pool = pool;
 
-  public boolean isFlushing() {
-    return this.isSnapshotFlushing.get();
-  }
+		dataSize.set(0);
+		this.kvMap = new ConcurrentSkipListMap<>();
+		this.snapshot = null;
+	}
 
-  @Override
-  public void close() throws IOException {
-  }
+	public void add(KeyValue kv) throws IOException {
+		flushIfNeeded(true);
+		updateLock.readLock().lock();
+		try {
+			KeyValue prevKeyValue;
+			if ((prevKeyValue = kvMap.put(kv, kv)) == null) {
+				dataSize.addAndGet(kv.getSerializeSize());
+			}
+			else {
+				dataSize.addAndGet(kv.getSerializeSize() - prevKeyValue.getSerializeSize());
+			}
+		}
+		finally {
+			updateLock.readLock().unlock();
+		}
+		flushIfNeeded(false);
+	}
 
-  private class FlusherTask implements Runnable {
-    @Override
-    public void run() {
-      // Step.1 memstore snpashot
-      updateLock.writeLock().lock();
-      try {
-        snapshot = kvMap;
-        // TODO MemStoreIter may find the kvMap changed ? should synchronize ?
-        kvMap = new ConcurrentSkipListMap<>();
-        dataSize.set(0);
-      } finally {
-        updateLock.writeLock().unlock();
-      }
+	private void flushIfNeeded(boolean shouldBlocking) throws IOException {
+		if (getDataSize() > conf.getMaxMemstoreSize()) {
+			if (isSnapshotFlushing.get() && shouldBlocking) {
+				throw new IOException("Memstore is full, currentDataSize=" + dataSize.get() + "B, maxMemstoreSize="
+						+ conf.getMaxMemstoreSize() + "B, please wait until the flushing is finished.");
+			}
+			else if (isSnapshotFlushing.compareAndSet(false, true)) {
+				pool.submit(new FlusherTask());
+			}
+		}
+	}
 
-      // Step.2 Flush the memstore to disk file.
-      boolean success = false;
-      for (int i = 0; i < conf.getFlushMaxRetries(); i++) {
-        try {
-          flusher.flush(new IteratorWrapper(snapshot));
-          success = true;
-        } catch (IOException e) {
-          LOG.error("Failed to flush memstore, retries=" + i + ", maxFlushRetries="
-                    + conf.getFlushMaxRetries(),
-                  e);
-          if (i >= conf.getFlushMaxRetries()) {
-            break;
-          }
-        }
-      }
+	public long getDataSize() {
+		return dataSize.get();
+	}
 
-      // Step.3 clear the snapshot.
-      if (success) {
-        // TODO MemStoreIter may get a NPE because we set null here ? should synchronize ?
-        snapshot = null;
-        isSnapshotFlushing.compareAndSet(true, false);
-      }
-    }
-  }
+	public boolean isFlushing() {
+		return this.isSnapshotFlushing.get();
+	}
 
-  public SeekIter<KeyValue> createIterator() throws IOException {
-    return new MemStoreIter(kvMap, snapshot);
-  }
+	@Override
+	public void close() throws IOException {
+	}
 
-  public static class IteratorWrapper implements SeekIter<KeyValue> {
+	private class FlusherTask implements Runnable {
 
-    private SortedMap<KeyValue, KeyValue> sortedMap;
-    private Iterator<KeyValue> it;
+		@Override
+		public void run() {
+			// Step.1 memstore snpashot
+			updateLock.writeLock().lock();
+			try {
+				snapshot = kvMap;
+				// TODO MemStoreIter may find the kvMap changed ? should synchronize ?
+				kvMap = new ConcurrentSkipListMap<>();
+				dataSize.set(0);
+			}
+			finally {
+				updateLock.writeLock().unlock();
+			}
 
-    public IteratorWrapper(SortedMap<KeyValue, KeyValue> sortedMap) {
-      this.sortedMap = sortedMap;
-      this.it = sortedMap.values().iterator();
-    }
+			// Step.2 Flush the memstore to disk file.
+			boolean success = false;
+			for (int i = 0; i < conf.getFlushMaxRetries(); i++) {
+				try {
+					flusher.flush(new IteratorWrapper(snapshot));
+					success = true;
+				}
+				catch (IOException e) {
+					LOG.error(
+							"Failed to flush memstore, retries=" + i + ", maxFlushRetries=" + conf.getFlushMaxRetries(),
+							e);
+					if (i >= conf.getFlushMaxRetries()) {
+						break;
+					}
+				}
+			}
 
-    @Override
-    public boolean hasNext() throws IOException {
-      return it != null && it.hasNext();
-    }
+			// Step.3 clear the snapshot.
+			if (success) {
+				// TODO MemStoreIter may get a NPE because we set null here ? should
+				// synchronize ?
+				snapshot = null;
+				isSnapshotFlushing.compareAndSet(true, false);
+			}
+		}
 
-    @Override
-    public KeyValue next() throws IOException {
-      return it.next();
-    }
+	}
 
-    @Override
-    public void seekTo(KeyValue kv) throws IOException {
-      it = sortedMap.tailMap(kv).values().iterator();
-    }
-  }
+	public SeekIter<KeyValue> createIterator() throws IOException {
+		return new MemStoreIter(kvMap, snapshot);
+	}
 
-  private class MemStoreIter implements SeekIter<KeyValue> {
+	public static class IteratorWrapper implements SeekIter<KeyValue> {
 
-    private MultiIter it;
+		private SortedMap<KeyValue, KeyValue> sortedMap;
 
-    public MemStoreIter(NavigableMap<KeyValue, KeyValue> kvSet,
-                        NavigableMap<KeyValue, KeyValue> snapshot) throws IOException {
-      List<IteratorWrapper> inputs = new ArrayList<>();
-      if (kvSet != null && kvSet.size() > 0) {
-        inputs.add(new IteratorWrapper(kvMap));
-      }
-      if (snapshot != null && snapshot.size() > 0) {
-        inputs.add(new IteratorWrapper(snapshot));
-      }
-      it = new MultiIter(inputs.toArray(new IteratorWrapper[0]));
-    }
+		private Iterator<KeyValue> it;
 
-    @Override
-    public boolean hasNext() throws IOException {
-      return it.hasNext();
-    }
+		public IteratorWrapper(SortedMap<KeyValue, KeyValue> sortedMap) {
+			this.sortedMap = sortedMap;
+			this.it = sortedMap.values().iterator();
+		}
 
-    @Override
-    public KeyValue next() throws IOException {
-      return it.next();
-    }
+		@Override
+		public boolean hasNext() throws IOException {
+			return it != null && it.hasNext();
+		}
 
-    @Override
-    public void seekTo(KeyValue kv) throws IOException {
-      it.seekTo(kv);
-    }
-  }
+		@Override
+		public KeyValue next() throws IOException {
+			return it.next();
+		}
+
+		@Override
+		public void seekTo(KeyValue kv) throws IOException {
+			it = sortedMap.tailMap(kv).values().iterator();
+		}
+
+	}
+
+	private class MemStoreIter implements SeekIter<KeyValue> {
+
+		private MultiIter it;
+
+		public MemStoreIter(NavigableMap<KeyValue, KeyValue> kvSet, NavigableMap<KeyValue, KeyValue> snapshot)
+				throws IOException {
+			List<IteratorWrapper> inputs = new ArrayList<>();
+			if (kvSet != null && kvSet.size() > 0) {
+				inputs.add(new IteratorWrapper(kvMap));
+			}
+			if (snapshot != null && snapshot.size() > 0) {
+				inputs.add(new IteratorWrapper(snapshot));
+			}
+			it = new MultiIter(inputs.toArray(new IteratorWrapper[0]));
+		}
+
+		@Override
+		public boolean hasNext() throws IOException {
+			return it.hasNext();
+		}
+
+		@Override
+		public KeyValue next() throws IOException {
+			return it.next();
+		}
+
+		@Override
+		public void seekTo(KeyValue kv) throws IOException {
+			it.seekTo(kv);
+		}
+
+	}
+
 }
