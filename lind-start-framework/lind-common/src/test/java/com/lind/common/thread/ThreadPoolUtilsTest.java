@@ -218,7 +218,9 @@ public class ThreadPoolUtilsTest {
 		taskExecutor.setQueueCapacity(10);
 		taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
 		taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
+		// AwaitTerminationSeconds:该方法调用会被阻塞，表示主线等待各子线程的时间
 		taskExecutor.setAwaitTerminationSeconds(60);
+		taskExecutor.setKeepAliveSeconds(60);
 		taskExecutor.setThreadNamePrefix("Standard-Thread-");
 		taskExecutor.initialize();
 		List<Callable<Integer>> retryWriterThreads = new ArrayList<>();

@@ -82,7 +82,7 @@ public class BitTest {
 		log.debug("ctl={}", ctl.get());
 		System.out.println("runStateOf=" + runStateOf(ctl.get()));
 		System.out.println("workerCountOf=" + workerCountOf(ctl.get()));
-		int code=1_000_000;
+		int code = 1_000_000;
 
 	}
 

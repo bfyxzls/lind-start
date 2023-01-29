@@ -5,10 +5,13 @@
     <property name="logPath" value="${log.path}"/>
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
     <property name="appName" value="sys:spring.application.name"/>
+    <conversionRule conversionWord="ip" converterClass="com.lind.logback.convert.IpConvert" />
+    <conversionRule conversionWord="color"  converterClass="com.lind.logback.convert.LevelColorConverter" />
+    <conversionRule conversionWord="currentUser" converterClass="com.lind.logback.convert.CurrentUserConvert" />
 
     <appender name="consoleLog" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${springAppName} [%thread] %-5level - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} ${springAppName} %ip %currentUser [%thread] %color %msg%n</pattern>
         </layout>
     </appender>
 

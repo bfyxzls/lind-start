@@ -1,5 +1,6 @@
 server.port: 81
 spring:
+  application.name: lind-manager
   freemarker:
     suffix: .ftl                                 # 设置模板后缀名
     content-type: text/html                      # 设置文档类型

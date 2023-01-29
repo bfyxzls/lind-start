@@ -1,5 +1,6 @@
-package com.lind.common;
+package com.lind.common.logger;
 
+import com.lind.common.AbstractTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,7 +16,9 @@ public class LoggerTest extends AbstractTest {
 	public void filter() {
 		log.debug("hello world!");
 		log.info("hello world!");
-		log.warn("end.");
+		log.warn("warning end.");
+		log.error("error end.");
+
 	}
 
 }

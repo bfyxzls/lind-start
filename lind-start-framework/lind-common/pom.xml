@@ -166,7 +166,6 @@
             <artifactId>netty-all</artifactId>
             <version>${netty-all.version}</version>
         </dependency>
-
     </dependencies>
     <build>
         <plugins>

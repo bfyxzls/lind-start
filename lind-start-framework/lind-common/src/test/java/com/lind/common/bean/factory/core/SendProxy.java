@@ -6,6 +6,9 @@ import org.springframework.beans.factory.BeanFactory;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
+/**
+ * InvocationHandler用来生成代理对象 BeanFactory是bean的工厂，用它的getBean()方法来获取bean的实例
+ */
 @Data
 public class SendProxy implements InvocationHandler {
 
