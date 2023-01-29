@@ -25,4 +25,5 @@ public class FeignTraceIdInterceptor implements RequestInterceptor {
 			template.header(HTTP_HEADER_TRACE, traceId);
 		}
 	}
+
 }

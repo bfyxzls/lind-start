@@ -14,6 +14,7 @@ import static com.lind.logback.mdc.LogInterceptor.TRACE_ID;
 
 /**
  * 基于okHttp的拦截器，处理traceId.
+ *
  * @author lind
  * @date 2023/1/28 17:21
  * @since 1.0.0
