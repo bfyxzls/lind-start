@@ -31,4 +31,5 @@ public class EngConfig {
         templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         return templateResolver;
     }
+
 }

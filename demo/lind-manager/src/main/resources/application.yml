@@ -9,6 +9,25 @@ spring:
     template-loader-path: classpath:/templates   # 设置ftl文件路径
   mvc:
     static-path-pattern: /static         # 设置静态文件路径，js,css等
+ribbon:
+  #ribbon请求连接的超时时间- 限制3秒内必须请求到服务，并不限制服务处理的返回时间
+  connectTimeout: 1000
+  #请求处理的超时时间 下级服务响应最大时间,超出时间消费方（路由也是消费方）返回timeout,超时时间不可大于断路器的超时时间
+  readTimeout: 2000
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: true
+        isolation:
+          strategy: THREAD #信号量模式，无超时时间；THREAD线程池模块，这是默认的
+          thread:
+            timeoutInMilliseconds: 3000 #对THREAD模式才有效
+feign:
+  hystrix:
+    # Feign启用断路器，默认为FALSE，如果开启熔断，如果是线程池模式，会在新线池中发起请求，这时MDC无论获取到，如果是SEMAPHORE模式，是可以获取到MDC的
+    enabled: true
 
 #Apollo 配置
 #app:

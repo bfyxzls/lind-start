@@ -17,7 +17,7 @@
 * %os 显示客户端操作系统
 * %browserType 显示客户端浏览器类型和版本
 * %uri 显示当前客户端请求的url
-* %traceId 显示调用链跟踪ID，不同的httpclient需要添加不同的Interceptor,本组件集成了okhttp,feign等
+* %traceId 显示调用链跟踪ID，不同的httpclient需要添加不同的Interceptor,本组件集成了okhttp,feign等,需要解决`openfeign`在新线程中获取MDC对象的问题
 
 # 自定义变量ClassicConverter
 ClassicConverter对象负责从ILoggingEvent 提取信息，并产生一个字符串。例如，LoggerConverter，它是处理“% logger”转换符的转换器，

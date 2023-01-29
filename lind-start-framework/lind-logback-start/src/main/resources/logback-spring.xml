@@ -19,7 +19,12 @@
         </layout>
     </appender>
 
-    <root level="INFO">0
+    <appender name="test" class="com.lind.logback.appender.MapAppender">
+
+    </appender>
+
+    <root level="INFO">
         <appender-ref ref="consoleLog"/>
+        <appender-ref ref="test"/>
     </root>
 </configuration>

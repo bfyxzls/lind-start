@@ -85,7 +85,7 @@ public class LogInterceptor implements HandlerInterceptor, ApplicationContextAwa
 				throw new NoSuchBeanDefinitionException("IdGenerator bean not found");
 			}
 			IdGenerator idGenerator = context.getBean(IdGenerator.class);
-			traceId = idGenerator.generateId().toString();
+			traceId = idGenerator.generateId().toString().replaceAll("-","");
 		}
 		MDC.put(TRACE_ID, traceId);
 		response.addHeader(HTTP_HEADER_TRACE, traceId);
