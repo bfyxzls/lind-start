@@ -12,6 +12,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -35,6 +36,13 @@ public class LindManagerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LindManagerApplication.class, args);
+	}
+
+	@SneakyThrows
+	@GetMapping(path = "s")
+	public ResponseEntity s(@RequestParam String wd) {
+		log.info("hello world!{}", wd);
+		return ResponseEntity.ok(wd);
 	}
 
 	@SneakyThrows
@@ -68,7 +76,7 @@ public class LindManagerApplication {
 		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
 		executor.initialize();
 
-		//不同的线程，MDC不共享
+		// 不同的线程，MDC不共享
 		executor.execute(() -> {
 			MDC.put("test", "bo");
 			System.out.println(String.format("t:%s,MDC:%s", Thread.currentThread().getName(), MDC.get("test")));

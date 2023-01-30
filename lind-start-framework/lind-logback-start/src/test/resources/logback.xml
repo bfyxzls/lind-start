@@ -10,7 +10,7 @@
     <appender name="map" class="com.lind.logback.appender.MapAppender">
     </appender>
 
-    <root level="info">
+    <root level="INFO">
         <appender-ref ref="console"/>
         <appender-ref ref="map"/>
     </root>
