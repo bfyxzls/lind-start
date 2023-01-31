@@ -21,8 +21,10 @@ public class FeignTraceIdInterceptor implements RequestInterceptor {
 	@Override
 	public void apply(RequestTemplate template) {
 		String traceId = MDC.get(TRACE_ID);
+
 		if (traceId != null) {
 			template.header(HTTP_HEADER_TRACE, traceId);
 		}
 	}
+
 }

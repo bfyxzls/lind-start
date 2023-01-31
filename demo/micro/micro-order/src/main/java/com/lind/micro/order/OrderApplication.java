@@ -8,22 +8,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @SpringBootApplication()
 @EnableDiscoveryClient
 @RestController
 public class OrderApplication {
 
-  @SneakyThrows
-  public static void main(String[] args) {
-    SpringApplication.run(OrderApplication.class, args);
-  }
+	@SneakyThrows
+	public static void main(String[] args) {
+		SpringApplication.run(OrderApplication.class, args);
+	}
 
-  @GetMapping("order")
-  public ResponseEntity product() throws InterruptedException {
-    System.out.println("hello order");
-    Thread.sleep(3000);
-    return ResponseEntity.ok("hello order");
-  }
+	@GetMapping("order")
+	public ResponseEntity product() throws InterruptedException {
+		System.out.println("hello order");
+		Thread.sleep(3000);
+		return ResponseEntity.ok("hello order");
+	}
 
 }

@@ -9,24 +9,29 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0.0
  */
 public class MapHolder {
-    private Map eventMap = new ConcurrentHashMap();;
-    private MapHolder(){}
 
-    private static MapHolder MAP_INSTANCE = null;
+	private Map eventMap = new ConcurrentHashMap();
 
-    public static MapHolder create(){
-        if(MAP_INSTANCE == null){
-            MAP_INSTANCE = new MapHolder();
-        }
-        return MAP_INSTANCE;
-    }
+	;
 
-    public void putEvent(String key,String value){
-        eventMap.put(key,value);
-    }
+	private MapHolder() {
+	}
 
-    public Map getEventMap(){
-        return eventMap;
-    }
+	private static MapHolder MAP_INSTANCE = null;
+
+	public static MapHolder create() {
+		if (MAP_INSTANCE == null) {
+			MAP_INSTANCE = new MapHolder();
+		}
+		return MAP_INSTANCE;
+	}
+
+	public void putEvent(String key, String value) {
+		eventMap.put(key, value);
+	}
+
+	public Map getEventMap() {
+		return eventMap;
+	}
 
 }

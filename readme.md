@@ -14,22 +14,29 @@
 
 # lind-start-framework项目介绍（springboot）
 以lind开头，以start结尾的项目，是其它项目的基础包
-1. lind-activiti 工作流组件
-1. lind-common 公用工具包
-1. lind-elasticsearch-start 封装了es7.x的操作，工厂模块完成对类型的动态转换
-1. lind-feign-start 接口调用组件
-1. lind-hbase-start 封装了hbase的操作，封装了常用字段，AOP完成赋值
-1. lind-kafka-start 封装了kafka工具，动态代理实现生产者
-1. lind-mybatis-start 封装了mybatis plus的操作
-1. lind-redis-start 对redis的封装，序列化的统一，分布锁组件， 限流组件
-1. lind-nacos-start 统一了nacos的版本，添加了配置热更新demo
-1. lind-office-convert 封装了对excel,word的操作
-1. lind-schedule 任务调组件
-1. lind-spi java原生的插件组件
-1. lind-uaa-jwt-start 基于JWT的授权组件
-1. lind-uaa-keycloak-start 基于keycloak的授权组件
-1. lind-uaa-start 用户授权组件
-1. lind-verification-code-start 验证码组件
+lind-start项目结构
+* demo 一些测试项目
+* lind-framework-bom lind组件和相关依赖清单，需要使用lind组件，需要import这个包
+* lind-framework 组件包
+   * lind-activiti 工作流组件
+   * lind-common 公用工具包
+   * lind-elasticsearch-start 封装了es7.x的操作，工厂模块完成对类型的动态转换
+   * lind-feign-start 接口调用组件
+   * lind-hbase-start 封装了hbase的操作，封装了常用字段，AOP完成赋值
+   * lind-kafka-start 封装了kafka工具，动态代理实现生产者
+   * lind-logback-start 对日志输出规范的封装，集成了traceId和ip等
+   * lind-logger-start 日志拦截器，记录行为日志
+   * lind-mybatis-start 封装了mybatis plus的操作
+   * lind-nacos-start 统一了nacos的版本，添加了配置热更新demo
+   * lind-office-convert 封装了对excel,word的操作
+   * lind-rbac-start 用户角色管理相关的封装
+   * lind-redis-start 对redis的封装，序列化的统一，分布锁组件， 限流组件
+   * lind-schedule 任务调组件
+   * lind-spi java原生的插件组件
+   * lind-uaa-jwt-start 基于JWT的授权组件
+   * lind-uaa-keycloak-start 基于keycloak的授权组件
+   * lind-uaa-start 用户授权组件
+   * lind-verification-code-start 验证码组件
 
 # maven的执行阶段
 ```

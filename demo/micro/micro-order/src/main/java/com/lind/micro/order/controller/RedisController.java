@@ -17,17 +17,20 @@ import java.util.Date;
 @RestController()
 @RequestMapping("redis")
 public class RedisController {
-    @Autowired
-    RedisTemplate<String,String> redisService;
 
-    @GetMapping("set")
-    public ResponseEntity set() {
-        redisService.opsForValue().set("test", new Date().toString());
-        return ResponseEntity.ok("success");
-    }
-    @GetMapping("se2t")
-    public ResponseEntity set2() {
-        redisService.opsForValue().set("test2", new Date().toString());
-        return ResponseEntity.ok("success");
-    }
+	@Autowired
+	RedisTemplate<String, String> redisService;
+
+	@GetMapping("set")
+	public ResponseEntity set() {
+		redisService.opsForValue().set("test", new Date().toString());
+		return ResponseEntity.ok("success");
+	}
+
+	@GetMapping("se2t")
+	public ResponseEntity set2() {
+		redisService.opsForValue().set("test2", new Date().toString());
+		return ResponseEntity.ok("success");
+	}
+
 }

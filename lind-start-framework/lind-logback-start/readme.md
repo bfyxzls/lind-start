@@ -17,8 +17,18 @@
 * %os 显示客户端操作系统
 * %browserType 显示客户端浏览器类型和版本
 * %uri 显示当前客户端请求的url
-* %traceId 显示调用链跟踪ID，不同的httpclient需要添加不同的Interceptor,本组件集成了okhttp,feign等,需要解决`openfeign`在新线程中获取MDC对象的问题
+* %traceId 显示调用链跟踪ID，不同的httpclient需要添加不同的Interceptor,本组件集成了okhttp,feign等。
 
+# transmittable-thread-local组件
+这个是阿里开发的组件，主要解决跨线程的数据转值问题，目前由于openfeign中开启熔断之后，默认使用thread模式，
+所以需要希望通过MDC转traceId，需要使用transmittable这个组件。
+```
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>transmittable-thread-local</artifactId>
+    <version>2.14.2</version>
+</dependency>
+```
 # 自定义变量ClassicConverter
 ClassicConverter对象负责从ILoggingEvent 提取信息，并产生一个字符串。例如，LoggerConverter，它是处理“% logger”转换符的转换器，
 它从ILoggingEvent提取logger 的名字并作为字符串返回。

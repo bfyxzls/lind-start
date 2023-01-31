@@ -2,6 +2,7 @@ package com.lind.lindmanager;
 
 import com.lind.common.locale.LocaleMessageUtils;
 import com.lind.lindmanager.feign.TestClient;
+import com.lind.logback.mdc.ThreadPoolExecutorMdcWrapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.SocketException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +67,7 @@ public class LindManagerApplication {
 
 		testClient.j();
 
-		ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+		ThreadPoolTaskExecutor executor = new ThreadPoolExecutorMdcWrapper();
 		executor.setCorePoolSize(2);
 		executor.setMaxPoolSize(4);
 		executor.setQueueCapacity(50);
@@ -75,10 +75,10 @@ public class LindManagerApplication {
 		executor.setThreadNamePrefix("TEST-A-");
 		executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
 		executor.initialize();
+		MDC.put("test", "bo");
 
 		// 不同的线程，MDC不共享
 		executor.execute(() -> {
-			MDC.put("test", "bo");
 			System.out.println(String.format("t:%s,MDC:%s", Thread.currentThread().getName(), MDC.get("test")));
 		});
 		executor.execute(() -> {
@@ -102,10 +102,8 @@ public class LindManagerApplication {
 		map.put("date", LocalDate.now());
 		// String result = objectMapper.writeValueAsString(map);
 		log.info("j page日志!");
-		// Thread.sleep(1000 * 20);
-		throw new SocketException("默认只有IOException异常才会发起重拾");
 
-		// return ResponseEntity.ok(map);
+		return ResponseEntity.ok(map);
 	}
 
 }

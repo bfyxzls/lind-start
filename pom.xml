@@ -5,11 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.lind</groupId>
     <artifactId>lind-start</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
 
     <modules>
         <module>lind-start-framework</module>
+        <module>lind-framework-bom</module>
 
         <!--        <module>demo/a-start-test</module>-->
         <!--        <module>demo/log4j-bug-rmi</module>-->
@@ -62,14 +63,7 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- lind-framework依赖的pom列表,子类直接引用pom名称不需要版本号  -->
-            <dependency>
-                <groupId>com.lind</groupId>
-                <artifactId>lind-framework-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+
         </dependencies>
     </dependencyManagement>
     <dependencies>

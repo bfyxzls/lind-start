@@ -17,7 +17,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.lind</groupId>
-                <artifactId>lind-framework-dependencies</artifactId>
+                <artifactId>lind-framework-bom</artifactId>
                 <version>${project.version}</version>
                 <scope>import</scope>
                 <type>pom</type>

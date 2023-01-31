@@ -6,11 +6,11 @@
     <parent>
         <artifactId>lind-start</artifactId>
         <groupId>com.lind</groupId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
     </parent>
     <artifactId>lind-start-framework</artifactId>
     <name>lind start framework</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <packaging>pom</packaging>
     <description>basic framework for all project.</description>
     <properties>
@@ -19,6 +19,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <spring-boot-dependencies.version>2.3.0.RELEASE</spring-boot-dependencies.version>
+        <spring-cloud-alibaba-dependencies.version>2.2.1.RELEASE</spring-cloud-alibaba-dependencies.version>
+        <spring-cloud.version>Hoxton.SR4</spring-cloud.version>
+        <version.infinispan>13.0.0.CR1</version.infinispan>
     </properties>
     <modules>
         <module>lind-redis-start</module>
@@ -39,10 +43,54 @@
         <module>lind-logger-start</module>
         <module>lind-rbac-start</module>
         <module>lind-seata-start</module>
-        <module>lind-framework-dependencies</module>
         <module>mini-admin</module>
         <module>lind-logback-start</module>
 
     </modules>
+    <dependencyManagement>
+        <dependencies>
+
+            <!--spring boot 版本-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--阿里巴巴组件-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--spring cloud 版本-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.infinispan</groupId>
+                <artifactId>infinispan-bom</artifactId>
+                <version>${version.infinispan}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-bom</artifactId>
+                <version>${project.parent.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
