@@ -47,12 +47,118 @@
         <spring.checkstyle.plugin>0.0.34</spring.checkstyle.plugin>
         <spring-boot-admin.version>2.6.7</spring-boot-admin.version>
         <jasypt.version>2.1.0</jasypt.version>
+        <elasticsearch.high.version>7.6.2</elasticsearch.high.version>
+        <elasticsearch.client.version>7.6.2</elasticsearch.client.version>
+        <commons-pool2.version>2.8.0</commons-pool2.version>
+        <disruptor.version>3.4.2</disruptor.version>
+        <netty-all.version>4.1.63.Final</netty-all.version>
+        <transmittable-thread-local.version>2.14.2</transmittable-thread-local.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <simple-pool.version>0.1.17</simple-pool.version>
+        <commons-net.version>3.1</commons-net.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <aesh.version>2.4</aesh.version>
+        <hbase-shaded-client.version>1.2.0</hbase-shaded-client.version>
+        <spring-kafka.version>2.4.1.RELEASE</spring-kafka.version>
+        <kafka-clients.version>2.6.0</kafka-clients.version>
+        <kafka-streams.version>2.5.0</kafka-streams.version>
+        <uadetector-resources.version>2014.10</uadetector-resources.version>
+        <okhttp.version>4.9.2</okhttp.version>
+        <java-jwt.version>3.4.0</java-jwt.version>
     </properties>
     <!-- maven依赖版本统一，子工程不需要声明包版本 -->
     <dependencyManagement>
         <dependencies>
 
             <!-- 三方包 -->
+            <!-- jwt工具类-->
+            <dependency>
+                <groupId>com.auth0</groupId>
+                <artifactId>java-jwt</artifactId>
+                <version>${java-jwt.version}</version>
+            </dependency>
+            <!-- 浏览器版本类-->
+            <dependency>
+                <groupId>net.sf.uadetector</groupId>
+                <artifactId>uadetector-resources</artifactId>
+                <version>${uadetector-resources.version}</version>
+            </dependency>
+            <!-- OkHttp工具 https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+            <!-- kafka -->
+            <dependency>
+                <groupId>org.springframework.kafka</groupId>
+                <artifactId>spring-kafka</artifactId>
+                <version>${spring-kafka.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-clients</artifactId>
+                <version>${kafka-clients.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.kafka</groupId>
+                <artifactId>kafka-streams</artifactId>
+                <version>${kafka-streams.version}</version>
+            </dependency>
+            <!-- hbase客户端-->
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-shaded-client</artifactId>
+                <version>${hbase-shaded-client.version}</version>
+            </dependency>
+            <!-- 命令行交互类-->
+            <dependency>
+                <groupId>org.aesh</groupId>
+                <artifactId>aesh</artifactId>
+                <version>${aesh.version}</version>
+            </dependency>
+            <!-- 编码工具类-->
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${commons-codec.version}</version>
+            </dependency>
+            <!-- 网络编程工具-->
+            <dependency>
+                <groupId>commons-net</groupId>
+                <artifactId>commons-net</artifactId>
+                <version>${commons-net.version}</version>
+            </dependency>
+            <!-- 解决线程线中任务的有序性 https://zhuanlan.zhihu.com/p/152405578-->
+            <dependency>
+                <groupId>com.github.phantomthief</groupId>
+                <artifactId>simple-pool</artifactId>
+                <version>${simple-pool.version}</version>
+            </dependency>
+            <!-- CC4集合增能组件-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-collections4</artifactId>
+                <version>${commons-collections4.version}</version>
+            </dependency>
+            <!-- 阿里TTL，解决线程间数据传值问题 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>${transmittable-thread-local.version}</version>
+            </dependency>
+            <!-- netty -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>${netty-all.version}</version>
+            </dependency>
+            <!-- 并行队列 -->
+            <dependency>
+                <groupId>com.lmax</groupId>
+                <artifactId>disruptor</artifactId>
+                <version>${disruptor.version}</version>
+            </dependency>
             <!-- Google 编码助手 -->
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -77,7 +183,7 @@
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-pool2</artifactId>
-                <version>2.8.0</version>
+                <version>${commons-pool2.version}</version>
             </dependency>
             <!-- Mysql 驱动 -->
             <dependency>
@@ -144,10 +250,17 @@
                 <artifactId>jedis</artifactId>
                 <version>${jedis-version}</version>
             </dependency>
+            <!-- elasticsearch包-->
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
                 <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>6.5.4</version>
+                <version>${elasticsearch.high.version}</version>
+            </dependency>
+            <!--  elasticsearch对应兼容版本为6.8.7-->
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch.client.version}</version>
             </dependency>
             <dependency>
                 <groupId>cn.hutool</groupId>

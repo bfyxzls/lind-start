@@ -1,10 +1,10 @@
 package com.lind.logback.trace;
 
+import com.sun.istack.internal.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 
 import java.io.IOException;

@@ -76,6 +76,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- infinispan框架依赖清单 -->
             <dependency>
                 <groupId>org.infinispan</groupId>
                 <artifactId>infinispan-bom</artifactId>
@@ -83,6 +84,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- lind框架依赖清单 -->
             <dependency>
                 <groupId>com.lind</groupId>
                 <artifactId>lind-framework-bom</artifactId>

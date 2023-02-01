@@ -8,18 +8,7 @@
         <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>lind-elasticsearch-start</artifactId>
-
-    <properties>
-        <fastjson.version>1.2.68</fastjson.version>
-        <elasticsearch.high.version>7.6.2</elasticsearch.high.version>
-        <elasticsearch.client.version>7.6.2</elasticsearch.client.version>
-
-<!--        <elasticsearch.high.version>6.5.4</elasticsearch.high.version>
-        <elasticsearch.client.version>6.5.4</elasticsearch.client.version>-->
-
-    </properties>
     <dependencyManagement>
         <dependencies>
             <!--spring boot 版本-->
@@ -27,6 +16,14 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
                 <version>2.3.0.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-bom</artifactId>
+                <version>${project.parent.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -45,13 +42,11 @@
         <dependency>
             <groupId>org.elasticsearch.client</groupId>
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
-            <version>${elasticsearch.high.version}</version>
         </dependency>
         <!--  elasticsearch对应兼容版本为6.8.7-->
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>${elasticsearch.client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -62,7 +57,6 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-common</artifactId>
-            <version>${project.parent.version}</version><!-- 使用根项目的版本，与根项目始终保持同一版本号 -->
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -73,7 +67,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.9</version>
         </dependency>
     </dependencies>
 </project>
