@@ -2,7 +2,6 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.logback.LoggerConfig,\
   com.lind.logback.mdc.HystrixCircuitBreakerConfiguration,\
-  com.lind.logback.mdc.LogInterceptor,\
   com.lind.logback.trace.FeignTraceIdInterceptor,\
   com.lind.logback.trace.RestTemplateTraceIdInterceptor,\
-  com.lind.logback.WebMvcConfigurer
+  com.lind.logback.LogbackConfigurer

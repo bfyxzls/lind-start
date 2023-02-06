@@ -12,10 +12,11 @@ import static com.lind.logback.mdc.LogInterceptor.TRACE_ID;
  * @since 1.0.0
  */
 public class TraceIdConvert extends ClassicConverter {
+	private static String EMPTY = "";
 
 	@Override
 	public String convert(ILoggingEvent event) {
-		return MDC.get(TRACE_ID) == null ? "" : MDC.get(TRACE_ID);
+		return MDC.get(TRACE_ID) == null ? EMPTY : MDC.get(TRACE_ID);
 	}
 
 }

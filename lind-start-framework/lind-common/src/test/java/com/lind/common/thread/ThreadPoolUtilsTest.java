@@ -1,5 +1,6 @@
 package com.lind.common.thread;
 
+import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
 import com.github.phantomthief.pool.KeyAffinityExecutor;
 import lombok.AllArgsConstructor;
@@ -8,9 +9,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.Test;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.util.StopWatch;
 import org.testng.collections.Sets;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
@@ -33,6 +36,7 @@ public class ThreadPoolUtilsTest {
 
 	static ExecutorService executorService = Executors.newFixedThreadPool(4);
 	static KeyAffinityExecutor executor = KeyAffinityExecutor.newSerializingExecutor(8, 200, "MY-POOL");
+	static boolean SYNCHRONIZED = false;
 
 	public static void executeByOldPool(List<Person> personList) {
 		personList.stream().forEach(p -> executorService.execute(() -> {
@@ -50,6 +54,53 @@ public class ThreadPoolUtilsTest {
 		personList.stream().forEach(p -> executor.executeEx(p.getId(), () -> {
 			System.out.println(JSON.toJSONString(p));
 		}));
+	}
+
+	public static void main(String[] args) throws InterruptedException {
+		StopWatch stopWatch = new StopWatch();
+		stopWatch.start("main");
+		final List<Callable<Void>> runnablesToTasks = new LinkedList<>();
+		runnablesToTasks.add(() -> {
+			try {
+				Thread.sleep(5000);
+			}
+			catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("a5000..." + Thread.currentThread().getName());
+			return null;
+		});
+		runnablesToTasks.add(() -> {
+			try {
+				Thread.sleep(6000);
+			}
+			catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("a6000..." + Thread.currentThread().getName());
+			return null;
+		});
+		runnablesToTasks.add(() -> {
+			try {
+				Thread.sleep(5500);
+			}
+			catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+			System.out.println("a5500..." + Thread.currentThread().getName());
+			return null;
+		});
+		final ExecutorService service = SYNCHRONIZED ? Executors.newSingleThreadExecutor()
+				: Executors.newFixedThreadPool(4);
+
+		service.invokeAll(runnablesToTasks);
+		service.shutdown();
+		Boolean isClose = service.awaitTermination(3, TimeUnit.MINUTES);
+		if (!isClose)
+			service.shutdown();
+
+		stopWatch.stop();
+		System.out.println("result:" + stopWatch.prettyPrint());
 	}
 
 	/**
@@ -243,6 +294,13 @@ public class ThreadPoolUtilsTest {
 		}
 
 		taskExecutor.shutdown();
+	}
+
+	@Test
+	public void single() {
+		Executors.newSingleThreadExecutor().execute(() -> {
+			HttpUtil.get("http://localhost:81/exit");
+		});
 	}
 
 	static class TreeNode {
