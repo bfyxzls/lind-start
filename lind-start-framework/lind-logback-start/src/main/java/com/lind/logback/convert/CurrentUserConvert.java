@@ -12,6 +12,7 @@ import static com.lind.logback.mdc.LogInterceptor.CURRENT_USER;
  * @since 1.0.0
  */
 public class CurrentUserConvert extends ClassicConverter {
+
 	private static String EMPTY = "";
 
 	@Override

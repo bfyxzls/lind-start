@@ -12,6 +12,7 @@ import static com.lind.logback.mdc.LogInterceptor.TRACE_ID;
  * @since 1.0.0
  */
 public class TraceIdConvert extends ClassicConverter {
+
 	private static String EMPTY = "";
 
 	@Override

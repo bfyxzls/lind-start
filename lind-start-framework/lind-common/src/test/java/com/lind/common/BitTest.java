@@ -1,5 +1,6 @@
 package com.lind.common;
 
+import com.lind.common.util.ByteUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -84,6 +85,27 @@ public class BitTest {
 		System.out.println("workerCountOf=" + workerCountOf(ctl.get()));
 		int code = 1_000_000;
 
+	}
+
+	@Test
+	public void hex() {
+		// 0~15
+		for (int i = 0; i <= 0xf; i++) {
+			log.info("i={}", i);
+		}
+		// 0~127
+		for (int i = 0; i <= 0x7f; i++) {
+			log.info("i={}", i);
+		}
+	}
+
+	@Test
+	public void bit32_4byte() {
+		byte[] digest = ByteUtil.intToBytes(1024);
+		// hash code, 把long截取到32-bits
+		long hashCode = ((long) (digest[3] & 0xFF) << 24) | ((long) (digest[2] & 0xFF) << 16)
+				| ((long) (digest[1] & 0xFF) << 8) | (digest[0] & 0xFF);
+		log.info("hashCode={}", hashCode);
 	}
 
 }

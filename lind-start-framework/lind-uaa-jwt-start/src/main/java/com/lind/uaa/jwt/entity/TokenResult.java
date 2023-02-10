@@ -19,6 +19,8 @@ public class TokenResult {
 
 	private String subject;
 
+	private String session_state;
+
 	public String getToken() {
 		return token;
 	}

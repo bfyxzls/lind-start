@@ -35,6 +35,7 @@ public class LindManagerApplication {
 	ThreadPoolTaskExecutor threadPoolExecutorMdcWrapper;
 
 	public static void main(String[] args) {
+		com.lind.pk.Tool.print();
 		SpringApplication.run(LindManagerApplication.class, args);
 	}
 

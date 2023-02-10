@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -40,13 +41,13 @@ public class KafkaTest {
 			testMessageEntity.setData(userDTO);
 			messageSender.send("lind-demo", testMessageEntity);
 		}
-		Thread.sleep(10000);
+		TimeUnit.SECONDS.sleep(10);
 	}
 
 	@Test
 	public void resume() throws InterruptedException {
 		kafkaRegistry.getListenerContainer("demo1").resume();
-		Thread.sleep(10000);
+		TimeUnit.SECONDS.sleep(10);
 
 	}
 
@@ -77,7 +78,7 @@ public class KafkaTest {
 
 		messageSender.send("sleep-test1", testMessageEntity);
 
-		Thread.sleep(10000 * 5);
+		TimeUnit.SECONDS.sleep(10 * 5);
 	}
 
 	/**
@@ -92,7 +93,7 @@ public class KafkaTest {
 		messageSender.send("sleep3", testMessageEntity);
 		messageSender.send("sleep3", testMessageEntity);
 
-		Thread.sleep(1000 * 30);
+		TimeUnit.SECONDS.sleep(10 * 30);
 	}
 
 }

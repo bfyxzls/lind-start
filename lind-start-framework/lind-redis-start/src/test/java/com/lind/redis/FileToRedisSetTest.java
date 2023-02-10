@@ -49,8 +49,10 @@ public class FileToRedisSetTest {
 		read.close();
 		inputStream.close();
 	}
+
 	@Test
 	public void writeTo() throws IOException {
 
 	}
+
 }

@@ -2,11 +2,13 @@ package com.lind.common.util;
 
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.time.StopWatch;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;
@@ -71,6 +73,19 @@ public class FileUtilsTest {
 	@Test
 	public void readBigFile() throws IOException {
 		FileUtils.splitBigFile();
+	}
+
+	@Test
+	public void recursiveDel(){
+		FileUtils.deleteRecursively(new File("d:\\test-del"));
+	}
+
+	@Test
+	public void appendFile(){
+		File file=new File("d:\\append.txt");
+		FileUtils.writeFileContent(file,"hello".getBytes());
+		FileUtils.writeFileContent(file,"world".getBytes());
+		Assert.assertEquals("world",new String(FileUtils.readFileContent(file)));
 	}
 
 }

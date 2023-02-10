@@ -11,6 +11,7 @@
     <modules>
         <module>lind-start-framework</module>
         <module>lind-framework-bom</module>
+        <module>lind-test-package</module>
 
         <!--        <module>demo/a-start-test</module>-->
         <!--        <module>demo/log4j-bug-rmi</module>-->
