@@ -57,7 +57,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
-		String token = jwtUserService.generateJwtJoinUser((UserDetails) authentication.getPrincipal());
+		String token = jwtUserService.generateJwtJoinUser((ResourceUser) authentication.getPrincipal());
 		response.setHeader("Content-Type", "application/json;charset=utf-8");
 		DecodedJWT jwt = JWT.decode(token);
 		TokenResult tokenResult = new TokenResult();
@@ -69,7 +69,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
 		// 用户登录后的在线token
 		redisService.set(Constants.ONLINE_USER + jwt.getToken(), 1, jwtConfig.getExpiresAt() * 60);
 
-		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token, ResourceUser.class);
+		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(token);
 		// 角色权限缓存
 		if (!CollectionUtils.isEmpty(userDetails.getAuthorities())) {
 			for (GrantedAuthority grantedAuthority : userDetails.getAuthorities()) {

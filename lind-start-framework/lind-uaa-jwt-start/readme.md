@@ -31,7 +31,7 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
 ```
 {
     "username":"admin",
-    "password":"123456"
+    "password":"abcd1234"
 }
 ```
 * 响应码：200

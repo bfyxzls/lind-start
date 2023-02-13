@@ -21,7 +21,7 @@ public class LoginSuccessListener {
 		TokenResult tokenResult = event.getTokenResult();
 		System.out.println("login success:" + tokenResult.getSubject() + ",token:" + tokenResult.getToken());
 		log.info("login success\nname:{}\ntoken:{}\n", tokenResult.getSubject(), tokenResult.getToken());
-		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken(), ResourceUser.class);
+		ResourceUser userDetails = jwtUserService.getUserDetailsByToken(tokenResult.getToken());
 		log.info("user:{}", userDetails);
 	}
 
