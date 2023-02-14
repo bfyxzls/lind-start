@@ -4,10 +4,8 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.config.JwtConfig;
-import com.lind.uaa.jwt.entity.ResourceUser;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -40,16 +38,11 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		if (jwt.getExpiresAt().before(Calendar.getInstance().getTime()))
 			throw new NonceExpiredException("Token expires");
 		String username = jwt.getSubject();
-		if (jwt.getClaim("user").asString() == null) {
-			throw new NonceExpiredException("Token illegality");
-		}
-		UserDetails user = new ObjectMapper().readValue(jwt.getClaim("user").asString(), ResourceUser.class);
-		if (user == null)
-			throw new NonceExpiredException("Token illegality");
+		UserDetails user =userService.getUserByJwt(jwt);
 		try {
 			// 验证jwt token的合法性.
 			Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());
-			JWTVerifier verifier = JWT.require(algorithm).withSubject(username).build();
+			JWTVerifier verifier = JWT.require(algorithm).withSubject(username).withIssuer(jwt.getIssuer()).build();
 			verifier.verify(jwt.getToken());
 		}
 		catch (Exception e) {

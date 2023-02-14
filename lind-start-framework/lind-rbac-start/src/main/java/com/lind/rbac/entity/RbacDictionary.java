@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 @Data
-@TableName("dictionary")
+@TableName("sys_dictionary")
 public class RbacDictionary {
 
 	@ApiModelProperty(value = "id")

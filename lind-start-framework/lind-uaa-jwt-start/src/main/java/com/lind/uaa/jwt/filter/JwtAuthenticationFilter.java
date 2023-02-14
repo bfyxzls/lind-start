@@ -2,6 +2,7 @@ package com.lind.uaa.jwt.filter;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.entity.ResourceUser;
@@ -80,11 +81,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		}
 		Authentication authResult = null;
 		AuthenticationException failed = null;
-
+		DecodedJWT decodedJWT = null;
 		try {
 			String token = getJwtToken(request);
 			if (StringUtils.isNotBlank(token)) {
-				JwtAuthenticationToken authToken = new JwtAuthenticationToken(JWT.decode(token));
+				decodedJWT = JWT.decode(token);
+				JwtAuthenticationToken authToken = new JwtAuthenticationToken(decodedJWT);
 				// jwt自身有效期和签名校验
 				authResult = this.getAuthenticationManager().authenticate(authToken);
 				// redis实时校验，如果用户手动单击登录，也将失败

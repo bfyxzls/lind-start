@@ -23,7 +23,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -57,7 +57,7 @@ public class PermissionAspect {
 		if (method.isAnnotationPresent(RequiresPermissions.class)) {
 			RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
 			ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
-			if (userDetails.isAdmin().equals(1))
+			if (userDetails.getAuthorities().stream().filter(o -> o.equals(new SimpleGrantedAuthority("管理员"))).findAny().isPresent())
 				return point.proceed();
 			Boolean flag = requiresPermissions.logical().equals(Logical.AND) ? true : false;
 

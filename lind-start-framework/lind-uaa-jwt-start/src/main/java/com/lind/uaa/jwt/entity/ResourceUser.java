@@ -24,8 +24,6 @@ public interface ResourceUser extends UserDetails {
 
 	String getId();
 
-	Integer isAdmin();
-
 	/**
 	 * 返回用户角色.
 	 * @return

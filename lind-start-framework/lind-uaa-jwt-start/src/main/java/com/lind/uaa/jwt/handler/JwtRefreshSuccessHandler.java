@@ -5,12 +5,12 @@ import com.lind.redis.service.RedisService;
 import com.lind.uaa.jwt.config.Constants;
 import com.lind.uaa.jwt.config.JwtAuthenticationToken;
 import com.lind.uaa.jwt.config.JwtConfig;
+import com.lind.uaa.jwt.entity.ResourceUser;
 import com.lind.uaa.jwt.service.JwtUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 import javax.servlet.ServletException;
@@ -50,8 +50,8 @@ public class JwtRefreshSuccessHandler implements AuthenticationSuccessHandler {
 		if (shouldRefresh) {
 			// 刷新后的新token在线状态
 			logger.info("JwtRefreshSuccessHandler");
-			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			String newToken = jwtUserService.generateJwtJoinToken(userDetails.getUsername(), jwt.getClaim("user"));
+			ResourceUser userDetails = (ResourceUser) authentication.getPrincipal();
+			String newToken = jwtUserService.generateJwtJoinUser(userDetails);
 			redisService.expire(Constants.ONLINE_USER + newToken, jwtConfig.getExpiresAt() * 60);
 			response.setHeader("Authorization", newToken);
 		}

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.CollectionUtils;
 
@@ -61,6 +60,7 @@ public class JsonLoginSuccessHandler implements AuthenticationSuccessHandler {
 		response.setHeader("Content-Type", "application/json;charset=utf-8");
 		DecodedJWT jwt = JWT.decode(token);
 		TokenResult tokenResult = new TokenResult();
+		tokenResult.setSessionState(request.getSession().getId());
 		tokenResult.setExpiresAt(jwt.getExpiresAt());
 		tokenResult.setSubject(jwt.getSubject());
 		tokenResult.setToken(token);

@@ -15,6 +15,7 @@ import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -41,8 +42,8 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 	@Override
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)
 			throws AccessDeniedException, InsufficientAuthenticationException {
-		log.info("path permission:{}", configAttributes);
-		log.info("current user role:");
+		log.debug("path permission:{}", configAttributes);
+		log.debug("current user role:");
 		Optional.ofNullable(authentication.getAuthorities()).ifPresent(o -> {
 			o.forEach(i -> log.info("{}", i));
 		});
@@ -50,9 +51,11 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 			return;
 		}
 		ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
-		if (userDetails.isAdmin().equals(1)) {
+		if (userDetails.getAuthorities().stream().filter(o -> o.equals(new SimpleGrantedAuthority("管理员"))).findAny()
+				.isPresent()) {
 			return;
 		}
+
 		// 遍历当前path所需的权限进行断言
 		for (ConfigAttribute configAttribute : configAttributes) {
 			for (GrantedAuthority ga : authentication.getAuthorities()) {
