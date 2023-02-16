@@ -45,7 +45,7 @@ public class ReadTest {
 		String msg = "(a=123)";
 		String result = trimLeadingCharacter(trimTrailingCharacter(msg, ')'), '(');
 		logger.debug("result:{}", result);
-		trimTrailingCharacter(null,')');
+		trimTrailingCharacter(null, ')');
 	}
 
 }

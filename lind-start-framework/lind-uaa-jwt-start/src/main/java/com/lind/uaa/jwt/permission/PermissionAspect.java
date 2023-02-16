@@ -57,7 +57,8 @@ public class PermissionAspect {
 		if (method.isAnnotationPresent(RequiresPermissions.class)) {
 			RequiresPermissions requiresPermissions = method.getAnnotation(RequiresPermissions.class);
 			ResourceUser userDetails = (ResourceUser) SecurityUtils.getUser();
-			if (userDetails.getAuthorities().stream().filter(o -> o.equals(new SimpleGrantedAuthority("管理员"))).findAny().isPresent())
+			if (userDetails.getAuthorities().stream().filter(o -> o.equals(new SimpleGrantedAuthority("管理员"))).findAny()
+					.isPresent())
 				return point.proceed();
 			Boolean flag = requiresPermissions.logical().equals(Logical.AND) ? true : false;
 

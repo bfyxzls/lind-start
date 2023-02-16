@@ -76,16 +76,16 @@ public class FileUtilsTest {
 	}
 
 	@Test
-	public void recursiveDel(){
+	public void recursiveDel() {
 		FileUtils.deleteRecursively(new File("d:\\test-del"));
 	}
 
 	@Test
-	public void appendFile(){
-		File file=new File("d:\\append.txt");
-		FileUtils.writeFileContent(file,"hello".getBytes());
-		FileUtils.writeFileContent(file,"world".getBytes());
-		Assert.assertEquals("world",new String(FileUtils.readFileContent(file)));
+	public void appendFile() {
+		File file = new File("d:\\append.txt");
+		FileUtils.writeFileContent(file, "hello".getBytes());
+		FileUtils.writeFileContent(file, "world".getBytes());
+		Assert.assertEquals("world", new String(FileUtils.readFileContent(file)));
 	}
 
 }

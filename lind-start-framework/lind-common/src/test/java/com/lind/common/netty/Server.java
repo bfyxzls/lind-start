@@ -61,6 +61,11 @@ public class Server {
 		}
 	});
 
+	/**
+	 * 公开一个web服务器，只支持post方法，公开端口kill
+	 * @param args
+	 * @throws InterruptedException
+	 */
 	public static void main(String[] args) throws InterruptedException {
 		// start server
 		int port = 7070;
@@ -88,16 +93,16 @@ public class Server {
 					@Override
 					public void initChannel(SocketChannel channel) throws Exception {
 						channel.pipeline().addLast(new IdleStateHandler(0, 0, 30 * 3, TimeUnit.SECONDS)) // beat
-																											// 3N,
-																											// close
-																											// if
-																											// idle
+								// 3N,
+								// close
+								// if
+								// idle
 								.addLast(new HttpServerCodec()).addLast(new HttpObjectAggregator(5 * 1024 * 1024)) // merge
-																													// request
-																													// &
-																													// reponse
-																													// to
-																													// FULL
+								// request
+								// &
+								// reponse
+								// to
+								// FULL
 								.addLast(new SimpleChannelInboundHandler<FullHttpRequest>() {
 									@Override
 									protected void channelRead0(ChannelHandlerContext channelHandlerContext,
@@ -144,7 +149,6 @@ public class Server {
 		if (HttpMethod.POST != httpMethod) {
 			return "invalid request, HttpMethod not support.";
 		}
-		TimeUnit.SECONDS.sleep(2);
 		// services mapping
 		try {
 			switch (uri) {

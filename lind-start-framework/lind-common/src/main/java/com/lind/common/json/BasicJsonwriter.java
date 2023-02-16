@@ -19,13 +19,21 @@ import java.util.Set;
 public class BasicJsonwriter {
 
 	private static final String STR_SLASH = "\"";
+
 	private static final String STR_SLASH_STR = "\":";
+
 	private static final String STR_COMMA = ",";
+
 	private static final String STR_OBJECT_LEFT = "{";
+
 	private static final String STR_OBJECT_RIGHT = "}";
+
 	private static final String STR_ARRAY_LEFT = "[";
+
 	private static final String STR_ARRAY_RIGHT = "]";
+
 	private static final Map<String, Field[]> cacheFields = new HashMap<>();
+
 	private static Logger logger = LoggerFactory.getLogger(BasicJsonwriter.class);
 
 	/**

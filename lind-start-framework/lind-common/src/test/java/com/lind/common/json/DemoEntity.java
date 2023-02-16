@@ -13,7 +13,11 @@ import java.util.List;
 @Data
 @Builder
 public class DemoEntity {
-    private String title;
-    private Integer count;
-    private List<DemoEntity> sons;
+
+	private String title;
+
+	private Integer count;
+
+	private List<DemoEntity> sons;
+
 }

@@ -12,8 +12,8 @@ import java.util.Map;
  * json读操作.
  */
 public class BasicJsonReader {
-	private static Logger logger = LoggerFactory.getLogger(BasicJsonwriter.class);
 
+	private static Logger logger = LoggerFactory.getLogger(BasicJsonwriter.class);
 
 	public Map<String, Object> parseMap(String json) {
 		if (json != null) {
@@ -34,7 +34,6 @@ public class BasicJsonReader {
 		}
 		throw new IllegalArgumentException("Cannot parse JSON");
 	}
-
 
 	private List<Object> parseListInternal(String json) {
 		List<Object> list = new ArrayList<Object>();
@@ -87,26 +86,30 @@ public class BasicJsonReader {
 
 	// append start
 	private static String[] split(String toSplit, String delimiter) {
-		if (toSplit!=null && !toSplit.isEmpty() && delimiter!=null && !delimiter.isEmpty()) {
+		if (toSplit != null && !toSplit.isEmpty() && delimiter != null && !delimiter.isEmpty()) {
 			int offset = toSplit.indexOf(delimiter);
 			if (offset < 0) {
 				return null;
-			} else {
+			}
+			else {
 				String beforeDelimiter = toSplit.substring(0, offset);
 				String afterDelimiter = toSplit.substring(offset + delimiter.length());
-				return new String[]{beforeDelimiter, afterDelimiter};
+				return new String[] { beforeDelimiter, afterDelimiter };
 			}
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
+
 	private static String[] trimArrayElements(String[] array) {
 		if (array == null || array.length == 0) {
 			return new String[0];
-		} else {
+		}
+		else {
 			String[] result = new String[array.length];
 
-			for(int i = 0; i < array.length; ++i) {
+			for (int i = 0; i < array.length; ++i) {
 				String element = array[i];
 				result[i] = element != null ? element.trim() : null;
 			}

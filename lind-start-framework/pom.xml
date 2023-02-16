@@ -28,7 +28,6 @@
     </properties>
     <modules>
         <module>lind-redis-start</module>
-        <module>lind-hbase-start</module>
         <module>lind-common</module>
         <module>lind-elasticsearch-start</module>
         <module>lind-mybatis-start</module>
