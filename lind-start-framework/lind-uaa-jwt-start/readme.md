@@ -47,9 +47,6 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
 * method: POST
 * header: bearer ****token****
 * 响应： 200
-
-## token的刷新
-本版本的jwt认证，不提供显示的refresh_token机制，只提供在服务端直接续期机制，当用户访问需要认证的接口时，会先检查认证过期时间，当快要过期时，会在响应头上输出新的token，前端人员需要替换现有的token.
 ## 依赖引用
 ```
 <dependency>
@@ -57,6 +54,20 @@ jwt payload中包括的内容太多，对网络传输是需要考虑的，比如
     <artifactId>pkulaw-uaa-jwt-start</artifactId>
     <version>1.0.1</version>
 </dependency>
+```
+## 登录
+```
+POST JSON /login
+{
+    "username":"Jack",
+    "password":"123456"
+}
+```
+![](./assets/readme-1642742553808.png)
+## 登出
+```
+POST /logout
+Header Bearer token
 ```
 ## 使用
 1. 认证和授权的服务引用lind-uaa-jwt-start之后，需要实现ResourcePermissionService和UserDetailsService接口

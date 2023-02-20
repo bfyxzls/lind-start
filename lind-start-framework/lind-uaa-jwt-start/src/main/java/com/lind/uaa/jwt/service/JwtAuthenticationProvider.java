@@ -38,7 +38,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 		if (jwt.getExpiresAt().before(Calendar.getInstance().getTime()))
 			throw new NonceExpiredException("Token expires");
 		String username = jwt.getSubject();
-		UserDetails user = userService.getUserByJwt(jwt);
+		UserDetails user =userService.getUserByJwt(jwt);
 		try {
 			// 验证jwt token的合法性.
 			Algorithm algorithm = Algorithm.HMAC256(jwtConfig.getSecret());

@@ -46,6 +46,7 @@
         <module>lind-seata-start</module>
         <module>mini-admin</module>
         <module>lind-logback-start</module>
+        <module>lind-hbase-start</module>
 
     </modules>
     <dependencyManagement>
