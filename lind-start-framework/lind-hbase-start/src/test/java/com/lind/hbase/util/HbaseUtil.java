@@ -7,7 +7,6 @@ import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.client.ConnectionFactory;
 import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
@@ -123,25 +122,6 @@ public class HbaseUtil {
 		scan.setFilter(filterList);
 		ResultScanner scanner = table.getScanner(scan);
 		return scanner;
-	}
-
-	public static boolean checkQueryBySingleColumnFilter(String columnName, String value, String tableName)
-			throws IOException {
-		ResultScanner scanner = queryBySingleColumnFilter(columnName, value, tableName);
-		Result rs = scanner.next();
-		if (rs == null) {
-			return false;
-		}
-		else {
-			return true;
-		}
-	}
-
-	public static void addDataSerialize(String rowKey, String tableName) throws IOException {
-		Table table = conn.getTable(TableName.valueOf(tableName));
-		Put put = new Put(Bytes.toBytes(rowKey));
-		put.addColumn(Bytes.toBytes("info"), Bytes.toBytes("fieldName1"), SerializationUtils.serialize("1"));
-		table.put(put);
 	}
 
 }

@@ -30,7 +30,7 @@ public class DataRecord implements Map<String, Object>, Serializable {
 	private final LinkedHashMap<String, Object> document;
 
 	/**
-	 * rowkey字段.
+	 * rowKey字段.
 	 */
 	@Getter
 	@Setter

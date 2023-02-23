@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +54,26 @@ public class StringTest {
 	public void split() {
 		String msg = "admin|中国";
 		log.info(StringUtils.split(msg, "|")[1]);
+	}
+
+	/**
+	 * 去掉http协议头
+	 * resource=www.sina.com/auth/bobo
+	 */
+	@Test
+	public void substringHttp() {
+		String resourceUrl = "http://www.sina.com/auth/bobo";
+		if (resourceUrl.indexOf("://") > -1) {
+			resourceUrl = resourceUrl.substring(resourceUrl.indexOf("://") + 3);
+		}
+		System.out.println("resource=" + resourceUrl);
+	}
+
+	@Test
+	public void substringHttpHost() {
+		String resourceUrl = "http://www.sina.com/auth/bobo";
+		URI uri=URI.create(resourceUrl);
+		System.out.println(uri.getPath());
 	}
 
 	@Test
