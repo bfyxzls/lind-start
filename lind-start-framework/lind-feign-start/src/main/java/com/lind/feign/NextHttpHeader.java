@@ -2,6 +2,7 @@ package com.lind.feign;
 
 import com.lind.common.util.MapUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -35,5 +36,24 @@ public class NextHttpHeader {
 		return inheritableThreadLocal.get().keySet();
 	}
 
+	public void clear() {
+		Map<String, String> map = inheritableThreadLocal.get();
+		if (map != null) {
+			map.clear();
+			inheritableThreadLocal.remove();
+		}
+	}
 
+	public static Map<String, String> getCopyOfContextMap() {
+		Map<String, String> oldMap = inheritableThreadLocal.get();
+		if (oldMap != null) {
+			return new HashMap<String, String>(oldMap);
+		} else {
+			return null;
+		}
+	}
+
+	public static void setContextMap(Map<String, String> contextMap) {
+		inheritableThreadLocal.set(new HashMap<String, String>(contextMap));
+	}
 }

@@ -51,7 +51,7 @@ BeanDefinitionReader
 那么获取Bean就从conCurrentHashMap中通过BeanName获取对应的Bean信息。
 
 从上面的分析：我们可以看到Bean的加载解析过程如下图所示：
-![img.png](img.png)
+![](./assets/img.png)
 
 接下来我们针对BeanDefinitionReader、BeanDefinitionRegistry、BeanFactory分别分析：
 
@@ -75,7 +75,7 @@ BeanDefinitionReader
 4. ConfigurationClassBeanDefinitionReader：基于@Configuration注解的类配置
    处理@Configuration注解的配置类，加在这些配置类上面的注解，即与@Configuration一起使用的注解，如@ComponentScan，@PropertySource，@Import，@Profile等。
    ConfigurationClassBeanDefinitionReader主要被ConfigurationClassPostProcessor调用，ConfigurationClassPostProcessor为BeanFactoryPostProcessor
-  
+
 # BeanDefinitionRegistry
 
 注册BeanDefinitions。提供registerBeanDefinition，removeBeanDefinition等方法，用来从BeanFactory注册或移除BeanDefinition。

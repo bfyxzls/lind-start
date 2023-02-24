@@ -2,42 +2,33 @@ package com.lind.feign;
 
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
- * 线程上下文传递，hystrix的相关实现有兴趣可以看源码. 将当前使用的用户存到ThreadLocal中，并共享给feign生产的线程.
+ * 线程上下文传递，hystrix的相关实现有兴趣可以看源码. 将主线程的对象通过NextHttpHeader并共享给feign生产的线程.
  */
 public class RequestContextHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
 	public <T> Callable<T> wrapCallable(Callable<T> callable) {
 		// 先包装一下要执行的任务，在这里把ThreadLocal的值取出来
-		return new ThreadLocalCallable<T>(callable);
+		return new ThreadLocalCallable<>(callable, NextHttpHeader.getCopyOfContextMap());
 	}
 
 	public static class ThreadLocalCallable<V> implements Callable<V> {
 
 		private Callable<V> target;
 
-		private Map<String, String> dic = new HashMap<>();
+		private Map<String, String> dic;
 
-		public ThreadLocalCallable(Callable<V> target) {
+		public ThreadLocalCallable(Callable<V> target, Map<String, String> dic) {
 			this.target = target;
-			// 取ThreadLocal的值并保存起来
-			NextHttpHeader.get().forEach(o -> {
-				this.dic.put(o, NextHttpHeader.get(o));
-			});
+			this.dic = dic;
 		}
 
 		@Override
 		public V call() throws Exception {
-
-			// 真正执行的时候再设置进去
-			this.dic.keySet().forEach(o->{
-				NextHttpHeader.set(o,this.dic.get(o));
-			});
-			// 真正执行的时候再设置进去
+			NextHttpHeader.setContextMap(this.dic);
 			return target.call();
 		}
 
