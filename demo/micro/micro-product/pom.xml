@@ -37,6 +37,14 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!--自主包-->
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-bom</artifactId>
+                <version>${project.parent.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
         </dependencies>
 
@@ -63,7 +71,6 @@
         <dependency>
             <groupId>com.lind</groupId>
             <artifactId>lind-feign-start</artifactId>
-            <version>1.0.0</version>
         </dependency>
 
     </dependencies>

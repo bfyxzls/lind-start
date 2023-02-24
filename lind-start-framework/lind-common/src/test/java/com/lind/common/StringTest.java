@@ -57,8 +57,7 @@ public class StringTest {
 	}
 
 	/**
-	 * 去掉http协议头
-	 * resource=www.sina.com/auth/bobo
+	 * 去掉http协议头 resource=www.sina.com/auth/bobo
 	 */
 	@Test
 	public void substringHttp() {
@@ -72,7 +71,7 @@ public class StringTest {
 	@Test
 	public void substringHttpHost() {
 		String resourceUrl = "http://www.sina.com/auth/bobo";
-		URI uri=URI.create(resourceUrl);
+		URI uri = URI.create(resourceUrl);
 		System.out.println(uri.getPath());
 	}
 

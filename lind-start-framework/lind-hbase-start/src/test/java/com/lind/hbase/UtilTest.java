@@ -54,7 +54,7 @@ public class UtilTest {
 
 	@Test
 	public void readData() {
-		log.info("hbase:{}",hBaseService.getByKey("test","1"));
+		log.info("hbase:{}", hBaseService.getByKey("test", "1"));
 	}
 
 }

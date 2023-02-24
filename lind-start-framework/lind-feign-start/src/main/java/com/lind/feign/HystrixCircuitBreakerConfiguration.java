@@ -17,8 +17,7 @@ public class HystrixCircuitBreakerConfiguration {
 
 	@PostConstruct
 	public void init() {
-		HystrixPlugins.getInstance().registerConcurrencyStrategy(
-				new RequestContextHystrixConcurrencyStrategy());
+		HystrixPlugins.getInstance().registerConcurrencyStrategy(new RequestContextHystrixConcurrencyStrategy());
 	}
 
 }

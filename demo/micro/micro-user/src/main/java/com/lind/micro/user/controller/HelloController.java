@@ -1,5 +1,6 @@
 package com.lind.micro.user.controller;
 
+import com.lind.feign.NextHttpHeader;
 import com.lind.micro.user.feign.OrderClient;
 import com.lind.micro.user.feign.StoreClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,9 @@ public class HelloController {
 
 	@GetMapping("hello2")
 	public ResponseEntity hello2() throws InterruptedException {
-		Thread.sleep(50000);// 当前线程阻塞，不影响其它接口
-		return ResponseEntity.ok("hello," + author);
+		NextHttpHeader.set("USER_ID","101");
+		NextHttpHeader.set("Authoration","bearer xxaabb1901");
+		return ResponseEntity.ok("hello," + storeClient.getStores());
 	}
 
 }

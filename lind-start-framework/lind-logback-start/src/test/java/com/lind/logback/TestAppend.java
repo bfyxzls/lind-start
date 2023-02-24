@@ -15,12 +15,12 @@ import java.util.stream.IntStream;
 public class TestAppend {
 
 	@Test
-	public void mains() {
+	public void mainss() {
 		IntStream.rangeClosed(1, 10).forEach(counter -> {
 			log.info("Counter:" + counter);
 		});
 		MapHolder.create().getEventMap().values().forEach((value) -> {
-			System.out.println(value);
+			log.info("value:" + value);
 		});
 	}
 
