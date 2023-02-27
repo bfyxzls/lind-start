@@ -11,7 +11,8 @@ import java.util.concurrent.Callable;
 public class RequestContextHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
 
 	public <T> Callable<T> wrapCallable(Callable<T> callable) {
-		// 先包装一下要执行的任务，在这里把ThreadLocal的值取出来
+		// 主程序中执行
+		System.out.println("RequestContextHystrixConcurrencyStrategy.getCopyOfContextMap thread:" + Thread.currentThread().getId());
 		return new ThreadLocalCallable<>(callable, NextHttpHeader.getCopyOfContextMap());
 	}
 
@@ -28,6 +29,8 @@ public class RequestContextHystrixConcurrencyStrategy extends HystrixConcurrency
 
 		@Override
 		public V call() throws Exception {
+			//新线程中的执行
+			System.out.println("RequestContextHystrixConcurrencyStrategy.setContextMap thread:" + Thread.currentThread().getId());
 			NextHttpHeader.setContextMap(this.dic);
 			return target.call();
 		}

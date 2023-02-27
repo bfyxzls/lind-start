@@ -45,6 +45,7 @@ public class NextHttpHeader {
 	}
 
 	public static Map<String, String> getCopyOfContextMap() {
+
 		Map<String, String> oldMap = inheritableThreadLocal.get();
 		if (oldMap != null) {
 			return new HashMap<String, String>(oldMap);
@@ -54,6 +55,7 @@ public class NextHttpHeader {
 	}
 
 	public static void setContextMap(Map<String, String> contextMap) {
+
 		inheritableThreadLocal.set(new HashMap<String, String>(contextMap));
 	}
 }

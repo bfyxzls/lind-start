@@ -16,12 +16,12 @@ public class FeignTraceIdInterceptor implements RequestInterceptor {
 
 	@Override
 	public void apply(RequestTemplate template) {
+		//新线程中的执行
+		System.out.println("FeignTraceIdInterceptor.getCopyOfContextMap thread:" + Thread.currentThread().getId());
+		NextHttpHeader.getCopyOfContextMap().forEach((i, o) -> {
+			template.header(i, o);
+		});
 
-		if (NextHttpHeader.get() != null) {
-			NextHttpHeader.get().forEach(o -> {
-				template.header(o, NextHttpHeader.get(o));
-			});
-		}
 	}
 
 }

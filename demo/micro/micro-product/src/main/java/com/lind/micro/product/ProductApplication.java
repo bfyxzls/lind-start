@@ -20,7 +20,7 @@ public class ProductApplication {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/product")
-	public String getStores(@RequestHeader("Authoration") String currentUserId) {
+	public String getStores(@RequestHeader("Authorization") String currentUserId) {
 		return "ok" + currentUserId;
 	}
 

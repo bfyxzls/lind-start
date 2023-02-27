@@ -27,8 +27,11 @@ public class HelloController {
 
 	@GetMapping("hello2")
 	public ResponseEntity hello2() throws InterruptedException {
-		NextHttpHeader.set("USER_ID","101");
-		NextHttpHeader.set("Authoration","bearer xxaabb1901");
+
+		NextHttpHeader.set("User-Id", "101");
+		NextHttpHeader.set("Authorization ", "bearer xxaabb1901");
+		NextHttpHeader.set("Real-Ip", "ie");
+
 		return ResponseEntity.ok("hello," + storeClient.getStores());
 	}
 
