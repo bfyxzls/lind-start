@@ -66,6 +66,16 @@ public class OrderServiceImpl implements IOrderService {
 		return orders.get(id);
 	}
 
+	public Order suggest(int id) {
+		Order order = orders.get(id);
+		System.out.println("线程名称：" + Thread.currentThread().getName() + " 用户评价，订单号：" + id);
+		if (!sendEvent(MessageBuilder.withPayload(OrderStatusChangeEvent.SUGGESTED).setHeader("order", order).build(),
+				orders.get(id))) {
+			System.out.println("线程名称：" + Thread.currentThread().getName() + " 评价失败，状态异常，订单号：" + id);
+		}
+		return orders.get(id);
+	}
+
 	public Map<Integer, Order> getOrders() {
 		return orders;
 	}

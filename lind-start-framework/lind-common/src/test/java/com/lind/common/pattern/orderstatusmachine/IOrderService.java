@@ -21,6 +21,8 @@ public interface IOrderService {
 	// 订单收货
 	Order receive(int id);
 
+	Order suggest(int id);
+
 	// 获取所有订单信息
 	Map<Integer, Order> getOrders();
 

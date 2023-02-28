@@ -8,10 +8,4 @@ lind:
   cfg:
     appId: zzl
     type: ORDER #PRODUCT
-org:
-  apache:
-    commons:
-      logging:
-        simplelog:
-          defaultlog: debug
 

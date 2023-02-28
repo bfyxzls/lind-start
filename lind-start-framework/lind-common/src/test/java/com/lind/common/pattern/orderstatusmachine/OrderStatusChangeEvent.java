@@ -7,7 +7,7 @@ package com.lind.common.pattern.orderstatusmachine;
  */
 public enum OrderStatusChangeEvent {
 
-	// 支付，发货，确认收货
-	PAYED, DELIVERY, RECEIVED;
+	// 支付，发货，确认收货，去评价
+	PAYED, DELIVERY, RECEIVED, SUGGESTED;
 
 }

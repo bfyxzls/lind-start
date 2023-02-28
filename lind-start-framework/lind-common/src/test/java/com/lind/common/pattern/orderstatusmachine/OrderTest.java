@@ -20,10 +20,11 @@ public class OrderTest {
 
 	@Test
 	public void flow() {
-		 orderService.create();
-		 orderService.pay(1);
-		 orderService.deliver(1);
-
+		orderService.create();
+		orderService.pay(1);
+		orderService.deliver(1);
+		orderService.receive(1);
+		orderService.suggest(1);
 
 	}
 

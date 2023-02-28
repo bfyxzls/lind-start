@@ -32,7 +32,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 	}
 
 	/**
-	 * 配置状态转换事件关系
+	 * 配置状态转换事件关系. 操作严格按着状态进行，没有到达某个状态时，操作是被禁止的.
 	 * @param transitions
 	 * @throws Exception
 	 */
@@ -41,7 +41,9 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 		transitions.withExternal().source(OrderStatus.WAIT_PAYMENT).target(OrderStatus.WAIT_DELIVER)
 				.event(OrderStatusChangeEvent.PAYED).and().withExternal().source(OrderStatus.WAIT_DELIVER)
 				.target(OrderStatus.WAIT_RECEIVE).event(OrderStatusChangeEvent.DELIVERY).and().withExternal()
-				.source(OrderStatus.WAIT_RECEIVE).target(OrderStatus.FINISH).event(OrderStatusChangeEvent.RECEIVED);
+				.source(OrderStatus.WAIT_RECEIVE).target(OrderStatus.WAIT_SUGGEST)
+				.event(OrderStatusChangeEvent.RECEIVED).and().withExternal().source(OrderStatus.WAIT_SUGGEST)
+				.target(OrderStatus.FINISH).event(OrderStatusChangeEvent.SUGGESTED);
 	}
 
 	/**
@@ -54,13 +56,13 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 			@Override
 			public void write(StateMachineContext<Object, Object> context, Order order) throws Exception {
 				// 此处可以对订单状态进行持久化操作
-				System.out.println("持久化-写入："+order.getId());
+				System.out.println("持久化-写入：" + order.getId());
 			}
 
 			@Override
 			public StateMachineContext<Object, Object> read(Order order) throws Exception {
 				// 此处直接获取order中的状态，其实并没有进行持久化读取操作
-				System.out.println("持久化-读取："+order.getId());
+				System.out.println("持久化-读取：" + order.getId());
 
 				return new DefaultStateMachineContext(order.getStatus(), null, null, null);
 			}
