@@ -1,5 +1,8 @@
 package com.lind.common.minibase;
 
+/**
+ * 布隆过滤器
+ */
 public class BloomFilter {
 
 	private int k;

@@ -165,6 +165,14 @@
             <groupId>com.alibaba</groupId>
             <artifactId>transmittable-thread-local</artifactId>
         </dependency>
+        <!--hanlp分词 修改后的-->
+        <dependency>
+            <groupId>com.hankcs</groupId>
+            <artifactId>hanlp</artifactId>
+            <version>portable-1.6.1</version>
+        </dependency>
+
+
     </dependencies>
     <build>
         <plugins>

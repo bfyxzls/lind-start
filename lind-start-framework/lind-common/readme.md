@@ -28,6 +28,11 @@
   * 
 * zip 压缩工具
 
+# 算法
+* 字典树 com.lind.common.hankcs,com.lind.common.tree
+* 跳跃表 com.lind.common.minibase
+* 布隆过滤器 com.lind.common.minibase
+
 # 事件处理
 主要实现业务相关代码的解耦，使用了发布订阅的机制，订阅方需要实现ObjectEventListener接口，
 事件相关对象需要实现ObjectEvent类型，使用方法使用ObjectEventService注入的实例即可完成事件
