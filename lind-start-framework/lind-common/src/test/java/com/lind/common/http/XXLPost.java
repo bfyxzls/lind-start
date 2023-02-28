@@ -87,11 +87,11 @@ public class XXLPost {
 			connection.setUseCaches(false);
 			connection.setReadTimeout(timeout * 1000);
 			connection.setConnectTimeout(3 * 1000);
-			//Keep-Alive是HTTP协议中的一个首部字段，它的作用是保持客户端和服务器之间的持久连接，使得客户端可以在一个TCP连接上发送多个HTTP请求而不必每次发送都要建立一个新的连接。这样可以节省网络的带宽和资源，提高网络的效率。
+			// Keep-Alive是HTTP协议中的一个首部字段，它的作用是保持客户端和服务器之间的持久连接，使得客户端可以在一个TCP连接上发送多个HTTP请求而不必每次发送都要建立一个新的连接。这样可以节省网络的带宽和资源，提高网络的效率。
 			connection.setRequestProperty("connection", "Keep-Alive");
-			//Content-Type用于指定发送给服务器的数据的类型和格式，例如：application/json、text/html等。
+			// Content-Type用于指定发送给服务器的数据的类型和格式，例如：application/json、text/html等。
 			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded;");
-			//Accept-Charset用于指定客户端希望接收到的字符集，也可以有响应格式，例如utf-8、gb2312、application/json;等。
+			// Accept-Charset用于指定客户端希望接收到的字符集，也可以有响应格式，例如utf-8、gb2312、application/json;等。
 			connection.setRequestProperty("Accept-Charset", "application/json;charset=UTF-8");
 
 			// do connection

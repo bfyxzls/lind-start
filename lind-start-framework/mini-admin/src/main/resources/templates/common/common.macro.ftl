@@ -223,7 +223,7 @@
 
 <#macro commonFooter >
 	<footer class="main-footer">
-        Powered by <b>XXL-JOB</b> ${I18n.admin_version}
+        Powered by <b>MINI-ADMIN</b> ${I18n.admin_version}
 		<div class="pull-right hidden-xs">
             <strong>Copyright &copy; 2010-${.now?string('yyyy')} &nbsp;
                 <a href="https://www.cnblogs.com/lori" target="_blank" >lind</a>

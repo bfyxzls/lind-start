@@ -12,8 +12,6 @@ public class MapHolder {
 
 	private Map eventMap = new ConcurrentHashMap();
 
-	;
-
 	private MapHolder() {
 	}
 

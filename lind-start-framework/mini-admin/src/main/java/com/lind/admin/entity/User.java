@@ -13,7 +13,7 @@ import java.util.Arrays;
 @TableName("user_info")
 public class User {
 
-	private int id;
+	private Integer id;
 
 	private String username; // 账号
 
