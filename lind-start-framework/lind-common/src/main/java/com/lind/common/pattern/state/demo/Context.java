@@ -16,9 +16,17 @@ public class Context {
 		this.state = state;
 	}
 
-	// 对请求做处理
-	public void handle() {
-		state.doAction(this);
+
+	public void prev() {
+		state.prev(this);
+	}
+
+	public void next() {
+		state.next(this);
+	}
+
+	public void printStatus() {
+		state.printStatus();
 	}
 
 }

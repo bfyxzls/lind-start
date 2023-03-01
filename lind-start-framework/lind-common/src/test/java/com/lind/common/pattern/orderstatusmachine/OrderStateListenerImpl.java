@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @date 2023/2/28 14:19
  * @since 1.0.0
  */
-@Component("orderStateListener")
+@Component
 @WithStateMachine(name = "orderStateMachine")
 public class OrderStateListenerImpl {
 
@@ -30,19 +30,19 @@ public class OrderStateListenerImpl {
 		return true;
 	}
 
-	@OnTransition(source = "WAIT_SUGGEST", target = "FINISH")
-	public boolean suggestTransition(Message<OrderStatusChangeEvent> message) {
-		Order order = (Order) message.getHeaders().get("order");
-		order.setStatus(OrderStatus.FINISH);
-		System.out.println("评价，状态机反馈信息：" + message.getHeaders().toString());
-		return true;
-	}
-
 	@OnTransition(source = "WAIT_RECEIVE", target = "WAIT_SUGGEST")
 	public boolean receiveTransition(Message<OrderStatusChangeEvent> message) {
 		Order order = (Order) message.getHeaders().get("order");
 		order.setStatus(OrderStatus.WAIT_SUGGEST);
 		System.out.println("收货，状态机反馈信息：" + message.getHeaders().toString());
+		return true;
+	}
+
+	@OnTransition(source = "WAIT_SUGGEST", target = "FINISH")
+	public boolean suggestTransition(Message<OrderStatusChangeEvent> message) {
+		Order order = (Order) message.getHeaders().get("order");
+		order.setStatus(OrderStatus.FINISH);
+		System.out.println("评价，状态机反馈信息：" + message.getHeaders().toString());
 		return true;
 	}
 

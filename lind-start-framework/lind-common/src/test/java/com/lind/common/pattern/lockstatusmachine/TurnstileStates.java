@@ -7,6 +7,6 @@ package com.lind.common.pattern.lockstatusmachine;
  */
 public enum TurnstileStates {
 
-	Unlocked, Locked
+	Wait_Leader, Wait_Manager, Wait_HR,Finish
 
 }

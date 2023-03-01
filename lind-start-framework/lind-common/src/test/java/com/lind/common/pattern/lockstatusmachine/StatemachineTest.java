@@ -22,14 +22,17 @@ public class StatemachineTest {
 	@Test
 	public void test() {
 		stateMachine.start();
-		System.out.println("--- coin ---");
-		stateMachine.sendEvent(TurnstileEvents.COIN);
-		System.out.println("--- coin ---");
-		stateMachine.sendEvent(TurnstileEvents.COIN);
-		System.out.println("--- push ---");
-		stateMachine.sendEvent(TurnstileEvents.PUSH);
-		System.out.println("--- push ---");
-		stateMachine.sendEvent(TurnstileEvents.PUSH);
+		stateMachine.sendEvent(TurnstileEvents.LEADER_PASS);
+		stateMachine.sendEvent(TurnstileEvents.MGR_PASS);
+		stateMachine.sendEvent(TurnstileEvents.HR_PASS);
+		stateMachine.stop();
+	}
+
+	@Test
+	public void fail() {
+		stateMachine.start();
+		stateMachine.sendEvent(TurnstileEvents.LEADER_PASS);
+		stateMachine.sendEvent(TurnstileEvents.HR_PASS);
 		stateMachine.stop();
 	}
 

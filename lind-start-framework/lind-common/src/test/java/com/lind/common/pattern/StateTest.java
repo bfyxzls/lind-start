@@ -13,10 +13,15 @@ public class StateTest {
 	public void statePatternDemo() {
 		// 状态模式，定义的状态的变更，类似于工作流.
 		Context context = new Context(new StartState());
-		context.handle();// 开始
-		context.handle();// 审批
-		context.handle();// 结束
-		context.handle();// 结束
+		context.printStatus();
+
+		context.next();
+		context.printStatus();
+
+		context.next();
+		context.printStatus();
+
+		context.next();
 	}
 
 }
