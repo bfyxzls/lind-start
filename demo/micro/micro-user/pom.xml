@@ -47,6 +47,7 @@
                 <scope>import</scope>
             </dependency>
 
+
         </dependencies>
 
     </dependencyManagement>
@@ -83,17 +84,12 @@
         </dependency>
         <dependency>
             <groupId>com.lind</groupId>
+            <artifactId>lind-logback-start</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.lind</groupId>
             <artifactId>lind-feign-start</artifactId>
         </dependency>
-
     </dependencies>
-    <build>
-        <plugins>
 
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
 </project>

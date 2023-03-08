@@ -39,11 +39,13 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 	public void configure(StateMachineTransitionConfigurer<OrderStatus, OrderStatusChangeEvent> transitions)
 			throws Exception {
 		transitions.withExternal().source(OrderStatus.WAIT_PAYMENT).target(OrderStatus.WAIT_DELIVER)
-				.event(OrderStatusChangeEvent.PAYED).and().withExternal().source(OrderStatus.WAIT_DELIVER)
-				.target(OrderStatus.WAIT_RECEIVE).event(OrderStatusChangeEvent.DELIVERY).and().withExternal()
-				.source(OrderStatus.WAIT_RECEIVE).target(OrderStatus.WAIT_SUGGEST)
-				.event(OrderStatusChangeEvent.RECEIVED).and().withExternal().source(OrderStatus.WAIT_SUGGEST)
-				.target(OrderStatus.FINISH).event(OrderStatusChangeEvent.SUGGESTED);
+				.event(OrderStatusChangeEvent.PAYED);
+		transitions.withExternal().source(OrderStatus.WAIT_DELIVER).target(OrderStatus.WAIT_RECEIVE)
+				.event(OrderStatusChangeEvent.DELIVERY);
+		transitions.withExternal().source(OrderStatus.WAIT_RECEIVE).target(OrderStatus.WAIT_SUGGEST)
+				.event(OrderStatusChangeEvent.RECEIVED);
+		transitions.withExternal().source(OrderStatus.WAIT_SUGGEST).target(OrderStatus.FINISH)
+				.event(OrderStatusChangeEvent.SUGGESTED);
 	}
 
 	/**

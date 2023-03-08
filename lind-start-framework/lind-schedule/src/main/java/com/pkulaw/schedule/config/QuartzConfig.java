@@ -1,5 +1,6 @@
 package com.pkulaw.schedule.config;
 
+import com.pkulaw.schedule.dynamic.DynamicSchedulerFactory;
 import com.pkulaw.schedule.service.QuartzService;
 import com.pkulaw.schedule.service.QuartzServiceImpl;
 import org.quartz.Scheduler;
@@ -40,7 +41,19 @@ public class QuartzConfig {
 	public SchedulerFactoryBean schedulerFactoryBean() throws IOException {
 		SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
 		schedulerFactoryBean.setQuartzProperties(quartzProperties());
+		schedulerFactoryBean.setAutoStartup(true);
+
 		return schedulerFactoryBean;
+	}
+
+	/**
+	 * dynamic scheduler factory 动态 定时任务 配置
+	 */
+	@Bean
+	public DynamicSchedulerFactory dynamicSchedulerFactory(Scheduler scheduler) {
+		DynamicSchedulerFactory schedulerFactory = new DynamicSchedulerFactory();
+		schedulerFactory.setScheduler(scheduler);
+		return schedulerFactory;
 	}
 
 	/**

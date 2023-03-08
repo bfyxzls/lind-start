@@ -27,6 +27,7 @@ spring:
       minimum-idle: 10
       pool-name: HikariCP
       validation-timeout: 1000
+
   freemarker:
     cache: false
     charset: UTF-8

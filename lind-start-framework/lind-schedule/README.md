@@ -28,7 +28,7 @@ org.quartz.dataSource.qzDS.maxConnections= 10
 # 使用
 定义业务处理任务
 ```
-public class TestJob implements Job {
+public class TestDynamicJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
     // 业务逻辑

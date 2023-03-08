@@ -2,6 +2,7 @@ package com.lind.common;
 
 import cn.hutool.core.date.DateTime;
 import com.lind.common.encrypt.HashUtils;
+import com.lind.common.util.BinHexSwitchUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -54,6 +55,14 @@ public class StringTest {
 	public void split() {
 		String msg = "admin|中国";
 		log.info(StringUtils.split(msg, "|")[1]);
+	}
+
+	@Test
+	public void StringTo16() {
+		String str = "abc";
+		String str16 = BinHexSwitchUtils.bytesToHex(str.getBytes());
+		log.info("result={}", str16);
+		log.info("result={}", new String(BinHexSwitchUtils.hexToBytes(str16)));
 	}
 
 	/**

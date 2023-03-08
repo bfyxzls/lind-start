@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 外层为threadLocal需要使用CanaryThreadLocalHolder这个对象.
+ * 写入CanaryThreadLocalHolder.put()
+ * 读取CanaryThreadLocalHolder.getHeaders()
  */
 public class CanaryThreadLocalHolder {
 

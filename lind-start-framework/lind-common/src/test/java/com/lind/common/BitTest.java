@@ -108,4 +108,26 @@ public class BitTest {
 		log.info("hashCode={}", hashCode);
 	}
 
+	/**
+	 * 时间轮.
+	 * @param ticksPerWheel
+	 * @return
+	 */
+	public int normalizeTicksPerWheel(int ticksPerWheel) {
+		int normalizedTicksPerWheel = ticksPerWheel - 1;
+		normalizedTicksPerWheel |= normalizedTicksPerWheel >>> 1;
+		normalizedTicksPerWheel |= normalizedTicksPerWheel >>> 2;
+		normalizedTicksPerWheel |= normalizedTicksPerWheel >>> 4;
+		normalizedTicksPerWheel |= normalizedTicksPerWheel >>> 8;
+		normalizedTicksPerWheel |= normalizedTicksPerWheel >>> 16;
+		return normalizedTicksPerWheel + 1;
+	}
+
+	@Test
+	public void bit32_4byte1() {
+		for (int i = 0; i < 8; i++)
+			log.info("{}={}", i,normalizeTicksPerWheel(i));
+
+	}
+
 }

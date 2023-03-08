@@ -1,26 +1,16 @@
 package com.lind.micro.user.feign;
 
-import feign.hystrix.FallbackFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.stereotype.Component;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(value = "micro-product", fallbackFactory = StoreClient.HystrixClientFallbackFactory.class)
+@FeignClient(value = "micro-product")
 public interface StoreClient {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/product")
 	String getStores();
 
-	@Component
-	class HystrixClientFallbackFactory implements FallbackFactory<StoreClient> {
-
-		@Override
-		public StoreClient create(Throwable cause) {
-			System.err.println("fall error product");
-			return () -> "fall error product";
-		}
-
-	}
-
+	@RequestMapping(method = RequestMethod.GET, value = "test")
+	ResponseEntity getHome();
 }

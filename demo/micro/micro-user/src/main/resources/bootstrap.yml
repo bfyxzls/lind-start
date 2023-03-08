@@ -4,6 +4,8 @@ spring:
   application:
     name: micro-user
   profiles.active: dev
+  main:
+    allow-bean-definition-overriding: true
 ##动态刷新配置 ---需要忽略权限拦截
 #management:
 #  endpoints:
@@ -25,11 +27,11 @@ hystrix:
           enabled: true
         isolation:
           thread:
-            timeoutInMilliseconds: 5000 #用接口能够触发Hystrix服务降级处理的超时时间
+            timeoutInMilliseconds: 500 #用接口能够触发Hystrix服务降级处理的超时时间
 #ribbon的超时时间需要小于hystrix超时时间
 ribbon:
-  ReadTimeout: 5000
-  ConnectTimeout: 5000
+  ReadTimeout: 50
+  ConnectTimeout: 50
   MaxAutoRetries: 3 #最大自动重试次数，前3次会重试，之后开始走fallback
   MaxAutoRetriesNextServer: 3 # 换实例重试次数
   MaxTotalHttpConnections: 2000 # 最大http连接数，越大越好，但到到达一个临界点之后，就不会提高响应速度了
@@ -43,3 +45,4 @@ feign:
     enabled: true
     max-connections: 2000 # 默认值
     max-connections-per-route: 50 # 默认值
+
