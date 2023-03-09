@@ -19,12 +19,12 @@ import org.springframework.integration.support.locks.LockRegistry;
 
 /**
  * redis lock bean register.
- * 同时注册RedisLockProperty这个bean，限制条件是lind.redis.lock.enable为true时注册它.
+ * 同时注册RedisLockProperty这个bean，限制条件是lind.redis.lock.enable为true时注册它,如果不想使用它，在配置中enable为false即可.
  */
 @EnableConfigurationProperties(RedisLockProperty.class)
 @RequiredArgsConstructor
 @ConditionalOnBean(LettuceRedisAutoConfigure.class) // 依赖注入
-@ConditionalOnProperty(value = "lind.redis.lock.enable", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = "lind.redis.lock.enabled",matchIfMissing = true)
 public class RedisLockConfig {
 
 	private final RedisLockProperty redisLockProperty;

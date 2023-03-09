@@ -1,8 +1,8 @@
 package com.lind.redis.limit.aop;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.SessionCallback;
@@ -14,10 +14,10 @@ import java.util.concurrent.TimeUnit;
  * 令牌桶算法限流.
  **/
 @Slf4j
+@RequiredArgsConstructor
 public class RedisRaterLimiter {
 
-	@Autowired
-	private StringRedisTemplate redisTemplate;
+	private final StringRedisTemplate redisTemplate;
 
 	public String acquireToken(String point, int limit, long timeout) {
 		String maxCountKey = "BUCKET:MAX_COUNT:" + point;

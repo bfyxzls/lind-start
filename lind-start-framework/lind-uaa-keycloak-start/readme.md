@@ -16,8 +16,22 @@
 ```
 keycloak.bearer-only: true #如果没有权限直接401，前后分离项目使用它，当后端返回401时，前端自己去KC认证，这个值为false时，属于前后一体模块，将会进行跳转KC登录
 ```
+## token有效性校验
+对于我们项目来说，只要集成了keycloak-spring-boot-starter包，它就已经有了校验token合法性的能力了；当然如果你需要校验token的在线性，还是需要
+自己写一个方法，在AuthenticationProvider的实现类中完成校验的。
 
-
+> 一个非法的token，它将直接返回401，不会进行我们的页面
+* 开启某个包的日志级别，方便查看原码执行过程
+```
+logging:
+  level:
+    # 全局日志级别
+    root: info
+    # 具体到某个类的日志级别，打印所有访问请求日志
+    org.keycloak.adapters.springsecurity.filter: debug
+```
+![](./assets/readme-1678256928918.png)
+* 开入户中某个包的
 # 对接KC统一认证中心-Springboot版
 ## pom.xml添加引用
 ```

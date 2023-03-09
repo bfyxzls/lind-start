@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +39,7 @@ public class UserController {
 	private PermissionDao permissionDao;
 
 	@RequestMapping
-	@PermissionLimit(adminuser = true)
+	@PermissionLimit()
 	public String index(Model model) {
 		List<Permission> permissions = permissionDao.selectList(new QueryWrapper<>());
 		model.addAttribute("permissions", permissions);
@@ -46,7 +48,7 @@ public class UserController {
 
 	@RequestMapping("/pageList")
 	@ResponseBody
-	@PermissionLimit(adminuser = true)
+	@PermissionLimit()
 	public Map<String, Object> pageList(@RequestParam(required = false, defaultValue = "0") int start,
 			@RequestParam(required = false, defaultValue = "10") int length, String username, int role) {
 
@@ -100,6 +102,21 @@ public class UserController {
 		if (existUser != null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, I18nUtil.getString("user_username_repeat"));
 		}
+
+		String[] roleStrList=xxlJobUser.getPermission().split(",");
+		Collection<Integer> roleIdList=new ArrayList<>();
+		for (String s : roleStrList) {
+			roleIdList.add(Integer.parseInt(s));
+		}
+		QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
+		queryWrapper.lambda().in(Permission::getId,roleIdList);
+		List<Permission> permissions=permissionDao.selectList(queryWrapper);
+		List<String> permissionCodeList=new ArrayList<>();
+		if(permissions!=null){
+			permissions.forEach(o->permissionCodeList.add(o.getPermissionCode()));
+		}
+		String permissionCodes=String.join(",",permissionCodeList);
+		xxlJobUser.setPermission(permissionCodes);
 
 		// write
 		userService.save(xxlJobUser);

@@ -35,7 +35,7 @@ import java.util.Map;
  * 自动装配管理.
  */
 @Configuration
-@ConditionalOnProperty(prefix = "spring.kafka", value = "enabled", matchIfMissing = true, havingValue = "true")
+@ConditionalOnProperty(value = "spring.kafka.enabled", matchIfMissing = true)
 @EnableConfigurationProperties(KafkaProperties.class)
 @RequiredArgsConstructor
 public class KafkaProviderConfig {

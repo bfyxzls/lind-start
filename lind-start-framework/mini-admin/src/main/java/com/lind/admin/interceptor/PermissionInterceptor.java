@@ -32,16 +32,16 @@ public class PermissionInterceptor implements AsyncHandlerInterceptor {
 			return true; // proceed with the next interceptor
 		}
 
-		// if need login
+		// if it needs login
 		boolean needLogin = true;
 		boolean needAdminuser = false;
 		String[] permissions = null;
 		HandlerMethod method = (HandlerMethod) handler;
-		PermissionLimit permission = method.getMethodAnnotation(PermissionLimit.class);
-		if (permission != null) {
-			needLogin = permission.limit();
-			needAdminuser = permission.adminuser();
-			permissions = permission.permissions();
+		PermissionLimit permissionLimit = method.getMethodAnnotation(PermissionLimit.class);
+		if (permissionLimit != null) {
+			needLogin = permissionLimit.limit();
+			needAdminuser = permissionLimit.adminuser();
+			permissions = permissionLimit.permissions();
 		}
 
 		if (needLogin) {

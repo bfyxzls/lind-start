@@ -45,3 +45,7 @@ spring:
       static-locations: classpath:/static/
   profiles:
     active: svt
+lind:
+  rate-limit:
+    enabled: true
+    limit: 5

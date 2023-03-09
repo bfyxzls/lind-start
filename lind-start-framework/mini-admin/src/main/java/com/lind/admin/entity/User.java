@@ -35,11 +35,13 @@ public class User {
 			return true;
 		}
 		else {
-			if (permissions == null) {
+
+			if (permissions == null || permissions.length == 0 || permissions[0].equals("")) {
 				return true;
 			}
 			if (StringUtils.hasText(this.permission)) {
 				String[] havePermissions = this.permission.split(",");
+
 				for (String param : permissions) {
 					if (Arrays.stream(havePermissions).anyMatch(o -> o.equals(param))) {
 						return true;

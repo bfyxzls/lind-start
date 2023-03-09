@@ -22,20 +22,19 @@ public class LimitRaterInterceptor extends HandlerInterceptorAdapter {
 	/**
 	 * 限流标识.
 	 */
-	static final String LIMIT_ALL = "LIMIT_ALL";
-
-	@Autowired
-	private RedisRaterLimiter redisRaterLimiter;
+	static String LIMIT_ALL = "LIMIT_ALL";
 
 	@Autowired
 	private LimitProperties limitProperties;
 
+	@Autowired
+	private RedisRaterLimiter redisRaterLimiter;
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-
 		// 全局限流
-		if (limitProperties != null && limitProperties.getEnable()) {
+		if (limitProperties != null && limitProperties.getEnabled()) {
 			String token2 = redisRaterLimiter.acquireToken(LIMIT_ALL, limitProperties.getLimit(),
 					limitProperties.getTimeout());
 			if (StrUtil.isBlank(token2)) {

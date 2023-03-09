@@ -1,14 +1,12 @@
 package com.lind.uaa.keycloak.config.permit;
 
-import cn.hutool.http.HttpUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.lind.uaa.keycloak.config.UaaProperties;
 import com.lind.uaa.keycloak.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -20,12 +18,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
 
 /**
  * 白名单过滤器，完成将header中的Authorization删除.
@@ -34,26 +28,12 @@ import static com.lind.uaa.keycloak.config.Constant.VERIFY_TOKEN;
 @RequiredArgsConstructor
 @Slf4j
 public class PermitAuthenticationFilter extends OncePerRequestFilter {
-
 	private final UaaProperties uaaProperties;
-
 	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
+	@Autowired
+	RedisTemplate redisTemplate;
 
-	/**
-	 * token是否在线. 如果是白名单，token没有在线，就直接跳过，如果在线，就带着token
-	 */
-	private boolean isTokenOnline(String authorization) {
-		String tokenString = TokenUtil.resolveFromAuthorizationHeader(authorization);
-		Map<String, Object> params = new HashMap<>();
-		params.put("client_id", keycloakSpringBootProperties.getResource());
-		params.put("client_secret", keycloakSpringBootProperties.getClientKeyPassword());
-		params.put("token", tokenString);
-		String verifyResult = HttpUtil.post(keycloakSpringBootProperties.getAuthServerUrl()
-				+ String.format(VERIFY_TOKEN, keycloakSpringBootProperties.getRealm()), params);
-		logger.info("token.verify:" + verifyResult);
-		JSONObject jsonObj = JSON.parseObject(verifyResult);
-		return jsonObj.getBoolean("active");
-	}
+
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -75,7 +55,7 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 						Enumeration<String> wrappedHeaderNames = super.getHeaderNames();
 						while (wrappedHeaderNames.hasMoreElements()) {
 							String headerName = wrappedHeaderNames.nextElement();
-							if (!HttpHeaders.AUTHORIZATION.equalsIgnoreCase(headerName)) {
+							if (!"Authorization".equalsIgnoreCase(headerName)) {
 								headerNameSet.add(headerName);
 							}
 						}
@@ -85,27 +65,24 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 
 				@Override
 				public Enumeration<String> getHeaders(String name) {
-					if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
-						if (!isTokenOnline(super.getHeader(name)))
-							return Collections.<String>emptyEnumeration();
-					}
 					return super.getHeaders(name);
 				}
 
 				@Override
 				public String getHeader(String name) {
-					if (HttpHeaders.AUTHORIZATION.equalsIgnoreCase(name)) {
-						if (!isTokenOnline(super.getHeader(name))) {
-							return null;
-						}
-					}
 					return super.getHeader(name);
 				}
 			};
 
 		}
+		String token = request.getHeader("Authorization");
+		if (token != null) {
+			String userId = TokenUtil.getSubject(token);
+			if (redisTemplate.opsForHash().hasKey(TokenUtil.NEED_REFRESH_TOKEN, userId)) {
+				response.addHeader(TokenUtil.NEED_REFRESH_TOKEN, "1");
+				redisTemplate.opsForHash().delete(TokenUtil.NEED_REFRESH_TOKEN, userId);
+			}
+		}
 		filterChain.doFilter(request, response);
-
 	}
-
 }

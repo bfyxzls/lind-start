@@ -13,7 +13,7 @@ public class RedisLockProperty {
 	/**
 	 * 是否开启redis分布锁.
 	 */
-	private Boolean enable = true;
+	private Boolean enabled = true;
 
 	/**
 	 * 锁前缀.

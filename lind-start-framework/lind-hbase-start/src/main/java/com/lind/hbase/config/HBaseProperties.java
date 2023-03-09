@@ -7,6 +7,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("hbase")
 public class HBaseProperties {
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
 	/**
 	 * 命名空间，默认为空，务必设置好
 	 */
@@ -15,7 +23,7 @@ public class HBaseProperties {
 	/**
 	 * 是否启用HBase starter
 	 */
-	private boolean enable = true;
+	private boolean enabled = true;
 
 	/**
 	 * 权限账号

@@ -3,7 +3,9 @@ package com.lind.admin.controller;
 import com.lind.admin.annotation.PermissionLimit;
 import com.lind.admin.service.LoginService;
 import com.lind.admin.util.ReturnT;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,6 +31,8 @@ import java.util.Map;
 @Controller
 public class IndexController {
 
+	@Autowired
+	RedisTemplate redisTemplate;
 	@Resource
 	private LoginService loginService;
 
@@ -36,7 +40,7 @@ public class IndexController {
 	public String index(Model model) {
 		Map<String, Object> dashboardMap = loginService.dashboardInfo();
 		model.addAllAttributes(dashboardMap);
-
+		redisTemplate.opsForSet().add("hello","a1");
 		return "index";
 	}
 

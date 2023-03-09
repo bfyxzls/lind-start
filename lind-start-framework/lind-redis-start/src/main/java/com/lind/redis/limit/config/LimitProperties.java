@@ -7,13 +7,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * 配置属性,不会自动注册.
  */
 @Data
-@ConfigurationProperties(prefix = "lind.ratelimit")
+@ConfigurationProperties(prefix = "lind.rate-limit")
 public class LimitProperties {
 
 	/**
 	 * 是否开启全局限流.
 	 */
-	private Boolean enable = false;
+	private Boolean enabled = false;
 
 	/**
 	 * 限制请求个数.

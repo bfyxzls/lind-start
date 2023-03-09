@@ -20,7 +20,7 @@ import java.util.Objects;
 @Slf4j
 @org.springframework.context.annotation.Configuration
 @EnableConfigurationProperties({ HBaseProperties.class })
-@ConditionalOnProperty(value = "hbase.enable", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(value = "hbase.enabled", matchIfMissing = true)
 public class HBaseAutoConfiguration {
 
 	private final HBaseProperties properties;
