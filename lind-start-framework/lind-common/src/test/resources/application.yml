@@ -9,3 +9,6 @@ lind:
     appId: zzl
     type: ORDER #PRODUCT
 
+test:
+  v1:
+    enabled: false
