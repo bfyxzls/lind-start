@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.Test;
 import org.springframework.util.SerializationUtils;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
+@Slf4j
 public class DateTimeTest {
 
 	public static final String DATE_FORMAT_STR = "yyyy.MM.dd";
@@ -57,6 +59,13 @@ public class DateTimeTest {
 		localFormater.setTimeZone(TimeZone.getDefault());
 		String localTime = localFormater.format(gpsUTCDate.getTime());
 		return localTime;
+	}
+
+	@Test
+	public void now() {
+		int offset = 1;
+		int currentTime = ((int) (System.currentTimeMillis() / 1000)) + offset;
+		log.info("currentTime={}", currentTime);
 	}
 
 	@Test

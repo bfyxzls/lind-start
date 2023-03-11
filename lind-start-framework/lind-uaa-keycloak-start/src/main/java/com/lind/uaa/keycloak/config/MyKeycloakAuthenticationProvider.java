@@ -30,7 +30,9 @@ import java.util.stream.Collectors;
 public class MyKeycloakAuthenticationProvider implements AuthenticationProvider {
 
 	private final static Logger logger = LoggerFactory.getLogger(MyKeycloakAuthenticationProvider.class);
+
 	private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
+
 	public void setGrantedAuthoritiesMapper(GrantedAuthoritiesMapper grantedAuthoritiesMapper) {
 		this.grantedAuthoritiesMapper = grantedAuthoritiesMapper;
 	}

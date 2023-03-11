@@ -1,6 +1,7 @@
 package com.lind.common.http;
 
 import com.alibaba.fastjson.JSON;
+import com.lind.common.jackson.JsonSerialization;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -20,11 +21,13 @@ import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 有连接池的概念.
@@ -51,6 +54,26 @@ public class ApacheTest {
 		// 创建 一个默认的 httpClient
 		httpClient = HttpClients.custom().setDefaultHeaders(headers) // 设置默认请求头
 				.build();
+	}
+
+	@Test
+	public void kcPublicKey() throws IOException {
+
+		HttpGet getMethod = new HttpGet("http://192.168.4.26:8080/auth/realms/fabao");
+		httpClient = HttpClients.custom().build();
+		CloseableHttpResponse response = httpClient.execute(getMethod);
+		int code = response.getStatusLine().getStatusCode();
+		log.info("code={}", code);
+		HttpEntity entity = response.getEntity();
+		InputStream is = entity.getContent();
+		try {
+			Map map = JsonSerialization.readValue(is, Map.class);
+			log.info("public_key={}", map.get("public_key"));
+		}
+		finally {
+			is.close();
+
+		}
 	}
 
 	/**

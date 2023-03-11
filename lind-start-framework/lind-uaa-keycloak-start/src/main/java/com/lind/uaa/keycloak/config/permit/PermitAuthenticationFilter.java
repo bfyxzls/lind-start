@@ -28,12 +28,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class PermitAuthenticationFilter extends OncePerRequestFilter {
+
 	private final UaaProperties uaaProperties;
+
 	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
+
 	@Autowired
 	RedisTemplate redisTemplate;
-
-
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -85,4 +86,5 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 		}
 		filterChain.doFilter(request, response);
 	}
+
 }
