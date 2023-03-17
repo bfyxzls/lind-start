@@ -94,10 +94,18 @@
                         <label for="lastname" class="col-sm-2 control-label">${I18n.user_username}<font color="red">*</font></label>
                         <div class="col-sm-8"><input type="text" class="form-control" name="username" placeholder="${I18n.system_please_input}${I18n.user_username}" maxlength="20" ></div>
                     </div>
+					<div class="form-group">
+						<label for="password" class="col-sm-2 control-label">${I18n.user_password}<font color="red">*</font></label>
+						<div class="col-sm-8"><input type="text" class="form-control" name="password" placeholder="${I18n.user_password_update_placeholder}" maxlength="20" ></div>
+					</div>
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-2 control-label">${I18n.user_password}<font color="red">*</font></label>
-                        <div class="col-sm-8"><input type="text" class="form-control" name="password" placeholder="${I18n.system_please_input}${I18n.user_password}" maxlength="20" ></div>
+                        <label for="email" class="col-sm-2 control-label">${I18n.user_email}<font color="red">*</font></label>
+                        <div class="col-sm-8"><input type="text" class="form-control" name="email" placeholder="${I18n.system_please_input}${I18n.user_email}" maxlength="20" ></div>
                     </div>
+					<div class="form-group">
+						<label for="phone" class="col-sm-2 control-label">${I18n.user_phone}<font color="red">*</font></label>
+						<div class="col-sm-8"><input type="text" class="form-control" name="phone" placeholder="${I18n.system_please_input}${I18n.user_phone}" maxlength="20" ></div>
+					</div>
                     <div class="form-group">
                         <label for="lastname" class="col-sm-2 control-label">${I18n.user_role}<font color="red">*</font></label>
                         <div class="col-sm-10">
@@ -145,9 +153,17 @@
                         <div class="col-sm-8"><input type="text" class="form-control" name="username" placeholder="${I18n.system_please_input}${I18n.user_username}" maxlength="20" readonly ></div>
                     </div>
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-2 control-label">${I18n.user_password}<font color="red">*</font></label>
+                        <label for="password" class="col-sm-2 control-label">${I18n.user_password}<font color="red">*</font></label>
                         <div class="col-sm-8"><input type="text" class="form-control" name="password" placeholder="${I18n.user_password_update_placeholder}" maxlength="20" ></div>
                     </div>
+					<div class="form-group">
+						<label for="email" class="col-sm-2 control-label">${I18n.user_email}<font color="red">*</font></label>
+						<div class="col-sm-8"><input type="text" class="form-control" name="email" placeholder="${I18n.system_please_input}${I18n.user_email}" maxlength="20" ></div>
+					</div>
+					<div class="form-group">
+						<label for="phone" class="col-sm-2 control-label">${I18n.user_phone}<font color="red">*</font></label>
+						<div class="col-sm-8"><input type="text" class="form-control" name="phone" placeholder="${I18n.system_please_input}${I18n.user_phone}" maxlength="20" ></div>
+					</div>
                     <div class="form-group">
                         <label for="lastname" class="col-sm-2 control-label">${I18n.user_role}<font color="red">*</font></label>
                         <div class="col-sm-10">
@@ -161,7 +177,7 @@
                         <div class="col-sm-10">
 						<#if permissions?exists && permissions?size gt 0>
 							<#list permissions as item>
-                                <input type="checkbox" name="permission" value="${item.id}" />${item.name}(${item.permissionCode})<br>
+                                <input type="checkbox" name="permission" value="${item.permissionCode}" />${item.name}(${item.permissionCode})<br>
 							</#list>
 						</#if>
                         </div>

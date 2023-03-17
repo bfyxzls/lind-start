@@ -1,12 +1,12 @@
 package com.lind.uaa.keycloak.config.permit;
 
+import com.lind.uaa.keycloak.cache.CacheProvider;
 import com.lind.uaa.keycloak.config.UaaProperties;
 import com.lind.uaa.keycloak.utils.TokenUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,7 +34,7 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 	private final KeycloakSpringBootProperties keycloakSpringBootProperties;
 
 	@Autowired
-	RedisTemplate redisTemplate;
+	CacheProvider cacheProvider;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -79,9 +79,10 @@ public class PermitAuthenticationFilter extends OncePerRequestFilter {
 		String token = request.getHeader("Authorization");
 		if (token != null) {
 			String userId = TokenUtil.getSubject(token);
-			if (redisTemplate.opsForHash().hasKey(TokenUtil.NEED_REFRESH_TOKEN, userId)) {
+			String key = TokenUtil.NEED_REFRESH_TOKEN + ":" + userId;
+			if (cacheProvider.hasKey(key)) {
 				response.addHeader(TokenUtil.NEED_REFRESH_TOKEN, "1");
-				redisTemplate.opsForHash().delete(TokenUtil.NEED_REFRESH_TOKEN, userId);
+				cacheProvider.delete(key);
 			}
 		}
 		filterChain.doFilter(request, response);

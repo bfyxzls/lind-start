@@ -219,6 +219,8 @@ $(function () {
             var paramData = {
                 "username": $("#addModal .form input[name=username]").val(),
                 "password": $("#addModal .form input[name=password]").val(),
+                "email": $("#addModal .form input[name=email]").val(),
+                "phone": $("#addModal .form input[name=phone]").val(),
                 "role": $("#addModal .form input[name=role]:checked").val(),
                 "permission": permissionArr.join(',')
             };
@@ -270,6 +272,9 @@ $(function () {
         $("#updateModal .form input[name='id']").val(row.id);
         $("#updateModal .form input[name='username']").val(row.username);
         $("#updateModal .form input[name='password']").val('');
+        $("#updateModal .form input[name='email']").val(row.email);
+        $("#updateModal .form input[name='phone']").val(row.phone);
+
         $("#updateModal .form input[name='role'][value='" + row.role + "']").click();
         var permissionArr = [];
         if (row.permission) {
@@ -311,6 +316,8 @@ $(function () {
                 "id": $("#updateModal .form input[name=id]").val(),
                 "username": $("#updateModal .form input[name=username]").val(),
                 "password": $("#updateModal .form input[name=password]").val(),
+                "email": $("#updateModal .form input[name=email]").val(),
+                "phone": $("#updateModal .form input[name=phone]").val(),
                 "role": $("#updateModal .form input[name=role]:checked").val(),
                 "permission": permissionArr.join(',')
             };
