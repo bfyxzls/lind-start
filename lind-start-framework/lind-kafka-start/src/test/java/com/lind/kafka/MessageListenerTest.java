@@ -6,11 +6,13 @@ import com.lind.kafka.entity.MessageEntity;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.common.utils.ByteUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
+import java.nio.ByteBuffer;
 import java.util.Optional;
 
 @Component
@@ -20,6 +22,40 @@ public class MessageListenerTest {
 	@Autowired
 	ObjectMapper objectMapper;
 
+	/**
+	 * byteBuffer 转 byte数组
+	 * @param buffer
+	 * @return
+	 */
+	public static byte[] bytebuffer2ByteArray(ByteBuffer buffer) {
+		// 重置 limit 和postion 值
+		buffer.flip();
+		// 获取buffer中有效大小
+		int len = buffer.limit() - buffer.position();
+
+		byte[] bytes = new byte[len];
+
+		for (int i = 0; i < bytes.length; i++) {
+			bytes[i] = buffer.get();
+
+		}
+
+		return bytes;
+	}
+	/**
+	 * byte 数组转byteBuffer
+	 * @param byteArray
+	 */
+	public static ByteBuffer byte2Byffer(byte[] byteArray) {
+
+		//初始化一个和byte长度一样的buffer
+		ByteBuffer buffer=ByteBuffer.allocate(byteArray.length);
+		// 数组放到buffer中
+		buffer.put(byteArray);
+		//重置 limit 和postion 值 否则 buffer 读取数据不对
+		buffer.flip();
+		return buffer;
+	}
 	@SneakyThrows
 	@KafkaListener(id = "demo1", topics = "lind-demo", groupId = "default", containerFactory = "batchFactory")
 	public void messageReceive(String message) {
@@ -113,6 +149,15 @@ public class MessageListenerTest {
 			ack.acknowledge();
 
 		}
+	}
+
+	@SneakyThrows
+	@KafkaListener(topics = "test-ttl", groupId = "default1")
+	public void ttl(ConsumerRecord<String, String> record) {
+		record.headers().forEach(o -> {
+			System.out.println("header:" + ByteUtils.readVarlong(byte2Byffer(o.value())));
+		});
+
 	}
 
 }

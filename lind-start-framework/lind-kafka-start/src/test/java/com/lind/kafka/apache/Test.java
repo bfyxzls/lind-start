@@ -1,5 +1,6 @@
 package com.lind.kafka.apache;
 
+import com.lind.kafka.ConumerInterceptorTTL;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -12,7 +13,7 @@ import java.util.Properties;
 
 public class Test {
 
-	private final static String TOPIC = "CREATE";
+	private final static String TOPIC = "test-ttl";
 
 	private final static String GROUP = "group1";
 
@@ -36,7 +37,7 @@ public class Test {
 	@org.junit.Test
 	public void consumer() {
 		Properties properties = new Properties();
-		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.4.26:9092");
+		properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.60.146:9092");
 		// 消费分组名
 		properties.put(ConsumerConfig.GROUP_ID_CONFIG, GROUP);
 		// 是否自动提交offset，默认就是true
@@ -62,6 +63,8 @@ public class Test {
 		properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		// 把消息的value从字节数组反序列化为字符串
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+		properties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, ConumerInterceptorTTL.class.getName());
+
 
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
 
