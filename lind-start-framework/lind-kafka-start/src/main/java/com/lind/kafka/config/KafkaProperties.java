@@ -7,37 +7,51 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class KafkaProperties {
 
 	private boolean enabled = true;
+
 	/**
 	 * kafka生产者ack机制
 	 */
 	private String acks = "1";
+
 	/**
 	 * kafka并发数量
 	 */
 	private String concurrency = "12";
+
 	private String bootstrapServers;
+
 	private String groupID;
+
 	private int retries = 3;
+
 	private int bufferMemory = 1024 * 1024 * 32;
+
 	private int lingerMS = 5;
+
 	private boolean enableAutoCommit = true;
+
 	private int batchSize = 1024 * 16;
+
 	/**
 	 * Key序列化
 	 */
 	private String keySerializer = "org.apache.kafka.common.serialization.StringSerializer";
+
 	/**
 	 * Value序列化
 	 */
 	private String valueSerializer = "org.apache.kafka.common.serialization.StringSerializer";
+
 	/**
 	 * Key反序列化
 	 */
 	private String keyDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
+
 	/**
 	 * Value反序列化
 	 */
 	private String valueDeserializer = "org.apache.kafka.common.serialization.StringDeserializer";
+
 	/**
 	 * 消费者配置
 	 */
@@ -179,6 +193,8 @@ public class KafkaProperties {
 		private int sessionTimeoutMsConfig = 10000;
 
 		private int autoCommitIntervalMsConfig = 100;
+
+		private String interceptorClasses;
 
 	}
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 消费者拦截器，注意我们的配置使用的是com.lind.kafka.config.KafkaProperties类，需要在这里添加interceptorClasses配置项
  * @author lind
  * @date 2023/3/21 13:45
  * @since 1.0.0

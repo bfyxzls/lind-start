@@ -152,7 +152,7 @@ public class MessageListenerTest {
 	}
 
 	@SneakyThrows
-	@KafkaListener(topics = "test-ttl", groupId = "default1")
+	@KafkaListener(topics = "test-ttl", groupId = "default")
 	public void ttl(ConsumerRecord<String, String> record) {
 		record.headers().forEach(o -> {
 			System.out.println("header:" + ByteUtils.readVarlong(byte2Byffer(o.value())));

@@ -103,6 +103,7 @@ public class KafkaProviderConfig {
 		paraMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getKeyDeserializer());
 		paraMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, kafkaProperties.getValueDeserializer());
 		paraMap.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, kafkaProperties.getEnableAutoCommit());
+		paraMap.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, kafkaProperties.getConsumer().getInterceptorClasses());
 
 		return new DefaultKafkaConsumerFactory<>(paraMap);
 	}
