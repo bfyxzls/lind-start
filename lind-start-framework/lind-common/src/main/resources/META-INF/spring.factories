@@ -8,3 +8,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.lind.common.enums.NameValueEnumConverterFactory,\
   com.lind.common.locale.LocalMessageConfig,\
   com.lind.common.init.ApplicationLoggerInitializer
+
