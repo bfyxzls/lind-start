@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.java8;
 
 import cn.hutool.core.lang.Assert;
 import com.lind.common.collection.Student;

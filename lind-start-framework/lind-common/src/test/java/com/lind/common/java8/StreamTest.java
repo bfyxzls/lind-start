@@ -1,4 +1,4 @@
-package com.lind.common;
+package com.lind.common.java8;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * @since 1.0.0
  */
 @Slf4j
-public class Java8StreamTest {
+public class StreamTest {
 
 	static List<Person> personInfos = Arrays.asList(
 			new PersonInfo("张三", 1000, "北京", "朝阳区", new String[] { "篮球", "足球" }),
