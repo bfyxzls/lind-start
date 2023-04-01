@@ -6,6 +6,7 @@ import com.lind.kafka.entity.MessageEntityAware;
 import com.lind.kafka.handler.FailureHandler;
 import com.lind.kafka.handler.SuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.MDC;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.StringUtils;
@@ -102,7 +103,7 @@ public class DefaultMessageSender implements MessageSender<MessageEntityAware> {
 		else {
 			send = template.send(topic, key, s);
 		}
-		send.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
+		send.addCallback(new ListenableFutureCallbackWithTracing(new ListenableFutureCallback<SendResult<String, String>>() {
 
 			@Override
 			public void onFailure(Throwable ex) {
@@ -117,7 +118,7 @@ public class DefaultMessageSender implements MessageSender<MessageEntityAware> {
 					successHandler.onSuccess(result);
 				}
 			}
-		});
+		}, MDC.getCopyOfContextMap()));
 
 	}
 
