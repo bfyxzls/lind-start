@@ -1,39 +1,43 @@
 package com.lind.kafka.producer;
 
-import org.slf4j.MDC;
+import com.lind.kafka.entity.MessageEntity;
+import com.lind.kafka.handler.FailureHandler;
+import com.lind.kafka.handler.SuccessHandler;
+import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.Map;
 
-public class ListenableFutureCallbackWithTracing<T> implements ListenableFutureCallback<T> {
-    protected final ListenableFutureCallback<T> origListenableFutureCallback;
-    protected final Map<String, String> mdcContextMap;
+@RequiredArgsConstructor
+public class ListenableFutureCallbackWithTracing<T extends SendResult<String, String>>
+		implements ListenableFutureCallback<T> {
 
+	protected final Map<String, String> mdcContextMap;
 
-    public ListenableFutureCallbackWithTracing(ListenableFutureCallback<T> origListenableFutureCallback, Map<String, String> mdcContextMap) {
-        this.origListenableFutureCallback = origListenableFutureCallback;
-        this.mdcContextMap = mdcContextMap;
-    }
+	private final SuccessHandler successHandler;
 
+	private final FailureHandler failureHandler;
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onSuccess(T result) {
+	private final String topic;
 
+	private final MessageEntity message;
 
-        System.out.println(mdcContextMap.get("traceId"));
-        origListenableFutureCallback.onSuccess(result);
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onSuccess(T result) {
 
-    }
+		if (successHandler != null) {
+			successHandler.onSuccess(result, mdcContextMap);
+		}
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onFailure(Throwable ex) {
-        try {
-            System.out.println(mdcContextMap.get("traceId"));
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onFailure(Throwable ex) {
+		if (failureHandler != null) {
+			failureHandler.onFailure(topic, message, ex, mdcContextMap);
+		}
+	}
 
-            origListenableFutureCallback.onFailure(ex);
-        } finally {
-        }
-    }
 }

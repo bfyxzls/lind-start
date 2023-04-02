@@ -27,7 +27,7 @@ public class RetryUtils {
 			}
 		}
 		ack.acknowledge();
-		logger.error("we repeat {},bug it always fail.",retry);
+		logger.error("we repeat {},bug it always fail.", retry);
 
 		logger.debug("reDo success");
 	}

@@ -35,22 +35,25 @@ public class TTLTopic {
 	@SneakyThrows
 	@Test
 	public void send() {
-//		Properties properties = new Properties();
-//		properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.60.146:9092");
-//		properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-//		properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-//		// 记录键值对的默认序列化和反序列化库
-//		KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
-//
-//		ProducerRecord record = new ProducerRecord<>("test-ttl", 0, System.currentTimeMillis(), null, "msg",
-//				new RecordHeaders().add(new RecordHeader("ttl", longToBytes(20))));
-//		producer.send(record);
-//
-//		// flush data
-//		producer.flush();
-//		// flush and close producer
-//		producer.close();
-		Thread.sleep(60*1000);
+		// Properties properties = new Properties();
+		// properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.60.146:9092");
+		// properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
+		// StringSerializer.class.getName());
+		// properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
+		// StringSerializer.class.getName());
+		// // 记录键值对的默认序列化和反序列化库
+		// KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
+		//
+		// ProducerRecord record = new ProducerRecord<>("test-ttl", 0,
+		// System.currentTimeMillis(), null, "msg",
+		// new RecordHeaders().add(new RecordHeader("ttl", longToBytes(20))));
+		// producer.send(record);
+		//
+		// // flush data
+		// producer.flush();
+		// // flush and close producer
+		// producer.close();
+		Thread.sleep(60 * 1000);
 	}
 
 }

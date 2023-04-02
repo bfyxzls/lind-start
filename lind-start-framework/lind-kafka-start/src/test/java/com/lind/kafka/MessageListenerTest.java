@@ -42,20 +42,22 @@ public class MessageListenerTest {
 
 		return bytes;
 	}
+
 	/**
 	 * byte 数组转byteBuffer
 	 * @param byteArray
 	 */
 	public static ByteBuffer byte2Byffer(byte[] byteArray) {
 
-		//初始化一个和byte长度一样的buffer
-		ByteBuffer buffer=ByteBuffer.allocate(byteArray.length);
+		// 初始化一个和byte长度一样的buffer
+		ByteBuffer buffer = ByteBuffer.allocate(byteArray.length);
 		// 数组放到buffer中
 		buffer.put(byteArray);
-		//重置 limit 和postion 值 否则 buffer 读取数据不对
+		// 重置 limit 和postion 值 否则 buffer 读取数据不对
 		buffer.flip();
 		return buffer;
 	}
+
 	@SneakyThrows
 	@KafkaListener(id = "demo1", topics = "lind-demo", groupId = "default", containerFactory = "batchFactory")
 	public void messageReceive(String message) {

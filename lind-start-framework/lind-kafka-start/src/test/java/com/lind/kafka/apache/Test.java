@@ -65,7 +65,6 @@ public class Test {
 		properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 		properties.put(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG, ConumerInterceptorTTL.class.getName());
 
-
 		KafkaConsumer<String, String> consumer = new KafkaConsumer<>(properties);
 
 		// 订阅主题，如果新加入的消费者需要消费之前的消息，那需要建立新的分组

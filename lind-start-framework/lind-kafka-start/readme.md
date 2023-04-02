@@ -13,9 +13,13 @@
     <version>1.0.0</version>
 </dependency>
 ```
+# 添加了统一的traceId，来自于主线程的MDCTraceId
 # 配置
-使用spring-kafka的标准配置即可
-
+* 使用spring-kafka的标准配置即可
+* 添加了统一的消费者拦截器，需要通过配置进行开启
+```
+spring.kafka.consumer.interceptor-classes: com.lind.kafka.ConumerInterceptorTTL
+```
 # 使用
 统一的消息体，直接为操作人和时间赋值
 ```

@@ -23,7 +23,7 @@ public class MqProducerFactoryBean<T> implements FactoryBean<T> {
 	@Override
 	public T getObject() throws Exception {
 		// 这里主要是创建接口对应的实例，便于注入到spring容器中
-		InvocationHandler handler = new MqProducerInvocationHandler(applicationContext);
+		InvocationHandler handler = new ServiceProxy<>(applicationContext);
 		return (T) Proxy.newProxyInstance(interfaceType.getClassLoader(), new Class[] { interfaceType }, handler);
 	}
 
