@@ -4,7 +4,16 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -108,6 +117,21 @@ public class SortedMapTest {
 		while (iterator.hasNext()) {
 			System.out.println(iterator.next());
 		}
+	}
+
+	/**
+	 * 对象里按字段排序.
+	 */
+	@Test
+	public void objSort() {
+		List<Student> studentList = new ArrayList<>();
+		studentList.add(new Student(20, "张三", 1.0));
+		studentList.add(new Student(31, "李四", 2.0));
+		studentList.add(new Student(28, "王五", 3.0));
+		studentList.add(new Student(23, "赵六", 4.0));
+		studentList.stream().sorted(Comparator.comparing(Student::getAge)).forEach(System.out::println);
+		logger.info("----reversed---");
+		studentList.stream().sorted(Comparator.comparing(Student::getAge).reversed()).forEach(System.out::println);
 	}
 
 }

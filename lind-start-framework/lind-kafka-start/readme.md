@@ -5,6 +5,20 @@
 * 去掉了kafka-receiver包，感觉封装意义不大
 * 使用时先添加注解`@EnableMqKafka`
 * 添加了标识接口MessageEntityAware，避免了topic消息体的格式僵化，MessageEntity做为默认的消息体，自己可以添加新的MessageEntityAware实现
+
+# kafka explorer说明
+## topic
+从这里可以看到消息的分区，序列化，可以发新消息
+## consumer
+从这里可以看到这个消费者，对于某个topic的消费进度，主要以下几个参数
+* topic 对应的消息名
+* partition 对应的消息所在的分区
+* start 这个消费者从哪个位置开始消费的
+* end 消息的总长度
+* offset 当前消费的偏移量
+* lan 未消费的消息
+* last commit 最后提交时间
+* 
 # 依赖引用
 ```
 <dependency>
@@ -14,12 +28,14 @@
 </dependency>
 ```
 # 添加了统一的traceId，来自于主线程的MDCTraceId
+通过MDC.getCopyOfContextMap()方式将当前线程上的对象传递到回调方法中，再通过MDC.setContextMap()方式将对象设置到子线程中。
 # 配置
 * 使用spring-kafka的标准配置即可
 * 添加了统一的消费者拦截器，需要通过配置进行开启
 ```
 spring.kafka.consumer.interceptor-classes: com.lind.kafka.ConumerInterceptorTTL
 ```
+
 # 使用
 统一的消息体，直接为操作人和时间赋值
 ```

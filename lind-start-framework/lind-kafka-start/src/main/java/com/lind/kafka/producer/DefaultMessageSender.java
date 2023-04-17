@@ -13,6 +13,8 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.util.concurrent.ListenableFuture;
 
+import java.util.UUID;
+
 /**
  * 默认消息发送者.
  **/
@@ -61,6 +63,9 @@ public class DefaultMessageSender implements MessageSender<MessageEntity> {
 			FailureHandler failureHandler) throws JsonProcessingException {
 		String s = objectMapper.writeValueAsString(message);
 		RecordHeaders headers = new RecordHeaders();
+		if (MDC.getCopyOfContextMap()==null || !MDC.getCopyOfContextMap().containsKey("traceId")) {
+			MDC.put("traceId", UUID.randomUUID().toString().replace("-", ""));
+		}
 		headers.add("traceId", MDC.get("traceId").getBytes());
 		ProducerRecord<String, String> producerRecord = new ProducerRecord(topic, null, null, null, s, headers);
 
