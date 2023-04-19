@@ -5,6 +5,7 @@ import com.lind.lindmanager.util.FreeMakerUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,7 +18,14 @@ import java.util.Map;
 @Controller
 @RequestMapping("f1")
 public class F1Controller {
-
+  @GetMapping("/index")
+  public String index(){
+    return "sse/index";
+  }
+  @GetMapping("/list")
+  public String list(){
+    return "sse/list";
+  }
   @RequestMapping("list")
   public String selectUser(Model model) {
     model.addAttribute("forgetPasswordAddress", "ok");
