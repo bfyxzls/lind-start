@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.0.RELEASE</version>
+        <version>2.7.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.lind</groupId>
@@ -17,16 +17,20 @@
         <java.version>1.8</java.version>
         <lind.version>1.0.1</lind.version>
     </properties>
+
     <dependencies>
+
         <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-test-package</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.lzhpo</groupId>
+            <artifactId>chatgpt-spring-boot-starter</artifactId>
+            <version>1.0.4</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <!-- FreeeMarker模板引擎所需依赖 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -42,11 +46,7 @@
             <artifactId>lind-redis-start</artifactId>
             <version>${lind.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.lind</groupId>
-            <artifactId>lind-logback-start</artifactId>
-            <version>${lind.version}</version>
-        </dependency>
+
         <!-- Thymeleaf -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,10 +63,6 @@
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
             <version>1.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
         </dependency>
 
 

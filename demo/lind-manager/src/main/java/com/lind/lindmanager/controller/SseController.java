@@ -1,12 +1,17 @@
 package com.lind.lindmanager.controller;
 
 import com.lind.lindmanager.util.SseEmitterUtil;
+import com.lzhpo.chatgpt.OpenAiClient;
+import com.lzhpo.chatgpt.entity.chat.ChatCompletionRequest;
+import com.lzhpo.chatgpt.sse.SseEventSourceListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -16,6 +21,17 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/sse")
 public class SseController {
+
+	@Autowired
+	OpenAiClient openAiClient;
+
+	@GetMapping("/chat-do")
+	public SseEmitter sseStreamChat(@RequestParam String message) {
+		SseEmitter sseEmitter = new SseEmitter();
+		ChatCompletionRequest request = ChatCompletionRequest.create(message);
+		openAiClient.streamChatCompletions(request, new SseEventSourceListener(sseEmitter));
+		return sseEmitter;
+	}
 
 	/**
 	 * 定时向所有端发消息.

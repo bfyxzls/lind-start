@@ -1,7 +1,6 @@
 <#macro commonStyle>
 
 	<#-- favicon -->
-	<link rel="icon" href="${request.contextPath}/static/favicon.ico" />
 
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">

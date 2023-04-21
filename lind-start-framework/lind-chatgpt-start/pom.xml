@@ -16,12 +16,23 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <chatgpt-java.version>1.0.4</chatgpt-java.version>
+        <okhttp.version>4.9.0</okhttp.version>
     </properties>
     <dependencies>
+        <dependency>
+            <groupId>com.lzhpo</groupId>
+            <artifactId>chatgpt-spring-boot-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
         <dependency>
             <groupId>com.unfbx</groupId>
             <artifactId>chatgpt-java</artifactId>
             <version>${chatgpt-java.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp-sse</artifactId>
+            <version>${okhttp.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

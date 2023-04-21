@@ -18,6 +18,11 @@ import java.util.Map;
 @Controller
 @RequestMapping("f1")
 public class F1Controller {
+  @GetMapping("/chat")
+  public String sseStreamChat() {
+    return "/sse/chat";
+  }
+
   @GetMapping("/index")
   public String index(){
     return "sse/index";

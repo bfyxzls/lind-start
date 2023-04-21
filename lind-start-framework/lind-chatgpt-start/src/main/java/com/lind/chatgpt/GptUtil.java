@@ -20,11 +20,17 @@ import java.util.List;
  */
 public class GptUtil {
 
-	public static OpenAiClient getOpenAiClient() {
+	public static final String GPT_KEY = "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";
+
+	public static Proxy getProxy() {
 		// 代理可以为null
 		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 10809));
-		OpenAiClient openAiClient = OpenAiClient.builder().apiKey("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")
-				.proxy(proxy).build();
+		return proxy;
+	}
+
+	public static OpenAiClient getOpenAiClient() {
+		// 代理可以为null
+		OpenAiClient openAiClient = OpenAiClient.builder().apiKey(GPT_KEY).proxy(getProxy()).build();
 		return openAiClient;
 	}
 
