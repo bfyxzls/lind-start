@@ -1,1 +1,0 @@
-一个使用adminlte开发的界面，类型xxl-job的管理平台
