@@ -5,25 +5,51 @@ import com.lzhpo.chatgpt.OpenAiClient;
 import com.lzhpo.chatgpt.entity.chat.ChatCompletionRequest;
 import com.lzhpo.chatgpt.sse.SseEventSourceListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import reactor.core.publisher.Flux;
 
-import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @EnableScheduling
 @RestController
 @RequestMapping("/sse")
 public class SseController {
 
+	private static Map<String, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
+
 	@Autowired
 	OpenAiClient openAiClient;
+
+	// 测试实时推送：/f1/sse-test
+	@GetMapping(value = "/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+	public Flux<String> flux() {
+		return Flux.create(sink -> {
+			new Thread(() -> {
+				String[] arr = { "pq1", "pq2", "pq3" };
+				for (int i = 0; i < 3; i++) {
+					try {
+						Thread.sleep(1000);
+					}
+					catch (InterruptedException e) {
+					}
+					sink.next(arr[i]);
+					if (i == 2) {
+						sink.complete();
+					}
+				}
+			}).start();
+		});
+	}
+
 
 	@GetMapping("/chat-do")
 	public SseEmitter sseStreamChat(@RequestParam String message) {
@@ -33,15 +59,6 @@ public class SseController {
 		return sseEmitter;
 	}
 
-	/**
-	 * 定时向所有端发消息.
-	 */
-	@Scheduled(fixedRate = 1000)
-	public void task() {
-		SseEmitterUtil.getIds().forEach(id -> {
-			SseEmitterUtil.sendMessage(id, "任务完成-" + LocalDateTime.now());
-		});
-	}
 
 	/**
 	 * 用于创建连接

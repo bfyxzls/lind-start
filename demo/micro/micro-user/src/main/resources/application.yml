@@ -1,0 +1,13 @@
+server:
+  port: 4040
+spring:
+  application:
+    name: micro-user
+  profiles.active: dev
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    loadbalancer:
+      enabled: true
+      health-check:
+        initial-delay: 1s

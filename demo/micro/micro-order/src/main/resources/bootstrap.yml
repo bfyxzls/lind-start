@@ -10,26 +10,3 @@ spring:
         server-addr: 192.168.60.138:80
         file-extension: yaml
         namespace: zzl
-  redis:
-    database: 0
-    password: bdyh@2020
-    cluster:
-      nodes:
-        - 192.168.4.26:6379
-        - 192.168.4.26:6380
-        - 192.168.4.26:6479
-        - 192.168.4.26:6480
-        - 192.168.4.26:6579
-        - 192.168.4.26:6580
-      max-redirects: 3 # 获取失败 最大重定向次数
-    lettuce:
-      pool:
-        max-idle: 10
-        max-active: 10
-        min-idle: 0
-      cluster:
-        refresh:
-          adaptive: true
-          period: 10000
-
-    timeout: 50000 # 连接超时时间

@@ -1,11 +1,12 @@
 package com.lind.micro.user.controller;
 
-import com.lind.feign.NextHttpHeader;
 import com.lind.micro.user.feign.OrderClient;
 import com.lind.micro.user.feign.StoreClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RefreshScope // 配置自动更新
 @RestController
-@EnableCircuitBreaker
+@Slf4j
 public class HelloController {
 
 	@Value("${const.email:lind}")
@@ -25,15 +26,15 @@ public class HelloController {
 	@Autowired
 	OrderClient orderClient;
 
+	@Autowired
+	private LoadBalancerClient loadBalancerClient;
+
 	@GetMapping("hello2")
 	public ResponseEntity hello2() throws InterruptedException {
+		ServiceInstance instance = loadBalancerClient.choose("micro-product");
+		log.info("ip:{},port:{}", instance.getHost(), instance.getPort());
 
-
-		 NextHttpHeader.set("User-Id", "101"); NextHttpHeader.set("Authorization",
-		 "bearer xxaabb1901"); NextHttpHeader.set("Real-Ip", "ie");
-
-
-		return ResponseEntity.ok("hello," + storeClient.getStores());
+		return ResponseEntity.ok("hello," + storeClient.getHome());
 	}
 
 }
