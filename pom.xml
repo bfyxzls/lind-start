@@ -69,7 +69,13 @@
                 <scope>import</scope>
             </dependency>
 
-
+            <dependency>
+                <groupId>com.lind</groupId>
+                <artifactId>lind-framework-bom</artifactId>
+                <version>1.1.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
     </dependencyManagement>
     <dependencies>

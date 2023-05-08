@@ -1,22 +1,26 @@
-server:
-  port: 4040
+server.port: 8081
 spring:
-  application:
-    name: micro-user
-  profiles.active: dev
-  main:
-    allow-bean-definition-overriding: true
+  application.name: micro-order
   cloud:
-    loadbalancer:
-      enabled: true
-      health-check:
-        initial-delay: 1s
+    nacos:
+      discovery:
+        server-addr: 192.168.60.138:80
+        namespace: zzl
+      config:
+        server-addr: 192.168.60.138:80
+        file-extension: yaml
+        namespace: zzl
+
+  datasource.url: jdbc:mysql://localhost:3306/db_order?allowMultiQueries=true
+  datasource.driverClassName: com.mysql.jdbc.Driver
+  datasource.username: root
+  datasource.password: 123456
 seata:
   registry: # TC服务注册中心的配置，微服务根据这些信息去注册中心获取tc服务地址
     # 参考tc服务自己的registry.conf中的配置
     type: nacos
     nacos: # tc
-      server-addr: 192.168.60.138:8848
+      server-addr: 192.168.60.138:80
       namespace: ""
       group: SEATA_GROUP
       application: seata-server # tc服务在nacos中的服务名称
