@@ -9,9 +9,9 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>demo/micro/micro-order</module>
-        <module>demo/micro/micro-product</module>
-        <module>demo/micro/micro-user</module>
+        <module>micro/micro-order</module>
+        <module>micro/micro-product</module>
+        <module>micro/micro-user</module>
         <module>lind-test-package</module>
         <module>demo/a-start-test</module>
         <module>demo/log4j-bug-rmi</module>
@@ -20,6 +20,8 @@
         <module>demo/springboot-admin</module>
         <module>demo/lind-proxy</module>
         <module>demo/lind-websocket-start</module>
+        <module>micro/lind-auth-service</module>
+        <module>micro/lind-gateway</module>
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -83,11 +85,6 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
-        </dependency>
     </dependencies>
 
     <distributionManagement>
@@ -137,7 +134,6 @@
                         </execution>
                     </executions>
                 </plugin>
-
             </plugins>
         </pluginManagement>
     </build>

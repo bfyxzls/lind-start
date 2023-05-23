@@ -1,0 +1,14 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.60.138:80
+      config:
+        server-addr: 192.168.60.138:80
+        file-extension: yaml
+        shared-configs[0]:
+          data-id: actuator.yaml
+          refresh: true
+        shared-configs[1]:
+          data-id: const.yaml
+          refresh: true
