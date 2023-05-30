@@ -15,8 +15,10 @@
  */
 package com.lind.micro.product.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.lind.micro.product.service.StockService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,11 +48,23 @@ public class StockController {
 	 * @param count 数量
 	 * @return
 	 */
+	@SentinelResource(value = "deduct")
 	@RequestMapping(path = "/deduct")
 	public Boolean deduct(String commodityCode, Integer count, String password) {
 		log.info("请求库存微服务password：{}", password);
 		stockService.deduct(commodityCode, count);
 		return true;
+	}
+
+	@SentinelResource
+	@RequestMapping(path = "/hello")
+	public ResponseEntity hello() {
+		return ResponseEntity.ok("ok");
+	}
+
+	@RequestMapping(path = "/hello2")
+	public ResponseEntity hello2() {
+		return ResponseEntity.ok("ok");
 	}
 
 }
