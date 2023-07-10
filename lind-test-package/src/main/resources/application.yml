@@ -1,9 +1,0 @@
-hbase:
-  zookeeper:
-    quorum: kafka146
-    property:
-      clientPort: 12181
-
-zookeeper:
-  znode:
-    parent: /hbase

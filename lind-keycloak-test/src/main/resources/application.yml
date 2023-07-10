@@ -1,0 +1,37 @@
+server:
+  port: 9090
+# Keycloak Configuration
+keycloak:
+  auth-server-url: http://192.168.4.26:8080/auth #https://cas.pkulaw.com/auth #http://192.168.4.26:8080/auth #https://finalcas.pkulaw.com/auth #https://devcas.pkulaw.com:18081/auth   # http://192.168.4.26:8080/auth
+  #realm-public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyOCNCy8x280vYwpVl26ToWPXkTFMdkSkLQ+UB6uCK5/1Ojw1+ZqKWhAZg4bNTG03QtG7xJOPJUH0S2Gf2CNbZjm2OEe1ZeY08JCFThZ4h5D6iuAOarmYjlSnzhdW8jpiSkm0Okci+xZkC1dWW2twjGgc0/E6o9JXYEggfrDWbllpGQOib+lx+mU51e0OMqu8TwSrLoa/d0a2dawPJnU3l1a6lyvhD7W/asUphMNeLKgmNf4wf92wElLlDkB2Qozfg1J/6l4JzBbgVLLljO0j7VKv7seyAnul55KmRd9tUjpdecf0FQPFZiNOTW+g4ivMNBQZvKAnsfgDboxy1PzW1QIDAQAB
+  realm: fabao
+  resource: democlient  # client-id
+  client-key-password: ec0fd1c6-68b0-4c39-a9fa-c3be25c8ef01 # 如果是policy-enforcer-config.enforcement-mode: ENFORCING时，需要使用credentials.secret
+  credentials.secret: ec0fd1c6-68b0-4c39-a9fa-c3be25c8ef01 # policy-enforcer-config.enforcement-mode: ENFORCING时，使用这个值
+  public-client: false #如果设置为true，则适配器不会将客户端的凭据发送到Keycloak。 这是可选的。 默认值为false。
+  principal-attribute: preferred_username # principal.getName()返回为用户名
+  use-resource-role-mappings: false #如果设置为true，则适配器将在令牌内部查找用户的应用程序级角色映射。 如果为false，它将查看用户角色映射的领域级别。 这是可选的。 默认值为false。
+  cors: true
+
+#  bearer-only: true  #如果没有权限直接401，前后分离项目使用它，当后端返回401时，前端自己去KC认证
+#  policy-enforcer-config:
+#    enforcement-mode: Enforcing #Permissive远程没有配置就放行；Enforcing远程没有配置直接403
+#  security-constraints:
+#    - auth-roles:
+#        - "*"
+#      security-collections:
+#        - name:
+#          patterns:
+#            - /*
+uaa:
+  permitAll: /admin/*,/uma,/user/fetch,/about,/add-user,/bind-user-role,/bind-user-group, /logout,/callback,/get-user,/static/**,/1.0/*,/get-two,/1_0/*
+  redirectUri: http://localhost:9090/index
+
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
+
+  profiles:
+    active: dev

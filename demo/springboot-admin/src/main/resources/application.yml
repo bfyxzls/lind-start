@@ -1,8 +1,0 @@
-server.port: 8080
-spring:
-  application.name: monitor
-  cloud:
-    nacos:
-      discovery:
-        server-addr: 192.168.60.138:80
-        namespace: zzl

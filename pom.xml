@@ -9,29 +9,20 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>micro/micro-order</module>
-        <module>micro/micro-product</module>
-        <module>micro/micro-user</module>
-        <module>lind-test-package</module>
-        <module>demo/a-start-test</module>
-        <module>demo/log4j-bug-rmi</module>
-        <module>demo/java-agent-demo</module>
-        <module>demo/a-start-activiti</module>
-        <module>demo/springboot-admin</module>
-        <module>demo/lind-proxy</module>
-        <module>demo/lind-websocket-start</module>
-        <module>micro/lind-auth-service</module>
-        <module>micro/lind-gateway</module>
-        <module>lind-test-lock</module>
+
+        <module>a-start-test</module>
+        <module>lind-manager</module>
+        <module>lind-websocket-start</module>
+        <module>lind-proxy</module>
+        <module>log4j-bug-rmi</module>
+        <module>lind-keycloak-test</module>
     </modules>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-
         <spring-boot.version>2.7.0</spring-boot.version>
         <spring-cloud.version>2021.0.3</spring-cloud.version>
         <spring-cloud-alibaba-dependencies.version>2021.0.1.0</spring-cloud-alibaba-dependencies.version>
-
         <version.infinispan>13.0.0.CR1</version.infinispan>
         <spring.checkstyle.plugin>0.0.32</spring.checkstyle.plugin>
     </properties>
