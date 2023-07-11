@@ -1,6 +1,6 @@
 package com.lind.keycloak.impl;
 
-import com.pkulaw.uaa.keycloak.permission.ResourcePermission;
+import com.lind.uaa.keycloak.permission.ResourcePermission;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

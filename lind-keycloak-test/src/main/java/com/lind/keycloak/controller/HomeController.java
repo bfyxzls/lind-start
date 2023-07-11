@@ -1,6 +1,6 @@
 package com.lind.keycloak.controller;
 
-import com.pkulaw.uaa.keycloak.config.SecurityUser;
+import com.lind.uaa.keycloak.config.SecurityUser;
 import lombok.extern.slf4j.Slf4j;
 import org.keycloak.adapters.springboot.KeycloakSpringBootProperties;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +31,17 @@ public class HomeController {
 	@PreAuthorize(("@pms.hasPermission('sys_user_del')"))
 	@GetMapping("/userinfo")
 	public ResponseEntity userinfo() {
-		return ResponseEntity.ok("需要授权" + SecurityUser.getCurrentTokenString());
+		return ResponseEntity.ok("需要授权" + SecurityUser.getCurrentUserName());
 	}
 
 	@GetMapping("/admin/add")
 	public ResponseEntity adminAdd() {
-		return ResponseEntity.ok("需要admin授权" + SecurityUser.getCurrentTokenString());
+		return ResponseEntity.ok("需要admin授权" + SecurityUser.getCurrentUserName());
 	}
 
 	@GetMapping("/client_auth")
 	public ResponseEntity clientAuth() {
-		return ResponseEntity.ok("需要客户端授权" + SecurityUser.getCurrentTokenString());
+		return ResponseEntity.ok("需要客户端授权" + SecurityUser.getCurrentUserName());
 	}
 
 }

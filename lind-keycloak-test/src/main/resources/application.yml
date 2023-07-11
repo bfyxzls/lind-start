@@ -1,5 +1,6 @@
 server:
   port: 9090
+
 # Keycloak Configuration
 keycloak:
   auth-server-url: http://192.168.4.26:8080/auth #https://cas.pkulaw.com/auth #http://192.168.4.26:8080/auth #https://finalcas.pkulaw.com/auth #https://devcas.pkulaw.com:18081/auth   # http://192.168.4.26:8080/auth
@@ -13,16 +14,18 @@ keycloak:
   use-resource-role-mappings: false #如果设置为true，则适配器将在令牌内部查找用户的应用程序级角色映射。 如果为false，它将查看用户角色映射的领域级别。 这是可选的。 默认值为false。
   cors: true
 
-#  bearer-only: true  #如果没有权限直接401，前后分离项目使用它，当后端返回401时，前端自己去KC认证
-#  policy-enforcer-config:
-#    enforcement-mode: Enforcing #Permissive远程没有配置就放行；Enforcing远程没有配置直接403
-#  security-constraints:
-#    - auth-roles:
-#        - "*"
-#      security-collections:
-#        - name:
-#          patterns:
-#            - /*
+  bearer-only: true  #如果没有权限直接401，前后分离项目使用它，当后端返回401时，前端自己去KC认证
+
+  # 在keycloak管理平台配置了uma之后，咱们的应用程序需要重启才能生效
+  policy-enforcer-config:
+    enforcement-mode: Enforcing #Permissive远程没有配置就放行；Enforcing远程没有配置直接403
+  security-constraints:
+    - auth-roles:
+        - "*"
+      security-collections:
+        - name:
+          patterns:
+            - /*
 uaa:
   permitAll: /admin/*,/uma,/user/fetch,/about,/add-user,/bind-user-role,/bind-user-group, /logout,/callback,/get-user,/static/**,/1.0/*,/get-two,/1_0/*
   redirectUri: http://localhost:9090/index
@@ -32,6 +35,5 @@ spring:
     static-path-pattern: /static/**
   resources:
     static-locations: classpath:/static/
-
   profiles:
     active: dev

@@ -1,8 +1,8 @@
 package com.lind.keycloak.impl;
 
 
-import com.pkulaw.uaa.keycloak.permission.PermissionService;
-import com.pkulaw.uaa.keycloak.permission.ResourcePermission;
+import com.lind.uaa.keycloak.permission.PermissionService;
+import com.lind.uaa.keycloak.permission.ResourcePermission;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
