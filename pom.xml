@@ -11,6 +11,7 @@
     <modules>
 
         <module>a-start-test</module>
+        <module>lind-chatgpt-start</module>
         <module>lind-manager</module>
         <module>lind-websocket-start</module>
         <module>lind-proxy</module>
