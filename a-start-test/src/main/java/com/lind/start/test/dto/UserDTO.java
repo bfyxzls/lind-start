@@ -16,6 +16,8 @@ import java.util.List;
 @Builder
 public class UserDTO {
 
+	private String id;
+
 	private String name;
 
 	private String email;

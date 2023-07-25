@@ -6,8 +6,8 @@ import com.unfbx.chatgpt.entity.chat.ChatCompletion;
 import com.unfbx.chatgpt.entity.chat.Message;
 import com.unfbx.chatgpt.entity.common.Choice;
 import com.unfbx.chatgpt.entity.completions.Completion;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.concurrent.CountDownLatch;
@@ -37,7 +37,7 @@ public class QuestionTest {
 		}
 	}
 
-	@Before
+	@BeforeEach
 	public void before() {
 		// 创建流式输出客户端
 		client = OpenAiStreamClient.builder().connectTimeout(50).readTimeout(50).writeTimeout(50)

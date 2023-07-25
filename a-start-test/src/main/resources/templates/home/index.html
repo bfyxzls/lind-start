@@ -1,0 +1,9 @@
+姓名_name：<input type="text" th:value="${@user.getName(1)}"/>
+<hr/>
+<ul th:each="item:${@user.getAll()}">
+    <li>
+        <span th:text="${item.id}"></span>
+
+        <span th:text="${item.name}"></span>
+    </li>
+</ul>

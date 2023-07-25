@@ -1,11 +1,15 @@
 package com.lind.start.test.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lind.redis.lock.annotation.RepeatSubmit;
 import com.lind.redis.lock.template.RedisUserManualLockTemplate;
+import com.lind.start.test.dto.AjaxResult;
 import com.lind.start.test.dto.Info;
 import com.lind.start.test.dto.Product;
 import com.lind.start.test.dto.Shop;
 import com.lind.start.test.dto.UserDTO;
+import com.lind.start.test.service.UserService;
 import com.lind.verification.code.image.ImageCodeProcessor;
 import com.lind.verification.code.image.ImageStreamCodeProcessor;
 import io.swagger.annotations.Api;
@@ -16,6 +20,7 @@ import org.apache.tomcat.util.buf.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.ServletWebRequest;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +40,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@RestController
+@Controller
 @Slf4j
 @Api("测试")
 public class HomeController {
@@ -52,9 +57,30 @@ public class HomeController {
 	@Autowired
 	ImageStreamCodeProcessor imageStreamCodeProcessor;
 
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	ObjectMapper objectMapper;
+
 	@GetMapping("/index")
 	public String index() {
-		return "index";
+		return "home/index";
+	}
+
+	@GetMapping("/add")
+	@ResponseBody
+	public AjaxResult add(HttpServletResponse response, @RequestParam String id) throws JsonProcessingException {
+		userService.save(UserDTO.builder().id(id).name("zzl").sex(true).build());
+		return AjaxResult.success();
+	}
+
+	@GetMapping("/del")
+	@ResponseBody // 直接响应体，而不是view
+	public AjaxResult del(HttpServletResponse response, String id) throws JsonProcessingException {
+		userService.del(id);
+		return AjaxResult.success();
+
 	}
 
 	/**
@@ -81,13 +107,13 @@ public class HomeController {
 	@GetMapping("/pget")
 	public ResponseEntity pget() {
 
-		return ResponseEntity.ok(new UserDTO("zzl", "dudu", false, 5d, BigDecimal.valueOf(100), null, null,
+		return ResponseEntity.ok(new UserDTO("1", "zzl", "dudu", false, 5d, BigDecimal.valueOf(100), null, null,
 				Arrays.asList(new Info("hello", "hello world", new Date()))));
 	}
 
 	@GetMapping("/no-get")
 	public ResponseEntity noGet() {
-		return ResponseEntity.ok(new UserDTO("zzl", "OK", false, 5d, BigDecimal.valueOf(100), null, null,
+		return ResponseEntity.ok(new UserDTO("1", "zzl", "OK", false, 5d, BigDecimal.valueOf(100), null, null,
 				Arrays.asList(new Info("hello", "hello world", new Date()))));
 	}
 
